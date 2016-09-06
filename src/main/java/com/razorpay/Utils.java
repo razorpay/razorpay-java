@@ -1,8 +1,9 @@
 package com.razorpay;
 
-import com.sun.javafx.sg.prism.NGShape;
+
 import okhttp3.Response;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -46,35 +47,65 @@ public class Utils {
     }
 
     static <T extends Model> T processResponse(Response response, String entity) throws IOException, RazorpayException {
-        int code = response.code();
-        JSONObject jsonObject = new JSONObject(response.body().string());
-        if (code == 200) {
+        String responseBody = response.body().string();
+        int statusCode = response.code();
+        if (statusCode == 200) {
+            JSONObject jsonObject = new JSONObject(responseBody);
             return Utils.<T>parseResponse(jsonObject, entity);
-        } else if (code == 400 || code == 401) {
-            throw new RazorpayException(jsonObject.getJSONObject("error").getString("code"), jsonObject.getJSONObject("error").getString("description"));
+        } else  {
+            processError(statusCode, responseBody);
         }
         return null;
     }
 
     static <T extends Model> ArrayList<T> processCollectionResponse(Response response, String entity) throws IOException, RazorpayException {
-        int code = response.code();
-        JSONObject jsonObject = new JSONObject(response.body().string());
-        if (code == 200) {
+        String responseBody = response.body().string();
+        int statusCode = response.code();
+        if (statusCode == 200) {
+            JSONObject jsonObject = new JSONObject(responseBody);
             return Utils.<T>parseCollectionResponse(jsonObject, entity);
-        } else if (code == 400 || code == 401) {
-            throw new RazorpayException(jsonObject.getJSONObject("error").getString("code"), jsonObject.getJSONObject("error").getString("description"));
+        } else {
+            processError(statusCode, responseBody);
         }
         return null;
     }
 
-    static Class getClass(String entitiy){
-        if(entitiy.equals(Model.ENTITY_ORDER)){
+    private static void processError(int statusCode, String responseBody) throws RazorpayException, IOException {
+        try {
+            JSONObject responseJson = new JSONObject(responseBody);
+            throwException(statusCode, responseJson);
+        } catch (JSONException e){
+            throwServerException(statusCode, responseBody);
+        }
+    }
+
+    private static void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
+        if(responseJson.has("error") == true) {
+            int code = Integer.parseInt(responseJson.getJSONObject("error").getString("code"));
+            String description = responseJson.getJSONObject("error").getString("description");
+            throw new RazorpayException(code, description);
+        }
+        else {
+            throwServerException(statusCode, responseJson.toString());
+        }
+    }
+
+    private static void throwServerException(int statusCode, String responseBody) throws RazorpayException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("The server did not send back a well-formed response.\n");
+        sb.append("Server response: ");
+        sb.append(responseBody);
+        throw new RazorpayException(statusCode, responseBody);
+    }
+
+    static Class getClass(String entity){
+        if(entity.equals(Model.ENTITY_ORDER)){
             return Order.class;
         }
-        if(entitiy.equals(Model.ENTITY_PAYMENT)){
+        if(entity.equals(Model.ENTITY_PAYMENT)){
             return Payment.class;
         }
-        if(entitiy.equals(Model.ENTITY_REFUND)){
+        if(entity.equals(Model.ENTITY_REFUND)){
             return Refund.class;
         }
         return null;
