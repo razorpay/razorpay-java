@@ -51,7 +51,7 @@ public class Utils {
         if (code == 200) {
             return Utils.<T>parseResponse(jsonObject, entity);
         } else if (code == 400 || code == 401) {
-            throw new RazorpayException(code, jsonObject.getString("description"));
+            throw new RazorpayException(jsonObject.getJSONObject("error").getString("code"), jsonObject.getJSONObject("error").getString("description"));
         }
         return null;
     }
@@ -62,7 +62,7 @@ public class Utils {
         if (code == 200) {
             return Utils.<T>parseCollectionResponse(jsonObject, entity);
         } else if (code == 400 || code == 401) {
-            throw new RazorpayException(code, jsonObject.getString("description"));
+            throw new RazorpayException(jsonObject.getJSONObject("error").getString("code"), jsonObject.getJSONObject("error").getString("description"));
         }
         return null;
     }

@@ -18,12 +18,12 @@ public class Payment extends Model{
     public Payment capture(String amount) throws IOException, RazorpayException {
         JSONObject options = new JSONObject();
         options.put("amount", amount);
-        Response response = ApiUtils.postRequest(String.format("/payments/%s", get("id")), options);
+        Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", get("id")), options);
         return Utils.processResponse(response, ENTITY_PAYMENT);
     }
 
     public Refund refund(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.postRequest(String.format("/payments/%s", get("id")), options);
+        Response response = ApiUtils.postRequest(String.format("/payments/%s/refund", get("id")), options);
         return Utils.processResponse(response, ENTITY_REFUND);
     }
 

@@ -1,6 +1,7 @@
 package com.razorpay;
 
-public class RazorpayException extends Throwable {
-    public RazorpayException(int code, String description) {
+public class RazorpayException extends Exception {
+    public RazorpayException(String code, String description) {
+        super(code + " : " + description);
     }
 }
