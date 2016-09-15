@@ -81,7 +81,7 @@ public class Utils {
 
     private static void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
         if(responseJson.has("error") == true) {
-            int code = Integer.parseInt(responseJson.getJSONObject("error").getString("code"));
+            String code = responseJson.getJSONObject("error").getString("code");
             String description = responseJson.getJSONObject("error").getString("description");
             throw new RazorpayException(code, description);
         }
@@ -95,7 +95,7 @@ public class Utils {
         sb.append("The server did not send back a well-formed response.\n");
         sb.append("Server response: ");
         sb.append(responseBody);
-        throw new RazorpayException(statusCode, responseBody);
+        throw new RazorpayException(String.valueOf(statusCode), sb.toString());
     }
 
     static Class getClass(String entity){
