@@ -16,9 +16,18 @@ public class RazorpayClient {
      * @param secret Razorpay API secret
      */
     public RazorpayClient(String key, String secret){
+        this(key, secret, false);
+    }
+
+    public RazorpayClient(String key, String secret, boolean enableLogging){
         ApiUtils.setAuthCredentials(key, secret);
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        if( enableLogging == true) {
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        }
+        else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .build();
@@ -27,5 +36,4 @@ public class RazorpayClient {
         Refund = new RefundClient();
         Order = new OrderClient();
     }
-
 }
