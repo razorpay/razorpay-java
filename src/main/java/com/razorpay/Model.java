@@ -16,7 +16,8 @@ abstract class Model {
     }
 
     public String get(String key){
-        return modelJson.getString(key);
+        Object value = modelJson.get(key);
+        return String.valueOf(value);
     }
 
     public String toString(){
