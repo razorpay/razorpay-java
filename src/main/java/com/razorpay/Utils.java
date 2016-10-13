@@ -99,15 +99,12 @@ public class Utils {
     }
 
     static Class getClass(String entity){
-        if(entity.equals(Model.ENTITY_ORDER)){
-            return Order.class;
+        try {
+            String entityClass = "com.razorpay." + Character.toUpperCase(entity.charAt(0)) + entity.substring(1);
+            return Class.forName(entityClass);
+        } catch (ClassNotFoundException e) {
+            return null;
         }
-        if(entity.equals(Model.ENTITY_PAYMENT)){
-            return Payment.class;
-        }
-        if(entity.equals(Model.ENTITY_REFUND)){
-            return Refund.class;
-        }
-        return null;
     }
+
 }
