@@ -2,8 +2,8 @@ package com.razorpay;
 
 import org.json.JSONObject;
 
-abstract class  Model {
-    private JSONObject modelJSON;
+abstract class Model {
+    private JSONObject modelJson;
     static final String ENTITY_PAYMENT = "payment";
     static final String ENTITY_ORDER = "order";
     static final String ENTITY_REFUND = "refund";
@@ -12,10 +12,14 @@ abstract class  Model {
 
 
     Model(JSONObject jsonObject){
-        this.modelJSON = jsonObject;
+        this.modelJson = jsonObject;
     }
 
     public String get(String key){
-        return modelJSON.getString(key);
+        return modelJson.getString(key);
+    }
+
+    public String toString(){
+        return modelJson.toString();
     }
 }
