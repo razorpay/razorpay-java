@@ -19,12 +19,12 @@ public class RefundClient {
 
     public List<Refund> fetchAll(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest("/refunds", options);
-        return Utils.processCollectionResponse(response, Model.ENTITY_REFUND);
+        return Utils.processCollectionResponse(response);
     }
 
     public Refund fetch(String id) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/refunds/%s", id), null);
-        return Utils.processResponse(response, Model.ENTITY_REFUND);
+        return Utils.processResponse(response);
     }
 
     public List<Refund> fetchAll() throws IOException, RazorpayException {

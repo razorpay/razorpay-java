@@ -16,6 +16,6 @@ public class Order extends Model{
 
     public List<Payment> fetchPayments() throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/orders/%s/payments", get("id")), null);
-        return Utils.processCollectionResponse(response, Model.ENTITY_PAYMENT);
+        return Utils.processCollectionResponse(response);
     }
 }

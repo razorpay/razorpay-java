@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    static <T extends Model> T parseResponse(JSONObject jsonObject, String entity){
-        if(jsonObject.getString("entity").equals(entity)){
-            Class<T> cls = getClass(entity);
+    static <T extends Model> T parseResponse(JSONObject jsonObject){
+        if(jsonObject.has("entity")){
+            Class<T> cls = getClass(jsonObject.getString("entity"));
 
             try {
                 return cls.getConstructor(JSONObject.class).newInstance(jsonObject);
@@ -31,13 +31,13 @@ public class Utils {
         return null;
     }
 
-    static <T extends Model> ArrayList<T> parseCollectionResponse(JSONObject jsonObject, String entity){
+    static <T extends Model> ArrayList<T> parseCollectionResponse(JSONObject jsonObject){
         ArrayList<T> modelList = new ArrayList<T>();
         if(jsonObject.getString("entity").equals(Model.ENTITY_COLLECTION)){
             JSONArray jsonArray = jsonObject.getJSONArray("items");
             for(int i=0; i < jsonArray.length(); i++){
                 JSONObject refundJson = jsonArray.getJSONObject(i);
-                T t = parseResponse(refundJson, entity);
+                T t = parseResponse(refundJson);
                 if(t != null){
                     modelList.add(t);
                 }
@@ -46,24 +46,24 @@ public class Utils {
         return modelList;
     }
 
-    static <T extends Model> T processResponse(Response response, String entity) throws IOException, RazorpayException {
+    static <T extends Model> T processResponse(Response response) throws IOException, RazorpayException {
         String responseBody = response.body().string();
         int statusCode = response.code();
         if (statusCode == 200) {
             JSONObject jsonObject = new JSONObject(responseBody);
-            return Utils.<T>parseResponse(jsonObject, entity);
+            return Utils.<T>parseResponse(jsonObject);
         } else  {
             processError(statusCode, responseBody);
         }
         return null;
     }
 
-    static <T extends Model> ArrayList<T> processCollectionResponse(Response response, String entity) throws IOException, RazorpayException {
+    static <T extends Model> ArrayList<T> processCollectionResponse(Response response) throws IOException, RazorpayException {
         String responseBody = response.body().string();
         int statusCode = response.code();
         if (statusCode == 200) {
             JSONObject jsonObject = new JSONObject(responseBody);
-            return Utils.<T>parseCollectionResponse(jsonObject, entity);
+            return Utils.<T>parseCollectionResponse(jsonObject);
         } else {
             processError(statusCode, responseBody);
         }

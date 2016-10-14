@@ -21,12 +21,12 @@ public class PaymentClient {
 
     public Payment fetch(String id) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/payments/%s", id), null);
-        return  Utils.processResponse(response, Model.ENTITY_PAYMENT);
+        return  Utils.processResponse(response);
     }
 
     public List<Payment> fetchAll(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest("/payments", options);
-        return Utils.processCollectionResponse(response, Model.ENTITY_PAYMENT);
+        return Utils.processCollectionResponse(response);
     }
 
     public List<Payment> fetchAll() throws IOException, RazorpayException {

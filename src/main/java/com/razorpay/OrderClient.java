@@ -18,21 +18,21 @@ public class OrderClient {
 
     public Order create(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.postRequest("/orders", options);
-        return Utils.processResponse(response, Model.ENTITY_ORDER);
+        return Utils.processResponse(response);
     }
 
     public List<Order> fetchAll(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest("/orders", options);
-        return Utils.processCollectionResponse(response, Model.ENTITY_ORDER);
+        return Utils.processCollectionResponse(response);
     }
 
     public Order fetch(String id) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/orders/%s", id), null);
-        return Utils.processResponse(response, Model.ENTITY_ORDER);
+        return Utils.processResponse(response);
     }
 
     public List<Payment> fetchPayments(String id) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/orders/%s/payments", id), null);
-        return Utils.processCollectionResponse(response, Model.ENTITY_PAYMENT);
+        return Utils.processCollectionResponse(response);
     }
 }

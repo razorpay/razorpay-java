@@ -19,12 +19,12 @@ public class Payment extends Model{
         JSONObject options = new JSONObject();
         options.put("amount", amount);
         Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", get("id")), options);
-        return Utils.processResponse(response, ENTITY_PAYMENT);
+        return Utils.processResponse(response);
     }
 
     public Refund refund(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.postRequest(String.format("/payments/%s/refund", get("id")), options);
-        return Utils.processResponse(response, ENTITY_REFUND);
+        return Utils.processResponse(response);
     }
 
     public Refund refund() throws IOException, RazorpayException {
@@ -33,12 +33,12 @@ public class Payment extends Model{
 
     public Refund fetchRefund(String refundId) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds/%s", get("id"), refundId), null);
-        return Utils.processResponse(response, ENTITY_REFUND);
+        return Utils.processResponse(response);
     }
 
     public List<Refund> fetchAllRefunds(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds", get("id")), options);
-        return Utils.processCollectionResponse(response, ENTITY_REFUND);
+        return Utils.processCollectionResponse(response);
     }
 
     public List<Refund> fetchAllRefunds() throws IOException, RazorpayException {
