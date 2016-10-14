@@ -32,4 +32,34 @@ public class PaymentClient {
     public List<Payment> fetchAll() throws IOException, RazorpayException {
         return fetchAll(null);
     }
+
+    public Payment capture(String id, String amount) throws IOException, RazorpayException {
+        JSONObject options = new JSONObject();
+        options.put("amount", amount);
+        Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", id), options);
+        return Utils.processResponse(response);
+    }
+
+    public Refund refund(String id, JSONObject options) throws IOException, RazorpayException {
+        Response response = ApiUtils.postRequest(String.format("/payments/%s/refund", id), options);
+        return Utils.processResponse(response);
+    }
+
+    public Refund refund(String id) throws IOException, RazorpayException {
+        return refund(id, null);
+    }
+
+    public Refund fetchRefund(String id, String refundId) throws IOException, RazorpayException {
+        Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds/%s", id, refundId), null);
+        return Utils.processResponse(response);
+    }
+
+    public List<Refund> fetchAllRefunds(String id, JSONObject options) throws IOException, RazorpayException {
+        Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds", id), options);
+        return Utils.processCollectionResponse(response);
+    }
+
+    public List<Refund> fetchAllRefunds(String id) throws IOException, RazorpayException {
+        return fetchAllRefunds(id, null);
+    }
 }
