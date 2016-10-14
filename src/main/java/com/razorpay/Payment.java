@@ -12,9 +12,7 @@ public class Payment extends Entity {
         super(jsonObject);
     }
 
-    public Payment capture(String amount) throws IOException, RazorpayException {
-        JSONObject options = new JSONObject();
-        options.put("amount", amount);
+    public Payment capture(JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", get("id")), options);
         return Utils.processResponse(response);
     }

@@ -33,9 +33,7 @@ public class PaymentClient {
         return fetchAll(null);
     }
 
-    public Payment capture(String id, String amount) throws IOException, RazorpayException {
-        JSONObject options = new JSONObject();
-        options.put("amount", amount);
+    public Payment capture(String id, JSONObject options) throws IOException, RazorpayException {
         Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", id), options);
         return Utils.processResponse(response);
     }
