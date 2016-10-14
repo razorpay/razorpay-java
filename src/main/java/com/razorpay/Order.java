@@ -5,10 +5,9 @@ import okhttp3.Response;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
-public class Order extends Model{
+public class Order extends Entity {
 
     public Order(JSONObject jsonObject) {
         super(jsonObject);
