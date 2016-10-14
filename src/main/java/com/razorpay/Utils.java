@@ -11,27 +11,21 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    static <T extends Entity> T parseResponse(JSONObject jsonObject){
+    static <T extends Entity> T parseResponse(JSONObject jsonObject) throws RazorpayException {
         if(jsonObject.has("entity")){
             Class<T> cls = getClass(jsonObject.getString("entity"));
-
             try {
                 return cls.getConstructor(JSONObject.class).newInstance(jsonObject);
-
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                throw new RazorpayException("Unable to parse response");
             }
         }
-        return null;
+        else {
+            throw new RazorpayException("Unable to parse response");
+        }
     }
 
-    static <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject){
+    static <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject) throws RazorpayException {
         ArrayList<T> modelList = new ArrayList<T>();
         if(jsonObject.getString("entity").equals(Entity.ENTITY_COLLECTION)){
             JSONArray jsonArray = jsonObject.getJSONArray("items");
@@ -42,6 +36,9 @@ public class Utils {
                     modelList.add(t);
                 }
             }
+        }
+        else {
+            throw new RazorpayException("Unable to parse response");
         }
         return modelList;
     }
