@@ -9,10 +9,6 @@ import java.io.IOException;
 class ApiUtils {
     private static String auth;
     private static OkHttpClient client;
-    private static final String AUTH_HEADER_NAME = "Authorization";
-    private static final String BASE_URL = "https://api.razorpay.com/v1";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-
 
     static void setAuthCredentials(String key, String secret){
         auth = Credentials.basic(key, secret);
@@ -22,11 +18,11 @@ class ApiUtils {
     private static Request createRequest(String method, String path, JSONObject options){
         Request request;
         Request.Builder builder = new Request.Builder()
-                .url(BASE_URL + path)
-                .addHeader(AUTH_HEADER_NAME, auth);
+                .url(Constants.BASE_URL + path)
+                .addHeader(Constants.AUTH_HEADER_KEY, auth);
 
         if(options != null){
-            request = builder.method(method, RequestBody.create(JSON, options.toString()))
+            request = builder.method(method, RequestBody.create(Constants.MEDIA_TYPE_JSON, options.toString()))
                     .build();
         }
         else{

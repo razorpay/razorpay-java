@@ -4,12 +4,6 @@ import org.json.JSONObject;
 
 abstract class Entity {
     private JSONObject modelJson;
-    static final String ENTITY_PAYMENT = "payment";
-    static final String ENTITY_ORDER = "order";
-    static final String ENTITY_REFUND = "refund";
-    static final String ENTITY_COLLECTION = "collection";
-
-
 
     Entity(JSONObject jsonObject){
         this.modelJson = jsonObject;
