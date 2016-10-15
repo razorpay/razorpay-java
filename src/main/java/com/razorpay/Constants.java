@@ -10,6 +10,10 @@ public class Constants {
     // JSON response keys
     static final String KEY_ENTITY= "entity";
     static final String KEY_ERROR = "error";
+    static final String KEY_CREATED_AT = "created_at";
+    static final String KEY_AMOUNT = "amount";
+    static final String KEY_NOTES = "notes";
+
 
     // Entities
     static final String ENTITY_PAYMENT = "payment";

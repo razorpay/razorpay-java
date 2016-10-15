@@ -1,6 +1,7 @@
 package com.razorpay;
 
 import org.json.JSONObject;
+import java.util.Date;
 
 abstract class Entity {
     private JSONObject modelJson;
@@ -9,10 +10,19 @@ abstract class Entity {
         this.modelJson = jsonObject;
     }
 
-    public String get(String key){
+    public <T> T get(String key) {
+        // Return Date for timestamps
+        if(key.equals(Constants.KEY_CREATED_AT)){
+            return (T) new Date(modelJson.getLong(key)*1000);
+        }
         Object value = modelJson.get(key);
-        return String.valueOf(value);
+        if(value == null) {
+            return null;
+        }
+        return (T) value.getClass().cast(value);
     }
+
+
 
     public String toString(){
         return modelJson.toString();
