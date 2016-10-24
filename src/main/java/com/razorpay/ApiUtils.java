@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.json.JSONObject;
 
 import okhttp3.Credentials;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -29,19 +30,25 @@ class ApiUtils {
   }
 
   static Response postRequest(String path, JSONObject requestObject) throws RazorpayException {
-    StringBuilder urlBuilder = new StringBuilder(Constants.BASE_URL).append(path);
+    HttpUrl.Builder builder =
+        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
+            .addPathSegment(Constants.VERSION).addPathSegments(path);
+
     RequestBody requestBody =
         RequestBody.create(Constants.MEDIA_TYPE_JSON, requestObject.toString());
 
-    Request request = createRequest(Method.POST.name(), urlBuilder.toString(), requestBody);
+    Request request = createRequest(Method.POST.name(), builder.build().toString(), requestBody);
     return processRequest(request);
   }
 
   static Response getRequest(String path, JSONObject requestObject) throws RazorpayException {
-    StringBuilder urlBuilder = new StringBuilder(Constants.BASE_URL).append(path);
-    urlBuilder.append(addQueryParams(requestObject));
+    HttpUrl.Builder builder =
+        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
+            .addPathSegment(Constants.VERSION).addPathSegments(path);
 
-    Request request = createRequest(Method.GET.name(), urlBuilder.toString(), null);
+    addQueryParams(builder, requestObject);
+
+    Request request = createRequest(Method.GET.name(), builder.build().toString(), null);
     return processRequest(request);
   }
 
@@ -52,20 +59,15 @@ class ApiUtils {
     return builder.method(method, requestBody).build();
   }
 
-  private static String addQueryParams(JSONObject request) {
-    StringBuilder urlBuilder = new StringBuilder();
-
+  private static void addQueryParams(HttpUrl.Builder builder, JSONObject request) {
     if (request == null)
-      return urlBuilder.toString();
-
-    urlBuilder.append("?");
+      return;
 
     Iterator<?> keys = request.keys();
     while (keys.hasNext()) {
       String key = (String) keys.next();
-      urlBuilder.append(key + "=" + request.get(key).toString());
+      builder.addQueryParameter(key, request.get(key).toString());
     }
-    return urlBuilder.toString();
   }
 
   private static Response processRequest(Request request) throws RazorpayException {
