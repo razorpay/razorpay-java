@@ -1,20 +1,20 @@
 package com.razorpay;
 
+import java.util.List;
 
-import okhttp3.Response;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
+import okhttp3.Response;
 
 public class Order extends Entity {
 
-    public Order(JSONObject jsonObject) {
-        super(jsonObject);
-    }
+  public Order(JSONObject jsonObject) {
+    super(jsonObject);
+  }
 
-    public List<Payment> fetchPayments() throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest(String.format("/orders/%s/payments", get("id")), null);
-        return Utils.processCollectionResponse(response);
-    }
+  public List<Payment> fetchPayments() throws RazorpayException {
+    Response response =
+        ApiUtils.getRequest(String.format(Constants.ORDER_PAYMENT_LIST, get(Constants.ID)), null);
+    return Utils.processCollectionResponse(response);
+  }
 }

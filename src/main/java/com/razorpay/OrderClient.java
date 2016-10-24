@@ -1,38 +1,43 @@
 package com.razorpay;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import java.util.List;
+
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
+import okhttp3.Response;
 
 public class OrderClient {
 
-    /**
-     * Make constructor package protected
-     */
-    OrderClient(){}
+  private static OrderClient orderClient = null;
 
-
-    public Order create(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.postRequest("/orders", options);
-        return Utils.processResponse(response);
+  protected static OrderClient getInstance() {
+    if (orderClient == null) {
+      orderClient = new OrderClient();
     }
+    return orderClient;
+  }
 
-    public List<Order> fetchAll(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest("/orders", options);
-        return Utils.processCollectionResponse(response);
-    }
+  private OrderClient() {
 
-    public Order fetch(String id) throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest(String.format("/orders/%s", id), null);
-        return Utils.processResponse(response);
-    }
+  };
 
-    public List<Payment> fetchPayments(String id) throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest(String.format("/orders/%s/payments", id), null);
-        return Utils.processCollectionResponse(response);
-    }
+  public Order create(JSONObject request) throws RazorpayException {
+    Response response = ApiUtils.postRequest(Constants.ORDER_CREATE, request);
+    return Utils.processResponse(response);
+  }
+
+  public List<Order> fetchAll(JSONObject request) throws RazorpayException {
+    Response response = ApiUtils.getRequest(Constants.ORDER_LIST, request);
+    return Utils.processCollectionResponse(response);
+  }
+
+  public Order fetch(String id) throws RazorpayException {
+    Response response = ApiUtils.getRequest(String.format(Constants.ORDER_GET, id), null);
+    return Utils.processResponse(response);
+  }
+
+  public List<Payment> fetchPayments(String id) throws RazorpayException {
+    Response response = ApiUtils.getRequest(String.format(Constants.ORDER_PAYMENT_LIST, id), null);
+    return Utils.processCollectionResponse(response);
+  }
 }

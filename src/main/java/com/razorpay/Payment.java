@@ -1,42 +1,42 @@
 package com.razorpay;
 
-import okhttp3.Response;
+import java.util.List;
+
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
+import okhttp3.Response;
 
 public class Payment extends Entity {
 
-    public Payment(JSONObject jsonObject) {
-        super(jsonObject);
-    }
+  public Payment(JSONObject jsonObject) {
+    super(jsonObject);
+  }
 
-    public Payment capture(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.postRequest(String.format("/payments/%s/capture", get("id")), options);
-        return Utils.processResponse(response);
-    }
+  public Payment capture(JSONObject request) throws RazorpayException {
+    Response response =
+        ApiUtils.postRequest(String.format(Constants.PAYMENT_CAPTURE, get(Constants.ID)), request);
+    return Utils.processResponse(response);
+  }
 
-    public Refund refund(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.postRequest(String.format("/payments/%s/refund", get("id")), options);
-        return Utils.processResponse(response);
-    }
+  public Refund refund(JSONObject request) throws RazorpayException {
+    Response response =
+        ApiUtils.postRequest(String.format(Constants.PAYMENT_REFUND, get(Constants.ID)), request);
+    return Utils.processResponse(response);
+  }
 
-    public Refund refund() throws IOException, RazorpayException {
-        return refund(null);
-    }
+  public Refund fetchRefund(String refundId) throws RazorpayException {
+    Response response = ApiUtils
+        .getRequest(String.format(Constants.PAYMENT_REFUND_GET, get(Constants.ID), refundId), null);
+    return Utils.processResponse(response);
+  }
 
-    public Refund fetchRefund(String refundId) throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds/%s", get("id"), refundId), null);
-        return Utils.processResponse(response);
-    }
+  public List<Refund> fetchAllRefunds(JSONObject request) throws RazorpayException {
+    Response response = ApiUtils
+        .getRequest(String.format(Constants.PAYMENT_REFUND_LIST, get(Constants.ID)), request);
+    return Utils.processCollectionResponse(response);
+  }
 
-    public List<Refund> fetchAllRefunds(JSONObject options) throws IOException, RazorpayException {
-        Response response = ApiUtils.getRequest(String.format("/payments/%s/refunds", get("id")), options);
-        return Utils.processCollectionResponse(response);
-    }
-
-    public List<Refund> fetchAllRefunds() throws IOException, RazorpayException {
-        return fetchAllRefunds(null);
-    }
+  public List<Refund> fetchAllRefunds() throws RazorpayException {
+    return fetchAllRefunds(null);
+  }
 }
