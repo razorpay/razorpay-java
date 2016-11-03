@@ -5,9 +5,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class Razorpay {
 
-  public PaymentClient paymentClient;
-  public RefundClient refundClient;
-  public OrderClient orderClient;
+  public PaymentClient Payments;
+  public RefundClient Refunds;
+  public OrderClient Orders;
 
   private static Razorpay razorpayClient = null;
 
@@ -38,8 +38,8 @@ public class Razorpay {
     OkHttpClient client = new OkHttpClient.Builder().addInterceptor(logging).build();
     ApiUtils.setClient(client);
 
-    paymentClient = PaymentClient.getInstance();
-    refundClient = RefundClient.getInstance();
-    orderClient = OrderClient.getInstance();
+    Payments = PaymentClient.getInstance();
+    Refunds = RefundClient.getInstance();
+    Orders = OrderClient.getInstance();
   }
 }

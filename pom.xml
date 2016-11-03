@@ -25,15 +25,12 @@
     <developerConnection>scm:git:git@github.com:razorpay/razorpay-java.git</developerConnection>
     <url>git@github.com:razorpay/razorpay-java.git</url>
   </scm>
-
+ 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
@@ -51,7 +48,6 @@
       <artifactId>json</artifactId>
       <version>20160212</version>
     </dependency>
-
   </dependencies>
 
   <distributionManagement>
