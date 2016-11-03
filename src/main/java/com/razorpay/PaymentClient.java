@@ -10,7 +10,7 @@ public class PaymentClient {
 
   private static PaymentClient paymentClient = null;
 
-  protected static PaymentClient getInstance() {
+  static PaymentClient getInstance() {
     if (paymentClient == null) {
       paymentClient = new PaymentClient();
     }

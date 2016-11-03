@@ -13,7 +13,7 @@ public class Razorpay {
 
   public static Razorpay getClient(String key, String secret) {
     if (razorpayClient == null) {
-      razorpayClient = new Razorpay(key, secret);
+      razorpayClient = new Razorpay(key, secret, false);
     }
     return razorpayClient;
   }
@@ -23,10 +23,6 @@ public class Razorpay {
       razorpayClient = new Razorpay(key, secret, enableLogging);
     }
     return razorpayClient;
-  }
-
-  private Razorpay(String key, String secret) {
-    this(key, secret, false);
   }
 
   private Razorpay(String key, String secret, Boolean enableLogging) {

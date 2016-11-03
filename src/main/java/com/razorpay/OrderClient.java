@@ -10,7 +10,7 @@ public class OrderClient {
 
   private static OrderClient orderClient = null;
 
-  protected static OrderClient getInstance() {
+  static OrderClient getInstance() {
     if (orderClient == null) {
       orderClient = new OrderClient();
     }

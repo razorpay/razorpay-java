@@ -10,7 +10,7 @@ public class RefundClient {
 
   private static RefundClient refundClient = null;
 
-  protected static RefundClient getInstance() {
+  static RefundClient getInstance() {
     if (refundClient == null) {
       refundClient = new RefundClient();
     }
