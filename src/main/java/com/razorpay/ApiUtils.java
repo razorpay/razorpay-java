@@ -34,8 +34,12 @@ class ApiUtils {
         new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
             .addPathSegment(Constants.VERSION).addPathSegments(path);
 
-    RequestBody requestBody =
-        RequestBody.create(Constants.MEDIA_TYPE_JSON, requestObject.toString());
+    RequestBody requestBody = null;
+    if (requestObject == null) {
+      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, "");
+    } else {
+      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestObject.toString());
+    }
 
     Request request = createRequest(Method.POST.name(), builder.build().toString(), requestBody);
     return processRequest(request);

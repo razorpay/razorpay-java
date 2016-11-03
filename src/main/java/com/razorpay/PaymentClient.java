@@ -40,6 +40,10 @@ public class PaymentClient {
     return Utils.processResponse(response);
   }
 
+  public Refund refund(String id) throws RazorpayException {
+    return refund(id, null);
+  }
+
   public Refund refund(String id, JSONObject request) throws RazorpayException {
     Response response = ApiUtils.postRequest(String.format(Constants.PAYMENT_REFUND, id), request);
     return Utils.processResponse(response);

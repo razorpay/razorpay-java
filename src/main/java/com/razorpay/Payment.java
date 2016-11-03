@@ -18,6 +18,10 @@ public class Payment extends Entity {
     return Utils.processResponse(response);
   }
 
+  public Refund refund() throws RazorpayException {
+    return refund(null);
+  }
+
   public Refund refund(JSONObject request) throws RazorpayException {
     Response response =
         ApiUtils.postRequest(String.format(Constants.PAYMENT_REFUND, get(Constants.ID)), request);
