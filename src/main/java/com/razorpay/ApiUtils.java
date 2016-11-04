@@ -3,6 +3,7 @@ package com.razorpay;
 import java.io.IOException;
 import java.util.Iterator;
 
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.json.JSONObject;
 
 import okhttp3.Credentials;
@@ -14,22 +15,27 @@ import okhttp3.Response;
 
 class ApiUtils {
 
-  private static String auth;
   private static OkHttpClient client;
+
+  static void createHttpClientInstance(boolean enableLogging) {
+    if(client == null){
+      client = new OkHttpClient.Builder().build();
+    }
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    if(enableLogging == true){
+      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+    }
+    else{
+      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+    }
+    client = client.newBuilder().addInterceptor(loggingInterceptor).build();
+  }
 
   private enum Method {
     GET, POST
   }
 
-  static void setAuthCredentials(String key, String secret) {
-    auth = Credentials.basic(key, secret);
-  }
-
-  static void setClient(OkHttpClient client) {
-    ApiUtils.client = client;
-  }
-
-  static Response postRequest(String path, JSONObject requestObject) throws RazorpayException {
+  static Response postRequest(String path, JSONObject requestObject, String auth) throws RazorpayException {
     HttpUrl.Builder builder =
         new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
             .addPathSegment(Constants.VERSION).addPathSegments(path);
@@ -41,22 +47,22 @@ class ApiUtils {
       requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestObject.toString());
     }
 
-    Request request = createRequest(Method.POST.name(), builder.build().toString(), requestBody);
+    Request request = createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
   }
 
-  static Response getRequest(String path, JSONObject requestObject) throws RazorpayException {
+  static Response getRequest(String path, JSONObject requestObject, String auth) throws RazorpayException {
     HttpUrl.Builder builder =
         new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
             .addPathSegment(Constants.VERSION).addPathSegments(path);
 
     addQueryParams(builder, requestObject);
 
-    Request request = createRequest(Method.GET.name(), builder.build().toString(), null);
+    Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  private static Request createRequest(String method, String url, RequestBody requestBody) {
+  private static Request createRequest(String method, String url, RequestBody requestBody, String auth) {
     Request.Builder builder =
         new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
 

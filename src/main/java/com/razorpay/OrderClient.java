@@ -4,40 +4,25 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import okhttp3.Response;
+public class OrderClient extends ApiClient {
 
-public class OrderClient {
-
-  private static OrderClient orderClient = null;
-
-  static OrderClient getInstance() {
-    if (orderClient == null) {
-      orderClient = new OrderClient();
-    }
-    return orderClient;
+  OrderClient(String auth) {
+    super(auth);
   }
 
-  private OrderClient() {
-
-  };
-
   public Order create(JSONObject request) throws RazorpayException {
-    Response response = ApiUtils.postRequest(Constants.ORDER_CREATE, request);
-    return Utils.processResponse(response);
+    return post(Constants.ORDER_CREATE, request);
   }
 
   public List<Order> fetchAll(JSONObject request) throws RazorpayException {
-    Response response = ApiUtils.getRequest(Constants.ORDER_LIST, request);
-    return Utils.processCollectionResponse(response);
+    return getCollection(Constants.ORDER_LIST, request);
   }
 
   public Order fetch(String id) throws RazorpayException {
-    Response response = ApiUtils.getRequest(String.format(Constants.ORDER_GET, id), null);
-    return Utils.processResponse(response);
+    return get(String.format(Constants.ORDER_GET, id), null);
   }
 
   public List<Payment> fetchPayments(String id) throws RazorpayException {
-    Response response = ApiUtils.getRequest(String.format(Constants.ORDER_PAYMENT_LIST, id), null);
-    return Utils.processCollectionResponse(response);
+    return getCollection(String.format(Constants.ORDER_PAYMENT_LIST, id), null);
   }
 }
