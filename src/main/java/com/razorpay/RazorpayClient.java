@@ -1,8 +1,6 @@
 package com.razorpay;
 
 import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 public class RazorpayClient {
 
@@ -10,8 +8,7 @@ public class RazorpayClient {
   public RefundClient Refunds;
   public OrderClient Orders;
 
-
-  public RazorpayClient(String key, String secret){
+  public RazorpayClient(String key, String secret) {
     this(key, secret, false);
   }
 

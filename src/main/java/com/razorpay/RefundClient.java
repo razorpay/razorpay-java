@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import okhttp3.Response;
-
 public class RefundClient extends ApiClient {
 
   RefundClient(String auth) {

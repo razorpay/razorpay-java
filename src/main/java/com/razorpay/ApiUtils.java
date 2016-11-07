@@ -3,29 +3,27 @@ package com.razorpay;
 import java.io.IOException;
 import java.util.Iterator;
 
-import okhttp3.logging.HttpLoggingInterceptor;
 import org.json.JSONObject;
 
-import okhttp3.Credentials;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 class ApiUtils {
 
   private static OkHttpClient client;
 
   static void createHttpClientInstance(boolean enableLogging) {
-    if(client == null){
+    if (client == null) {
       client = new OkHttpClient.Builder().build();
     }
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-    if(enableLogging == true){
+    if (enableLogging) {
       loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-    }
-    else{
+    } else {
       loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
     }
     client = client.newBuilder().addInterceptor(loggingInterceptor).build();
@@ -35,23 +33,22 @@ class ApiUtils {
     GET, POST
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth) throws RazorpayException {
+  static Response postRequest(String path, JSONObject requestObject, String auth)
+      throws RazorpayException {
     HttpUrl.Builder builder =
         new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
             .addPathSegment(Constants.VERSION).addPathSegments(path);
 
-    RequestBody requestBody = null;
-    if (requestObject == null) {
-      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, "");
-    } else {
-      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestObject.toString());
-    }
+    String requestContent = requestObject == null ? "" : requestObject.toString();
+    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
 
-    Request request = createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
+    Request request =
+        createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
   }
 
-  static Response getRequest(String path, JSONObject requestObject, String auth) throws RazorpayException {
+  static Response getRequest(String path, JSONObject requestObject, String auth)
+      throws RazorpayException {
     HttpUrl.Builder builder =
         new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
             .addPathSegment(Constants.VERSION).addPathSegments(path);
@@ -62,7 +59,8 @@ class ApiUtils {
     return processRequest(request);
   }
 
-  private static Request createRequest(String method, String url, RequestBody requestBody, String auth) {
+  private static Request createRequest(String method, String url, RequestBody requestBody,
+      String auth) {
     Request.Builder builder =
         new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
 
