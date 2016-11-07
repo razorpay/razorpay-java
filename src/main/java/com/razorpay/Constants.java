@@ -4,16 +4,6 @@ import okhttp3.MediaType;
 
 public class Constants {
 
-  // Entities Keys
-  static final String ID = "id";
-  static final String CREATED_AT = "created_at";
-  static final String CAPTURED_AT = "captured_at";
-  static final String ENTITY = "entity";
-  static final String COLLECTION = "collection";
-  static final String ERROR = "error";
-  static final String DESCRIPTION = "description";
-  static final String STATUS_CODE = "code";
-
   // API constants
   static final String SCHEME = "https";
   static final String HOSTNAME = "api.razorpay.com";
@@ -39,7 +29,5 @@ public class Constants {
   static final String ORDER_GET = "orders/%s";
   static final String ORDER_LIST = "orders";
   static final String ORDER_PAYMENT_LIST = "orders/%s/payments";
-
-  static final int STATUS_OK = 200;
 
 }
