@@ -15,14 +15,15 @@ Instantiate `RazorpayClient` with `key_id` & `key_secret`. You can obtain the ke
 
 ```java
 // Initialize client
-Razorpay razorpayClient = Razorpay.getClient("key_id", "key_secret");
-
+RazorpayClient razorpayClient = new RazorpayClient("key_id", "key_secret");
 ```
+
 ### [Payments](https://docs.razorpay.com/docs/return-objects#payment-entity)
 * Fetch all payments
 ```java
 List<Payment> payments = razorpayClient.Payments.fetchAll();
 ```
+
 * Fetch a particular payment:
 ```java
 Payment payment = razorpayClient.Payments.fetch("payment_id");
@@ -37,28 +38,41 @@ Date createdAt = payment.get("created_at");
 JSONObject options = new JSONObject();
 options.put("amount", 1000);
 razorpayClient.Payments.capture("payment_id", options);
-// Note: Amount should be same as the original amount while creating the payment
+// Note: Amount should be same as the original amount while creating the payment. The amount should be in paise.
 ```
+
 * Refund a payment:
 ```java
 // For full refunds
-razorpayClient.Payments.refund("payment_id");
+Refund refund = razorpayClient.Payments.refund("payment_id");
 
 // For partial refunds
-razorpayClient.Payments.refund("payment_id", "amount_to_be_refunded");
-// Note: Amount to be refunded should be less than or equal to the original amount.
+JSONObject refundRequest = new JSONObject();
+refundRequest.put("amount", 100);
+Refund refund = razorpay.Payments.refund("payment_id", refundRequest);
+// Note: Amount to be refunded should be less than or equal to the original amount.The amount should be in paise.
+```
+
+* Fetch all refunds for a payment:
+```java
+List<Refund> refund = razorpayClient.Payments.fetchAllRefunds("payment_id");
+```
+
+* Fetch refund for a payment:
+```java
+Refund refund = razorpayClient.Payments.fetchRefund("payment_id", "refund_id");
 ```
 
 ### [Refunds](https://docs.razorpay.com/docs/return-objects#refund-entity)
 
 * Fetch all refunds:
 ```java
-razorpayClient.Refunds.fetchAll("payment_id");
+List<Refund> refunds = razorpayClient.Refunds.fetchAll();
 ```
 
 * Fetch a particular refund:
 ```java
-razorpayClient.Refunds.fetch("payment_id", "refund_id");
+Refund refund = razorpayClient.Refunds.fetch("refund_id");
 ```
 
 ### [Orders](https://docs.razorpay.com/docs/return-objects#order-entity)
@@ -66,7 +80,7 @@ razorpayClient.Refunds.fetch("payment_id", "refund_id");
 * Create a new order:
 ```java
 JSONObject options = new JSONObject();
-options.put("amount", 5000);
+options.put("amount", 5000); // Note: The amount should be in paise.
 options.put("currency", "INR");
 options.put("receipt", "txn_123456");
 Order order = razorpayClient.Orders.create(options);
@@ -75,10 +89,7 @@ Order order = razorpayClient.Orders.create(options);
 * Fetch a particular order:
 ```java
 Order order = razorpayClient.Orders.fetch("order_id");
-// You can fetch payments for a particular order
-List<Payment> payments = order.fetchPayments();
 ```
-
 * Fetch all orders:
 ```java
 List<Order> orders = razorpayClient.Orders.fetchAll();
