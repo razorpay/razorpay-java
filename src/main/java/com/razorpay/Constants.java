@@ -4,11 +4,6 @@ import okhttp3.MediaType;
 
 public class Constants {
 
-  // Entities Keys
-  static final String ID = "id";
-  static final String CREATED_AT = "created_at";
-  static final String CAPTURED_AT = "captured_at";
-
   // API constants
   static final String SCHEME = "https";
   static final String HOSTNAME = "api.razorpay.com";

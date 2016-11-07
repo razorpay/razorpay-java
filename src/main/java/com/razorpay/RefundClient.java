@@ -4,31 +4,18 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import okhttp3.Response;
+public class RefundClient extends ApiClient {
 
-public class RefundClient {
-
-  private static RefundClient refundClient = null;
-
-  static RefundClient getInstance() {
-    if (refundClient == null) {
-      refundClient = new RefundClient();
-    }
-    return refundClient;
+  RefundClient(String auth) {
+    super(auth);
   }
 
-  private RefundClient() {
-
-  };
-
   public List<Refund> fetchAll(JSONObject request) throws RazorpayException {
-    Response response = ApiUtils.getRequest(Constants.REFUND_LIST, request);
-    return Utils.processCollectionResponse(response);
+    return getCollection(Constants.REFUND_LIST, request);
   }
 
   public Refund fetch(String id) throws RazorpayException {
-    Response response = ApiUtils.getRequest(String.format(Constants.REFUND_GET, id), null);
-    return Utils.processResponse(response);
+    return get(String.format(Constants.REFUND_GET, id), null);
   }
 
   public List<Refund> fetchAll() throws RazorpayException {

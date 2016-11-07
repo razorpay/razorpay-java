@@ -8,19 +8,43 @@ import org.json.JSONObject;
 
 import okhttp3.Response;
 
-public class Utils {
+class ApiClient {
 
-  private static final int STATUS_OK = 200;
-  private static final String ENTITY = "entity";
-  private static final String ENTITY_COLLECTION = "collection";
+  private String auth;
 
-  private static final String ERROR = "error";
-  private static final String DESCRIPTION = "description";
-  private static final String STATUS_CODE = "code";
+  private final String ENTITY = "entity";
 
-  private static <T extends Entity> T parseResponse(JSONObject jsonObject)
+  private final String COLLECTION = "collection";
+
+  private final String ERROR = "error";
+
+  private final String DESCRIPTION = "description";
+
+  private final String STATUS_CODE = "code";
+
+  private final int STATUS_OK = 200;
+
+  ApiClient(String auth) {
+    this.auth = auth;
+  }
+
+  <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.getRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
+  <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.postRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
+  <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
       throws RazorpayException {
+    Response response = ApiUtils.getRequest(path, requestObject, auth);
+    return processCollectionResponse(response);
+  }
 
+  private <T extends Entity> T parseResponse(JSONObject jsonObject) throws RazorpayException {
     if (jsonObject.has(ENTITY)) {
       Class<T> cls = getClass(jsonObject.getString(ENTITY));
       try {
@@ -33,20 +57,18 @@ public class Utils {
     throw new RazorpayException("Unable to parse response");
   }
 
-  private static <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
+  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
       throws RazorpayException {
 
     ArrayList<T> modelList = new ArrayList<T>();
-    if (jsonObject.has(ENTITY) && ENTITY_COLLECTION.equals(jsonObject.getString(ENTITY))) {
+    if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
       JSONArray jsonArray = jsonObject.getJSONArray("items");
-
       try {
         for (int i = 0; i < jsonArray.length(); i++) {
           JSONObject refundJson = jsonArray.getJSONObject(i);
           T t = parseResponse(refundJson);
           modelList.add(t);
         }
-
         return modelList;
       } catch (RazorpayException e) {
         throw e;
@@ -56,7 +78,7 @@ public class Utils {
     throw new RazorpayException("Unable to parse response");
   }
 
-  static <T extends Entity> T processResponse(Response response) throws RazorpayException {
+  private <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -73,14 +95,14 @@ public class Utils {
     }
 
     if (statusCode == STATUS_OK) {
-      return Utils.<T>parseResponse(responseJson);
+      return parseResponse(responseJson);
     }
 
     throwException(statusCode, responseJson);
     return null;
   }
 
-  static <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
+  private <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
       throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
@@ -97,17 +119,15 @@ public class Utils {
       throw new RazorpayException(e.getMessage());
     }
 
-
     if (statusCode == STATUS_OK) {
-      return Utils.<T>parseCollectionResponse(responseJson);
+      return parseCollectionResponse(responseJson);
     }
 
     throwException(statusCode, responseJson);
     return null;
   }
 
-  private static void throwException(int statusCode, JSONObject responseJson)
-      throws RazorpayException {
+  private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
     if (responseJson.has(ERROR)) {
       JSONObject errorResponse = responseJson.getJSONObject(ERROR);
       String code = errorResponse.getString(STATUS_CODE);
@@ -117,15 +137,14 @@ public class Utils {
     throwServerException(statusCode, responseJson.toString());
   }
 
-  private static void throwServerException(int statusCode, String responseBody)
-      throws RazorpayException {
+  private void throwServerException(int statusCode, String responseBody) throws RazorpayException {
     StringBuilder sb = new StringBuilder();
     sb.append("Status Code: ").append(statusCode).append("\n");
     sb.append("Server response: ").append(responseBody);
     throw new RazorpayException(sb.toString());
   }
 
-  private static Class getClass(String entity) {
+  private Class getClass(String entity) {
     try {
       String entityClass =
           "com.razorpay." + Character.toUpperCase(entity.charAt(0)) + entity.substring(1);
@@ -134,5 +153,4 @@ public class Utils {
       return null;
     }
   }
-
 }
