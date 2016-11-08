@@ -7,7 +7,31 @@ Official java bindings for the [Razorpay API](https://docs.razorpay.com/docs/pay
 
 Documentation of Razorpay's API and their usage is available at <https://docs.razorpay.com>
 
+## Requirements
+
+Java 1.7 or later
+
 ## Installation
+
+### Maven users
+
+Add this dependency to your project's POM:
+
+```xml
+<dependency>
+<groupId>com.razorpay</groupId>
+<artifactId>razorpay-java</artifactId>
+<version>1.0.0</version>
+</dependency>
+```
+
+### Gradle users
+
+Add this dependency to your project's build file:
+
+```groovy
+compile "com.razorpay:razorpay-java:1.0.0"
+```
 
 ## Usage
 
