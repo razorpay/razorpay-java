@@ -14,6 +14,10 @@ public class OrderClient extends ApiClient {
     return post(Constants.ORDER_CREATE, request);
   }
 
+  public List<Order> fetchAll() throws RazorpayException {
+    return fetchAll(null);
+  }
+
   public List<Order> fetchAll(JSONObject request) throws RazorpayException {
     return getCollection(Constants.ORDER_LIST, request);
   }
