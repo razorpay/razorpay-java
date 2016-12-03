@@ -136,6 +136,9 @@ lineItems.put(lineItem);
 
 JSONObject request = new JSONObject();
 request.put("line_items", lineItems);
+request.put("date", 1480768625); // Timestamp in seconds
+request.put("currency", "INR");
+request.put("sms_notify", "0"); 
 
 Invoice invoice = razorpayClient.Invoices.create(request);
 ```
