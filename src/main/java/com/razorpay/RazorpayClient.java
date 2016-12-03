@@ -7,6 +7,7 @@ public class RazorpayClient {
   public PaymentClient Payments;
   public RefundClient Refunds;
   public OrderClient Orders;
+  public InvoiceClient Invoices;
 
   public RazorpayClient(String key, String secret) {
     this(key, secret, false);
@@ -18,5 +19,6 @@ public class RazorpayClient {
     Payments = new PaymentClient(auth);
     Refunds = new RefundClient(auth);
     Orders = new OrderClient(auth);
+    Invoices = new InvoiceClient(auth);
   }
 }

@@ -30,4 +30,7 @@ public class Constants {
   static final String ORDER_LIST = "orders";
   static final String ORDER_PAYMENT_LIST = "orders/%s/payments";
 
+  static final String INVOICE_CREATE = "invoices";
+  static final String INVOICE_GET = "invoices/%s";
+  static final String INVOICE_LIST = "invoices";
 }
