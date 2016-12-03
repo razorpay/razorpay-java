@@ -122,3 +122,29 @@ List<Order> orders = razorpayClient.Orders.fetchAll();
 ```java
 List<Payment> payments = razorpayClient.Orders.fetchPayments("order_id");
 ```
+
+### [Invoices](https://docs.razorpay.com/v1/page/invoices)
+
+* Create a new invoice:
+```java
+JSONObject lineItem = new JSONObject();
+lineItem.put("amount", 100); // Note: The amount should be in paise.
+lineItem.put("name", "name_invoice");
+
+JSONArray lineItems = new JSONArray();
+lineItems.put(lineItem);
+
+JSONObject request = new JSONObject();
+request.put("line_items", lineItems);
+
+Invoice invoice = razorpayClient.Invoices.create(request);
+```
+
+* Fetch a particular invoice:
+```java
+Invoice invoice = razorpayClient.Invoices.fetch("invoice_id");
+```
+* Fetch all invoices:
+```java
+List<Invoice> invoices = razorpayClient.Invoices.fetchAll();
+```
