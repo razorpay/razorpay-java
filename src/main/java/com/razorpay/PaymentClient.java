@@ -31,6 +31,12 @@ public class PaymentClient extends ApiClient {
   }
 
   public Refund refund(String id, JSONObject request) throws RazorpayException {
+    RefundClient refundClient = new RefundClient(auth);
+    if (request == NULL) {
+      request = new JSONObject();
+    }
+    request.put('payment_id', id);
+
     return post(String.format(Constants.PAYMENT_REFUND, id), request);
   }
 
@@ -39,7 +45,13 @@ public class PaymentClient extends ApiClient {
   }
 
   public List<Refund> fetchAllRefunds(String id, JSONObject request) throws RazorpayException {
-    return getCollection(String.format(Constants.PAYMENT_REFUND_LIST, id), request);
+    RefundClient refundClient = new RefundClient(auth);
+    if (request == NULL) {
+      request = new JSONObject();
+    }
+    request.put('payment_id', id);
+
+    return refundClient.fetchAll(request);
   }
 
   public List<Refund> fetchAllRefunds(String id) throws RazorpayException {

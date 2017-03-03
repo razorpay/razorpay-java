@@ -24,6 +24,7 @@ public class Constants {
 
   static final String REFUND_GET = "refunds/%s";
   static final String REFUND_LIST = "refunds";
+  static final String REFUND_CREATE = "refunds";
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
@@ -35,5 +36,4 @@ public class Constants {
   static final String INVOICE_LIST = "invoices";
 
   static final String CARD_GET = "cards/%s";
-  static final String CARD_LIST = "cards";
 }

@@ -10,6 +10,10 @@ public class RefundClient extends ApiClient {
     super(auth);
   }
 
+  public Refunc create(JSONObject request) throws RazorpayException {
+    return post(Constants.REFUND_CREATE, request);
+  }
+
   public List<Refund> fetchAll(JSONObject request) throws RazorpayException {
     return getCollection(Constants.REFUND_LIST, request);
   }
