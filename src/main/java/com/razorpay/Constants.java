@@ -36,4 +36,12 @@ public class Constants {
   static final String INVOICE_LIST = "invoices";
 
   static final String CARD_GET = "cards/%s";
+
+  static final String CUSTOMER_CREATE = "customers";
+  static final String CUSTOMER_GET = "customers/%s";
+  static final String CUSTOMER_EDIT = "customers/%s";
+
+  static final String TOKEN_GET = "customers/%s/tokens/%s";
+  static final String TOKEN_LIST = "/customers/%s/tokens";
+  static final String TOKEN_DELETE = "customers/%s/tokens/%s";
 }
