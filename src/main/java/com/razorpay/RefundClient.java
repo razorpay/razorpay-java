@@ -10,7 +10,7 @@ public class RefundClient extends ApiClient {
     super(auth);
   }
 
-  public Refunc create(JSONObject request) throws RazorpayException {
+  public Refund create(JSONObject request) throws RazorpayException {
     return post(Constants.REFUND_CREATE, request);
   }
 

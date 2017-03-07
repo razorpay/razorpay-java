@@ -6,12 +6,15 @@ import org.json.JSONObject;
 
 public class CustomerClient extends ApiClient {
 
+  private String auth;
+
   CustomerClient(String auth) {
     super(auth);
+    this.auth = auth;
   }
 
   public Customer create(JSONObject request) throws RazorpayException {
-    return post(Constants.CUSTOMER_CREATE, request);
+    return post(Constants.CUSTOMER_CREATE, request);  
   }
 
   public Customer fetch(String id) throws RazorpayException {

@@ -6,8 +6,11 @@ import org.json.JSONObject;
 
 public class PaymentClient extends ApiClient {
 
+  private String auth;
+
   PaymentClient(String auth) {
-    super(auth);
+	super(auth);
+	this.auth = auth;
   }
 
   public Payment fetch(String id) throws RazorpayException {
@@ -32,12 +35,12 @@ public class PaymentClient extends ApiClient {
 
   public Refund refund(String id, JSONObject request) throws RazorpayException {
     RefundClient refundClient = new RefundClient(auth);
-    if (request == NULL) {
+    if (request == null) {
       request = new JSONObject();
     }
-    request.put('payment_id', id);
+    request.put("payment_id", id);
 
-    return post(String.format(Constants.PAYMENT_REFUND, id), request);
+    return refundClient.create(request);
   }
 
   public Refund fetchRefund(String id, String refundId) throws RazorpayException {
@@ -45,11 +48,11 @@ public class PaymentClient extends ApiClient {
   }
 
   public List<Refund> fetchAllRefunds(String id, JSONObject request) throws RazorpayException {
-    RefundClient refundClient = new RefundClient(auth);
-    if (request == NULL) {
+    RefundClient refundClient = new RefundClient(this.auth);
+    if (request == null) {
       request = new JSONObject();
     }
-    request.put('payment_id', id);
+    request.put("payment_id", id);
 
     return refundClient.fetchAll(request);
   }

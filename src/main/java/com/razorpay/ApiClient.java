@@ -38,6 +38,11 @@ class ApiClient {
     return processResponse(response);
   }
 
+  <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
+	Response response = ApiUtils.putRequest(path, requestObject, auth);
+	return processResponse(response);
+  }
+
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
       throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
@@ -94,7 +99,7 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode == STATUS_OK) {
+    if (statusCode >= STATUS_OK && statusCode < 300) {
       return parseResponse(responseJson);
     }
 

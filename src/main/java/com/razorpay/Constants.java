@@ -42,6 +42,6 @@ public class Constants {
   static final String CUSTOMER_EDIT = "customers/%s";
 
   static final String TOKEN_GET = "customers/%s/tokens/%s";
-  static final String TOKEN_LIST = "/customers/%s/tokens";
+  static final String TOKEN_LIST = "customers/%s/tokens";
   static final String TOKEN_DELETE = "customers/%s/tokens/%s";
 }

@@ -1,8 +1,9 @@
 package com.razorpay;
 
-import java.util.List;
-
 import org.json.JSONObject;
+
+import java.math.BigInteger;
+import java.util.Base64;
 
 import javax.crypto.Mac;
 
@@ -21,9 +22,9 @@ public class Utils {
 
   public boolean verifyPaymentSignature(JSONObject attributes)
   {
-    String expectedSignature = attributes.get('razorpay_signature');
-    String orderId = attributes.get('razorpay_order_id');
-    String paymentId = attributes.get('razorpay_payment_id');
+    String expectedSignature = attributes.getString("razorpay_signature");
+    String orderId = attributes.getString("razorpay_order_id");
+    String paymentId = attributes.getString("razorpay_payment_id");
     String payload = orderId + '|' + paymentId;
 
     return this.verifySignature(payload, expectedSignature);
@@ -55,10 +56,16 @@ public class Utils {
   } 
 
   public String getHash(String payload) {
-    Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-    SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes(), "HmacSHA256");
-    sha256_HMAC.init(secret_key);
+    Mac sha256_HMAC;
+	try {
+	  sha256_HMAC = Mac.getInstance("HmacSHA256");
+	  SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes("UTF-8"), "HmacSHA256");
+	  sha256_HMAC.init(secret_key);
 
-    return sha256_HMAC.doFinal(payload.getBytes());
+	  return String.format("%040x", new BigInteger(1,sha256_HMAC.doFinal(payload.getBytes("UTF-8"))));
+	} catch (Exception e) {
+
+    return null;
+	}
   }  
 }
