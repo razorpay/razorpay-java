@@ -57,15 +57,19 @@ public class Utils {
 
   public String getHash(String payload) {
     Mac sha256_HMAC;
-	try {
-	  sha256_HMAC = Mac.getInstance("HmacSHA256");
-	  SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes("UTF-8"), "HmacSHA256");
-	  sha256_HMAC.init(secret_key);
+	 try {
+	   sha256_HMAC = Mac.getInstance("HmacSHA256");
+	   SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes("UTF-8"), "HmacSHA256");
+	   sha256_HMAC.init(secret_key);
 
-	  return String.format("%040x", new BigInteger(1,sha256_HMAC.doFinal(payload.getBytes("UTF-8"))));
-	} catch (Exception e) {
+	   return String.format("%040x", new BigInteger(1,sha256_HMAC.doFinal(payload.getBytes("UTF-8"))));
+	 } catch (Exception e) {
 
     return null;
-	}
-  }  
+	 }
+  }
+
+  public void addHeaders(String key, String value) {
+    ApiUtils.headers.put(key, value);
+  }
 }

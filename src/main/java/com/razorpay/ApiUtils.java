@@ -1,7 +1,9 @@
 package com.razorpay;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -15,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 class ApiUtils {
 
   private static OkHttpClient client;
+  public static Map<String,String> headers = new HashMap<String, String>();
 
   static void createHttpClientInstance(boolean enableLogging) {
     if (client == null) {
@@ -77,6 +80,11 @@ class ApiUtils {
       String auth) {
     Request.Builder builder =
         new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
+
+    for (Map.Entry<String, String> header : headers.entrySet())
+    {
+      builder.addHeader(header.getKey(), header.getValue());
+    }
 
     return builder.method(method, requestBody).build();
   }
