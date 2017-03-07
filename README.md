@@ -21,7 +21,7 @@ Add this dependency to your project's POM:
 <dependency>
 <groupId>com.razorpay</groupId>
 <artifactId>razorpay-java</artifactId>
-<version>1.1.0</version>
+<version>1.2.0</version>
 </dependency>
 ```
 
@@ -40,6 +40,10 @@ Instantiate `RazorpayClient` with `key_id` & `key_secret`. You can obtain the ke
 ```java
 // Initialize client
 RazorpayClient razorpayClient = new RazorpayClient("key_id", "key_secret");
+```
+* Add a custom header to request (optional)
+```java
+razorpayClient.utility.addHeaders(key,value);
 ```
 
 ### [Payments](https://docs.razorpay.com/docs/return-objects#payment-entity)
@@ -150,4 +154,45 @@ Invoice invoice = razorpayClient.Invoices.fetch("invoice_id");
 * Fetch all invoices:
 ```java
 List<Invoice> invoices = razorpayClient.Invoices.fetchAll();
+```
+
+### [Cards](https://docs.razorpay.com/v1/page/cards)
+
+* Fetch card details:
+```java
+Card card = razorpayClient.Cards.fetch(id);
+```
+
+### [Customers]
+
+* Create new customer
+```java
+JSONObject request = new JSONObject();
+request.put("name", "Razorpay User");
+request.put("email", "ustomer@razorpay.com");
+Customer customer = razorpayClient.Customers.create(request);
+```
+
+* Fetch customer details
+```java
+Customer customer = razorpayClient.Customers.fetch(customerId);
+```
+
+* Edit customer
+```java
+JSONObject request = new JSONObject();
+request.put("name", "Razorpay User");
+request.put("email", "ustomer@razorpay.com");
+Customer customer = razorpayClient.Customers.edit(customerId, request);
+```
+
+### [Tokens]
+
+* Fetch tokens for a customer
+```java
+List<Token> tokens = razorpayClient.Customers.fetchTokens(customerId);
+```
+* Get a Token
+```java
+Token token = razorpayClient.Tokens.fetch(id, customerId);
 ```
