@@ -7,5 +7,4 @@ public class Token extends Entity {
   public Token(JSONObject jsonObject) {
     super(jsonObject);
   }
-
 }
