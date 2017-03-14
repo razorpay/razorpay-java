@@ -14,7 +14,7 @@ public class CustomerClient extends ApiClient {
   }
 
   public Customer create(JSONObject request) throws RazorpayException {
-    return post(Constants.CUSTOMER_CREATE, request);  
+    return post(Constants.CUSTOMER_CREATE, request);
   }
 
   public Customer fetch(String id) throws RazorpayException {
@@ -26,8 +26,12 @@ public class CustomerClient extends ApiClient {
   }
 
   public List<Token> fetchTokens(String id) throws RazorpayException {
-    TokenClient tokenClient = new TokenClient(auth);
-    
-    return tokenClient.fetchAll(id);
+
+    return getCollection(String.format(Constants.TOKEN_LIST, id), null);
+  }
+
+  public Token fetchToken(String id, String tokenId) throws RazorpayException {
+
+    return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
   }
 }

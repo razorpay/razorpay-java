@@ -11,6 +11,7 @@ public class Constants {
   static final String VERSION = "v1";
 
   static final String AUTH_HEADER_KEY = "Authorization";
+  static final String USER_AGENT = "User-Agent";
   static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
   // API URI
@@ -43,5 +44,4 @@ public class Constants {
 
   static final String TOKEN_GET = "customers/%s/tokens/%s";
   static final String TOKEN_LIST = "customers/%s/tokens";
-  static final String TOKEN_DELETE = "customers/%s/tokens/%s";
 }

@@ -6,11 +6,11 @@ import org.json.JSONObject;
 
 public class PaymentClient extends ApiClient {
 
-  private String auth;
+  private RefundClient refundClient;
 
   PaymentClient(String auth) {
-	super(auth);
-	this.auth = auth;
+    super(auth);
+    refundClient = new RefundClient(auth);
   }
 
   public Payment fetch(String id) throws RazorpayException {
@@ -29,16 +29,8 @@ public class PaymentClient extends ApiClient {
     return post(String.format(Constants.PAYMENT_CAPTURE, id), request);
   }
 
-  public Refund refund(String id) throws RazorpayException {
-    return refund(id, null);
-  }
 
-  public Refund refund(String id, JSONObject request) throws RazorpayException {
-    RefundClient refundClient = new RefundClient(auth);
-    if (request == null) {
-      request = new JSONObject();
-    }
-    request.put("payment_id", id);
+  public Refund refund(JSONObject request) throws RazorpayException {
 
     return refundClient.create(request);
   }
@@ -47,17 +39,9 @@ public class PaymentClient extends ApiClient {
     return get(String.format(Constants.PAYMENT_REFUND_GET, id, refundId), null);
   }
 
-  public List<Refund> fetchAllRefunds(String id, JSONObject request) throws RazorpayException {
-    RefundClient refundClient = new RefundClient(this.auth);
-    if (request == null) {
-      request = new JSONObject();
-    }
-    request.put("payment_id", id);
+  public List<Refund> fetchAllRefunds(JSONObject request) throws RazorpayException {
 
     return refundClient.fetchAll(request);
   }
 
-  public List<Refund> fetchAllRefunds(String id) throws RazorpayException {
-    return fetchAllRefunds(id, null);
-  }
 }
