@@ -44,7 +44,7 @@
       <artifactId>okhttp</artifactId>
       <version>3.4.1</version>
     </dependency>
-  
+
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>logging-interceptor</artifactId>
@@ -81,8 +81,7 @@
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
-    </resources>   
-
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
@@ -136,6 +135,5 @@
         </executions>
       </plugin>
     </plugins>
-    
   </build>
 </project>
