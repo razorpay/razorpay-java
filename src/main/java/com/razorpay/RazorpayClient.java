@@ -30,7 +30,7 @@ public class RazorpayClient {
     Utility = new Utils(key, secret);
   }
 
-  public RazorpayClient withHeaders(Map<String, String> headers) {
+  public RazorpayClient addHeaders(Map<String, String> headers) {
     ApiUtils.addHeaders(headers);
 
     return this;

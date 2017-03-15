@@ -24,6 +24,8 @@ class ApiClient {
 
   private final int STATUS_OK = 200;
 
+  private final int STATUS_MULTIPLE_CHOICE = 300;
+
   ApiClient(String auth) {
     this.auth = auth;
   }
@@ -99,7 +101,7 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode >= STATUS_OK && statusCode < 300) {
+    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseResponse(responseJson);
     }
 
@@ -124,7 +126,7 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode == STATUS_OK) {
+    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseCollectionResponse(responseJson);
     }
 

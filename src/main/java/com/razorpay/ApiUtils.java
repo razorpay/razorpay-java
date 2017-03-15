@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import org.json.JSONObject;
 
@@ -18,7 +19,8 @@ class ApiUtils {
 
   private static OkHttpClient client;
   private static Map<String, String> headers = new HashMap<String, String>();
-  private static final String version = "1.2.0";
+
+  private static String version = null;
 
   static void createHttpClientInstance(boolean enableLogging) {
     if (client == null) {
@@ -31,6 +33,14 @@ class ApiUtils {
       loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
     }
     client = client.newBuilder().addInterceptor(loggingInterceptor).build();
+
+    Properties properties = new Properties();
+    try {
+      properties.load(ApiUtils.class.getResourceAsStream("/project.properties"));
+      version = (String) properties.get("version");
+    } catch (IOException e) {
+      // TODO:
+    }
   }
 
   private enum Method {
@@ -81,7 +91,6 @@ class ApiUtils {
       String auth) {
     Request.Builder builder =
         new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
-
     builder.addHeader(Constants.USER_AGENT,
         "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
 

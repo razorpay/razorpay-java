@@ -4,7 +4,7 @@
 
   <groupId>com.razorpay</groupId>
   <artifactId>razorpay-java</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
 
   <name>razorpay-java</name>
@@ -44,7 +44,7 @@
       <artifactId>okhttp</artifactId>
       <version>3.4.1</version>
     </dependency>
-
+  
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>logging-interceptor</artifactId>
@@ -57,7 +57,6 @@
       <version>20160212</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -77,6 +76,13 @@
   </distributionManagement>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>   
+
     <plugins>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
@@ -130,5 +136,6 @@
         </executions>
       </plugin>
     </plugins>
+    
   </build>
 </project>

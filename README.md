@@ -44,7 +44,7 @@ RazorpayClient razorpayClient = new RazorpayClient("key_id", "key_secret");
 * Add custom headers to request (optional)
 ```java
 Map<String, String> headers = new HashMap<String, String>();
-razorpayClient.withHeaders(headers);
+razorpayClient.addHeaders(headers);
 ```
 
 ### [Payments](https://docs.razorpay.com/docs/return-objects#payment-entity)
@@ -74,13 +74,13 @@ razorpayClient.Payments.capture("payment_id", options);
 ```java
 // For full refunds
 JSONObject refundRequest = new JSONObject();
-refundRequest.put("payment_id", 1);
+refundRequest.put("payment_id", <payment_id>);
 Refund refund = razorpayClient.Payments.refund(refundRequest);
 
 // For partial refunds
 JSONObject refundRequest = new JSONObject();
-refundRequest.put("amount", 100);
-refundRequest.put("payment_id", 1);
+refundRequest.put("amount", <amount>);
+refundRequest.put("payment_id", <payment_id>);
 Refund refund = razorpay.Payments.refund(refundRequest);
 // Note: Amount to be refunded should be less than or equal to the original amount.The amount should be in paise.
 ```
@@ -88,13 +88,13 @@ Refund refund = razorpay.Payments.refund(refundRequest);
 * Fetch all refunds for a payment:
 ```java
 JSONObject refundRequest = new JSONObject();
-refundRequest.put("payment_id", 1);
+refundRequest.put("payment_id", <payment_id>);
 List<Refund> refund = razorpayClient.Payments.fetchAllRefunds(refundRequest);
 ```
 
 * Fetch refund for a payment:
 ```java
-Refund refund = razorpayClient.Payments.fetchRefund("payment_id", "refund_id");
+Refund refund = razorpayClient.Payments.fetchRefund("refund_id");
 ```
 
 ### [Refunds](https://docs.razorpay.com/docs/return-objects#refund-entity)
@@ -174,8 +174,8 @@ Card card = razorpayClient.Cards.fetch(id);
 * Create new customer
 ```java
 JSONObject request = new JSONObject();
-request.put("name", "Razorpay User");
-request.put("email", "customer@razorpay.com");
+request.put("name", <name>);
+request.put("email", <email>);
 Customer customer = razorpayClient.Customers.create(request);
 ```
 
@@ -187,8 +187,8 @@ Customer customer = razorpayClient.Customers.fetch(customerId);
 * Edit customer
 ```java
 JSONObject request = new JSONObject();
-request.put("name", "Razorpay User");
-request.put("email", "customer@razorpay.com");
+request.put("name", <name>);
+request.put("email", <email>);
 Customer customer = razorpayClient.Customers.edit(customerId, request);
 ```
 

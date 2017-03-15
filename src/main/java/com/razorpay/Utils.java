@@ -33,12 +33,15 @@ public class Utils {
 
   public boolean verifySignature(String payload, String expectedSignature)
       throws RazorpayException {
-    String actualSignature = this.getHash(payload);
+    String actualSignature = getHash(payload);
 
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
   }
 
-  public boolean isEqual(byte[] a, byte[] b) {
+  /**
+   * http://security.stackexchange.com/a/83670
+   */
+  private boolean isEqual(byte[] a, byte[] b) {
     if (a.length != b.length) {
       return false;
     }
@@ -62,7 +65,6 @@ public class Utils {
 
       return new String(Hex.encodeHex(hash));
     } catch (Exception e) {
-
       throw new RazorpayException(e.getMessage());
     }
   }

@@ -6,11 +6,8 @@ import org.json.JSONObject;
 
 public class CustomerClient extends ApiClient {
 
-  private String auth;
-
   CustomerClient(String auth) {
     super(auth);
-    this.auth = auth;
   }
 
   public Customer create(JSONObject request) throws RazorpayException {
@@ -26,12 +23,10 @@ public class CustomerClient extends ApiClient {
   }
 
   public List<Token> fetchTokens(String id) throws RazorpayException {
-
     return getCollection(String.format(Constants.TOKEN_LIST, id), null);
   }
 
   public Token fetchToken(String id, String tokenId) throws RazorpayException {
-
     return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
   }
 }
