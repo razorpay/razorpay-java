@@ -22,7 +22,6 @@ public class Utils {
     String orderId = attributes.getString("razorpay_order_id");
     String paymentId = attributes.getString("razorpay_payment_id");
     String payload = orderId + '|' + paymentId;
-
     return verifySignature(payload, expectedSignature);
   }
 
@@ -34,7 +33,6 @@ public class Utils {
   public boolean verifySignature(String payload, String expectedSignature)
       throws RazorpayException {
     String actualSignature = getHash(payload);
-
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
   }
 
@@ -45,12 +43,10 @@ public class Utils {
     if (a.length != b.length) {
       return false;
     }
-
     int result = 0;
     for (int i = 0; i < a.length; i++) {
       result |= a[i] ^ b[i];
     }
-
     return result == 0;
   }
 
@@ -60,9 +56,7 @@ public class Utils {
       sha256_HMAC = Mac.getInstance("HmacSHA256");
       SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes("UTF-8"), "HmacSHA256");
       sha256_HMAC.init(secret_key);
-
       byte[] hash = sha256_HMAC.doFinal(payload.getBytes());
-
       return new String(Hex.encodeHex(hash));
     } catch (Exception e) {
       throw new RazorpayException(e.getMessage());

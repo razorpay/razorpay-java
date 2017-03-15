@@ -32,7 +32,6 @@ public class RazorpayClient {
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
     ApiUtils.addHeaders(headers);
-
     return this;
   }
 }

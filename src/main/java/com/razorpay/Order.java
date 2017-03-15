@@ -7,5 +7,4 @@ public class Order extends Entity {
   public Order(JSONObject jsonObject) {
     super(jsonObject);
   }
-
 }

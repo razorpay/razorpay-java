@@ -29,18 +29,10 @@ public class PaymentClient extends ApiClient {
     return post(String.format(Constants.PAYMENT_CAPTURE, id), request);
   }
 
-  /**
-   * @deprecated As of release 1.2.0, replaced by {@link #refund(JSONObject)}
-   */
-  @Deprecated
   public Refund refund(String id) throws RazorpayException {
     return refund(id, null);
   }
 
-  /**
-   * @deprecated As of release 1.2.0, replaced by {@link #refund(JSONObject)}
-   */
-  @Deprecated
   public Refund refund(String id, JSONObject request) throws RazorpayException {
     return post(String.format(Constants.PAYMENT_REFUND, id), request);
   }
@@ -49,10 +41,6 @@ public class PaymentClient extends ApiClient {
     return refundClient.create(request);
   }
 
-  /**
-   * @deprecated As of release 1.2.0, replaced by {@link #fetchRefund(String)}
-   */
-  @Deprecated
   public Refund fetchRefund(String id, String refundId) throws RazorpayException {
     return get(String.format(Constants.PAYMENT_REFUND_GET, id, refundId), null);
   }
@@ -61,18 +49,10 @@ public class PaymentClient extends ApiClient {
     return refundClient.fetch(refundId);
   }
 
-  /**
-   * @deprecated As of release 1.2.0, replaced by {@link #fetchAllRefunds(JSONObject)}
-   */
-  @Deprecated
   public List<Refund> fetchAllRefunds(String id, JSONObject request) throws RazorpayException {
     return getCollection(String.format(Constants.PAYMENT_REFUND_LIST, id), request);
   }
 
-  /**
-   * @deprecated As of release 1.2.0, replaced by {@link #fetchAllRefunds(JSONObject)}
-   */
-  @Deprecated
   public List<Refund> fetchAllRefunds(String id) throws RazorpayException {
     return fetchAllRefunds(id, null);
   }
