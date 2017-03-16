@@ -1,7 +1,10 @@
 package com.razorpay;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 import org.json.JSONObject;
 
@@ -15,8 +18,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 class ApiUtils {
 
   private static OkHttpClient client;
+  private static Map<String, String> headers = new HashMap<String, String>();
 
-  static void createHttpClientInstance(boolean enableLogging) {
+  private static String version = null;
+
+  static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
     if (client == null) {
       client = new OkHttpClient.Builder().build();
     }
@@ -27,17 +33,24 @@ class ApiUtils {
       loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
     }
     client = client.newBuilder().addInterceptor(loggingInterceptor).build();
+
+    Properties properties = new Properties();
+    try {
+      properties.load(ApiUtils.class.getResourceAsStream("/project.properties"));
+      version = (String) properties.get("version");
+    } catch (IOException e) {
+      throw new RazorpayException(e.getMessage());
+    }
   }
 
   private enum Method {
-    GET, POST
+    GET, POST, PUT
   }
 
   static Response postRequest(String path, JSONObject requestObject, String auth)
       throws RazorpayException {
-    HttpUrl.Builder builder =
-        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
-            .addPathSegment(Constants.VERSION).addPathSegments(path);
+
+    HttpUrl.Builder builder = getBuilder(path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -47,22 +60,44 @@ class ApiUtils {
     return processRequest(request);
   }
 
+  static Response putRequest(String path, JSONObject requestObject, String auth)
+      throws RazorpayException {
+
+    HttpUrl.Builder builder = getBuilder(path);
+
+    String requestContent = requestObject == null ? "" : requestObject.toString();
+    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+
+    Request request =
+        createRequest(Method.PUT.name(), builder.build().toString(), requestBody, auth);
+    return processRequest(request);
+  }
+
   static Response getRequest(String path, JSONObject requestObject, String auth)
       throws RazorpayException {
-    HttpUrl.Builder builder =
-        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
-            .addPathSegment(Constants.VERSION).addPathSegments(path);
 
+    HttpUrl.Builder builder = getBuilder(path);
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
+  private static HttpUrl.Builder getBuilder(String path) {
+    return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
+        .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
+  }
+
   private static Request createRequest(String method, String url, RequestBody requestBody,
       String auth) {
     Request.Builder builder =
         new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
+    builder.addHeader(Constants.USER_AGENT,
+        "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
+
+    for (Map.Entry<String, String> header : headers.entrySet()) {
+      builder.addHeader(header.getKey(), header.getValue());
+    }
 
     return builder.method(method, requestBody).build();
   }
@@ -84,5 +119,9 @@ class ApiUtils {
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
+  }
+
+  static void addHeaders(Map<String, String> header) {
+    headers.putAll(header);
   }
 }

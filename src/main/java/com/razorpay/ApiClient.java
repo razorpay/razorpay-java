@@ -24,6 +24,8 @@ class ApiClient {
 
   private final int STATUS_OK = 200;
 
+  private final int STATUS_MULTIPLE_CHOICE = 300;
+
   ApiClient(String auth) {
     this.auth = auth;
   }
@@ -35,6 +37,11 @@ class ApiClient {
 
   <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.postRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
+  <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.putRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
@@ -94,7 +101,7 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode == STATUS_OK) {
+    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseResponse(responseJson);
     }
 
@@ -119,7 +126,7 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode == STATUS_OK) {
+    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseCollectionResponse(responseJson);
     }
 

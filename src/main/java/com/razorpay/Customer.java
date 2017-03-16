@@ -2,9 +2,9 @@ package com.razorpay;
 
 import org.json.JSONObject;
 
-public class Order extends Entity {
+public class Customer extends Entity {
 
-  public Order(JSONObject jsonObject) {
+  public Customer(JSONObject jsonObject) {
     super(jsonObject);
   }
 }

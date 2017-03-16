@@ -11,6 +11,7 @@ public class Constants {
   static final String VERSION = "v1";
 
   static final String AUTH_HEADER_KEY = "Authorization";
+  static final String USER_AGENT = "User-Agent";
   static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
   // API URI
@@ -24,6 +25,7 @@ public class Constants {
 
   static final String REFUND_GET = "refunds/%s";
   static final String REFUND_LIST = "refunds";
+  static final String REFUND_CREATE = "refunds";
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
@@ -33,4 +35,13 @@ public class Constants {
   static final String INVOICE_CREATE = "invoices";
   static final String INVOICE_GET = "invoices/%s";
   static final String INVOICE_LIST = "invoices";
+
+  static final String CARD_GET = "cards/%s";
+
+  static final String CUSTOMER_CREATE = "customers";
+  static final String CUSTOMER_GET = "customers/%s";
+  static final String CUSTOMER_EDIT = "customers/%s";
+
+  static final String TOKEN_GET = "customers/%s/tokens/%s";
+  static final String TOKEN_LIST = "customers/%s/tokens";
 }
