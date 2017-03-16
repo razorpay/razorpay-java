@@ -1,9 +1,5 @@
 package com.razorpay;
 
-import java.util.List;
-
-import org.json.JSONObject;
-
 public class CardClient extends ApiClient {
 
   CardClient(String auth) {

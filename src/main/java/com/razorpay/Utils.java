@@ -36,20 +36,6 @@ public class Utils {
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
   }
 
-  /**
-   * http://security.stackexchange.com/a/83670
-   */
-  private boolean isEqual(byte[] a, byte[] b) {
-    if (a.length != b.length) {
-      return false;
-    }
-    int result = 0;
-    for (int i = 0; i < a.length; i++) {
-      result |= a[i] ^ b[i];
-    }
-    return result == 0;
-  }
-
   public String getHash(String payload) throws RazorpayException {
     Mac sha256_HMAC;
     try {
@@ -61,5 +47,24 @@ public class Utils {
     } catch (Exception e) {
       throw new RazorpayException(e.getMessage());
     }
+  }
+
+  /**
+   * We are not using String.equals() method because of security issue mentioned in
+   * <a href="http://security.stackexchange.com/a/83670">StackOverflow</a>
+   * 
+   * @param a
+   * @param b
+   * @return boolean
+   */
+  private boolean isEqual(byte[] a, byte[] b) {
+    if (a.length != b.length) {
+      return false;
+    }
+    int result = 0;
+    for (int i = 0; i < a.length; i++) {
+      result |= a[i] ^ b[i];
+    }
+    return result == 0;
   }
 }

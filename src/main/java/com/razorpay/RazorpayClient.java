@@ -14,11 +14,11 @@ public class RazorpayClient {
   public CustomerClient Customers;
   public Utils Utility;
 
-  public RazorpayClient(String key, String secret) {
+  public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
   }
 
-  public RazorpayClient(String key, String secret, Boolean enableLogging) {
+  public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException {
     ApiUtils.createHttpClientInstance(enableLogging);
     String auth = Credentials.basic(key, secret);
     Payments = new PaymentClient(auth);

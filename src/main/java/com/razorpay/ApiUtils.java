@@ -22,7 +22,7 @@ class ApiUtils {
 
   private static String version = null;
 
-  static void createHttpClientInstance(boolean enableLogging) {
+  static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
     if (client == null) {
       client = new OkHttpClient.Builder().build();
     }
@@ -39,7 +39,7 @@ class ApiUtils {
       properties.load(ApiUtils.class.getResourceAsStream("/project.properties"));
       version = (String) properties.get("version");
     } catch (IOException e) {
-      // TODO:
+      throw new RazorpayException(e.getMessage());
     }
   }
 
@@ -49,6 +49,7 @@ class ApiUtils {
 
   static Response postRequest(String path, JSONObject requestObject, String auth)
       throws RazorpayException {
+
     HttpUrl.Builder builder = getBuilder(path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
@@ -61,6 +62,7 @@ class ApiUtils {
 
   static Response putRequest(String path, JSONObject requestObject, String auth)
       throws RazorpayException {
+
     HttpUrl.Builder builder = getBuilder(path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
@@ -73,12 +75,11 @@ class ApiUtils {
 
   static Response getRequest(String path, JSONObject requestObject, String auth)
       throws RazorpayException {
-    HttpUrl.Builder builder = getBuilder(path);
 
+    HttpUrl.Builder builder = getBuilder(path);
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
-
     return processRequest(request);
   }
 

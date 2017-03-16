@@ -39,6 +39,7 @@
   </properties>
 
   <dependencies>
+  
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
@@ -62,6 +63,7 @@
       <artifactId>commons-codec</artifactId>
       <version>1.4</version>
     </dependency>
+    
   </dependencies>
 
   <distributionManagement>
@@ -76,12 +78,14 @@
   </distributionManagement>
 
   <build>
+  
     <resources>
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>
       </resource>
     </resources>
+    
     <plugins>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
@@ -135,5 +139,7 @@
         </executions>
       </plugin>
     </plugins>
+    
   </build>
+  
 </project>
