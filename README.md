@@ -169,7 +169,7 @@ List<Invoice> invoices = razorpayClient.Invoices.fetchAll();
 Card card = razorpayClient.Cards.fetch(id);
 ```
 
-### [Customers]
+### [Customers](https://docs.razorpay.com/v1/page/card-saving)
 
 * Create new customer
 ```java
@@ -192,7 +192,7 @@ request.put("email", <email>);
 Customer customer = razorpayClient.Customers.edit(customerId, request);
 ```
 
-### [Tokens]
+### [Tokens](https://docs.razorpay.com/v1/page/card-saving)
 
 * Fetch tokens for a customer
 ```java
