@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
@@ -24,7 +25,10 @@ class ApiUtils {
 
   static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
     if (client == null) {
-      client = new OkHttpClient.Builder().build();
+      client = new OkHttpClient.Builder()
+              .readTimeout(60, TimeUnit.SECONDS)
+              .writeTimeout(60, TimeUnit.SECONDS)
+              .build();
     }
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
     if (enableLogging) {
