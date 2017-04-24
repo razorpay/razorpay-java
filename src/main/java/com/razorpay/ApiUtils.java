@@ -25,18 +25,16 @@ class ApiUtils {
 
   static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
     if (client == null) {
-      client = new OkHttpClient.Builder()
-              .readTimeout(60, TimeUnit.SECONDS)
-              .writeTimeout(60, TimeUnit.SECONDS)
-              .build();
+      HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+      if (enableLogging) {
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+      } else {
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
+      }
+
+      client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
+          .writeTimeout(60, TimeUnit.SECONDS).addInterceptor(loggingInterceptor).build();
     }
-    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-    if (enableLogging) {
-      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-    } else {
-      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-    }
-    client = client.newBuilder().addInterceptor(loggingInterceptor).build();
 
     Properties properties = new Properties();
     try {
