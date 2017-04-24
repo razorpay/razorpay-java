@@ -21,7 +21,7 @@ Add this dependency to your project's POM:
 <dependency>
 <groupId>com.razorpay</groupId>
 <artifactId>razorpay-java</artifactId>
-<version>1.2.1</version>
+<version>1.2.2</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.razorpay:razorpay-java:1.2.1"
+compile "com.razorpay:razorpay-java:1.2.2"
 ```
 
 ## Usage
