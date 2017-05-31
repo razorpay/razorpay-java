@@ -46,7 +46,7 @@ class ApiUtils {
   }
 
   private enum Method {
-    GET, POST, PUT
+    GET, POST, PUT, PATCH
   }
 
   static Response postRequest(String path, JSONObject requestObject, String auth)
@@ -72,6 +72,19 @@ class ApiUtils {
 
     Request request =
         createRequest(Method.PUT.name(), builder.build().toString(), requestBody, auth);
+    return processRequest(request);
+  }
+
+  static Response patchRequest(String path, JSONObject requestObject, String auth)
+      throws RazorpayException {
+
+    HttpUrl.Builder builder = getBuilder(path);
+
+    String requestContent = requestObject == null ? "" : requestObject.toString();
+    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+
+    Request request =
+        createRequest(Method.PATCH.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
   }
 

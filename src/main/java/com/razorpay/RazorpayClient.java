@@ -12,6 +12,7 @@ public class RazorpayClient {
   public InvoiceClient Invoices;
   public CardClient Cards;
   public CustomerClient Customers;
+  public TransferClient Transfers;
   public Utils Utility;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
@@ -27,6 +28,7 @@ public class RazorpayClient {
     Invoices = new InvoiceClient(auth);
     Cards = new CardClient(auth);
     Customers = new CustomerClient(auth);
+    Transfers = new TransferClient(auth);
     Utility = new Utils(key, secret);
   }
 

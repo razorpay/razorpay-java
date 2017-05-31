@@ -19,6 +19,8 @@ public class Constants {
   static final String PAYMENT_LIST = "payments";
   static final String PAYMENT_CAPTURE = "payments/%s/capture";
   static final String PAYMENT_REFUND = "payments/%s/refund";
+  static final String PAYMENT_TRANSFER_CREATE = "payments/%s/transfers";
+  static final String PAYMENT_TRANSFER_GET = "payments/%s/transfers";
 
   static final String PAYMENT_REFUND_LIST = "payments/%s/refunds";
   static final String PAYMENT_REFUND_GET = "payments/%s/refunds/%s";
@@ -44,4 +46,10 @@ public class Constants {
 
   static final String TOKEN_GET = "customers/%s/tokens/%s";
   static final String TOKEN_LIST = "customers/%s/tokens";
+
+  static final String TRANSFER_CREATE = "transfers";
+  static final String TRANSFER_GET = "transfers/%s";
+  static final String TRANSFER_EDIT = "transfers/%s";
+  static final String TRANSFER_LIST = "transfers";
+  static final String TRANSFER_REVERSAL_CREATE = "transfers/%s/reversals";
 }

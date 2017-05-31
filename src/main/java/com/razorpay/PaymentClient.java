@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import okhttp3.Response;
+
 public class PaymentClient extends ApiClient {
 
   private RefundClient refundClient;
@@ -59,5 +61,15 @@ public class PaymentClient extends ApiClient {
 
   public List<Refund> fetchAllRefunds(JSONObject request) throws RazorpayException {
     return refundClient.fetchAll(request);
+  }
+
+  public List<Transfer> transfer(String id, JSONObject request) throws RazorpayException {
+    Response response =
+        ApiUtils.postRequest(String.format(Constants.PAYMENT_TRANSFER_CREATE, id), request, auth);
+    return processCollectionResponse(response);
+  }
+
+  public List<Transfer> fetchAllTransfers(String id, JSONObject request) throws RazorpayException {
+    return getCollection(String.format(Constants.PAYMENT_TRANSFER_GET, id), request);
   }
 }
