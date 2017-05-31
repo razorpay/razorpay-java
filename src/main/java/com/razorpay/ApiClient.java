@@ -10,7 +10,7 @@ import okhttp3.Response;
 
 class ApiClient {
 
-  private String auth;
+  String auth;
 
   private final String ENTITY = "entity";
 
@@ -42,6 +42,11 @@ class ApiClient {
 
   <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.putRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
+  <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.patchRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
@@ -85,7 +90,7 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
 
-  private <T extends Entity> T processResponse(Response response) throws RazorpayException {
+  <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -109,7 +114,7 @@ class ApiClient {
     return null;
   }
 
-  private <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
+  <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
       throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
