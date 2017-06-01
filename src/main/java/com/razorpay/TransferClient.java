@@ -26,6 +26,10 @@ public class TransferClient extends ApiClient {
     return get(String.format(Constants.TRANSFER_GET, id), null);
   }
 
+  public List<Transfer> fetchAll() throws RazorpayException {
+    return fetchAll(null);
+  }
+
   public List<Transfer> fetchAll(JSONObject request) throws RazorpayException {
     return getCollection(Constants.TRANSFER_LIST, request);
   }
