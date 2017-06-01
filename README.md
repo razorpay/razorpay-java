@@ -19,9 +19,9 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-<groupId>com.razorpay</groupId>
-<artifactId>razorpay-java</artifactId>
-<version>1.2.2</version>
+ <groupId>com.razorpay</groupId>
+ <artifactId>razorpay-java</artifactId>
+ <version>1.2.2</version>
 </dependency>
 ```
 
@@ -95,6 +95,28 @@ List<Refund> refund = razorpayClient.Payments.fetchAllRefunds(refundRequest);
 * Fetch refund for a payment:
 ```java
 Refund refund = razorpayClient.Payments.fetchRefund("refund_id");
+```
+
+* Create Transfer for a payment:
+```java
+JSONObject request = new JSONObject();
+    
+JSONArray transfers = new JSONArray();
+
+JSONObject transfer = new JSONObject();
+transfer.put("amount", <amount>); // The amount should be in paise.
+transfer.put("currency", "INR");
+transfer.put("account", <account_id>);
+    
+transfers.put(transfer);
+request.put("transfers", transfers);
+
+List<Transfer> transfers = razorpayClient.Payments.transfer("payment_id", request);
+```
+
+* Fetch all transfers for a payment:
+```java
+List<Transfers> transfers = razorpayClient.Payments.fetchAllTransfers("payment_id");
 ```
 
 ### [Refunds](https://docs.razorpay.com/docs/return-objects#refund-entity)
@@ -201,4 +223,41 @@ List<Token> tokens = razorpayClient.Customers.fetchTokens(customerId);
 * Get a Token
 ```java
 Token token = razorpayClient.Customers.fetchToken(customerId, tokenId);
+```
+
+### [Transfers](https://docs.razorpay.com/v1/page/marketplace)
+
+* Create direct Transfer
+```java
+JSONObject request = new JSONObject();
+request.put("amount", <amount>); // The amount should be in paise.
+request.put("currency", "INR");
+request.put("account", <account_id>);
+    
+Transfer transfer = razorpayClient.Transfers.create(request);
+```
+
+* Edit a Transfer
+```java
+JSONObject request = new JSONObject();
+request.put("on_hold", true); // The amount should be in paise.
+Transfer transfer = razorpayClient.Transfers.edit(request);
+```
+
+* Create reversal of a Transfer
+```java
+JSONObject request = new JSONObject();
+request.put("amount", <amount>); // The amount should be in paise.
+
+Reversal reversal = razorpayClient.Transfers.reversal("transfer_id", request);
+```
+
+* Fetch a particular transfer
+```java
+Transfer transfer = razorpayClient.Transfers.fetch("transfer_id");
+```
+
+* Fetch all transfers
+```java
+List<Transfer> transfers = razorpayClient.Transfers.fetchAll();
 ```
