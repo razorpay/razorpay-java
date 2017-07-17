@@ -22,25 +22,26 @@ public class Utils {
     String orderId = attributes.getString("razorpay_order_id");
     String paymentId = attributes.getString("razorpay_payment_id");
     String payload = orderId + '|' + paymentId;
-    return verifySignature(payload, expectedSignature);
+    String apiSecret = this.secret;
+    return verifySignature(payload, expectedSignature, apiSecret);
   }
 
-  public boolean verifyWebhookSignature(String payload, String expectedSignature)
+  public boolean verifyWebhookSignature(String payload, String expectedSignature, String webhookSecret)
       throws RazorpayException {
-    return verifySignature(payload, expectedSignature);
+    return verifySignature(payload, expectedSignature, webhookSecret);
   }
 
-  public boolean verifySignature(String payload, String expectedSignature)
+  public boolean verifySignature(String payload, String expectedSignature, String secret)
       throws RazorpayException {
-    String actualSignature = getHash(payload);
+    String actualSignature = getHash(payload, secret);
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
   }
 
-  public String getHash(String payload) throws RazorpayException {
+  public String getHash(String payload, String secret) throws RazorpayException {
     Mac sha256_HMAC;
     try {
       sha256_HMAC = Mac.getInstance("HmacSHA256");
-      SecretKeySpec secret_key = new SecretKeySpec(this.secret.getBytes("UTF-8"), "HmacSHA256");
+      SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256");
       sha256_HMAC.init(secret_key);
       byte[] hash = sha256_HMAC.doFinal(payload.getBytes());
       return new String(Hex.encodeHex(hash));
