@@ -10,7 +10,7 @@ public class Utils {
 
   private String key;
 
-  private String secret;
+  private String apiSecret;
 
   public Utils() {
 
@@ -18,7 +18,7 @@ public class Utils {
 
   public Utils(String key, String secret) {
     this.key = key;
-    this.secret = secret;
+    this.apiSecret = secret;
   }
 
   public boolean verifyPaymentSignature(JSONObject attributes) throws RazorpayException {
@@ -26,7 +26,7 @@ public class Utils {
     String orderId = attributes.getString("razorpay_order_id");
     String paymentId = attributes.getString("razorpay_payment_id");
     String payload = orderId + '|' + paymentId;
-    return verifySignature(payload, expectedSignature, this.secret);
+    return verifySignature(payload, expectedSignature, this.apiSecret);
   }
 
   public boolean verifyWebhookSignature(String payload, String expectedSignature,
