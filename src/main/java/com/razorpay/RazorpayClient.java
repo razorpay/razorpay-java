@@ -13,7 +13,6 @@ public class RazorpayClient {
   public CardClient Cards;
   public CustomerClient Customers;
   public TransferClient Transfers;
-  public Utils Utility;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
@@ -29,7 +28,6 @@ public class RazorpayClient {
     Cards = new CardClient(auth);
     Customers = new CustomerClient(auth);
     Transfers = new TransferClient(auth);
-    Utility = new Utils(key, secret);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
