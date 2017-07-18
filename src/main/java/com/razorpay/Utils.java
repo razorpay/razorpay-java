@@ -12,6 +12,10 @@ public class Utils {
 
   private String secret;
 
+  public Utils() {
+
+  }
+
   public Utils(String key, String secret) {
     this.key = key;
     this.secret = secret;
@@ -22,12 +26,11 @@ public class Utils {
     String orderId = attributes.getString("razorpay_order_id");
     String paymentId = attributes.getString("razorpay_payment_id");
     String payload = orderId + '|' + paymentId;
-    String apiSecret = this.secret;
-    return verifySignature(payload, expectedSignature, apiSecret);
+    return verifySignature(payload, expectedSignature, this.secret);
   }
 
-  public boolean verifyWebhookSignature(String payload, String expectedSignature, String webhookSecret)
-      throws RazorpayException {
+  public boolean verifyWebhookSignature(String payload, String expectedSignature,
+      String webhookSecret) throws RazorpayException {
     return verifySignature(payload, expectedSignature, webhookSecret);
   }
 
