@@ -13,6 +13,10 @@ public class RazorpayClient {
   public CardClient Cards;
   public CustomerClient Customers;
   public TransferClient Transfers;
+  public SubscriptionClient Subscriptions;
+  public AddonClient Addons;
+  public PlanClient Plans;
+  public VirtualAccountClient VirtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
@@ -28,6 +32,10 @@ public class RazorpayClient {
     Cards = new CardClient(auth);
     Customers = new CustomerClient(auth);
     Transfers = new TransferClient(auth);
+    Subscriptions = new SubscriptionClient(auth);
+    Addons = new AddonClient(auth);
+    Plans = new PlanClient(auth);
+    VirtualAccounts = new VirtualAccountClient(auth);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
