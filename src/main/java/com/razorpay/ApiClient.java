@@ -50,6 +50,11 @@ class ApiClient {
     return processResponse(response);
   }
 
+  <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
       throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
