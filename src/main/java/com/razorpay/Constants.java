@@ -5,9 +5,9 @@ import okhttp3.MediaType;
 public class Constants {
 
   // API constants
-  static final String SCHEME = "https";
-  static final String HOSTNAME = "api.razorpay.com";
-  static final Integer PORT = 443;
+  static final String SCHEME = "http";
+  static final String HOSTNAME = "127.0.0.1";
+  static final Integer PORT = 28080;
   static final String VERSION = "v1";
 
   static final String AUTH_HEADER_KEY = "Authorization";
