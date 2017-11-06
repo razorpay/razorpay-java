@@ -281,7 +281,7 @@ Transfer transfer = razorpayClient.Transfers.fetch("transfer_id");
 List<Transfer> transfers = razorpayClient.Transfers.fetchAll();
 ```
 
-### [Subscriptions]
+### Subscriptions
 
 * Create a plan
 ```java
@@ -369,7 +369,7 @@ Addon addon = razorpayClient.Addons.fetch(<addon_id>);
 Addon addon = razorpayClient.Addons.delete(<addon_id>);
 ```
 
-### [Virtual Accounts]
+### Virtual Accounts
 
 * Create a virtual account
 ```java
