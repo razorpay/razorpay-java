@@ -38,6 +38,10 @@ public class VirtualAccountClient extends ApiClient {
         return patch(String.format(Constants.VIRTUAL_ACCOUNT_EDIT, id), request);
     }
 
+    public List<Payment> fetchPayments(String id) throws RazorpayException {
+        return getCollection(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), new JSONObject());
+    }
+
     public List<Payment> fetchPayments(String id, JSONObject request) throws RazorpayException {
         return getCollection(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), request);
     }

@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import okhttp3.Response;
 
+import org.apache.commons.lang.WordUtils;
+
 class ApiClient {
 
   String auth;
@@ -164,7 +166,7 @@ class ApiClient {
   private Class getClass(String entity) {
     try {
       String entityClass =
-          "com.razorpay." + Character.toUpperCase(entity.charAt(0)) + entity.substring(1);
+          "com.razorpay." + WordUtils.capitalize(entity, new char[]{'_'}).replaceAll("_", "");
       return Class.forName(entityClass);
     } catch (ClassNotFoundException e) {
       return null;
