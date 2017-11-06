@@ -119,6 +119,11 @@ List<Transfer> transfers = razorpayClient.Payments.transfer("payment_id", reques
 List<Transfers> transfers = razorpayClient.Payments.fetchAllTransfers("payment_id");
 ```
 
+* Fetch payment bank transfer
+```java
+BankTransfer bankTransfer = razorpayClient.Payments.fetchBankTransfer("payment_id");
+```
+
 ### [Refunds](https://docs.razorpay.com/docs/return-objects#refund-entity)
 
 * Fetch all refunds:
@@ -274,4 +279,128 @@ Transfer transfer = razorpayClient.Transfers.fetch("transfer_id");
 * Fetch all transfers
 ```java
 List<Transfer> transfers = razorpayClient.Transfers.fetchAll();
+```
+
+### [Subscriptions]
+
+* Create a plan
+```java
+JSONObject request = new JSONObject();
+request.put("period", "weekly");
+request.put("interval", 1);
+
+JSONObject item = new JSONObject();
+item.put("name", "Test Weekly 1 plan");
+item.put("description", "Description for the weekly 1 plan");
+item.put("amount", 600);
+item.put("currency", "INR");
+request.put("item", item);
+
+Plan plan = razorpayClient.Plans.create(request);
+```
+
+* Fetch a plan
+```java
+Plan plan = razorpayClient.Plans.fetch("<plan_id>");
+```
+
+* Fetch all plans
+```java
+List<Plan> listPlans = razorpayClient.Plans.fetchAll();
+```
+
+* Create a subscription
+```java
+JSONObject request = new JSONObject();
+request.put("plan_id", "<plan_id>");
+request.put("customer_notify", 1);
+request.put("total_count", 6);
+request.put("start_at", 1495995837);
+
+JSONArray addons = new JSONArray();
+JSONObject addon = new JSONObject();
+JSONObject item = new JSONObject();
+item.put("name", "Delivery charges");
+item.put("amount", 30000);
+item.put("currency", "INR");
+addon.put("item", item);
+addons.put(addon);
+request.put("addons", addons);
+
+Subscription subscription = razorpayClient.Subscriptions.create(request);
+```
+
+* Fetch a subscription
+```java
+Subscription subscription = razorpayClient.Subscriptions.fetch("<subscription_id>");
+```
+
+* Fetch all subscription
+```java
+List<Subscription> listSubscriptions = razorpayClient.Subscriptions.fetchAll();
+```
+
+* Cancel a subscription
+```java
+Subscription subscription = razorpayClient.Subscriptions.cancel("<subscription_id>");
+```
+
+* Add addon
+```java
+JSONObject request = new JSONObject();
+request.put("quantity", 2);
+
+JSONObject addonItem = new JSONObject();
+addonItem.put("name", "Extra Chair");
+addonItem.put("amount", 30000);
+addonItem.put("currency", "INR");
+request.put("item", addonItem);
+
+Addon addon = razorpayClient.Subscriptions.createAddon(<subscription_id>, request);
+```
+
+* Fetch Addon
+```java
+Addon addon = razorpayClient.Addons.fetch(<addon_id>);
+```
+
+* Delete Addon
+```java
+Addon addon = razorpayClient.Addons.delete(<addon_id>);
+```
+
+### [Virtual Accounts]
+
+* Create a virtual account
+```java
+JSONObject request = new JSONObject();
+JSONArray receiverTypeArray = new JSONArray();
+receiverTypeArray.put("bank_account");
+request.put("receiver_types", receiverTypeArray);
+JSONObject notes = new JSONObject();
+notes.put("receiver_key", "receiver_value");
+request.put("notes", notes);
+request.put("description", "First Virtual Account");
+
+VirtualAccount virtualAccount = razorpayClient.VirtualAccounts.create(request);
+```
+
+* Fetch Virtual Account
+```java
+VirtualAccount virtualAccount = razorpayClient.VirtualAccounts.fetch("<virtual_account_id>");
+```
+
+* Fetch all Virtual Accounts
+```java
+List<VirtualAccount> virtualAccountList = razorpayClient.VirtualAccounts.fetchAll();
+```
+
+* Close Virtual Account
+```java
+VirtualAccount virtualAccount = razorpayClient.VirtualAccounts.close("<virtual_account_id>");
+```
+
+* List Virtual Account payments
+```java
+List<Payment> paymentList = razorpayClient.VirtualAccounts.fetchPayments("virtual_account_id");
 ```
