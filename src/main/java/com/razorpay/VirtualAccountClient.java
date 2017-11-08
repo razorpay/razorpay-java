@@ -39,7 +39,7 @@ public class VirtualAccountClient extends ApiClient {
     }
 
     public List<Payment> fetchPayments(String id) throws RazorpayException {
-        return getCollection(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), new JSONObject());
+        return fetchPayments(id, null);
     }
 
     public List<Payment> fetchPayments(String id, JSONObject request) throws RazorpayException {

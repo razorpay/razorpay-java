@@ -15,6 +15,6 @@ public class AddonClient extends ApiClient {
     }
 
     public Addon delete(String id) throws RazorpayException {
-        return get(String.format(Constants.ADDON_DELETE, id), null);
+        return delete(String.format(Constants.ADDON_DELETE, id), null);
     }
 }
