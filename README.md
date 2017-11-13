@@ -121,7 +121,7 @@ List<Transfers> transfers = razorpayClient.Payments.fetchAllTransfers("payment_i
 
 * Fetch payment bank transfer
 ```java
-BankTransfer bankTransfer = razorpayClient.Payments.fetchBankTransfer("payment_id");
+BankTransfer bankTransfer = razorpayClient.Payments.fetchBankTransfers("payment_id");
 ```
 
 ### [Refunds](https://docs.razorpay.com/docs/return-objects#refund-entity)
