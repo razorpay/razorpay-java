@@ -77,7 +77,7 @@ public class PaymentClient extends ApiClient {
     return getCollection(String.format(Constants.PAYMENT_TRANSFER_GET, id), request);
   }
 
-  public BankTransfer fetchBankTransfer(String id) throws RazorpayException {
+  public BankTransfer fetchBankTransfers(String id) throws RazorpayException {
     return get(String.format(Constants.PAYMENT_BANK_TRANSFER_GET, id), null);
   }
 }
