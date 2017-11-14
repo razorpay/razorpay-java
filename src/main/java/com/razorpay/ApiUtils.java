@@ -46,7 +46,7 @@ class ApiUtils {
   }
 
   private enum Method {
-    GET, POST, PUT, PATCH
+    GET, POST, PUT, PATCH, DELETE
   }
 
   static Response postRequest(String path, JSONObject requestObject, String auth)
@@ -95,6 +95,16 @@ class ApiUtils {
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
+    return processRequest(request);
+  }
+
+  static Response deleteRequest(String path, JSONObject requestObject, String auth)
+      throws RazorpayException {
+
+    HttpUrl.Builder builder = getBuilder(path);
+    addQueryParams(builder, requestObject);
+
+    Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 

@@ -3,6 +3,7 @@ package com.razorpay;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,6 +48,11 @@ class ApiClient {
 
   <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.patchRequest(path, requestObject, auth);
+    return processResponse(response);
+  }
+
+  <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
@@ -158,8 +164,7 @@ class ApiClient {
 
   private Class getClass(String entity) {
     try {
-      String entityClass =
-          "com.razorpay." + Character.toUpperCase(entity.charAt(0)) + entity.substring(1);
+      String entityClass = "com.razorpay." + WordUtils.capitalize(entity, '_').replaceAll("_", "");
       return Class.forName(entityClass);
     } catch (ClassNotFoundException e) {
       return null;
