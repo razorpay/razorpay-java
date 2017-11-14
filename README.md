@@ -281,7 +281,7 @@ Transfer transfer = razorpayClient.Transfers.fetch("transfer_id");
 List<Transfer> transfers = razorpayClient.Transfers.fetchAll();
 ```
 
-### Subscriptions
+### [Subscriptions](https://razorpay.com/docs/subscriptions/)
 
 * Create a plan
 ```java

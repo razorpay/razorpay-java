@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import okhttp3.Response;
+import org.apache.commons.text.WordUtils;
 
-import org.apache.commons.lang.WordUtils;
+import okhttp3.Response;
 
 class ApiClient {
 
