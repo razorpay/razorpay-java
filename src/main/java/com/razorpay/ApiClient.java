@@ -3,10 +3,9 @@ package com.razorpay;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import org.apache.commons.text.WordUtils;
 
 import okhttp3.Response;
 
@@ -165,8 +164,7 @@ class ApiClient {
 
   private Class getClass(String entity) {
     try {
-      String entityClass =
-          "com.razorpay." + WordUtils.capitalize(entity, new char[]{'_'}).replaceAll("_", "");
+      String entityClass = "com.razorpay." + WordUtils.capitalize(entity, '_').replaceAll("_", "");
       return Class.forName(entityClass);
     } catch (ClassNotFoundException e) {
       return null;
