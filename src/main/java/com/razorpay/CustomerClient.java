@@ -29,4 +29,8 @@ public class CustomerClient extends ApiClient {
   public Token fetchToken(String id, String tokenId) throws RazorpayException {
     return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
   }
+
+  public Token deleteToken(String id, String tokenId) throws RazorpayException {
+    return delete(String.format(Constants.TOKEN_DELETE, id, tokenId), null);
+  }
 }

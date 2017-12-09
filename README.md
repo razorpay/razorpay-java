@@ -243,6 +243,10 @@ List<Token> tokens = razorpayClient.Customers.fetchTokens(customerId);
 ```java
 Token token = razorpayClient.Customers.fetchToken(customerId, tokenId);
 ```
+* Delete a Token
+```java
+Token token = razorpayClient.Customers.deleteToken(customerId, tokenId);
+```
 
 ### [Transfers](https://docs.razorpay.com/v1/page/marketplace)
 
