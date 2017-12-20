@@ -51,9 +51,9 @@ class ApiClient {
     return processResponse(response);
   }
 
-  <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
+  void delete(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.deleteRequest(path, requestObject, auth);
-    return processResponse(response);
+    processDeleteResponse(response);
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
@@ -83,8 +83,8 @@ class ApiClient {
       JSONArray jsonArray = jsonObject.getJSONArray("items");
       try {
         for (int i = 0; i < jsonArray.length(); i++) {
-          JSONObject refundJson = jsonArray.getJSONObject(i);
-          T t = parseResponse(refundJson);
+          JSONObject jsonObj = jsonArray.getJSONObject(i);
+          T t = parseResponse(jsonObj);
           modelList.add(t);
         }
         return modelList;
@@ -143,6 +143,27 @@ class ApiClient {
 
     throwException(statusCode, responseJson);
     return null;
+  }
+
+  private void processDeleteResponse(Response response) throws RazorpayException {
+    if (response == null) {
+      throw new RazorpayException("Invalid Response from server");
+    }
+
+    int statusCode = response.code();
+    String responseBody = null;
+    JSONObject responseJson = null;
+
+    try {
+      responseBody = response.body().string();
+      responseJson = new JSONObject(responseBody);
+    } catch (IOException e) {
+      throw new RazorpayException(e.getMessage());
+    }
+
+    if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
+      throwException(statusCode, responseJson);
+    }
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
