@@ -21,7 +21,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.3.3</version>
+ <version>1.3.4</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.razorpay:razorpay-java:1.3.3"
+compile "com.razorpay:razorpay-java:1.3.4"
 ```
 
 ## Usage
@@ -245,7 +245,7 @@ Token token = razorpayClient.Customers.fetchToken(customerId, tokenId);
 ```
 * Delete a Token
 ```java
-Token token = razorpayClient.Customers.deleteToken(customerId, tokenId);
+razorpayClient.Customers.deleteToken(customerId, tokenId);
 ```
 
 ### [Transfers](https://docs.razorpay.com/v1/page/marketplace)
@@ -370,7 +370,7 @@ Addon addon = razorpayClient.Addons.fetch(<addon_id>);
 
 * Delete Addon
 ```java
-Addon addon = razorpayClient.Addons.delete(<addon_id>);
+razorpayClient.Addons.delete(<addon_id>);
 ```
 
 ### Virtual Accounts
