@@ -30,7 +30,7 @@ public class CustomerClient extends ApiClient {
     return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
   }
 
-  public Token deleteToken(String id, String tokenId) throws RazorpayException {
-    return delete(String.format(Constants.TOKEN_DELETE, id, tokenId), null);
+  public void deleteToken(String id, String tokenId) throws RazorpayException {
+    delete(String.format(Constants.TOKEN_DELETE, id, tokenId), null);
   }
 }
