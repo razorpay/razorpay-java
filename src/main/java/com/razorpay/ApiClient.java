@@ -31,22 +31,22 @@ class ApiClient {
     this.auth = auth;
   }
 
-  <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
-  <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.postRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
-  <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.putRequest(path, requestObject, auth);
     return processResponse(response);
   }
 
-  <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.patchRequest(path, requestObject, auth);
     return processResponse(response);
   }

@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-abstract class Entity {
+public abstract class Entity {
 
   private JSONObject modelJson;
 
