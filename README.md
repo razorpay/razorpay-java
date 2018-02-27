@@ -408,3 +408,11 @@ VirtualAccount virtualAccount = razorpayClient.VirtualAccounts.close("<virtual_a
 ```java
 List<Payment> paymentList = razorpayClient.VirtualAccounts.fetchPayments("virtual_account_id");
 ```
+
+* Make custom requests
+
+You can make custom API requests using clients. For example, here is how to make custom request to `/payments/path` endpoint. 
+
+```java
+Entity response = razorpayClient.Payments.post("path", JSONObject requestBody);
+```
