@@ -51,7 +51,7 @@ class ApiClient {
     return processResponse(response);
   }
 
-  void delete(String path, JSONObject requestObject) throws RazorpayException {
+  public void delete(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.deleteRequest(path, requestObject, auth);
     processDeleteResponse(response);
   }
