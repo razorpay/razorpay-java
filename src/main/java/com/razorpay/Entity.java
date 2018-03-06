@@ -17,7 +17,7 @@ public abstract class Entity {
 
   public <T> T get(String key) {
     // Return null if key not in JSONObject
-    if (has(key) == false) {
+    if (!has(key)) {
       return null;
     }
     // Return Date for timestamps
@@ -34,9 +34,7 @@ public abstract class Entity {
   public JSONObject toJson() {
     return modelJson;
   }
-
-
-
+  
   public boolean has(String key) {
     return modelJson.has(key);
   }
