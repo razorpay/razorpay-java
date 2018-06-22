@@ -1,14 +1,17 @@
 package com.razorpay;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
+import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,8 +35,15 @@ class ApiUtils {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
       }
 
-      client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
-          .writeTimeout(60, TimeUnit.SECONDS).addInterceptor(loggingInterceptor).build();
+      List<ConnectionSpec> connectionSpecs = new ArrayList<ConnectionSpec>();
+      connectionSpecs.add(ConnectionSpec.MODERN_TLS);
+      
+      client = new OkHttpClient.Builder()
+                               .readTimeout(60, TimeUnit.SECONDS)
+                               .writeTimeout(60, TimeUnit.SECONDS)
+                               .addInterceptor(loggingInterceptor)
+                               .connectionSpecs(connectionSpecs)
+                               .build();
     }
 
     Properties properties = new Properties();
