@@ -1,17 +1,22 @@
 package com.razorpay;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 import org.json.JSONObject;
 
-import okhttp3.ConnectionSpec;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,16 +39,17 @@ class ApiUtils {
       } else {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
       }
-
-      List<ConnectionSpec> connectionSpecs = new ArrayList<ConnectionSpec>();
-      connectionSpecs.add(ConnectionSpec.MODERN_TLS);
       
-      client = new OkHttpClient.Builder()
-                               .readTimeout(60, TimeUnit.SECONDS)
-                               .writeTimeout(60, TimeUnit.SECONDS)
-                               .addInterceptor(loggingInterceptor)
-                               .connectionSpecs(connectionSpecs)
-                               .build();
+      try {
+        client = new OkHttpClient.Builder()
+                                 .readTimeout(60, TimeUnit.SECONDS)
+                                 .writeTimeout(60, TimeUnit.SECONDS)
+                                 .addInterceptor(loggingInterceptor)
+                                 .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
+                                 .build();
+      } catch (Exception e) {
+        throw new RazorpayException(e);
+      }
     }
 
     Properties properties = new Properties();
@@ -158,5 +164,16 @@ class ApiUtils {
 
   static void addHeaders(Map<String, String> header) {
     headers.putAll(header);
+  }
+  
+  private static X509TrustManager createDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
+    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    trustManagerFactory.init((KeyStore) null);
+    TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+    if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+      throw new IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers));
+    }
+    X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
+    return trustManager;
   }
 }
