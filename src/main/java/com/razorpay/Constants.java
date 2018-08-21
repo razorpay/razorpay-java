@@ -38,6 +38,7 @@ public class Constants {
   static final String INVOICE_CREATE = "invoices";
   static final String INVOICE_GET = "invoices/%s";
   static final String INVOICE_LIST = "invoices";
+  static final String INVOICE_CANCEL = "invoices/%s/cancel";
 
   static final String CARD_GET = "cards/%s";
 
