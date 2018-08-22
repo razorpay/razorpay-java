@@ -100,14 +100,14 @@ Refund refund = razorpayClient.Payments.fetchRefund("refund_id");
 * Create Transfer for a payment:
 ```java
 JSONObject request = new JSONObject();
-    
+
 JSONArray transfers = new JSONArray();
 
 JSONObject transfer = new JSONObject();
 transfer.put("amount", <amount>); // The amount should be in paise.
 transfer.put("currency", "INR");
 transfer.put("account", <account_id>);
-    
+
 transfers.put(transfer);
 request.put("transfers", transfers);
 
@@ -164,7 +164,7 @@ List<Payment> payments = razorpayClient.Orders.fetchPayments("order_id");
 You can use the Utils class to verify the signature received in response to a payment made using Orders API
 ```java
 JSONObject paymentResponse = new JSONObject();
-options.put("razorpay_order_id", "<order_id>"); 
+options.put("razorpay_order_id", "<order_id>");
 options.put("razorpay_payment_id", "<payment_id>");
 options.put("razorpay_signature", "<signature>");
 Utils.verifyPaymentSignature(paymentResponse, "<secret_key>");
@@ -189,11 +189,10 @@ JSONObject request = new JSONObject();
 request.put("line_items", lineItems);
 request.put("date", 1480768625); // Timestamp in seconds
 request.put("currency", "INR");
-request.put("sms_notify", "0"); 
+request.put("sms_notify", "0");
 
 Invoice invoice = razorpayClient.Invoices.create(request);
 ```
-
 * Fetch a particular invoice:
 ```java
 Invoice invoice = razorpayClient.Invoices.fetch("invoice_id");
@@ -201,6 +200,10 @@ Invoice invoice = razorpayClient.Invoices.fetch("invoice_id");
 * Fetch all invoices:
 ```java
 List<Invoice> invoices = razorpayClient.Invoices.fetchAll();
+```
+* Cancel a particular invoice:
+```java
+Invoice invoice = razorpayClient.Invoices.cancel("invoice_id");
 ```
 
 ### [Cards](https://docs.razorpay.com/v1/page/cards)
@@ -256,7 +259,7 @@ JSONObject request = new JSONObject();
 request.put("amount", <amount>); // The amount should be in paise.
 request.put("currency", "INR");
 request.put("account", <account_id>);
-    
+
 Transfer transfer = razorpayClient.Transfers.create(request);
 ```
 
@@ -411,7 +414,7 @@ List<Payment> paymentList = razorpayClient.VirtualAccounts.fetchPayments("virtua
 
 * Make custom requests
 
-You can make custom API requests using clients. For example, here is how to make custom request to `/payments/path` endpoint. 
+You can make custom API requests using clients. For example, here is how to make custom request to `/payments/path` endpoint.
 
 ```java
 Entity response = razorpayClient.Payments.post("path", JSONObject requestBody);
