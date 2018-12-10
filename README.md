@@ -163,7 +163,7 @@ List<Payment> payments = razorpayClient.Orders.fetchPayments("order_id");
 ### Verification
 You can use the Utils class to verify the signature received in response to a payment made using Orders API
 ```java
-JSONObject paymentResponse = new JSONObject();
+JSONObject options = new JSONObject();
 options.put("razorpay_order_id", "<order_id>");
 options.put("razorpay_payment_id", "<payment_id>");
 options.put("razorpay_signature", "<signature>");
