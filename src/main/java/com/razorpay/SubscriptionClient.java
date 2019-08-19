@@ -13,6 +13,10 @@ public class SubscriptionClient extends ApiClient {
   public Subscription create(JSONObject request) throws RazorpayException {
     return post(Constants.SUBSCRIPTION_CREATE, request);
   }
+  
+  public Subscription update(String id, JSONObject request) throws RazorpayException {
+    return patch(String.format(Constants.SUBSCRIPTION_UPDATE, id), request);
+  }
 
   public Subscription fetch(String id) throws RazorpayException {
     return get(String.format(Constants.SUBSCRIPTION_GET, id), null);
