@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class RefundClient extends ApiClient {
 
-  RefundClient(String auth) {
-    super(auth);
+  RefundClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Refund create(JSONObject request) throws RazorpayException {

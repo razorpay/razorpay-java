@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class CustomerClient extends ApiClient {
 
-  CustomerClient(String auth) {
-    super(auth);
+  CustomerClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Customer create(JSONObject request) throws RazorpayException {

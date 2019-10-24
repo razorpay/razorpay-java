@@ -2,8 +2,8 @@ package com.razorpay;
 
 public class CardClient extends ApiClient {
 
-  CardClient(String auth) {
-    super(auth);
+  CardClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Card fetch(String id) throws RazorpayException {

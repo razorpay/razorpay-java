@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class SubscriptionClient extends ApiClient {
 
-  SubscriptionClient(String auth) {
-    super(auth);
+  SubscriptionClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Subscription create(JSONObject request) throws RazorpayException {
