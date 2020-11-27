@@ -31,9 +31,7 @@ public class VirtualAccountClient extends ApiClient {
   }
 
   public VirtualAccount close(String id) throws RazorpayException {
-    JSONObject request = new JSONObject();
-    request.put("status", "closed");
-    return patch(String.format(Constants.VIRTUAL_ACCOUNT_EDIT, id), request);
+    return post(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, id), null);
   }
 
   public List<Payment> fetchPayments(String id) throws RazorpayException {
