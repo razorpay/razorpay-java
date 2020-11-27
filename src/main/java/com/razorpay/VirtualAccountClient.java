@@ -31,7 +31,7 @@ public class VirtualAccountClient extends ApiClient {
   }
 
   public VirtualAccount close(String id) throws RazorpayException {
-    return post(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, id));
+    return post(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, id), null);
   }
 
   public List<Payment> fetchPayments(String id) throws RazorpayException {
