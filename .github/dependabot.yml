@@ -6,13 +6,3 @@ updates:
     interval: daily
     time: "04:00"
     timezone: Asia/Calcutta
-  ignore:
-  - dependency-name: org.json:json
-    versions:
-    - "20201115"
-  - dependency-name: com.squareup.okhttp3:logging-interceptor
-    versions:
-    - 4.9.0
-  - dependency-name: com.squareup.okhttp3:okhttp
-    versions:
-    - 4.9.0
