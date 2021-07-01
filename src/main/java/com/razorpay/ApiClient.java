@@ -27,38 +27,41 @@ class ApiClient {
 
   private final int STATUS_MULTIPLE_CHOICE = 300;
 
-  ApiClient(String auth) {
+  String clientKey;
+
+  ApiClient(String auth, String clientKey) {
     this.auth = auth;
+    this.clientKey = clientKey;
   }
 
   public <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.getRequest(path, requestObject, auth);
+    Response response = ApiUtils.getRequest(path, requestObject, auth, clientKey);
     return processResponse(response);
   }
 
   public <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.postRequest(path, requestObject, auth);
+    Response response = ApiUtils.postRequest(path, requestObject, auth, clientKey);
     return processResponse(response);
   }
 
   public <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.putRequest(path, requestObject, auth);
+    Response response = ApiUtils.putRequest(path, requestObject, auth, clientKey);
     return processResponse(response);
   }
 
   public <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.patchRequest(path, requestObject, auth);
+    Response response = ApiUtils.patchRequest(path, requestObject, auth, clientKey);
     return processResponse(response);
   }
 
   public void delete(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
+    Response response = ApiUtils.deleteRequest(path, requestObject, auth, clientKey);
     processDeleteResponse(response);
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
       throws RazorpayException {
-    Response response = ApiUtils.getRequest(path, requestObject, auth);
+    Response response = ApiUtils.getRequest(path, requestObject, auth, clientKey);
     return processCollectionResponse(response);
   }
 

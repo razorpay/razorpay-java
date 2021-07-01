@@ -10,9 +10,9 @@ public class PaymentClient extends ApiClient {
 
   private RefundClient refundClient;
 
-  PaymentClient(String auth) {
-    super(auth);
-    refundClient = new RefundClient(auth);
+  PaymentClient(String auth, String clientKey) {
+    super(auth, clientKey);
+    refundClient = new RefundClient(auth, clientKey);
   }
 
   public Payment fetch(String id) throws RazorpayException {
@@ -65,7 +65,7 @@ public class PaymentClient extends ApiClient {
 
   public List<Transfer> transfer(String id, JSONObject request) throws RazorpayException {
     Response response =
-        ApiUtils.postRequest(String.format(Constants.PAYMENT_TRANSFER_CREATE, id), request, auth);
+        ApiUtils.postRequest(String.format(Constants.PAYMENT_TRANSFER_CREATE, id), request, auth, clientKey);
     return processCollectionResponse(response);
   }
 

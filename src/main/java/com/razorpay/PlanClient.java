@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class PlanClient extends ApiClient {
 
-    PlanClient(String auth) {
-        super(auth);
+    PlanClient(String auth, String clientKey) {
+        super(auth, clientKey);
     }
 
     public Plan create(JSONObject request) throws RazorpayException {

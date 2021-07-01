@@ -2,8 +2,8 @@ package com.razorpay;
 
 public class AddonClient extends ApiClient {
 
-  AddonClient(String auth) {
-    super(auth);
+  AddonClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   // To create an Addon, use the createAddon method of SubscriptionClient

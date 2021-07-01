@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class TransferClient extends ApiClient {
 
-  TransferClient(String auth) {
-    super(auth);
+  TransferClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Transfer create(JSONObject request) throws RazorpayException {

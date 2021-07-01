@@ -27,7 +27,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 class ApiUtils {
 
   private static OkHttpClient client;
-  private static Map<String, String> headers = new HashMap<String, String>();
+
+  private static Map<String, Map<String, String>> multiHeaders = new HashMap<String, Map<String, String>>();
 
   private static String version = null;
 
@@ -39,14 +40,14 @@ class ApiUtils {
       } else {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
       }
-      
+
       try {
         client = new OkHttpClient.Builder()
-                                 .readTimeout(60, TimeUnit.SECONDS)
-                                 .writeTimeout(60, TimeUnit.SECONDS)
-                                 .addInterceptor(loggingInterceptor)
-                                 .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
-                                 .build();
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(loggingInterceptor)
+                .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
+                .build();
       } catch (Exception e) {
         throw new RazorpayException(e);
       }
@@ -65,8 +66,8 @@ class ApiUtils {
     GET, POST, PUT, PATCH, DELETE
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
+  static Response postRequest(String path, JSONObject requestObject, String auth, String clientKey)
+          throws RazorpayException {
 
     HttpUrl.Builder builder = getBuilder(path);
 
@@ -74,12 +75,12 @@ class ApiUtils {
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
 
     Request request =
-        createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
+            createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth, clientKey);
     return processRequest(request);
   }
 
-  static Response putRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
+  static Response putRequest(String path, JSONObject requestObject, String auth, String clientKey)
+          throws RazorpayException {
 
     HttpUrl.Builder builder = getBuilder(path);
 
@@ -87,12 +88,12 @@ class ApiUtils {
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
 
     Request request =
-        createRequest(Method.PUT.name(), builder.build().toString(), requestBody, auth);
+            createRequest(Method.PUT.name(), builder.build().toString(), requestBody, auth, clientKey);
     return processRequest(request);
   }
 
-  static Response patchRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
+  static Response patchRequest(String path, JSONObject requestObject, String auth, String clientKey)
+          throws RazorpayException {
 
     HttpUrl.Builder builder = getBuilder(path);
 
@@ -100,52 +101,56 @@ class ApiUtils {
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
 
     Request request =
-        createRequest(Method.PATCH.name(), builder.build().toString(), requestBody, auth);
+            createRequest(Method.PATCH.name(), builder.build().toString(), requestBody, auth, clientKey);
     return processRequest(request);
   }
 
-  static Response getRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
+  static Response getRequest(String path, JSONObject requestObject, String auth, String clientKey)
+          throws RazorpayException {
 
     HttpUrl.Builder builder = getBuilder(path);
     addQueryParams(builder, requestObject);
 
-    Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
+    Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth, clientKey);
     return processRequest(request);
   }
 
-  static Response deleteRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
+  static Response deleteRequest(String path, JSONObject requestObject, String auth, String clientKey)
+          throws RazorpayException {
 
     HttpUrl.Builder builder = getBuilder(path);
     addQueryParams(builder, requestObject);
 
-    Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
+    Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth, clientKey);
     return processRequest(request);
   }
 
   private static HttpUrl.Builder getBuilder(String path) {
     return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
-        .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
+            .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
   }
 
   private static Request createRequest(String method, String url, RequestBody requestBody,
-      String auth) {
+                                       String auth, String clientKey) {
     Request.Builder builder =
-        new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
+            new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
     builder.addHeader(Constants.USER_AGENT,
-        "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
+            "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
 
-    for (Map.Entry<String, String> header : headers.entrySet()) {
-      builder.addHeader(header.getKey(), header.getValue());
+    Map<String, String> clientHeaders = multiHeaders.get(clientKey);
+    if(clientHeaders!=null) {
+      for (Map.Entry<String, String> header : multiHeaders.get(clientKey).entrySet()) {
+        builder.addHeader(header.getKey(), header.getValue());
+      }
     }
 
     return builder.method(method, requestBody).build();
   }
 
   private static void addQueryParams(HttpUrl.Builder builder, JSONObject request) {
-    if (request == null)
+    if (request == null) {
       return;
+    }
 
     Iterator<?> keys = request.keys();
     while (keys.hasNext()) {
@@ -162,10 +167,17 @@ class ApiUtils {
     }
   }
 
-  static void addHeaders(Map<String, String> header) {
-    headers.putAll(header);
+  static void addHeaders(String clientKey, Map<String, String> header) {
+    if(!multiHeaders.containsKey(clientKey)) {
+      initNewHeaders(clientKey);
+    }
+    multiHeaders.get(clientKey).putAll(header);
   }
-  
+
+  synchronized private static void initNewHeaders(String clientKey) {
+    multiHeaders.put(clientKey, new HashMap<String, String>());
+  }
+
   private static X509TrustManager createDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
     TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
     trustManagerFactory.init((KeyStore) null);

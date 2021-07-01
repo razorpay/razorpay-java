@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class VirtualAccountClient extends ApiClient {
 
-  VirtualAccountClient(String auth) {
-    super(auth);
+  VirtualAccountClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public VirtualAccount create(JSONObject request) throws RazorpayException {
