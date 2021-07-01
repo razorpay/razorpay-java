@@ -65,6 +65,7 @@ public class Constants {
   static final String SUBSCRIPTION_LIST = "subscriptions";
   static final String SUBSCRIPTION_CANCEL = "subscriptions/%s/cancel";
   static final String SUBSCRIPTION_ADDON_CREATE = "subscriptions/%s/addons";
+  static final String SUBSCRIPTION_UPDATE = "subscriptions/%s";
 
   static final String ADDON_GET = "addons/%s";
   static final String ADDON_DELETE = "addons/%s";
