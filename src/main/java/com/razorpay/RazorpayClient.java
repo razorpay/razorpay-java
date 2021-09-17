@@ -5,6 +5,7 @@ import java.util.Map;
 import okhttp3.Credentials;
 
 public class RazorpayClient {
+  private static final int DEFAULT_TIMEOUT_DURATION_IN_SECONDS = 60;
 
   public PaymentClient Payments;
   public RefundClient Refunds;
@@ -19,11 +20,19 @@ public class RazorpayClient {
   public VirtualAccountClient VirtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
-    this(key, secret, false);
+    this(key, secret, false, DEFAULT_TIMEOUT_DURATION_IN_SECONDS);
   }
 
   public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException {
-    ApiUtils.createHttpClientInstance(enableLogging);
+    this(key, secret, enableLogging, DEFAULT_TIMEOUT_DURATION_IN_SECONDS);
+  }
+
+  public RazorpayClient(String key, String secret, int timeoutDurationInSeconds) throws RazorpayException {
+    this(key, secret, false, timeoutDurationInSeconds);
+  }
+
+  public RazorpayClient(String key, String secret, Boolean enableLogging, Integer timeout) throws RazorpayException {
+    ApiUtils.createHttpClientInstance(enableLogging, timeout);
     String auth = Credentials.basic(key, secret);
     Payments = new PaymentClient(auth);
     Refunds = new RefundClient(auth);

@@ -31,7 +31,7 @@ class ApiUtils {
 
   private static String version = null;
 
-  static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
+  static void createHttpClientInstance(boolean enableLogging, int timeout) throws RazorpayException {
     if (client == null) {
       HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
       if (enableLogging) {
@@ -42,8 +42,8 @@ class ApiUtils {
       
       try {
         client = new OkHttpClient.Builder()
-                                 .readTimeout(60, TimeUnit.SECONDS)
-                                 .writeTimeout(60, TimeUnit.SECONDS)
+                                 .readTimeout(timeout, TimeUnit.SECONDS)
+                                 .writeTimeout(timeout, TimeUnit.SECONDS)
                                  .addInterceptor(loggingInterceptor)
                                  .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
                                  .build();
@@ -165,7 +165,7 @@ class ApiUtils {
   static void addHeaders(Map<String, String> header) {
     headers.putAll(header);
   }
-  
+
   private static X509TrustManager createDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
     TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
     trustManagerFactory.init((KeyStore) null);
