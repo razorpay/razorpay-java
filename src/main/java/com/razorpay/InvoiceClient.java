@@ -29,4 +29,12 @@ public class InvoiceClient extends ApiClient {
   public Invoice cancel(String id) throws RazorpayException {
     return post(String.format(Constants.INVOICE_CANCEL, id), null);
   }
+
+  public Invoice notifyBy(String id, String medium) throws RazorpayException {
+    return post(String.format(Constants.INVOICE_NOTIFY, id, medium), null);
+  }
+  
+  public Invoice createRegistrationLink(JSONObject request) throws RazorpayException {
+	    return post(Constants.SUBSCRIPTION_REGISTRATION_LINK, request);
+	}
 }

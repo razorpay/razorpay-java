@@ -80,4 +80,8 @@ public class PaymentClient extends ApiClient {
   public BankTransfer fetchBankTransfers(String id) throws RazorpayException {
     return get(String.format(Constants.PAYMENT_BANK_TRANSFER_GET, id), null);
   }
+  
+  public Payment createRecurring(JSONObject request) throws RazorpayException {
+	return post(Constants.PAYMENT_RECURRING, request);  
+  }
 }
