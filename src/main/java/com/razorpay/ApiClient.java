@@ -2,6 +2,7 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -95,6 +96,22 @@ class ApiClient {
 
     throw new RazorpayException("Unable to parse response");
   }
+  
+  private String StaticEntity(Response response) {
+	  List<String> url = response.request().url().pathSegments();
+	   	   
+	   switch(url.get(1)) {
+	     case "invoices":
+	      return StaticClass.Invoice;
+	      
+	     case "payments":
+	      return StaticClass.Payment;
+	      
+	     default :
+	       return "empty";
+	   }
+  }
+  
 
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
@@ -104,7 +121,6 @@ class ApiClient {
     int statusCode = response.code();
     String responseBody = null;
     JSONObject responseJson = null;
-
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
@@ -113,6 +129,14 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
+    	
+      if(!responseJson.has(ENTITY)) {
+    	   String cls = StaticEntity(response);
+           if(cls != "empty") {
+    	    responseJson.put("entity",cls); 
+           }
+        }
+      
       return parseResponse(responseJson);
     }
 
