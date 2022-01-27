@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 public class InvoiceClient extends ApiClient {
 
-  InvoiceClient(String auth) {
-    super(auth);
+  InvoiceClient(String auth, String clientKey) {
+    super(auth, clientKey);
   }
 
   public Invoice create(JSONObject request) throws RazorpayException {
