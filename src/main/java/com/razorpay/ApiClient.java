@@ -2,11 +2,13 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 class ApiClient {
@@ -96,9 +98,11 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
   
-  private EntityMapping populateEntityNameFromURL(String args) {
-
-     switch(args) {
+  private EntityMapping populateEntityNameFromURL(HttpUrl url) {
+	  
+     String param = url.pathSegments().get(1).toString();
+     
+     switch(param) {
        case "invoices":
         return EntityMapping.Invoice;
         
@@ -129,10 +133,8 @@ class ApiClient {
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       
       if(!responseJson.has(ENTITY)) {
-         EntityMapping cls = populateEntityNameFromURL(response.request().url().pathSegments().get(1).toString());
-           if(cls != EntityMapping.Default) {
+         EntityMapping cls = populateEntityNameFromURL(response.request().url());
           responseJson.put("entity",cls.toString()); 
-           }
         }
       
       return parseResponse(responseJson);
