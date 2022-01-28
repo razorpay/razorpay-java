@@ -2,7 +2,6 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -97,19 +96,18 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
   
-  private String StaticEntity(Response response) {
-	  List<String> url = response.request().url().pathSegments();
-	   	   
-	   switch(url.get(1)) {
-	     case "invoices":
-	      return StaticClass.Invoice;
-	      
-	     case "payments":
-	      return StaticClass.Payment;
-	      
-	     default :
-	       return "empty";
-	   }
+  private EntityMapping populateEntityNameFromURL(String args) {
+
+     switch(args) {
+       case "invoices":
+        return EntityMapping.Invoice;
+        
+       case "payments":
+        return EntityMapping.Payment;
+        
+       default :
+         return EntityMapping.Default;
+     }
   }
   
 
@@ -129,11 +127,11 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-    	
+      
       if(!responseJson.has(ENTITY)) {
-    	   String cls = StaticEntity(response);
-           if(cls != "empty") {
-    	    responseJson.put("entity",cls); 
+         EntityMapping cls = populateEntityNameFromURL(response.request().url().pathSegments().get(1).toString());
+           if(cls != EntityMapping.Default) {
+          responseJson.put("entity",cls.toString()); 
            }
         }
       
