@@ -180,7 +180,11 @@ class ApiClient {
 
     try {
       responseBody = response.body().string();
-      responseJson = new JSONObject(responseBody);
+      if(responseBody=="[]") {
+       responseJson = new JSONObject(responseBody);
+      }else {
+       responseJson = new JSONObject("{}");	  
+      }
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }

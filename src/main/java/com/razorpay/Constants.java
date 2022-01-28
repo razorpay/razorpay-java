@@ -29,7 +29,10 @@ public class Constants {
   static final String REFUND_GET = "refunds/%s";
   static final String REFUND_LIST = "refunds";
   static final String REFUND_CREATE = "refunds";
-
+  
+  static final String FUND_ACCOUNT_CREATE = "fund_accounts";
+  static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
+  
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
   static final String ORDER_LIST = "orders";
@@ -39,6 +42,7 @@ public class Constants {
   static final String INVOICE_GET = "invoices/%s";
   static final String INVOICE_LIST = "invoices";
   static final String INVOICE_CANCEL = "invoices/%s/cancel";
+  static final String INVOICE_ISSUE = "invoices/%s/issue";
 
   static final String CARD_GET = "cards/%s";
 

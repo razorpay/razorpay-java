@@ -16,6 +16,7 @@ public class RazorpayClient {
   public SubscriptionClient Subscriptions;
   public AddonClient Addons;
   public PlanClient Plans;
+  public FundAccountClient FundAccount; 
   public VirtualAccountClient VirtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
@@ -27,6 +28,7 @@ public class RazorpayClient {
     String auth = Credentials.basic(key, secret);
     Payments = new PaymentClient(auth);
     Refunds = new RefundClient(auth);
+    FundAccount = new FundAccountClient(auth);
     Orders = new OrderClient(auth);
     Invoices = new InvoiceClient(auth);
     Cards = new CardClient(auth);
