@@ -98,20 +98,10 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
   
-  private EntityMapping populateEntityNameFromURL(HttpUrl url) {
+  private String populateEntityNameFromURL(HttpUrl url) {
 	  
-     String param = url.pathSegments().get(1).toString();
-     
-     switch(param) {
-       case "invoices":
-        return EntityMapping.Invoice;
-        
-       case "payments":
-        return EntityMapping.Payment;
-        
-       default :
-         return EntityMapping.Default;
-     }
+	  String param = url.pathSegments().get(1);
+      return EntityNameURLMapping.getEntityClassName(param);
   }
   
 
@@ -133,8 +123,8 @@ class ApiClient {
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       
       if(!responseJson.has(ENTITY)) {
-         EntityMapping cls = populateEntityNameFromURL(response.request().url());
-          responseJson.put("entity",cls.toString()); 
+    	  String entityName = populateEntityNameFromURL(response.request().url());
+          responseJson.put("entity",entityName); 
         }
       
       return parseResponse(responseJson);
