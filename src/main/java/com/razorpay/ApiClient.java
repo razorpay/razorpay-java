@@ -106,6 +106,9 @@ class ApiClient {
 	      
 	     case "payments":
 	      return StaticClass.Payment;
+	     
+	     case "items":
+	      return "Item";
 	      
 	     default :
 	       return "empty";
@@ -124,6 +127,7 @@ class ApiClient {
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
+      
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
@@ -162,6 +166,15 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
+    	
+    	if(!responseJson.has(ENTITY)) {
+     	   String cls = StaticEntity(response);
+            if(cls != "empty") {
+            JSONArray jsonArray = responseJson.getJSONArray("items");
+            System.out.print("Hii");
+     	    responseJson.put("entity",cls); 
+            }
+         }	
       return parseCollectionResponse(responseJson);
     }
 

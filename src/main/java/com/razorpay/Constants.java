@@ -39,7 +39,12 @@ public class Constants {
   static final String INVOICE_GET = "invoices/%s";
   static final String INVOICE_LIST = "invoices";
   static final String INVOICE_CANCEL = "invoices/%s/cancel";
-
+  
+  static final String ITEM_CREATE = "items";
+  static final String ITEM_GET = "items/%s";
+  static final String ITEM_LIST = "items";
+  static final String ITEM_EDIT = "items/%s";
+  
   static final String CARD_GET = "cards/%s";
 
   static final String CUSTOMER_CREATE = "customers";
