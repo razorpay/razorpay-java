@@ -8,6 +8,7 @@ import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 class ApiClient {
@@ -97,22 +98,10 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
   
-  private String StaticEntity(Response response) {
-	  List<String> url = response.request().url().pathSegments();
-	   	   
-	   switch(url.get(1)) {
-	     case "invoices":
-	      return StaticClass.Invoice;
-	      
-	     case "payments":
-	      return StaticClass.Payment;
-	     
-	     case "items":
-	      return "Item";
-	      
-	     default :
-	       return "empty";
-	   }
+  private String populateEntityNameFromURL(HttpUrl url) {
+	  
+	  String param = url.pathSegments().get(1);
+      return EntityNameURLMapping.getEntityClassName(param);
   }
   
 
@@ -127,18 +116,15 @@ class ApiClient {
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
-      
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-    	
+      
       if(!responseJson.has(ENTITY)) {
-    	   String cls = StaticEntity(response);
-           if(cls != "empty") {
-    	    responseJson.put("entity",cls); 
-           }
+    	  String entityName = populateEntityNameFromURL(response.request().url());
+          responseJson.put("entity",entityName); 
         }
       
       return parseResponse(responseJson);
@@ -157,24 +143,27 @@ class ApiClient {
     int statusCode = response.code();
     String responseBody = null;
     JSONObject responseJson = null;
-
+    
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
+    
+    if(responseJson.has("items")){
+      JSONArray jsonArray = responseJson.getJSONArray("items"); 
+       
+      for (int i = 0; i < jsonArray.length(); i++) {
+          JSONObject jsonObj = jsonArray.getJSONObject(i);
+          if(!jsonObj.has(ENTITY)) {
+              String entityName = populateEntityNameFromURL(response.request().url());
+              jsonObj.put("entity",entityName); 
+          }
+       }
+    }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-    	
-    	if(!responseJson.has(ENTITY)) {
-     	   String cls = StaticEntity(response);
-            if(cls != "empty") {
-            JSONArray jsonArray = responseJson.getJSONArray("items");
-            System.out.print("Hii");
-     	    responseJson.put("entity",cls); 
-            }
-         }	
       return parseCollectionResponse(responseJson);
     }
 

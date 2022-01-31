@@ -25,4 +25,8 @@ public class ItemClient extends ApiClient{
 	public List<Item> fetchAll(JSONObject request) throws RazorpayException {
 	    return getCollection(Constants.ITEM_LIST, request);
 	}
+	
+	public void delete(String id) throws RazorpayException {
+	   delete(String.format(Constants.ITEM_DELETE, id), null);
+	}
 }

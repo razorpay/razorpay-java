@@ -16,7 +16,7 @@ public class RazorpayClient {
   public SubscriptionClient Subscriptions;
   public AddonClient Addons;
   public PlanClient Plans;
-  public ItemClient Item;
+  public ItemClient Items;
   public VirtualAccountClient VirtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
@@ -36,7 +36,7 @@ public class RazorpayClient {
     Subscriptions = new SubscriptionClient(auth);
     Addons = new AddonClient(auth);
     Plans = new PlanClient(auth);
-    Item = new ItemClient(auth);
+    Items = new ItemClient(auth);
     VirtualAccounts = new VirtualAccountClient(auth);
   }
 

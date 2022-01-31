@@ -44,6 +44,7 @@ public class Constants {
   static final String ITEM_GET = "items/%s";
   static final String ITEM_LIST = "items";
   static final String ITEM_EDIT = "items/%s";
+  static final String ITEM_DELETE = "items/%s";
   
   static final String CARD_GET = "cards/%s";
 
