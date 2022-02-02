@@ -97,10 +97,14 @@ class ApiClient {
 
     throw new RazorpayException("Unable to parse response");
   }
-  
+
+  /*
+   * this method will take http url as : https://api.razorpay.com/v1/invocies
+   * and will return entity name with the help of @EntityNameURLMapping class
+   */
   private String getEntityNameFromURL(HttpUrl url) {
 	  String param = url.pathSegments().get(1);
-    return EntityNameURLMapping.getEntityClassName(param);
+    return EntityNameURLMapping.getEntityName(param);
   }
   
 
