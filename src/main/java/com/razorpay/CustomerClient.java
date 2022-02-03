@@ -22,6 +22,14 @@ public class CustomerClient extends ApiClient {
     return put(String.format(Constants.CUSTOMER_EDIT, id), request);
   }
 
+  public List<Customer> fetchAll() throws RazorpayException {
+    return fetchAll(null);
+  }
+
+  public List<Customer> fetchAll(JSONObject request) throws RazorpayException {
+    return getCollection(Constants.CUSTOMER_LIST, request);
+  }
+
   public List<Token> fetchTokens(String id) throws RazorpayException {
     return getCollection(String.format(Constants.TOKEN_LIST, id), null);
   }
