@@ -154,6 +154,17 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
+    if(responseJson.has("items")){
+      JSONArray jsonArray = responseJson.getJSONArray("items"); 
+      for (int i = 0; i < jsonArray.length(); i++) {
+          JSONObject jsonObj = jsonArray.getJSONObject(i);
+          if(!jsonObj.has(ENTITY)) {
+              String entityName = getEntityNameFromURL(response.request().url());
+              jsonObj.put("entity",entityName); 
+          }
+       }
+    }
+
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseCollectionResponse(responseJson);
     }
@@ -173,7 +184,11 @@ class ApiClient {
 
     try {
       responseBody = response.body().string();
-      responseJson = new JSONObject(responseBody);
+      if(responseBody.startsWith("[")) {
+        responseJson = new JSONObject("{}");
+      }else {
+        responseJson = new JSONObject(responseBody);
+      }
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
