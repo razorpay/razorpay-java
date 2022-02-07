@@ -20,6 +20,8 @@ public class BaseTest {
     private OkHttpClient okHttpClient;
     Response mockedResponse;
 
+    static final String TEST_SECRET_KEY = "test";
+
     @Before
     public void setUp() throws Exception {
 
