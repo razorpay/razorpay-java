@@ -1,12 +1,11 @@
 package com.razorpay;
 
 import okhttp3.*;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
-import org.springframework.util.ReflectionUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -17,8 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BaseTest {
-    @InjectMocks
-    protected AddonClient client = new AddonClient("test");
+
     private OkHttpClient okHttpClient;
     Response mockedResponse;
 
@@ -30,21 +28,22 @@ public class BaseTest {
 
     }
 
-    private void mockGetCall() throws IOException {
+    private void mockGetCall() throws IOException, IllegalAccessException {
 
         okHttpClient = mock(OkHttpClient.class);
         mockedResponse = mock(Response.class);
-        Field clientField = ReflectionUtils.findField(ApiUtils.class, "client", OkHttpClient.class);
-        clientField.setAccessible(true);
-        ReflectionUtils.setField(clientField,new ApiUtils(),okHttpClient);
+        Field clientField =FieldUtils.getDeclaredField(ApiUtils.class,"client",true);
+        FieldUtils.writeField(clientField,new ApiUtils(),okHttpClient);
+
         Call call = mock(Call.class);
         when(call.execute()).thenReturn(mockedResponse);
         when(okHttpClient.newCall(anyObject())).thenReturn(call);
+
     }
 
     protected void mockResponseHTTPCodeFromExternalClient(int code)
     {
-        when(mockedResponse.code()).thenReturn(200);
+        when(mockedResponse.code()).thenReturn(code);
     }
     protected void mockURL(List<String> urlString)
     {
@@ -54,8 +53,8 @@ public class BaseTest {
         when(request.url()).thenReturn(url);
         when(mockedResponse.request()).thenReturn(request);
     }
-    protected void mockResponseFromExternalClient(String jsonObject) throws IOException {
-        JSONObject parse = new JSONObject(jsonObject);
+    protected void mockResponseFromExternalClient(String response) throws IOException {
+        JSONObject parse = new JSONObject(response);
         ResponseBody rb = mock(ResponseBody.class);
         when(rb.string()).thenReturn(parse.toString());
         when(mockedResponse.body()).thenReturn(rb);
