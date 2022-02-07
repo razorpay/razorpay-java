@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class InvoiceClientTest extends BaseTest{
 
     @InjectMocks
-    protected InvoiceClient invoiceClient = new InvoiceClient("test");
+    protected InvoiceClient invoiceClient = new InvoiceClient(TEST_SECRET_KEY);
 
     private static final String INVOICE_ID = "inv_DAweOiQ7amIUVd";
 
