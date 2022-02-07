@@ -1,6 +1,7 @@
 package com.razorpay;
 
 import org.junit.Test;
+import org.mockito.InjectMocks;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +11,10 @@ import static org.junit.Assert.assertNotNull;
 
 public class AddonClientTest  extends BaseTest{
 
-    public static final String ADDON_ID = "ao_00000000000001";
+    @InjectMocks
+    protected AddonClient client = new AddonClient("test");
+
+    private static final String ADDON_ID = "ao_00000000000001";
 
     @Test
     public void fetch() throws RazorpayException {
