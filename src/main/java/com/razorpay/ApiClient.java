@@ -127,7 +127,7 @@ class ApiClient {
       
       if(!responseJson.has(ENTITY)) {
     	  String entityName = getEntityNameFromURL(response.request().url());
-          responseJson.put("entity",entityName); 
+          responseJson.put(ENTITY,entityName);
         }
       
       return parseResponse(responseJson);
