@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class AddonClientTest  extends BaseTest{
 
     @InjectMocks
-    protected AddonClient client = new AddonClient("test");
+    protected AddonClient client = new AddonClient(TEST_SECRET_KEY);
 
     private static final String ADDON_ID = "ao_00000000000001";
 
