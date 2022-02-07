@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class CardClientTest extends BaseTest{
 
     @InjectMocks
-    protected CardClient cardClientClient = new CardClient("test");
+    protected CardClient cardClientClient = new CardClient(TEST_SECRET_KEY);
 
     private static final String CARD_ID = "card_DZon6fd8J3IcA2";
 
