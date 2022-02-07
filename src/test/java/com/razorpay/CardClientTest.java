@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 public class CardClientTest extends BaseTest{
 
     @InjectMocks
-    private CardClient cardClientClient = new CardClient("test");
+    protected CardClient cardClientClient = new CardClient("test");
 
-    public static final String CARD_ID = "card_DZon6fd8J3IcA2";
+    private static final String CARD_ID = "card_DZon6fd8J3IcA2";
 
     @Test
     public void fetch() throws RazorpayException {
