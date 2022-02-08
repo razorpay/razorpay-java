@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 public class CustomerClientTest extends BaseTest{
 
     @InjectMocks
-    private CustomerClient customerClient = new CustomerClient("test");
+    protected CustomerClient customerClient = new CustomerClient(TEST_SECRET_KEY);
 
-    public static final String CUSTOMER_ID = "cust_1Aa00000000004";
+    private static final String CUSTOMER_ID = "cust_1Aa00000000004";
 
-    public static final String TOKEN_ID = "token_Hxe0skTXLeg9pF";
+    private static final String TOKEN_ID = "token_Hxe0skTXLeg9pF";
 
     @Test
     public void create() throws RazorpayException{
