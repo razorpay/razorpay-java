@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 public class FundAccountClientTest extends BaseTest{
 
     @InjectMocks
-    private FundAccountClient fundAccountClient = new FundAccountClient("test");
+    protected FundAccountClient fundAccountClient = new FundAccountClient(TEST_SECRET_KEY);
 
-    public static final String FUNDACCOUNT_ID = "fa_Aa00000000001";
+    private static final String FUNDACCOUNT_ID = "fa_Aa00000000001";
 
     @Test
     public void create() throws RazorpayException {
