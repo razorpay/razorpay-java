@@ -18,9 +18,9 @@ public class CardClientTest extends BaseTest{
     @Test
     public void fetch() throws RazorpayException {
 
-        String json = "{\n  \"id\": \"card_DZon6fd8J3IcA2\",\n  \"entity\": \"card\",\n  \"international\": false,\n  \"last4\": 1111,\n  \"name\": \"sample name\",\n  \"network\": \"Visa\",\n  \"type\": \"debit\"\n}";
+        String mockedResponseJson = "{\n  \"id\": "+CARD_ID+",\n  \"entity\": \"card\",\n  \"international\": false,\n  \"last4\": 1111,\n  \"name\": \"sample name\",\n  \"network\": \"Visa\",\n  \"type\": \"debit\"\n}";
         try {
-            mockResponseFromExternalClient(json);
+            mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
             Card fetch = cardClientClient.fetch(CARD_ID);
             assertNotNull(fetch);
