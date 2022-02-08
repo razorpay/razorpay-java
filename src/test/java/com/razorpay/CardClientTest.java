@@ -15,6 +15,9 @@ public class CardClientTest extends BaseTest{
 
     private static final String CARD_ID = "card_DZon6fd8J3IcA2";
 
+    /** fetch card details
+     * @throws RazorpayException
+     */
     @Test
     public void fetch() throws RazorpayException {
 
@@ -25,8 +28,10 @@ public class CardClientTest extends BaseTest{
             Card fetch = cardClientClient.fetch(CARD_ID);
             assertNotNull(fetch);
             assertEquals(CARD_ID,fetch.get("id"));
+            assertTrue(fetch.has("international"));
         } catch (IOException e) {
             e.printStackTrace();
+            assertTrue(false);
         }
     }
 }
