@@ -17,7 +17,11 @@ public class InvoiceClientTest extends BaseTest{
 
     private static final String INVOICE_ID = "inv_DAweOiQ7amIUVd";
 
-    /** Create invoice mock */
+
+    /**
+     * Create invoice mock
+     * @throws RazorpayException
+     */
     @Test
     public void create() throws RazorpayException {
         JSONObject request = new JSONObject("{\n  \"type\":\"link\",\n  \"decsription\":\"test\",\n  \"line_items\":[\n    {\n      \"name\":\"name\",\n      \"amount\":100\n    }\n  ]\n}\n");
@@ -36,7 +40,11 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Fetch all invoices mock */
+
+    /**
+     * Fetch all invoices mock
+     * @throws RazorpayException
+     */
     @Test
     public void fetchAll() throws RazorpayException {
 
@@ -54,7 +62,11 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Fetch invoices mock */
+
+    /**
+     * Fetch invoices mock
+     * @throws RazorpayException
+     */
     @Test
     public void fetch() throws RazorpayException {
 
@@ -73,7 +85,11 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Cancel invoice mock */
+
+    /**
+     * Cancel invoice mock
+     * @throws RazorpayException
+     */
     @Test
     public void cancel() throws RazorpayException {
 
@@ -92,7 +108,11 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Send notification to the customer mock */
+
+    /**
+     * Send notification to the customer mock
+     * @throws RazorpayException
+     */
     @Test
     public void notifyBy() throws RazorpayException {
 
@@ -110,7 +130,11 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Create a registration link mock */
+
+    /**
+     * Create a registration link mock
+     * @throws RazorpayException
+     */
     @Test
     public void createRegistrationLink() throws RazorpayException {
 
@@ -130,7 +154,10 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** Issue an invoice */
+    /**
+     * Issue an invoice
+     * @throws RazorpayException
+     */
     @Test
     public void issue() throws RazorpayException {
 
@@ -149,7 +176,10 @@ public class InvoiceClientTest extends BaseTest{
         }
     }
 
-    /** update an invoice mock */
+    /**
+     * Update an invoice mock
+     * @throws RazorpayException
+     */
     @Test
     public void edit() throws RazorpayException {
         JSONObject request = new JSONObject("{ \n  \"notes\": {\n    \"updated-key\": \"An updated note.\"\n  }\n}");
