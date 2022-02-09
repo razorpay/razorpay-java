@@ -19,12 +19,13 @@ public class InvoiceClientTest extends BaseTest{
 
 
     /**
-     * Create invoice mock
+     * Invoice is created using the customer and item details.
+     * Here, the customer and item are created while creating the invoice.
      * @throws RazorpayException
      */
     @Test
     public void create() throws RazorpayException {
-        JSONObject request = new JSONObject("{\n  \"type\":\"link\",\n  \"decsription\":\"test\",\n  \"line_items\":[\n    {\n      \"name\":\"name\",\n      \"amount\":100\n    }\n  ]\n}\n");
+        JSONObject request = new JSONObject("{\n  type: \"invoice\",\n  description: \"Invoice for the month of January 2020\",\n  partial_payment: true,\n  customer: {\n    name: \"Gaurav Kumar\",\n    contact: 9999999999,\n    email: \"gaurav.kumar@example.com\",\n    billing_address: {\n      line1: \"Ground & 1st Floor, SJR Cyber Laskar\",\n      line2: \"Hosur Road\",\n      zipcode: 560068,\n      city: \"Bengaluru\",\n      state: \"Karnataka\",\n      country: \"in\"\n    },\n    shipping_address: {\n      line1: \"Ground & 1st Floor, SJR Cyber Laskar\",\n      line2: \"Hosur Road\",\n      zipcode: 560068,\n      city: \"Bengaluru\",\n      state: \"Karnataka\",\n      country: \"in\"\n    }\n  },\n  line_items: [\n    {\n      name: \"Master Cloud Computing in 30 Days\",\n      description: \"Book by Ravena Ravenclaw\",\n      amount: 399,\n      currency: \"USD\",\n      quantity: 1\n    }\n  ],\n  sms_notify: 1,\n  email_notify: 1,\n  currency: \"USD\",\n  expire_by: 1589765167\n}");
         String mockedResponseJson = "{\n  \"issued_at\": 1481541533,\n  \"customer_details\":\n  {\n    \"customer_name\": \"Gaurav Kumar\",\n    \"customer_email\": \"gaurav.kumar@example.com\",\n    \"customer_contact\": \"9999999999\"\n  },\n  \"short_url\": \"http://bit.ly/link\", \n  \"receipt\": null, \n  \"entity\": \"invoice\", \n  \"currency\": \"INR\", \n  \"paid_at\": null, \n  \"view_less\": true, \n  \"id\": \"random_id\", \n  \"customer_id\": \"cust_E7q0trFqXgExmT\", \n  \"type\": null, \n  \"status\": \"issued\", \n  \"description\": \"random decsription\", \n  \"order_id\": \"order_random_id\", \n  \"sms_status\": \"pending\", \n  \"date\": 1481541533, \n  \"payment_id\": null, \n  \"amount\": 100,\n  \"email_status\": \"pending\",\n  \"created_at\": 1481541534\n}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
@@ -35,14 +36,13 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(invoice.has("customer_details"));
             assertTrue(invoice.has("short_url"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
 
     /**
-     * Fetch all invoices mock
+     * Details of all the invoices can be retrieved.
      * @throws RazorpayException
      */
     @Test
@@ -57,14 +57,13 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("type"));
             assertTrue(fetch.get(0).has("receipt"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
 
     /**
-     * Fetch invoices mock
+     * Retrieve all the invoice details of respective customer using invoice id.
      * @throws RazorpayException
      */
     @Test
@@ -80,14 +79,13 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(fetch.has("customer_details"));
             assertTrue(fetch.has("issued_at"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
 
     /**
-     * Cancel invoice mock
+     * Cancel an unpaid invoice of respective customer using invoice id.
      * @throws RazorpayException
      */
     @Test
@@ -100,6 +98,7 @@ public class InvoiceClientTest extends BaseTest{
             Invoice fetch = invoiceClient.cancel(INVOICE_ID);
             assertNotNull(fetch);
             assertEquals(INVOICE_ID,fetch.get("id"));
+            assertEquals("pending",fetch.get("email_status"));
             assertTrue(fetch.has("customer_details"));
             assertTrue(fetch.has("issued_at"));
         } catch (IOException e) {
@@ -110,7 +109,8 @@ public class InvoiceClientTest extends BaseTest{
 
 
     /**
-     * Send notification to the customer mock
+     * Send notifications with the short URL to the customer via email or SMS
+     * using invoice id
      * @throws RazorpayException
      */
     @Test
@@ -125,14 +125,13 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(fetch.has("success"));
             assertTrue(fetch.has("entity"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
 
     /**
-     * Create a registration link mock
+     * Create a registration for a recurring payment
      * @throws RazorpayException
      */
     @Test
@@ -145,17 +144,17 @@ public class InvoiceClientTest extends BaseTest{
             mockResponseHTTPCodeFromExternalClient(200);
             Invoice fetch = invoiceClient.createRegistrationLink(request);
             assertNotNull(fetch);
+            assertEquals("invoice",fetch.get("entity"));
             assertTrue(fetch.has("razorpay_payment_id"));
             assertTrue(fetch.has("razorpay_order_id"));
             assertTrue(fetch.has("razorpay_signature"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
     /**
-     * Issue an invoice
+     * Invoice in the draft status can only be issued using customer's invoice id
      * @throws RazorpayException
      */
     @Test
@@ -170,14 +169,14 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals(INVOICE_ID,fetch.get("id"));
             assertEquals("invoice",fetch.get("entity"));
             assertTrue(fetch.has("invoice_number"));
+            assertTrue(fetch.has("receipt"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
     /**
-     * Update an invoice mock
+     * Update an invoice of respective customer using invoice id with object of that properties
      * @throws RazorpayException
      */
     @Test
@@ -191,9 +190,9 @@ public class InvoiceClientTest extends BaseTest{
             assertNotNull(invoice);
             assertEquals(INVOICE_ID,invoice.get("id"));
             assertEquals("invoice",invoice.get("entity"));
+            assertTrue(invoice.has("invoice_number"));
             assertTrue(invoice.has("receipt"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
