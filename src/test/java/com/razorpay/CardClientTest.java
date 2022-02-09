@@ -17,7 +17,7 @@ public class CardClientTest extends BaseTest{
 
     private static final String PAYMENT_ID = "pay_IDRP0tbirMSsbn";
 
-    /** Fetch card details
+    /** Retrieving a specific card details using card id
      * @throws RazorpayException
      */
     @Test
@@ -32,13 +32,13 @@ public class CardClientTest extends BaseTest{
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("international"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
 
-    /** Fetch Card Details of a Payment
+    /** Fetch the details of the card used to make a payment
      * @throws RazorpayException
+     * @return void
      */
     @Test
     public void fetchCardDetails() throws RazorpayException {
@@ -53,7 +53,6 @@ public class CardClientTest extends BaseTest{
             assertTrue(fetch.has("name"));
             assertTrue(fetch.has("network"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
