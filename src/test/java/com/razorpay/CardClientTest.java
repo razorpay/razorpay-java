@@ -15,7 +15,9 @@ public class CardClientTest extends BaseTest{
 
     private static final String CARD_ID = "card_DZon6fd8J3IcA2";
 
-    /** fetch card details
+    private static final String PAYMENT_ID = "pay_IDRP0tbirMSsbn";
+
+    /** Fetch card details
      * @throws RazorpayException
      */
     @Test
@@ -29,6 +31,27 @@ public class CardClientTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("international"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    /** Fetch Card Details of a Payment
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchCardDetails() throws RazorpayException {
+
+        String mockedResponseJson = "{\"id\":"+CARD_ID+",\"entity\":\"card\",\"name\":\"GauravKumar\",\"last4\":\"8430\",\"network\":\"Visa\",\"type\":\"credit\",\"issuer\":\"HDFC\",\"international\":false,\"emi\":true,\"sub_type\":\"consumer\",\"token_iin\":null}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Card fetch = cardClientClient.fetchCardDetails(PAYMENT_ID);
+            assertNotNull(fetch);
+            assertEquals(CARD_ID,fetch.get("id"));
+            assertTrue(fetch.has("name"));
+            assertTrue(fetch.has("network"));
         } catch (IOException e) {
             e.printStackTrace();
             assertTrue(false);
