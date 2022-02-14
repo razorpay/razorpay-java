@@ -23,6 +23,12 @@ public class Constants {
   static final String PAYMENT_TRANSFER_GET = "payments/%s/transfers";
   static final String PAYMENT_BANK_TRANSFER_GET = "payments/%s/bank_transfer";
 
+  static final String PAYMENTLINK_CREATE = "payment_links";
+  static final String PAYMENTLINK_GET = "payment_links/%s";
+  static final String PAYMENTLINK_EDIT = "payment_links/%s";
+  static final String PAYMENTLINK_CANCEL = "payment_links/%s/cancel";
+  static final String PAYMENTLINK_NOTIFYBY = "payment_links/%s/notify_by/%s";
+
   static final String PAYMENT_REFUND_LIST = "payments/%s/refunds";
   static final String PAYMENT_REFUND_GET = "payments/%s/refunds/%s";
 
