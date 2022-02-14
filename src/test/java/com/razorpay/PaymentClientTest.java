@@ -17,8 +17,9 @@ public class PaymentClientTest extends BaseTest{
     private static final String PAYMENT_ID = "pay_IDRP0tbirMSsbn";
 
     private static final String REFUND_ID = "rfnd_FP8QHiV938haTz";
+    
     /**
-     * Fetch a payment
+     * Retrieve payment details of respective customer using payment id.
      * @throws RazorpayException
      */
     @Test
@@ -32,13 +33,14 @@ public class PaymentClientTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals(PAYMENT_ID,fetch.get("id"));
             assertTrue(fetch.has("status"));
+            assertTrue(fetch.has("currency"));
         } catch (IOException e) {
             assertTrue(false);
         }
     }
 
     /**
-     * Fetch Multiple Payments
+     * Details of all the payments can be retrieved.
      * @throws RazorpayException
      */
     @Test
@@ -59,7 +61,8 @@ public class PaymentClientTest extends BaseTest{
     }
 
     /**
-     * Capture payment
+     * Capture a payment that verifies the amount deducted from the customer
+     * is same as the amount paid by the customer on website
      * @throws RazorpayException
      */
     @Test
@@ -80,26 +83,12 @@ public class PaymentClientTest extends BaseTest{
         }
     }
 
+    /**
+     * Create a refunds to respective customers
+     * @throws RazorpayException
+     */
     @Test
-    public void refund() throws RazorpayException{
-
-        JSONObject request = new JSONObject("{\"amount\":\"100\",\"speed\":\"normal\",\"notes\":{\"notes_key_1\":\"BeammeupScotty.\",\"notes_key_2\":\"Engage\"},\"receipt\":\"ReceiptNo.31\"}");
-        String mockedResponseJson = "{\"id\":\"rfnd_FP8QHiV938haTz\",\"entity\":\"refund\",\"amount\":500100,\"receipt\":\"ReceiptNo.31\",\"currency\":\"INR\",\"payment_id\":\"pay_FCXKPFtYfPXJPy\",\"notes\":[],\"acquirer_data\":{\"arn\":null},\"created_at\":1597078866,\"batch_id\":null,\"status\":\"processed\",\"speed_processed\":\"normal\"}";
-        try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
-            Refund fetch = paymentClient.refund(PAYMENT_ID,request);
-            assertNotNull(fetch);
-            assertEquals("rfnd_FP8QHiV938haTz",fetch.get("id"));
-            assertTrue(fetch.has("entity"));
-            assertTrue(fetch.has("amount"));
-        } catch (IOException e) {
-            assertTrue(false);
-        }
-    }
-
-    @Test
-    public void testRefund() throws Exception{
+    public void refund() throws Exception{
         JSONObject request = new JSONObject("{\"amount\":\"100\",\"speed\":\"normal\",\"notes\":{\"notes_key_1\":\"BeammeupScotty.\",\"notes_key_2\":\"Engage\"},\"receipt\":\"ReceiptNo.31\"}");
         String mockedResponseJson = "{\"id\":"+REFUND_ID+",\"entity\":\"refund\",\"amount\":500100,\"receipt\":\"ReceiptNo.31\",\"currency\":\"INR\",\"payment_id\":\"pay_FCXKPFtYfPXJPy\",\"notes\":[],\"acquirer_data\":{\"arn\":null},\"created_at\":1597078866,\"batch_id\":null,\"status\":\"processed\",\"speed_processed\":\"normal\"}";
         try {
@@ -115,7 +104,10 @@ public class PaymentClientTest extends BaseTest{
         }
     }
 
-
+    /**
+     * Retrieve all the refunds for a payment by default only last 10 refunds returned.
+     * @throws RazorpayException
+     */
     @Test
     public void FetchAllRefunds() throws RazorpayException{
         JSONObject request = new JSONObject("{}");
@@ -134,7 +126,11 @@ public class PaymentClientTest extends BaseTest{
         }
     }
 
-
+    /**
+     * Create transfer from payments using payment id and with
+     * object of that properties
+     * @throws RazorpayException
+     */
     @Test
     public void transfers() throws RazorpayException{
         JSONObject request = new JSONObject("{\"transfers\":[{\"account\":\"acc_CPRsN1LkFccllA\",\"amount\":100,\"currency\":\"INR\",\"notes\":{\"name\":\"GauravKumar\",\"roll_no\":\"IEC2011025\"},\"linked_account_notes\":[\"roll_no\"],\"on_hold\":true,\"on_hold_until\":1671222870}]}");
@@ -153,6 +149,10 @@ public class PaymentClientTest extends BaseTest{
         }
     }
 
+    /**
+     * Details of all the transfers payment can be retrieved.
+     * @throws RazorpayException
+     */
     @Test
     public void fetchAllTransfers() throws RazorpayException{
 
@@ -162,14 +162,19 @@ public class PaymentClientTest extends BaseTest{
             mockResponseHTTPCodeFromExternalClient(200);
             List<Transfer> fetch = paymentClient.fetchAllTransfers(PAYMENT_ID);
             assertNotNull(fetch);
-            //assertEquals("bt_Di5iqCElVyRlCb",fetch.get("id"));
             assertTrue(fetch.get(0).has("source"));
             assertTrue(fetch.get(0).has("recipient"));
+            assertTrue(fetch.get(0).has("amount"));
         } catch (IOException e) {
             assertTrue(false);
         }
     }
 
+
+    /**
+     * Retrieve transfers for a payment using payment id
+     * @throws RazorpayException
+     */
     @Test
     public void fetchBankTransfers() throws RazorpayException{
 
@@ -188,7 +193,11 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
-
+    
+    /**
+     * Create a payment of customer after order is created (Server to server integration)
+     * @throws RazorpayException
+     */ 
     @Test
     public void createJsonPayment() throws RazorpayException {
 
