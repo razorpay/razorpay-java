@@ -24,6 +24,7 @@ public class Constants {
   static final String PAYMENT_BANK_TRANSFER_GET = "payments/%s/bank_transfer";
 
   static final String PAYMENTLINK_CREATE = "payment_links";
+  static final String PAYMENTLINK_LIST = "payment_links";
   static final String PAYMENTLINK_GET = "payment_links/%s";
   static final String PAYMENTLINK_EDIT = "payment_links/%s";
   static final String PAYMENTLINK_CANCEL = "payment_links/%s/cancel";

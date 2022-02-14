@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -124,6 +125,27 @@ public class PaymentLinkTest extends BaseTest{
             assertTrue(fetch.has("accept_partial"));
             assertTrue(fetch.has("order_id"));
             assertTrue(fetch.has("payments"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+    
+     /**
+     * Details of all the payment-links can be retrieved.
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchAll() throws RazorpayException{
+        String mockedResponseJson = "{\"payment_links\":[{\"cancelled_at\":1644517434,\"reminders\":{\"status\":\"in_progress\"},\"amount_paid\":0,\"notes\":{\"policy_name\":\"JeevanBima\"},\"reference_id\":\"\",\"payments\":[],\"created_at\":1644517182,\"description\":\"ForXYZpurpose\",\"expired_at\":0,\"notify\":{\"sms\":true,\"email\":true},\"short_url\":\"https://rzp.io/i/Yyzzizh\",\"callback_url\":\"https://example-callback-url.com/\",\"updated_at\":1644517434,\"upi_link\":false,\"accept_partial\":true,\"currency\":\"INR\",\"id\":\"plink_IuP2QzddqlPG2A\",\"callback_method\":\"get\",\"expire_by\":0,\"first_min_partial_amount\":100,\"amount\":500,\"reminder_enable\":true,\"user_id\":\"\",\"entity\":\"payment_link\",\"customer\":{\"contact\":\"+919999999999\",\"name\":\"GauravKumar\",\"email\":\"gaurav.kumar@example.com\"},\"status\":\"cancelled\"},{\"cancelled_at\":0,\"reminders\":{\"status\":\"in_progress\"},\"amount_paid\":0,\"notes\":{\"policy_name\":\"JeevanBima\"},\"reference_id\":\"\",\"payments\":[],\"created_at\":1643024367,\"description\":\"ForXYZpurpose\",\"expired_at\":0,\"notify\":{\"sms\":true,\"email\":true},\"short_url\":\"https://rzp.io/i/zdFAncL\",\"callback_url\":\"https://example-callback-url.com/\",\"updated_at\":1643024367,\"upi_link\":false,\"accept_partial\":true,\"currency\":\"INR\",\"id\":\"plink_InZ8aqDn9IfpAj\",\"callback_method\":\"get\",\"expire_by\":0,\"first_min_partial_amount\":100,\"amount\":500,\"reminder_enable\":true,\"user_id\":\"\",\"entity\":\"payment_link\",\"customer\":{\"name\":\"GauravKumar\",\"email\":\"gaurav.kumar@example.com\"},\"status\":\"created\"},]}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<PaymentLink> fetch = paymentLinkClient.fetchAll();
+            assertNotNull(fetch);
+            assertTrue(fetch.get(0).has("cancelled_at"));
+            assertTrue(fetch.get(0).has("reminders"));
+            assertTrue(fetch.get(0).has("created_at"));
+            assertTrue(fetch.get(0).has("currency"));
         } catch (IOException e) {
             assertTrue(false);
         }

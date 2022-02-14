@@ -19,6 +19,14 @@ public class PaymentLinkClient extends ApiClient {
     public PaymentLink fetch(String id) throws RazorpayException {
         return get(String.format(Constants.PAYMENTLINK_GET, id), null);
     }
+    
+    public List<PaymentLink> fetchAll() throws RazorpayException {
+        return fetchAll(null);
+    }
+
+    public List<PaymentLink> fetchAll(JSONObject request) throws RazorpayException {
+        return getCollection(Constants.PAYMENTLINK_LIST, request);
+    }
 
     public PaymentLink cancel(String id) throws RazorpayException {
         return post(String.format(Constants.PAYMENTLINK_CANCEL, id), null);

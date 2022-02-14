@@ -82,7 +82,17 @@ class ApiClient {
 
     ArrayList<T> modelList = new ArrayList<T>();
     if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
-      JSONArray jsonArray = jsonObject.getJSONArray("items");
+    	
+    	JSONArray jsonArray = new JSONArray();
+        
+    	if(jsonObject.has("items")) {
+    	   jsonArray = jsonObject.getJSONArray("items");
+      	}
+    	
+    	if(jsonObject.has("payment_links")) {
+        	jsonArray = jsonObject.getJSONArray("payment_links");
+        }
+
       try {
         for (int i = 0; i < jsonArray.length(); i++) {
           JSONObject jsonObj = jsonArray.getJSONObject(i);
@@ -124,7 +134,7 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      
+
       if(!responseJson.has(ENTITY)) {
     	  String entityName = getEntityNameFromURL(response.request().url());
           responseJson.put("entity",entityName); 
@@ -153,7 +163,20 @@ class ApiClient {
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
-
+     
+    if(responseJson.has("payment_links")){
+      responseJson.put("entity","collection");	
+      JSONArray jsonArray = responseJson.getJSONArray("payment_links");
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject jsonObj = jsonArray.getJSONObject(i);
+         if(!jsonObj.has(ENTITY)) {
+           String entityName = getEntityNameFromURL(response.request().url());
+           jsonObj.put("entity",entityName);
+         }
+         
+      }
+    }
+      
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
       return parseCollectionResponse(responseJson);
     }
