@@ -22,8 +22,22 @@ public class ItemClientTest extends BaseTest{
      */
     @Test
     public void create() throws RazorpayException {
-        JSONObject request = new JSONObject("{\n  \"name\": \"Book English August\",\n  \"description\": \"An indian story, Booker prize winner.\",\n  \"amount\": 20000,\n  \"currency\": \"INR\"\n}");
-        String mockedResponseJson = "{\n  \"entity\" : \"item\",\n  \"id\": "+ITEM_ID+",\n  \"active\": true,\n  \"name\": \"Book English August\",\n  \"description\": \"An indian story, Booker prize winner.\",\n  \"amount\": 20000,\n  \"currency\": \"INR\"\n}";
+        JSONObject request = new JSONObject("{\n" +
+                "\"name\": \"Book English August\",\n" +
+                "\"description\": \"An indian story, Booker prize winner.\",\n" +
+                "\"amount\": 20000,\n" +
+                "\"currency\": \"INR\"\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "\"entity\" : \"item\",\n" +
+                "\"id\": "+ITEM_ID+",\n" +
+                "\"active\": true,\n" +
+                "\"name\": \"Book English August\",\n" +
+                "\"description\": \"An indian story, Booker prize winner.\",\n" +
+                "\"amount\": 20000,\n" +
+                "\"currency\": \"INR\"\n" +
+                "}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -46,7 +60,15 @@ public class ItemClientTest extends BaseTest{
     @Test
     public void fetch() throws RazorpayException {
 
-        String mockedResponseJson = "{\n  \"entity\": \"item\",\n  \"id\": "+ITEM_ID+",\n  \"active\": true,\n  \"name\": \"Book English August\",\n  \"description\": \"An indian story, Booker prize winner.\",\n  \"amount\": 20000,\n  \"currency\": \"INR\"\n}";
+        String mockedResponseJson = "{\n  " +
+                "\"entity\": \"item\",\n" +
+                "\"id\": "+ITEM_ID+",\n" +
+                "\"active\": true,\n" +
+                "\"name\": \"Book English August\",\n" +
+                "\"description\": \"An indian story, Booker prize winner.\",\n" +
+                "\"amount\": 20000,\n" +
+                "\"currency\": \"INR\"\n" +
+                "}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -68,7 +90,19 @@ public class ItemClientTest extends BaseTest{
     @Test
     public void fetchAll() throws RazorpayException{
 
-        String mockedResponseJson = "{\n  \"entity\": \"collection\",\n  \"count\": 1,\n  \"items\": [\n    {\n      \"id\": \"item_7OxoGnoxCuUKbo\",\n       \"entity\" : \"item\",\n      \"active\": true,\n      \"name\": \"Book  English August\",\n      \"description\": null,\n      \"amount\": 20000,\n      \"currency\": \"INR\"\n    }\n  ]\n}";
+        String mockedResponseJson = "{\n  " +
+                "\"entity\": \"collection\",\n" +
+                "\"count\": 1,\n" +
+                "\"items\": [\n" +
+                "{\n" +
+                  "\"id\": \"item_7OxoGnoxCuUKbo\",\n" +
+                  "\"entity\" : \"item\",\n" +
+                  "\"active\": true,\n" +
+                  "\"name\": \"Book  English August\",\n" +
+                  "\"description\": null,\n" +
+                  "\"amount\": 20000,\n" +
+                  "\"currency\": \"INR\"\n" +
+                  "}\n]\n}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -89,8 +123,21 @@ public class ItemClientTest extends BaseTest{
     @Test
     public void edit() throws RazorpayException{
 
-        JSONObject request = new JSONObject("{\n  \"name\": \"Book Ignited Minds - Updated name!\",\n  \"description\": \"New descirption too. :).\",\n  \"amount\": 20000,\n  \"currency\": \"INR\",\n  \"active\": true\n}");
-        String mockedResponseJson = "{\n   \"entity\" : \"item\",\n  \"id\": "+ITEM_ID+",\n  \"active\": true,\n  \"name\": \"Book Ignited Minds - Updated name!\",\n  \"description\": \"New descirption too. :)\",\n  \"amount\": 15000,\n  \"currency\": \"INR\"\n}";
+        JSONObject request = new JSONObject("{\n" +
+                "\"name\": \"Book Ignited Minds - Updated name!\",\n" +
+                "\"description\": \"New descirption too. :).\",\n" +
+                "\"amount\": 20000,\n  \"currency\": \"INR\",\n" +
+                "\"active\": true\n}");
+
+        String mockedResponseJson = "{\n   " +
+                "\"entity\" : \"item\",\n" +
+                "\"id\": "+ITEM_ID+",\n" +
+                "\"active\": true,\n" +
+                "\"name\": \"Book Ignited Minds - Updated name!\",\n" +
+                "\"description\": \"New descirption too. :)\",\n" +
+                "\"amount\": 15000,\n" +
+                "\"currency\": \"INR\"\n" +
+                "}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
