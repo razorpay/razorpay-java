@@ -26,6 +26,12 @@ public class Constants {
   static final String PAYMENT_REFUND_LIST = "payments/%s/refunds";
   static final String PAYMENT_REFUND_GET = "payments/%s/refunds/%s";
 
+  static final String QRCODE_CREATE = "payments/qr_codes";
+  static final String QRCODE_FETCH = "payments/qr_codes/%s";
+  static final String QRCODE_CLOSE = "payments/qr_codes/%s/close";
+  static final String QRCODE_LIST = "payments/qr_codes";
+  static final String QRCODE_FETCH_PAYMENT = "payments";
+
   static final String REFUND_GET = "refunds/%s";
   static final String REFUND_LIST = "refunds";
   static final String REFUND_CREATE = "refunds";

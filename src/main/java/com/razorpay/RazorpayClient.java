@@ -16,6 +16,7 @@ public class RazorpayClient {
   public SubscriptionClient Subscriptions;
   public AddonClient Addons;
   public PlanClient Plans;
+  public QrCodeClient QrCode;
   public VirtualAccountClient VirtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
@@ -35,6 +36,7 @@ public class RazorpayClient {
     Subscriptions = new SubscriptionClient(auth);
     Addons = new AddonClient(auth);
     Plans = new PlanClient(auth);
+    QrCode = new QrCodeClient(auth);
     VirtualAccounts = new VirtualAccountClient(auth);
   }
 
