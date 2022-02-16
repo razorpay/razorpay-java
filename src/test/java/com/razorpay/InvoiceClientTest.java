@@ -102,7 +102,6 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(fetch.has("customer_details"));
             assertTrue(fetch.has("issued_at"));
         } catch (IOException e) {
-            e.printStackTrace();
             assertTrue(false);
         }
     }
