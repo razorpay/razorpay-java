@@ -22,10 +22,19 @@ public class CustomerClient extends ApiClient {
     return put(String.format(Constants.CUSTOMER_EDIT, id), request);
   }
 
+  /**
+   * It is wrapper of fetchAll with parameter here sending null defines fetchAll
+   * with a default values without filteration
+   * @throws RazorpayException
+   */
   public List<Customer> fetchAll() throws RazorpayException {
     return fetchAll(null);
   }
 
+  /**
+   * This method get list of customers filtered by parameters @request
+   * @throws RazorpayException
+   */
   public List<Customer> fetchAll(JSONObject request) throws RazorpayException {
     return getCollection(Constants.CUSTOMER_LIST, request);
   }
