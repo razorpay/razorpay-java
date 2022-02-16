@@ -21,8 +21,27 @@ public class FundAccountClientTest extends BaseTest{
      */
     @Test
     public void create() throws RazorpayException {
-        JSONObject request = new JSONObject("{\n  \"customer_id\":\"cust_Aa000000000001\",\n  \"account_type\":\"bank_account\",\n  \"bank_account\":{\n    \"name\":\"Gaurav Kumar\",\n    \"account_number\":\"11214311215411\",\n    \"ifsc\":\"HDFC0000053\"\n  }\n}");
-        String mockedResponseJson = "{\n  \"id\":\"fa_Aa00000000001\",\n  \"entity\":\"fund_account\",\n  \"customer_id\":\"cust_Aa000000000001\",\n  \"account_type\":\"bank_account\",\n  \"bank_account\":{\n    \"name\":\"Gaurav Kumar\",\n    \"account_number\":\"11214311215411\",\n    \"ifsc\":\"HDFC0000053\",\n    \"bank_name\":\"HDFC Bank\"\n  },\n  \"active\":true,\n  \"created_at\":1543650891\n}";
+        JSONObject request = new JSONObject("{\n  " +
+                "\"customer_id\":\"cust_Aa000000000001\",\n" +
+                "\"account_type\":\"bank_account\",\n" +
+                "\"bank_account\":{\n" +
+                "\"name\":\"Gaurav Kumar\",\n" +
+                "\"account_number\":\"11214311215411\",\n" +
+                "\"ifsc\":\"HDFC0000053\"\n}\n}");
+
+        String mockedResponseJson = "{\n  " +
+                "\"id\":\"fa_Aa00000000001\",\n" +
+                "\"entity\":\"fund_account\",\n" +
+                "\"customer_id\":\"cust_Aa000000000001\",\n" +
+                "\"account_type\":\"bank_account\",\n" +
+                "\"bank_account\":{\n" +
+                "\"name\":\"Gaurav Kumar\",\n" +
+                "\"account_number\":\"11214311215411\",\n" +
+                "\"ifsc\":\"HDFC0000053\",\n" +
+                "\"bank_name\":\"HDFC Bank\"\n" +
+                "},\n" +
+                "\"active\":true,\n" +
+                "\"created_at\":1543650891\n}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -41,7 +60,19 @@ public class FundAccountClientTest extends BaseTest{
     @Test
     public void fetch() throws RazorpayException {
 
-        String mockedResponseJson = "{\n  \"id\":\"fa_Aa00000000001\",\n  \"entity\":\"fund_account\",\n  \"customer_id\":\"cust_Aa000000000001\",\n  \"account_type\":\"bank_account\",\n  \"bank_account\":{\n    \"name\":\"Gaurav Kumar\",\n    \"account_number\":\"11214311215411\",\n    \"ifsc\":\"HDFC0000053\",\n    \"bank_name\":\"HDFC Bank\"\n  },\n  \"active\":true,\n  \"created_at\":1543650891\n}";
+        String mockedResponseJson = "{\n" +
+                "\"id\":\"fa_Aa00000000001\",\n" +
+                "\"entity\":\"fund_account\",\n" +
+                "\"customer_id\":\"cust_Aa000000000001\",\n" +
+                "\"account_type\":\"bank_account\",\n" +
+                "\"bank_account\":{\n" +
+                "\"name\":\"Gaurav Kumar\",\n" +
+                "\"account_number\":\"11214311215411\",\n" +
+                "\"ifsc\":\"HDFC0000053\",\n" +
+                "\"bank_name\":\"HDFC Bank\"\n" +
+                "},\n" +
+                "\"active\":true,\n" +
+                "\"created_at\":1543650891\n}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
