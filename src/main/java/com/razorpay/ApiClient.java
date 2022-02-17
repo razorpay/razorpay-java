@@ -59,7 +59,7 @@ class ApiClient {
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
-          throws RazorpayException {
+      throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processCollectionResponse(response);
   }
@@ -78,9 +78,8 @@ class ApiClient {
   }
 
   private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
-          throws RazorpayException {
-
-    ArrayList<T> modelList = new ArrayList<T>();
+      throws RazorpayException {
+	ArrayList<T> modelList = new ArrayList<T>();
     if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
       JSONArray jsonArray = jsonObject.getJSONArray("items");
       try {
@@ -103,10 +102,10 @@ class ApiClient {
    * and will return entity name with the help of @EntityNameURLMapping class
    */
   private String getEntityNameFromURL(HttpUrl url) {
-    String param = url.pathSegments().get(1);
+	  String param = url.pathSegments().get(1);
     return EntityNameURLMapping.getEntityName(param);
   }
-
+  
 
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
@@ -124,12 +123,12 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-
+      
       if(!responseJson.has(ENTITY)) {
-        String entityName = getEntityNameFromURL(response.request().url());
-        responseJson.put("entity",entityName);
-      }
-
+    	  String entityName = getEntityNameFromURL(response.request().url());
+          responseJson.put("entity",entityName); 
+        }
+      
       return parseResponse(responseJson);
     }
 
@@ -138,7 +137,7 @@ class ApiClient {
   }
 
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
-          throws RazorpayException {
+      throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
