@@ -22,8 +22,27 @@ public class OrderClientTest extends BaseTest{
      */
     @Test
     public void create() throws RazorpayException {
-        JSONObject request = new JSONObject("{amount:50000,currency:\"INR\",receipt:\"receipt#1\",notes:{key1:\"value3\",key2:\"value2\"}}");
-        String mockedResponseJson = "{\"id\":\"order_EKwxwAgItmmXdp\",\"entity\":\"order\",\"amount\":50000,\"amount_paid\":0,\"amount_due\":50000,\"currency\":\"INR\",\"receipt\":\"receipt#1\",\"offer_id\":null,\"status\":\"created\",\"attempts\":0,\"notes\":[],\"created_at\":1582628071}";
+        JSONObject request = new JSONObject("{" +
+                "amount:50000," +
+                "currency:\"INR\"," +
+                "receipt:\"receipt#1\"," +
+                "notes:" +
+                "{key1:\"value3\"," +
+                "key2:\"value2\"}}");
+
+        String mockedResponseJson = "{" +
+                "\"id\":\"order_EKwxwAgItmmXdp\"," +
+                "\"entity\":\"order\"," +
+                "\"amount\":50000," +
+                "\"amount_paid\":0," +
+                "\"amount_due\":50000," +
+                "\"currency\":\"INR\"," +
+                "\"receipt\":\"receipt#1\"," +
+                "\"offer_id\":null," +
+                "\"status\":\"created\"," +
+                "\"attempts\":0," +
+                "\"notes\":[]," +
+                "\"created_at\":1582628071}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -44,7 +63,21 @@ public class OrderClientTest extends BaseTest{
      */
     @Test
     public void fetchAll() throws RazorpayException{
-        String mockedResponseJson = "{\"entity\":\"collection\",\"count\":1,\"items\":[{\"id\":\"order_EKzX2WiEWbMxmx\",\"entity\":\"order\",\"amount\":1234,\"amount_paid\":0,\"amount_due\":1234,\"currency\":\"INR\",\"receipt\":\"ReceiptNo.1\",\"offer_id\":null,\"status\":\"created\",\"attempts\":0,\"notes\":[],\"created_at\":1582637108}]}";
+        String mockedResponseJson = "{" +
+                "\"entity\":\"collection\"," +
+                "\"count\":1,\"items\":" +
+                "[{\"id\":\"order_EKzX2WiEWbMxmx\"," +
+                "\"entity\":\"order\"," +
+                "\"amount\":1234," +
+                "\"amount_paid\":0," +
+                "\"amount_due\":1234," +
+                "\"currency\":\"INR\"," +
+                "\"receipt\":\"ReceiptNo.1\"," +
+                "\"offer_id\":null," +
+                "\"status\":\"created\"," +
+                "\"attempts\":0," +
+                "\"notes\":[]," +
+                "\"created_at\":1582637108}]}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -64,7 +97,17 @@ public class OrderClientTest extends BaseTest{
      */
     @Test
     public void fetch() throws RazorpayException{
-        String mockedResponseJson = "{\"id\":"+ORDER_ID+",\"entity\":\"order\",\"amount\":2200,\"amount_paid\":0,\"amount_due\":2200,\"currency\":\"INR\",\"receipt\":\"Receipt#211\",\"status\":\"attempted\",\"attempts\":1,\"notes\":[],\"created_at\":1572505143}";
+        String mockedResponseJson = "{\"id\":"+ORDER_ID+"," +
+                "\"entity\":\"order\"," +
+                "\"amount\":2200," +
+                "\"amount_paid\":0," +
+                "\"amount_due\":2200," +
+                "\"currency\":\"INR\"," +
+                "\"receipt\":\"Receipt#211\"," +
+                "\"status\":\"attempted\"," +
+                "\"attempts\":1," +
+                "\"notes\":[]," +
+                "\"created_at\":1572505143}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -85,7 +128,34 @@ public class OrderClientTest extends BaseTest{
      */
     @Test
     public void fetchPayments() throws RazorpayException{
-        String mockedResponseJson = "{\"entity\":\"collection\",\"count\":1,\"items\":[{\"id\":\"pay_DaaSOvhgcOfzgR\",\"entity\":\"payment\",\"amount\":2200,\"currency\":\"INR\",\"status\":\"captured\",\"order_id\":\"order_DaaS6LOUAASb7Y\",\"invoice_id\":null,\"international\":false,\"method\":\"card\",\"amount_refunded\":0,\"refund_status\":null,\"captured\":true,\"description\":\"Beansineveryimaginableflavour\",\"card_id\":\"card_DZon6fd8J3IcA2\",\"bank\":null,\"wallet\":null,\"vpa\":null,\"email\":\"gaurav.kumar@example.com\",\"contact\":\"+919999999988\",\"notes\":[],\"fee\":44,\"tax\":0,\"error_code\":null,\"error_description\":null,\"created_at\":1572505160}]}";
+        String mockedResponseJson = "{" +
+                "\"entity\":\"collection\"," +
+                "\"count\":1," +
+                "\"items\":[{\"id\":\"pay_DaaSOvhgcOfzgR\"," +
+                "\"entity\":\"payment\"," +
+                "\"amount\":2200," +
+                "\"currency\":\"INR\"," +
+                "\"status\":\"captured\"," +
+                "\"order_id\":\"order_DaaS6LOUAASb7Y\"," +
+                "\"invoice_id\":null," +
+                "\"international\":false," +
+                "\"method\":\"card\"," +
+                "\"amount_refunded\":0," +
+                "\"refund_status\":null," +
+                "\"captured\":true," +
+                "\"description\":\"Beansineveryimaginableflavour\"," +
+                "\"card_id\":\"card_DZon6fd8J3IcA2\"," +
+                "\"bank\":null," +
+                "\"wallet\":null," +
+                "\"vpa\":null," +
+                "\"email\":\"gaurav.kumar@example.com\"," +
+                "\"contact\":\"+919999999988\"," +
+                "\"notes\":[]," +
+                "\"fee\":44," +
+                "\"tax\":0," +
+                "\"error_code\":null," +
+                "\"error_description\":null," +
+                "\"created_at\":1572505160}]}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
@@ -105,8 +175,29 @@ public class OrderClientTest extends BaseTest{
      */
     @Test
     public void edit() throws RazorpayException {
-        JSONObject request = new JSONObject("{\"notes\":{\"key1\":\"value3\",\"key2\":\"value2\"}}");
-        String mockedResponseJson = "{\"id\":"+ORDER_ID+",\"entity\":\"order\",\"amount\":2200,\"amount_paid\":0,\"amount_due\":2200,\"currency\":\"INR\",\"receipt\":\"Receipt#211\",\"offer_id\":null,\"status\":\"attempted\",\"attempts\":1,\"notes\":{\"notes_key_1\":\"Tea,EarlGrey,Hot\",\"notes_key_2\":\"Tea,EarlGrey…decaf.\"},\"created_at\":1572505143}";
+        JSONObject request = new JSONObject("{" +
+                "\"notes\":{" +
+                "\"key1\":\"value3\"," +
+                "\"key2\":\"value2\"" +
+                "}}");
+
+        String mockedResponseJson = "{" +
+                "\"id\":"+ORDER_ID+"," +
+                "\"entity\":\"order\"," +
+                "\"amount\":2200," +
+                "\"amount_paid\":0," +
+                "\"amount_due\":2200," +
+                "\"currency\":\"INR\"," +
+                "\"receipt\":\"Receipt#211\"," +
+                "\"offer_id\":null," +
+                "\"status\":\"attempted\"," +
+                "\"attempts\":1," +
+                "\"notes\":{" +
+                "\"notes_key_1\":\"Tea,EarlGrey,Hot\"," +
+                "\"notes_key_2\":\"Tea,EarlGrey…decaf.\"" +
+                "}," +
+                "\"created_at\":1572505143" +
+                "}";
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
