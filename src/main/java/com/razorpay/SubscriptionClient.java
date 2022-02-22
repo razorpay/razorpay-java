@@ -15,7 +15,7 @@ public class SubscriptionClient extends ApiClient {
   }
 
   public Subscription fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.SUBSCRIPTION_GET, id), null);
+    return get(String.format(Constants.SUBSCRIPTION, id), null);
   }
 
   public List<Subscription> fetchAll() throws RazorpayException {
@@ -32,5 +32,25 @@ public class SubscriptionClient extends ApiClient {
 
   public Addon createAddon(String id, JSONObject request) throws RazorpayException {
     return post(String.format(Constants.SUBSCRIPTION_ADDON_CREATE, id), request);
+  }
+
+  public Subscription update(String id, JSONObject request) throws RazorpayException {
+    return patch(String.format(Constants.SUBSCRIPTION, id), request);
+  }
+
+  public Subscription fetchPendingUpdate(String id) throws RazorpayException {
+    return get(String.format(Constants.SUBSCRIPTION_PENDING_UPDATE, id), null);
+  }
+
+  public Subscription cancelPendingUpdate(String id) throws RazorpayException {
+    return post(String.format(Constants.SUBSCRIPTION_CANCEL_SCHEDULED_UPDATE, id), null);
+  }
+
+  public Subscription pause(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.PAUSE_SUBSCRIPTION, id), request);
+  }
+
+  public Subscription resume(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.RESUME_SUBSCRIPTION, id), request);
   }
 }
