@@ -2,6 +2,7 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -76,25 +77,20 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
 
-  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
-      throws RazorpayException {
+  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
+          throws RazorpayException {
 
     ArrayList<T> modelList = new ArrayList<T>();
-    if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
-      JSONArray jsonArray = jsonObject.getJSONArray("items");
-      try {
-        for (int i = 0; i < jsonArray.length(); i++) {
-          JSONObject jsonObj = jsonArray.getJSONObject(i);
-          T t = parseResponse(jsonObj);
-          modelList.add(t);
-        }
-        return modelList;
-      } catch (RazorpayException e) {
-        throw e;
+    try {
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject jsonObj = jsonArray.getJSONObject(i);
+        T t = parseResponse(jsonObj);
+        modelList.add(t);
       }
+      return modelList;
+    } catch (RazorpayException e) {
+      throw e;
     }
-
-    throw new RazorpayException("Unable to parse response");
   }
 
   /*
@@ -123,12 +119,12 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      
+
       if(!responseJson.has(ENTITY)) {
-    	  String entityName = getEntityNameFromURL(response.request().url());
-          responseJson.put("entity",entityName); 
-        }
-      
+        String entityName = getEntityNameFromURL(response.request().url());
+        responseJson.put("entity",entityName);
+      }
+
       return parseResponse(responseJson);
     }
 
@@ -137,7 +133,7 @@ class ApiClient {
   }
 
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
-      throws RazorpayException {
+          throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -152,27 +148,29 @@ class ApiClient {
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
-    
-    populateEntity(response, responseJson, "items");
 
+    String collectionName  = null;
+    collectionName = responseJson.has("payment_links")?
+            "payment_links": "items";
+
+    JSONArray collection = responseJson.getJSONArray(collectionName);
+    populateEntityInCollection(response, collection);
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      return parseCollectionResponse(responseJson);
+      return parseCollectionResponse(collection);
     }
 
     throwException(statusCode, responseJson);
     return null;
   }
 
-  private void populateEntity(Response response, JSONObject responseJson, String key) {
-    if(responseJson.has(key)){
-      JSONArray jsonArray = responseJson.getJSONArray(key);
-      for (Object obj : jsonArray) {
-          JSONObject jsonObj = (JSONObject) obj;
-          if(!jsonObj.has(ENTITY)) {
-              jsonObj.put("entity", getEntityNameFromURL(response.request().url()));
-          }
-       }
+  private void populateEntityInCollection(Response response, JSONArray jsonArray) {
+    for (int i = 0; i < jsonArray.length(); i++) {
+      JSONObject jsonObj = jsonArray.getJSONObject(i);
+      if(!jsonObj.has(ENTITY)) {
+        String entityName = getEntityNameFromURL(response.request().url());
+        jsonObj.put("entity",entityName);
+      }
     }
   }
 
@@ -180,20 +178,20 @@ class ApiClient {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
+
     int statusCode = response.code();
-    String string = null;
+    String responseBody = null;
+    JSONObject responseJson = null;
+
     try {
-      string = response.body().string();
-      if (string.startsWith("[")) {
-        string = "{}";
-      }
+      responseBody = response.body().string();
+      responseJson = new JSONObject(responseBody);
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
-    JSONObject jsonObject = new JSONObject(string);
 
     if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
-      throwException(statusCode, jsonObject);
+      throwException(statusCode, responseJson);
     }
   }
 
