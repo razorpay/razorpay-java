@@ -25,4 +25,16 @@ public class RefundClient extends ApiClient {
   public List<Refund> fetchAll() throws RazorpayException {
     return fetchAll(null);
   }
+
+  public List<Refund> fetchMultipleRefund(String id) throws RazorpayException {
+    return fetchMultipleRefund(id,null);
+  }
+
+  public List<Refund> fetchMultipleRefund(String id,JSONObject request) throws RazorpayException {
+    return getCollection(Constants.PAYMENT_LIST+"/"+id+"/"+Constants.REFUND_LIST, request);
+  }
+
+  public Refund edit(String id, JSONObject request) throws RazorpayException {
+    return patch(String.format(Constants.REFUND_EDIT, id), request);
+  }
 }
