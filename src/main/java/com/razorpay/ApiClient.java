@@ -2,11 +2,13 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 class ApiClient {
@@ -96,6 +98,16 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
 
+  /*
+   * this method will take http url as : https://api.razorpay.com/v1/invocies
+   * and will return entity name with the help of @EntityNameURLMapping class
+   */
+  private String getEntityNameFromURL(HttpUrl url) {
+	  String param = url.pathSegments().get(1);
+    return EntityNameURLMapping.getEntityName(param);
+  }
+  
+
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
@@ -104,7 +116,6 @@ class ApiClient {
     int statusCode = response.code();
     String responseBody = null;
     JSONObject responseJson = null;
-
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
@@ -113,6 +124,12 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
+      
+      if(!responseJson.has(ENTITY)) {
+    	  String entityName = getEntityNameFromURL(response.request().url());
+          responseJson.put("entity",entityName); 
+        }
+      
       return parseResponse(responseJson);
     }
 
