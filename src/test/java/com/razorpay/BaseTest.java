@@ -61,4 +61,9 @@ public class BaseTest {
         when(rb.string()).thenReturn(parse.toString());
         when(mockedResponse.body()).thenReturn(rb);
     }
+
+    protected OkHttpClient getOkHttpClient()
+    {
+        return okHttpClient;
+    }
 }
