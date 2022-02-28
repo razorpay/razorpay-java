@@ -120,18 +120,22 @@ class ApiClient {
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
 
-      if(!responseJson.has(ENTITY)) {
-        String entityName = getEntityNameFromURL(response.request().url());
-        responseJson.put("entity",entityName);
-      }else if(responseJson.get("entity").toString().equals("settlement.ondemand")){
-        responseJson.put("entity","settlement");
-      }
+      populateEntityInResponse(responseJson, response);
 
       return parseResponse(responseJson);
     }
 
     throwException(statusCode, responseJson);
     return null;
+  }
+
+  private void populateEntityInResponse(JSONObject responseJson, Response response) {
+      if(!responseJson.has(ENTITY)) {
+        String entityName = getEntityNameFromURL(response.request().url());
+        responseJson.put("entity",entityName);
+      }else if(responseJson.get("entity").toString().equals("settlement.ondemand")){
+        responseJson.put("entity","settlement");
+      }
   }
 
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)

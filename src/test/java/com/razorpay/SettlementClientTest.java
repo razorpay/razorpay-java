@@ -158,7 +158,11 @@ public class SettlementClientTest extends BaseTest{
      */
     @Test
     public void create() throws RazorpayException{
-        JSONObject request = new JSONObject("{\"amount\":200000,\"settle_full_balance\":false,\"description\":\"Needthistomakevendorpayments.\",\"notes\":{\"notes_key_1\":\"Tea,EarlGrey,Hot\",\"notes_key_2\":\"Tea,EarlGrey…decaf.\"}}");
+        JSONObject request = new JSONObject("{\"amount\":200000," +
+                "\"settle_full_balance\":false," +
+                "\"description\":\"Needthistomakevendorpayments.\"," +
+                "\"notes\":{\"notes_key_1\":\"Tea,EarlGrey,Hot\"," +
+                "\"notes_key_2\":\"Tea,EarlGrey…decaf.\"}}");
 
         String mockedResponseJson = "{\n" +
                 "  \"id\": "+SETTLEMENT_ID+",\n" +
