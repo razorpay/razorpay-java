@@ -19,6 +19,10 @@ public class VirtualAccountClientTest extends BaseTest{
     protected VirtualAccountClient virtualAccountClient = new VirtualAccountClient(TEST_SECRET_KEY);
 
     private static final String VIRTUAL_ACCOUNT_ID = "va_DlGmm7jInLudH9";
+    private static final String CUSTOMER_ID = "cust_DzbSeP2RJD1ZHg";
+    private static final String CORP_NAME = "Acme Corp";
+    private static final String ACTIVE_STATUS = "active";
+    private static final String CLOSED_STATUS = "closed";
 
     /**
      * VirtualAccount is created using the bank-account and customer details.
@@ -27,7 +31,7 @@ public class VirtualAccountClientTest extends BaseTest{
     @Test
     public void create() throws RazorpayException{
 
-        String x = "{\"receivers\":" +
+        JSONObject request = new JSONObject("{\"receivers\":" +
                 "{\"types\":[\"bank_account\"]}," +
                 "\"allowed_payers\":[{\"type\":\"bank_account\"," +
                 "\"bank_account\":{\"ifsc\":\"UTIB0000013\"," +
@@ -38,9 +42,7 @@ public class VirtualAccountClientTest extends BaseTest{
                 "\"description\":\"VirtualAccountcreatedforRaftarSoft\"," +
                 "\"customer_id\":\"cust_CaVDm8eDRSXYME\"," +
                 "\"close_by\":1681615838," +
-                "\"notes\":{\"project_name\":\"BankingSoftware\"}}";
-
-        JSONObject request = new JSONObject(x);
+                "\"notes\":{\"project_name\":\"BankingSoftware\"}}");
 
         String mockedResponseJson = "{\n" +
                 "  \"id\":\"va_DlGmm7jInLudH9\",\n" +
@@ -94,8 +96,8 @@ public class VirtualAccountClientTest extends BaseTest{
             VirtualAccount fetch = virtualAccountClient.create(request);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
-            assertEquals("active",fetch.get("status"));
-            assertEquals("Acme Corp",fetch.get("name"));
+            assertEquals(ACTIVE_STATUS,fetch.get("status"));
+            assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("allowed_payers"));
             String virtualAccountCreate = getHost(Constants.VIRTUAL_ACCOUNT_CREATE);
             verifySentRequest(true, String.valueOf(request), virtualAccountCreate);
@@ -160,8 +162,8 @@ public class VirtualAccountClientTest extends BaseTest{
             VirtualAccount fetch = virtualAccountClient.fetch(VIRTUAL_ACCOUNT_ID);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
-            assertEquals("active",fetch.get("status"));
-            assertEquals("Acme Corp",fetch.get("name"));
+            assertEquals(ACTIVE_STATUS,fetch.get("status"));
+            assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("allowed_payers"));
             verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_GET, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
@@ -280,8 +282,8 @@ public class VirtualAccountClientTest extends BaseTest{
             VirtualAccount fetch = virtualAccountClient.close(VIRTUAL_ACCOUNT_ID);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
-            assertEquals("closed",fetch.get("status"));
-            assertEquals("Acme Corp",fetch.get("name"));
+            assertEquals(CLOSED_STATUS,fetch.get("status"));
+            assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("receivers"));
             verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
@@ -336,8 +338,8 @@ public class VirtualAccountClientTest extends BaseTest{
             VirtualAccount fetch = virtualAccountClient.addReceiver(VIRTUAL_ACCOUNT_ID, request);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
-            assertEquals("cust_DzbSeP2RJD1ZHg",fetch.get("customer_id"));
-            assertEquals("Acme Corp",fetch.get("name"));
+            assertEquals(CUSTOMER_ID,fetch.get("customer_id"));
+            assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("receivers"));
             verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
@@ -397,12 +399,12 @@ public class VirtualAccountClientTest extends BaseTest{
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            VirtualAccount fetch = virtualAccountClient.addAllowedPayers(VIRTUAL_ACCOUNT_ID, request);
-            assertNotNull(fetch);
-            assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
-            assertEquals("cust_DzbSeP2RJD1ZHg",fetch.get("customer_id"));
-            assertEquals("Acme Corp",fetch.get("name"));
-            assertTrue(fetch.has("allowed_payers"));
+            VirtualAccount response = virtualAccountClient.addAllowedPayers(VIRTUAL_ACCOUNT_ID, request);
+            assertNotNull(response);
+            assertEquals(VIRTUAL_ACCOUNT_ID,response.get("id"));
+            assertEquals(CUSTOMER_ID,response.get("customer_id"));
+            assertEquals(CORP_NAME,response.get("name"));
+            assertTrue(response.has("allowed_payers"));
             verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
             assertTrue(false);
