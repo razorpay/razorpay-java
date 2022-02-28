@@ -171,16 +171,8 @@ class ApiClient {
   }
 
   private void populateEntityInCollection(Response response, JSONArray jsonArray) {
-
     for (int i = 0; i < jsonArray.length(); i++) {
-      JSONObject jsonObj = jsonArray.getJSONObject(i);
-
-      if(!jsonObj.has(ENTITY)) {
-        String entityName = getEntityNameFromURL(response.request().url());
-        jsonObj.put("entity",entityName);
-      }else if(jsonObj.get("entity").toString().equals("settlement.ondemand")){
-        jsonObj.put("entity","settlement");
-      }
+      populateEntityInResponse(jsonArray.getJSONObject(i),response);
     }
   }
 
