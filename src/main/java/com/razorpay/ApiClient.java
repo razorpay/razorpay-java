@@ -2,7 +2,6 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -53,9 +52,9 @@ class ApiClient {
     return processResponse(response);
   }
 
-  public void delete(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.deleteRequest(path, requestObject, auth);
-    processDeleteResponse(response);
+    return processDeleteResponse(response);
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
@@ -78,9 +77,9 @@ class ApiClient {
   }
 
   private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
-          throws RazorpayException {
+      throws RazorpayException {
 
-    ArrayList<T> modelList = new ArrayList<T>();
+   ArrayList<T> modelList = new ArrayList<T>();
     try {
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject jsonObj = jsonArray.getJSONObject(i);
@@ -176,7 +175,8 @@ class ApiClient {
     }
   }
 
-  private void processDeleteResponse(Response response) throws RazorpayException {
+
+  private <T extends Entity> T processDeleteResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -195,6 +195,7 @@ class ApiClient {
     if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
       throwException(statusCode, responseJson);
     }
+    return parseResponse(responseJson);
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {

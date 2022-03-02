@@ -10,9 +10,12 @@ import java.util.Arrays;
  */
 
 public enum EntityNameURLMapping {
+  
     INVOICES("invoice"),
-	PAYMENTS("payment"),
-    SETTLEMENTS("settlement");
+    SETTLEMENTS("settlement"),
+	  PAYMENTS("payment"),
+    PAYMENT_LINKS("payment_link"),
+    ITEMS("item"); 
 
     private String entity;
 
