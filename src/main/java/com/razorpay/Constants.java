@@ -51,6 +51,9 @@ public class Constants {
   static final String INVOICE_ISSUE = "invoices/%s/issue";
   static final String INVOICE_NOTIFY = "invoices/%s/notify_by/%s";
 
+  static final String ITEMS = "items";
+  static final String ITEM = "items/%s";
+
   static final String CARD_GET = "cards/%s";
   static final String FETCH_CARD_DETAILS = "payments/%s/card";
 

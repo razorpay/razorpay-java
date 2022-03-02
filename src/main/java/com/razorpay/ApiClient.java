@@ -76,25 +76,20 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
 
-  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
-      throws RazorpayException {
+  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
+          throws RazorpayException {
 
     ArrayList<T> modelList = new ArrayList<T>();
-    if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
-      JSONArray jsonArray = jsonObject.getJSONArray("items");
-      try {
-        for (int i = 0; i < jsonArray.length(); i++) {
-          JSONObject jsonObj = jsonArray.getJSONObject(i);
-          T t = parseResponse(jsonObj);
-          modelList.add(t);
-        }
-        return modelList;
-      } catch (RazorpayException e) {
-        throw e;
+    try {
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject jsonObj = jsonArray.getJSONObject(i);
+        T t = parseResponse(jsonObj);
+        modelList.add(t);
       }
+      return modelList;
+    } catch (RazorpayException e) {
+      throw e;
     }
-
-    throw new RazorpayException("Unable to parse response");
   }
 
   /*
@@ -123,12 +118,12 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      
+
       if(!responseJson.has(ENTITY)) {
-    	  String entityName = getEntityNameFromURL(response.request().url());
-          responseJson.put("entity",entityName); 
-        }
-      
+        String entityName = getEntityNameFromURL(response.request().url());
+        responseJson.put("entity",entityName);
+      }
+
       return parseResponse(responseJson);
     }
 
@@ -137,7 +132,7 @@ class ApiClient {
   }
 
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
-      throws RazorpayException {
+          throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -153,12 +148,30 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
+    String collectionName  = null;
+    collectionName = responseJson.has("payment_links")?
+            "payment_links": "items";
+
+    JSONArray collection = responseJson.getJSONArray(collectionName);
+    populateEntityInCollection(response, collection);
+
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      return parseCollectionResponse(responseJson);
+      return parseCollectionResponse(collection);
     }
 
     throwException(statusCode, responseJson);
     return null;
+  }
+
+
+  private void populateEntityInCollection(Response response, JSONArray jsonArray) {
+    for (int i = 0; i < jsonArray.length(); i++) {
+      JSONObject jsonObj = jsonArray.getJSONObject(i);
+      if(!jsonObj.has(ENTITY)) {
+        String entityName = getEntityNameFromURL(response.request().url());
+        jsonObj.put("entity",entityName);
+      }
+    }
   }
 
   private <T extends Entity> T processDeleteResponse(Response response) throws RazorpayException {

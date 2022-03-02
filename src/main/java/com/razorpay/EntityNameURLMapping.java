@@ -11,7 +11,8 @@ import java.util.Arrays;
 
 public enum EntityNameURLMapping {
     INVOICES("invoice"),
-	PAYMENTS("payment");
+	PAYMENTS("payment"),
+    ITEMS("item"); 
 
     private String entity;
 

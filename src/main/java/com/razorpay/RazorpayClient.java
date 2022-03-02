@@ -16,6 +16,7 @@ public class RazorpayClient {
   public SubscriptionClient Subscriptions;
   public AddonClient Addons;
   public PlanClient Plans;
+  public ItemClient Items;
   public FundAccountClient FundAccount; 
   public VirtualAccountClient VirtualAccounts;
 
@@ -36,6 +37,7 @@ public class RazorpayClient {
     Subscriptions = new SubscriptionClient(auth);
     Addons = new AddonClient(auth);
     Plans = new PlanClient(auth);
+    Items = new ItemClient(auth);
     FundAccount = new FundAccountClient(auth);
     VirtualAccounts = new VirtualAccountClient(auth);
   }
