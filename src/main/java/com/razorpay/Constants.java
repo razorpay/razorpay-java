@@ -78,7 +78,6 @@ public class Constants {
   static final String ITEM = "items/%s";
 
   static final String CARD_GET = "cards/%s";
-  static final String FETCH_CARD_DETAILS = "payments/%s/card";
 
   static final String CUSTOMER_CREATE = "customers";
   static final String CUSTOMER_GET = "customers/%s";
