@@ -31,9 +31,9 @@ public class Constants {
   static final String PAYMENT_REFUND_LIST = "payments/%s/refunds";
   static final String PAYMENT_REFUND_GET = "payments/%s/refunds/%s";
 
-  static final String REFUND_GET = "refunds/%s";
-  static final String REFUND_LIST = "refunds";
-  static final String REFUND_CREATE = "refunds";
+  static final String REFUND = "refunds/%s";
+  static final String REFUNDS = "refunds";
+  static final String REFUND_MULTIPLE = "payments/%s/refunds";
 
   static final String FUND_ACCOUNT_CREATE = "fund_accounts";
   static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
