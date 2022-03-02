@@ -16,10 +16,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BaseTest {
-    @InjectMocks
-    protected AddonClient client = new AddonClient("test");
+
     private OkHttpClient okHttpClient;
     Response mockedResponse;
+
+    static final String TEST_SECRET_KEY = "test";
 
     @Before
     public void setUp() throws Exception {
@@ -59,5 +60,10 @@ public class BaseTest {
         ResponseBody rb = mock(ResponseBody.class);
         when(rb.string()).thenReturn(parse.toString());
         when(mockedResponse.body()).thenReturn(rb);
+    }
+
+    protected OkHttpClient getOkHttpClient()
+    {
+        return okHttpClient;
     }
 }
