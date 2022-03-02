@@ -35,8 +35,12 @@ public class Constants {
   static final String REFUND_LIST = "refunds";
   static final String REFUND_CREATE = "refunds";
 
+  static final String FUND_ACCOUNT_CREATE = "fund_accounts";
+  static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
+
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
+  static final String ORDER_EDIT = "orders/%s";
   static final String ORDER_LIST = "orders";
   static final String ORDER_PAYMENT_LIST = "orders/%s/payments";
 
@@ -44,12 +48,16 @@ public class Constants {
   static final String INVOICE_GET = "invoices/%s";
   static final String INVOICE_LIST = "invoices";
   static final String INVOICE_CANCEL = "invoices/%s/cancel";
+  static final String INVOICE_ISSUE = "invoices/%s/issue";
+  static final String INVOICE_NOTIFY = "invoices/%s/notify_by/%s";
 
   static final String CARD_GET = "cards/%s";
+  static final String FETCH_CARD_DETAILS = "payments/%s/card";
 
   static final String CUSTOMER_CREATE = "customers";
   static final String CUSTOMER_GET = "customers/%s";
   static final String CUSTOMER_EDIT = "customers/%s";
+  static final String CUSTOMER_LIST = "customers";
 
   static final String TOKEN_LIST = "customers/%s/tokens";
   static final String TOKEN_GET = "customers/%s/tokens/%s";
@@ -70,9 +78,11 @@ public class Constants {
   static final String SUBSCRIPTION_LIST = "subscriptions";
   static final String SUBSCRIPTION_CANCEL = "subscriptions/%s/cancel";
   static final String SUBSCRIPTION_ADDON_CREATE = "subscriptions/%s/addons";
+  static final String SUBSCRIPTION_REGISTRATION_LINK = "subscription_registration/auth_links";
 
   static final String ADDON_GET = "addons/%s";
   static final String ADDON_DELETE = "addons/%s";
+  static final String ADDON_LIST = "addons";
 
   static final String VIRTUAL_ACCOUNT_CREATE = "virtual_accounts";
   static final String VIRTUAL_ACCOUNT_GET = "virtual_accounts/%s";
