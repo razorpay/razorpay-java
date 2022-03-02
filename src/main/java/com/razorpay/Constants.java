@@ -48,6 +48,7 @@ public class Constants {
   static final String CUSTOMER_CREATE = "customers";
   static final String CUSTOMER_GET = "customers/%s";
   static final String CUSTOMER_EDIT = "customers/%s";
+  static final String CUSTOMER_LIST = "customers";
 
   static final String TOKEN_LIST = "customers/%s/tokens";
   static final String TOKEN_GET = "customers/%s/tokens/%s";
