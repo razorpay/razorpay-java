@@ -80,4 +80,21 @@ public class PaymentClient extends ApiClient {
   public BankTransfer fetchBankTransfers(String id) throws RazorpayException {
     return get(String.format(Constants.PAYMENT_BANK_TRANSFER_GET, id), null);
   }
+
+  public Payment edit(String id, JSONObject request) throws RazorpayException {
+    return patch(String.format(Constants.PAYMENT_EDIT, id), request);
+  }
+  
+  public List<Payment> fetchPaymentDowntime() throws RazorpayException {
+    return getCollection(Constants.FETCH_DOWNTIME_LIST, null);
+  }
+
+  public Payment fetchPaymentDowntimeById(String id) throws RazorpayException {
+    return get(String.format(Constants.FETCH_DOWNTIME_GET, id), null);
+  }
+
+  public Payment createJsonPayment(JSONObject request) throws RazorpayException {
+    return post(Constants.PAYMENT_JSON_CREATE, request);
+  }
+
 }
