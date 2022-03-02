@@ -48,6 +48,12 @@ public class Constants {
   static final String REFUND_LIST = "refunds";
   static final String REFUND_CREATE = "refunds";
 
+  static final String SETTLEMENTS = "settlements";
+  static final String SETTLEMENT = "settlements/%s";
+  static final String SETTLEMENTS_REPORTS = "settlements/recon/combined";
+  static final String SETTLEMENTS_INSTANT = "settlements/ondemand";
+  static final String SETTLEMENT_INSTANT = "settlements/ondemand/%s";
+
   static final String REFUND = "refunds/%s";
   static final String REFUNDS = "refunds";
   static final String REFUND_MULTIPLE = "payments/%s/refunds";

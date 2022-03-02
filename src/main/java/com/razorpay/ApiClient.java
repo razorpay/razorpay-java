@@ -58,7 +58,7 @@ class ApiClient {
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
-      throws RazorpayException {
+          throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processCollectionResponse(response);
   }
@@ -97,10 +97,10 @@ class ApiClient {
    * and will return entity name with the help of @EntityNameURLMapping class
    */
   private String getEntityNameFromURL(HttpUrl url) {
-	  String param = url.pathSegments().get(1);
+    String param = url.pathSegments().get(1);
     return EntityNameURLMapping.getEntityName(param);
   }
-  
+
 
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
@@ -119,16 +119,22 @@ class ApiClient {
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
 
-      if(!responseJson.has(ENTITY)) {
-        String entityName = getEntityNameFromURL(response.request().url());
-        responseJson.put("entity",entityName);
-      }
+      populateEntityInResponse(responseJson, response);
 
       return parseResponse(responseJson);
     }
 
     throwException(statusCode, responseJson);
     return null;
+  }
+
+  private void populateEntityInResponse(JSONObject responseJson, Response response) {
+      if(!responseJson.has(ENTITY)) {
+        String entityName = getEntityNameFromURL(response.request().url());
+        responseJson.put("entity",entityName);
+      }else if(responseJson.get("entity").toString().equals("settlement.ondemand")){
+        responseJson.put("entity","settlement");
+      }
   }
 
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
@@ -165,13 +171,10 @@ class ApiClient {
 
   private void populateEntityInCollection(Response response, JSONArray jsonArray) {
     for (int i = 0; i < jsonArray.length(); i++) {
-      JSONObject jsonObj = jsonArray.getJSONObject(i);
-      if(!jsonObj.has(ENTITY)) {
-        String entityName = getEntityNameFromURL(response.request().url());
-        jsonObj.put("entity",entityName);
-      }
+      populateEntityInResponse(jsonArray.getJSONObject(i),response);
     }
   }
+
 
   private <T extends Entity> T processDeleteResponse(Response response) throws RazorpayException {
     if (response == null) {
