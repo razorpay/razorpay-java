@@ -77,7 +77,7 @@ class ApiClient {
   }
 
   private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
-          throws RazorpayException {
+      throws RazorpayException {
 
     ArrayList<T> modelList = new ArrayList<T>();
     try {
@@ -162,7 +162,6 @@ class ApiClient {
     throwException(statusCode, responseJson);
     return null;
   }
-
 
   private void populateEntityInCollection(Response response, JSONArray jsonArray) {
     for (int i = 0; i < jsonArray.length(); i++) {
