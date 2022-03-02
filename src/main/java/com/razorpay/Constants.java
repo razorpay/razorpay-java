@@ -74,10 +74,15 @@ public class Constants {
   static final String PLAN_LIST = "plans";
 
   static final String SUBSCRIPTION_CREATE = "subscriptions";
-  static final String SUBSCRIPTION_GET = "subscriptions/%s";
+  static final String SUBSCRIPTION = "subscriptions/%s";
   static final String SUBSCRIPTION_LIST = "subscriptions";
   static final String SUBSCRIPTION_CANCEL = "subscriptions/%s/cancel";
   static final String SUBSCRIPTION_ADDON_CREATE = "subscriptions/%s/addons";
+
+  static final String SUBSCRIPTION_PENDING_UPDATE = "subscriptions/%s/retrieve_scheduled_changes";
+  static final String SUBSCRIPTION_CANCEL_SCHEDULED_UPDATE = "subscriptions/%s/cancel_scheduled_changes";
+  static final String PAUSE_SUBSCRIPTION = "subscriptions/%s/pause";
+  static final String RESUME_SUBSCRIPTION = "subscriptions/%s/resume";
   static final String SUBSCRIPTION_REGISTRATION_LINK = "subscription_registration/auth_links";
 
   static final String ADDON_GET = "addons/%s";
