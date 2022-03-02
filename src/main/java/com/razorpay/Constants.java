@@ -76,6 +76,7 @@ public class Constants {
 
   static final String ADDON_GET = "addons/%s";
   static final String ADDON_DELETE = "addons/%s";
+  static final String ADDON_LIST = "addons";
 
   static final String VIRTUAL_ACCOUNT_CREATE = "virtual_accounts";
   static final String VIRTUAL_ACCOUNT_GET = "virtual_accounts/%s";
