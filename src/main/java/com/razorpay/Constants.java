@@ -83,6 +83,7 @@ public class Constants {
   static final String SUBSCRIPTION_CANCEL_SCHEDULED_UPDATE = "subscriptions/%s/cancel_scheduled_changes";
   static final String PAUSE_SUBSCRIPTION = "subscriptions/%s/pause";
   static final String RESUME_SUBSCRIPTION = "subscriptions/%s/resume";
+  static final String SUBSCRIPTION_OFFER = "subscriptions/%s/%s";
   static final String SUBSCRIPTION_REGISTRATION_LINK = "subscription_registration/auth_links";
 
   static final String ADDON_GET = "addons/%s";

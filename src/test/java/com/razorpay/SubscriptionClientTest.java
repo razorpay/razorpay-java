@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SubscriptionClientTest extends BaseTest {
 
@@ -25,6 +26,7 @@ public class SubscriptionClientTest extends BaseTest {
     public static final String ADDON_SUBSCRIPTION_ID = "subscription_id";
     public static final String TEST_ADDON_ID = "ao_00000000000001";
     public static final String ADDON_ITEM_ID = "item_00000000000001";
+    public static final String TEST_OFFER = "TEST_OFFER";
     @InjectMocks
     private SubscriptionClient subscriptionClient = new SubscriptionClient(TEST_SECRET_KEY);
 
@@ -252,6 +254,17 @@ public class SubscriptionClientTest extends BaseTest {
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
         assertEquals(1, (int) subscription.get("quantity"));
         verifySentRequest(true, getRequest(), getHost(String.format(Constants.RESUME_SUBSCRIPTION, TEST_SUBSCRIPTION_ID)));
+    }
+
+    @Test
+    public void testDeleteSubscriptionOffer() throws IOException, RazorpayException {
+
+        String mockedResponseJson = getMockedResponseJson();
+        mockResponseFromExternalClient(mockedResponseJson);
+        mockResponseHTTPCodeFromExternalClient(200);
+        Subscription subscription = subscriptionClient.deleteSubscriptionOffer(TEST_SUBSCRIPTION_ID, TEST_OFFER);
+        assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
+        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_OFFER, TEST_SUBSCRIPTION_ID,TEST_OFFER)));
     }
 
     private String getAddonMockedResponse() {
