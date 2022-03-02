@@ -64,6 +64,8 @@ public class PaymentClientTest extends BaseTest{
             assertEquals(PAYMENT_ID,fetch.get("id"));
             assertTrue(fetch.has("status"));
             assertTrue(fetch.has("currency"));
+            String fetchRequest = getHost(String.format(Constants.PAYMENT_GET, PAYMENT_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -117,6 +119,8 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("amount"));
+            String fetchRequest = getHost(Constants.PAYMENT_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -173,6 +177,8 @@ public class PaymentClientTest extends BaseTest{
             assertEquals(PAYMENT_ID,fetch.get("id"));
             assertTrue(fetch.has("entity"));
             assertTrue(fetch.has("amount"));
+            String captureRequest = getHost(String.format(Constants.PAYMENT_CAPTURE, PAYMENT_ID));
+            verifySentRequest(true, request.toString(), captureRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -210,6 +216,8 @@ public class PaymentClientTest extends BaseTest{
             assertEquals(REFUND_ID,fetch.get("id"));
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("payment_id"));
+            String refundRequest = getHost(String.format(Constants.PAYMENT_REFUND, PAYMENT_ID));
+            verifySentRequest(true, request.toString(), refundRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -246,6 +254,8 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("payment_id"));
             assertTrue(fetch.get(0).has("notes"));
+            String refundRequest = getHost(String.format(Constants.PAYMENT_REFUND_LIST, PAYMENT_ID));
+            verifySentRequest(false, null, refundRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -303,6 +313,8 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("source"));
             assertTrue(fetch.get(0).has("recipient"));
             assertTrue(fetch.get(0).has("currency"));
+            String transferRequest = getHost(String.format(Constants.PAYMENT_TRANSFER_CREATE, PAYMENT_ID));
+            verifySentRequest(true, request.toString(), transferRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -345,6 +357,8 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("source"));
             assertTrue(fetch.get(0).has("recipient"));
             assertTrue(fetch.get(0).has("amount"));
+            String transferRequest = getHost(String.format(Constants.PAYMENT_TRANSFER_GET, PAYMENT_ID));
+            verifySentRequest(false, null, transferRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

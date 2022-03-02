@@ -58,6 +58,8 @@ public class SettlementClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("fees"));
             assertTrue(fetch.get(0).has("tax"));
+            String fetchRequest = getHost(Constants.SETTLEMENTS);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -89,6 +91,8 @@ public class SettlementClientTest extends BaseTest{
             assertEquals("settlement",fetch.get("entity"));
             assertEquals("processed",fetch.get("status"));
             assertEquals("1568176960vxp0rj",fetch.get("utr"));
+            String fetchRequest = getHost(String.format(Constants.SETTLEMENT,SETTLEMENT_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -147,6 +151,8 @@ public class SettlementClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("order_id"));
             assertTrue(fetch.get(0).has("method"));
             assertTrue(fetch.get(0).has("card_type"));
+            String reportRequest = getHost(Constants.SETTLEMENTS_REPORTS)+"?month=9&year=2020";
+            verifySentRequest(false, null, reportRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -212,6 +218,8 @@ public class SettlementClientTest extends BaseTest{
             assertEquals(SETTLEMENT_ID,fetch.get("id"));
             assertEquals("initiated",fetch.get("status"));
             assertTrue(fetch.has("notes"));
+            String createRequest = getHost(Constants.SETTLEMENTS_INSTANT);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -258,6 +266,8 @@ public class SettlementClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("amount_requested"));
             assertTrue(fetch.get(0).has("amount_pending"));
+            String fetchRequest = getHost(Constants.SETTLEMENTS_INSTANT);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -296,6 +306,8 @@ public class SettlementClientTest extends BaseTest{
             assertEquals(SETTLEMENT_ID,fetch.get("id"));
             assertEquals("processed",fetch.get("status"));
             assertEquals(200000,(int)fetch.get("amount_requested"));
+            String fetchRequest = getHost(String.format(Constants.SETTLEMENT_INSTANT,SETTLEMENT_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

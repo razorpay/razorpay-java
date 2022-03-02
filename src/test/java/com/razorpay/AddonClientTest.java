@@ -58,6 +58,8 @@ public class AddonClientTest  extends BaseTest{
             assertEquals(30000,item.get("amount"));
             assertTrue(item.getBoolean("active"));
             assertTrue(item.has("unit_amount"));
+            String addonCreate = getHost(String.format(Constants.ADDON_GET, ADDON_ID));
+            verifySentRequest(false, null, addonCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -109,6 +111,8 @@ public class AddonClientTest  extends BaseTest{
             assertEquals(true,fetch.get(0).has("entity"));
             assertEquals(true,fetch.get(0).has("item"));
             assertEquals(true,fetch.get(0).toJson().getJSONObject("item").has("hsn_code"));
+            String addonList = getHost(Constants.ADDON_LIST);
+            verifySentRequest(false, null, addonList);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -411,28 +411,4 @@ public class VirtualAccountClientTest extends BaseTest{
         }
     }
 
-    public void verifySentRequest(boolean hasBody, String request, String requestPath) {
-        ArgumentCaptor<Request> req = ArgumentCaptor.forClass(Request.class);
-        Mockito.verify(getOkHttpClient()).newCall(req.capture());
-        if(hasBody) {
-            assertEquals(new JSONObject(request).toString(), new JSONObject(bodyToString(req.getAllValues().get(0))).toString());
-        }
-        assertEquals(requestPath, req.getValue().url().toString());
-    }
-
-    private static String bodyToString(final Request request) {
-
-        try {
-            final Request copy = request.newBuilder().build();
-            final Buffer buffer = new Buffer();
-            copy.body().writeTo(buffer);
-            return buffer.readUtf8();
-        } catch (final IOException e) {
-            return "did not work";
-        }
-    }
-
-    String getHost(String url) {
-        return Constants.SCHEME + "://" + Constants.HOSTNAME + "/" + Constants.VERSION + "/" + url;
-    }
 }

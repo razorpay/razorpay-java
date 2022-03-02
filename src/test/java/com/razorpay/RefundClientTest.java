@@ -55,6 +55,8 @@ public class RefundClientTest extends BaseTest{
             assertEquals("refund",fetch.get("entity"));
             assertEquals(500100,(int)fetch.get("amount"));
             assertEquals("INR",fetch.get("currency"));
+            String createRequest = getHost(Constants.REFUNDS);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -91,6 +93,8 @@ public class RefundClientTest extends BaseTest{
             Refund fetch = refundClient.fetch(REFUND_ID);
             assertNotNull(fetch);
             assertEquals(REFUND_ID,fetch.get("id"));
+            String fetchRequest = getHost(String.format(Constants.REFUND,REFUND_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -136,6 +140,8 @@ public class RefundClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("currency"));
             assertTrue(fetch.get(0).has("payment_id"));
+            String fetchRequest = getHost(Constants.REFUNDS);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -182,6 +188,8 @@ public class RefundClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("currency"));
             assertTrue(fetch.get(0).has("payment_id"));
+            String fetchRequest = getHost(String.format(Constants.REFUND_MULTIPLE,REFUND_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -228,6 +236,8 @@ public class RefundClientTest extends BaseTest{
             assertEquals("refund",fetch.get("entity"));
             assertEquals(300100,(int)fetch.get("amount"));
             assertEquals("INR",fetch.get("currency"));
+            String editRequest = getHost(String.format(Constants.REFUND,REFUND_ID));
+            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
