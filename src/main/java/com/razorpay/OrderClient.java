@@ -29,4 +29,8 @@ public class OrderClient extends ApiClient {
   public List<Payment> fetchPayments(String id) throws RazorpayException {
     return getCollection(String.format(Constants.ORDER_PAYMENT_LIST, id), null);
   }
+
+  public Order edit(String id, JSONObject request) throws RazorpayException {
+    return patch(String.format(Constants.ORDER_EDIT, id), request);
+  }
 }
