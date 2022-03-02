@@ -79,7 +79,7 @@ class ApiClient {
   private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
       throws RazorpayException {
 
-    ArrayList<T> modelList = new ArrayList<T>();
+   ArrayList<T> modelList = new ArrayList<T>();
     try {
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject jsonObj = jsonArray.getJSONObject(i);

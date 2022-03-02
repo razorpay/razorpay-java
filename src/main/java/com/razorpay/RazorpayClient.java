@@ -16,6 +16,7 @@ public class RazorpayClient {
   public SubscriptionClient Subscriptions;
   public AddonClient Addons;
   public PlanClient Plans;
+  public QrCodeClient QrCode;
   public PaymentLinkClient PaymentLink;
   public ItemClient Items;
   public FundAccountClient FundAccount; 
@@ -38,6 +39,7 @@ public class RazorpayClient {
     Subscriptions = new SubscriptionClient(auth);
     Addons = new AddonClient(auth);
     Plans = new PlanClient(auth);
+    QrCode = new QrCodeClient(auth);
     PaymentLink = new PaymentLinkClient(auth);
     Items = new ItemClient(auth);
     FundAccount = new FundAccountClient(auth);
