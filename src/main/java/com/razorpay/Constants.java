@@ -35,6 +35,7 @@ public class Constants {
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
+  static final String ORDER_EDIT = "orders/%s";
   static final String ORDER_LIST = "orders";
   static final String ORDER_PAYMENT_LIST = "orders/%s/payments";
 
