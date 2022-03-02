@@ -95,4 +95,7 @@ public class Constants {
   static final String VIRTUAL_ACCOUNT_EDIT = "virtual_accounts/%s";
   static final String VIRTUAL_ACCOUNT_CLOSE = "virtual_accounts/%s/close";
   static final String VIRTUAL_ACCOUNT_PAYMENTS = "virtual_accounts/%s/payments";
+  static final String VIRTUAL_ACCOUNT_RECEIVERS = "virtual_accounts/%s/receivers";
+  static final String VIRTUAL_ACCOUNT_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers";
+  static final String VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers/%s";
 }

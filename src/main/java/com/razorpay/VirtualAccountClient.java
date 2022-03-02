@@ -41,4 +41,16 @@ public class VirtualAccountClient extends ApiClient {
   public List<Payment> fetchPayments(String id, JSONObject request) throws RazorpayException {
     return getCollection(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), request);
   }
+
+  public VirtualAccount addReceiver(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, id), request);
+  }
+
+  public VirtualAccount addAllowedPayers(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, id), request);
+  }
+
+  public void deleteAllowedPayer(String virtual_id, String payer_id) throws RazorpayException {
+    delete(String.format(Constants.VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS, virtual_id, payer_id), null);
+  }
 }
