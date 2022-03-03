@@ -118,9 +118,7 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-
       populateEntityInResponse(responseJson, response);
-
       return parseResponse(responseJson);
     }
 
