@@ -17,7 +17,10 @@ public class PaymentClientTest extends BaseTest{
     private static final String PAYMENT_ID = "pay_IDRP0tbirMSsbn";
 
     private static final String REFUND_ID = "rfnd_FP8QHiV938haTz";
-    
+
+    private static final String ORDER_ID = "order_J2bVDDGFwgGJbW";
+
+    private static final String SIGNATURE = "aa64f4fafe6b0c3febce374c1176bbf91bf8077a25501efc0558d60b4a68bead";
     /**
      * Retrieve payment details of respective customer using payment id.
      * @throws RazorpayException
@@ -478,6 +481,48 @@ public class PaymentClientTest extends BaseTest{
             assertEquals("payment",fetch.get("entity"));
             assertTrue(fetch.has("request"));
             assertTrue(fetch.has("base"));
+            String createRequest = getHost(Constants.PAYMENT_JSON_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void createRecurringPayment() throws RazorpayException {
+
+        JSONObject request = new JSONObject("{\n" +
+                "  \"email\": \"gaurav.kumar@example.com\",\n" +
+                "  \"contact\": \"9876543567\",\n" +
+                "  \"amount\": 10000,\n" +
+                "  \"currency\": \"INR\",\n" +
+                "  \"order_id\": \"order_J2bmbRQxkC3YTv\",\n" +
+                "  \"customer_id\": \"cust_DzYEzfJLV03rkp\",\n" +
+                "  \"token\": \"token_Ip8u7q7FA77Q30\",\n" +
+                "  \"recurring\": \"1\",\n" +
+                "  \"notes\": {\n" +
+                "    \"note_key_1\": \"Tea. Earl grey. Hot.\",\n" +
+                "    \"note_key_2\": \"Tea. Earl grey. Decaf.\"\n" +
+                "  },\n" +
+                "  \"description\": \"Creating recurring payment for Gaurav Kumar\"\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "    \"entity\": \"payment\",\n" +
+                "    \"razorpay_payment_id\": \"pay_IDRP0tbirMSsbn\",\n" +
+                "    \"razorpay_order_id\": \"order_J2bVDDGFwgGJbW\",\n" +
+                "    \"razorpay_signature\": \"aa64f4fafe6b0c3febce374c1176bbf91bf8077a25501efc0558d60b4a68bead\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.createRecurringPayment(request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
+            assertEquals(ORDER_ID,fetch.get("razorpay_order_id"));
+            assertEquals(SIGNATURE,fetch.get("razorpay_signature"));
+            String createRequest = getHost(Constants.PAYMENT_RECURRING);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

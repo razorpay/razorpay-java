@@ -27,6 +27,7 @@ public class Constants {
   static final String FETCH_DOWNTIME_LIST = "payments/downtimes";
   static final String FETCH_DOWNTIME_GET = "payments/downtimes";
   static final String PAYMENT_JSON_CREATE = "payments/create/json";
+  static final String PAYMENT_RECURRING = "payments/create/recurring";
 
   static final String PAYMENTLINK_CREATE = "payment_links";
   static final String PAYMENTLINK_LIST = "payment_links";

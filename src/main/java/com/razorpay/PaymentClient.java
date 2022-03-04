@@ -97,4 +97,8 @@ public class PaymentClient extends ApiClient {
     return post(Constants.PAYMENT_JSON_CREATE, request);
   }
 
+  public Payment createRecurringPayment(JSONObject request) throws RazorpayException {
+    return post(Constants.PAYMENT_RECURRING, request);
+  }
+
 }
