@@ -35,6 +35,8 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals("invoice",invoice.get("entity"));
             assertTrue(invoice.has("customer_details"));
             assertTrue(invoice.has("short_url"));
+            String createRequest = getHost(Constants.INVOICE_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -56,6 +58,8 @@ public class InvoiceClientTest extends BaseTest{
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("type"));
             assertTrue(fetch.get(0).has("receipt"));
+            String fetchRequest = getHost(Constants.INVOICE_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -78,6 +82,8 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals(INVOICE_ID,fetch.get("id"));
             assertTrue(fetch.has("customer_details"));
             assertTrue(fetch.has("issued_at"));
+            String fetchRequest = getHost(String.format(Constants.INVOICE_GET,INVOICE_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -101,6 +107,8 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals("pending",fetch.get("email_status"));
             assertTrue(fetch.has("customer_details"));
             assertTrue(fetch.has("issued_at"));
+            String cancelRequest = getHost(String.format(Constants.INVOICE_CANCEL,INVOICE_ID));
+            verifySentRequest(false, null, cancelRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -123,6 +131,8 @@ public class InvoiceClientTest extends BaseTest{
             assertNotNull(fetch);
             assertTrue(fetch.has("success"));
             assertTrue(fetch.has("entity"));
+            String notifyByRequest = getHost(String.format(Constants.INVOICE_NOTIFY,INVOICE_ID,"sms"));
+            verifySentRequest(false, null, notifyByRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -147,6 +157,8 @@ public class InvoiceClientTest extends BaseTest{
             assertTrue(fetch.has("razorpay_payment_id"));
             assertTrue(fetch.has("razorpay_order_id"));
             assertTrue(fetch.has("razorpay_signature"));
+            String createRegistrationLinkRequest = getHost(Constants.SUBSCRIPTION_REGISTRATION_LINK);
+            verifySentRequest(true, request.toString(), createRegistrationLinkRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -169,6 +181,8 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals("invoice",fetch.get("entity"));
             assertTrue(fetch.has("invoice_number"));
             assertTrue(fetch.has("receipt"));
+            String issueRequest = getHost(String.format(Constants.INVOICE_ISSUE,INVOICE_ID));
+            verifySentRequest(false, null, issueRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -191,6 +205,8 @@ public class InvoiceClientTest extends BaseTest{
             assertEquals("invoice",invoice.get("entity"));
             assertTrue(invoice.has("invoice_number"));
             assertTrue(invoice.has("receipt"));
+            String editRequest = getHost(String.format(Constants.INVOICE_GET,INVOICE_ID));
+            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

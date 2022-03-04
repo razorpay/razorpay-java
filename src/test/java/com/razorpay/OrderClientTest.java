@@ -52,6 +52,8 @@ public class OrderClientTest extends BaseTest{
             assertEquals("order",fetch.get("entity"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("amount_paid"));
+            String createRequest = getHost(Constants.ORDER_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -86,6 +88,8 @@ public class OrderClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("amount_paid"));
+            String fetchRequest = getHost(Constants.ORDER_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -117,6 +121,8 @@ public class OrderClientTest extends BaseTest{
             assertTrue(fetch.has("entity"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("amount_paid"));
+            String fetchRequest = getHost(String.format(Constants.ORDER_GET,ORDER_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -164,6 +170,8 @@ public class OrderClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("currency"));
+            String fetchRequest = getHost(String.format(Constants.ORDER_PAYMENT_LIST, ORDER_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -205,6 +213,8 @@ public class OrderClientTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals(ORDER_ID,fetch.get("id"));
             assertEquals(ORDER_ID,fetch.get("id"));
+            String editRequest = getHost(String.format(Constants.ORDER_EDIT, ORDER_ID));
+            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -31,6 +31,8 @@ public class CardClientTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("international"));
+            String addonCreate = getHost(String.format(Constants.CARD_GET, CARD_ID));
+            verifySentRequest(false, null, addonCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -52,6 +54,8 @@ public class CardClientTest extends BaseTest{
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("name"));
             assertTrue(fetch.has("network"));
+            String fetchCardDetails = getHost(String.format(Constants.FETCH_CARD_DETAILS, PAYMENT_ID));
+            verifySentRequest(false, null, fetchCardDetails);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -6,22 +6,22 @@ import okhttp3.Credentials;
 
 public class RazorpayClient {
 
-  public PaymentClient Payments;
-  public RefundClient Refunds;
-  public OrderClient Orders;
-  public InvoiceClient Invoices;
-  public CardClient Cards;
-  public CustomerClient Customers;
-  public TransferClient Transfers;
-  public SubscriptionClient Subscriptions;
-  public AddonClient Addons;
-  public PlanClient Plans;
-  public SettlementClient Settlement;
-  public QrCodeClient QrCode;
-  public PaymentLinkClient PaymentLink;
-  public ItemClient Items;
-  public FundAccountClient FundAccount; 
-  public VirtualAccountClient VirtualAccounts;
+  public PaymentClient payments;
+  public RefundClient refunds;
+  public OrderClient orders;
+  public InvoiceClient invoices;
+  public CardClient cards;
+  public CustomerClient customers;
+  public TransferClient transfers;
+  public SubscriptionClient subscriptions;
+  public AddonClient addons;
+  public PlanClient plans;
+  public SettlementClient settlement;
+  public QrCodeClient qrCode;
+  public PaymentLinkClient paymentLink;
+  public ItemClient items;
+  public FundAccountClient fundAccount;
+  public VirtualAccountClient virtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
@@ -30,22 +30,22 @@ public class RazorpayClient {
   public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException {
     ApiUtils.createHttpClientInstance(enableLogging);
     String auth = Credentials.basic(key, secret);
-    Payments = new PaymentClient(auth);
-    Refunds = new RefundClient(auth);
-    Orders = new OrderClient(auth);
-    Invoices = new InvoiceClient(auth);
-    Cards = new CardClient(auth);
-    Customers = new CustomerClient(auth);
-    Transfers = new TransferClient(auth);
-    Subscriptions = new SubscriptionClient(auth);
-    Addons = new AddonClient(auth);
-    Plans = new PlanClient(auth);
-    Settlement = new SettlementClient(auth);
-    QrCode = new QrCodeClient(auth);
-    PaymentLink = new PaymentLinkClient(auth);
-    Items = new ItemClient(auth);
-    FundAccount = new FundAccountClient(auth);
-    VirtualAccounts = new VirtualAccountClient(auth);
+    payments = new PaymentClient(auth);
+    refunds = new RefundClient(auth);
+    orders = new OrderClient(auth);
+    invoices = new InvoiceClient(auth);
+    cards = new CardClient(auth);
+    customers = new CustomerClient(auth);
+    transfers = new TransferClient(auth);
+    subscriptions = new SubscriptionClient(auth);
+    addons = new AddonClient(auth);
+    plans = new PlanClient(auth);
+    settlement = new SettlementClient(auth);
+    qrCode = new QrCodeClient(auth);
+    paymentLink = new PaymentLinkClient(auth);
+    items = new ItemClient(auth);
+    fundAccount = new FundAccountClient(auth);
+    virtualAccounts = new VirtualAccountClient(auth);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {

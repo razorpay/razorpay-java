@@ -69,6 +69,8 @@ public class QrCodeClientTest extends BaseTest{
             assertEquals(QRCODE_ID,fetch.get("id"));
             assertTrue(fetch.has("close_by"));
             assertTrue(fetch.has("fixed_amount"));
+            String createRequest = getHost(Constants.QRCODE_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -113,6 +115,8 @@ public class QrCodeClientTest extends BaseTest{
             assertEquals(CUSTOMER_ID,fetch.get("customer_id"));
             assertTrue(fetch.has("close_by"));
             assertTrue(fetch.has("fixed_amount"));
+            String fetchRequest = getHost(String.format(Constants.QRCODE_FETCH, QRCODE_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -163,6 +167,8 @@ public class QrCodeClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("customer_id"));
             assertTrue(fetch.get(0).has("close_by"));
+            String fetchRequest = getHost(Constants.QRCODE_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -208,6 +214,8 @@ public class QrCodeClientTest extends BaseTest{
             assertEquals(CUSTOMER_ID,fetch.get("customer_id"));
             assertTrue(fetch.has("close_by"));
             assertTrue(fetch.has("fixed_amount"));
+            String closeRequest = getHost(String.format(Constants.QRCODE_CLOSE,QRCODE_ID));
+            verifySentRequest(false, null, closeRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

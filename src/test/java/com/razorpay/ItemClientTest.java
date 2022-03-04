@@ -48,6 +48,8 @@ public class ItemClientTest extends BaseTest{
             assertTrue(item.has("active"));
             assertTrue(item.has("name"));
             assertTrue(item.has("name"));
+            String createRequest = getHost(Constants.ITEMS);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -78,6 +80,8 @@ public class ItemClientTest extends BaseTest{
             assertEquals("item",fetch.get("entity"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("currency"));
+            String fetchRequest = getHost(String.format(Constants.ITEM,ITEM_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -111,6 +115,8 @@ public class ItemClientTest extends BaseTest{
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("active"));
+            String fetchRequest = getHost(Constants.ITEMS);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -147,6 +153,8 @@ public class ItemClientTest extends BaseTest{
             assertEquals("item",item.get("entity"));
             assertTrue(item.has("amount"));
             assertTrue(item.has("description"));
+            String editRequest = getHost(String.format(Constants.ITEM, ITEM_ID));
+            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
