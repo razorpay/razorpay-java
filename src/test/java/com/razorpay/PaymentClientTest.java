@@ -481,6 +481,8 @@ public class PaymentClientTest extends BaseTest{
             assertEquals("payment",fetch.get("entity"));
             assertTrue(fetch.has("request"));
             assertTrue(fetch.has("base"));
+            String createRequest = getHost(Constants.PAYMENT_JSON_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -519,6 +521,8 @@ public class PaymentClientTest extends BaseTest{
             assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
             assertEquals(ORDER_ID,fetch.get("razorpay_order_id"));
             assertEquals(SIGNATURE,fetch.get("razorpay_signature"));
+            String createRequest = getHost(Constants.PAYMENT_RECURRING);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
