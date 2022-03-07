@@ -56,6 +56,8 @@ public class CustomerClientTest extends BaseTest{
             Customer customer = customerClient.create(request);
             assertNotNull(customer);
             assertEquals(CUSTOMER_ID,customer.get("id"));
+            String createRequest = getHost(Constants.CUSTOMER_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -84,6 +86,8 @@ public class CustomerClientTest extends BaseTest{
             Customer fetch = customerClient.fetch(CUSTOMER_ID);
             assertNotNull(fetch);
             assertEquals(CUSTOMER_ID,fetch.get("id"));
+            String fetchRequest = getHost(String.format(Constants.CUSTOMER_GET, CUSTOMER_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -119,6 +123,8 @@ public class CustomerClientTest extends BaseTest{
             List <Customer> fetch = customerClient.fetchAll();
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
+            String fetchRequest = getHost(Constants.CUSTOMER_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -159,6 +165,8 @@ public class CustomerClientTest extends BaseTest{
             Customer fetch = customerClient.edit(CUSTOMER_ID,request);
             assertNotNull(fetch);
             assertEquals(CUSTOMER_ID,fetch.get("id"));
+            String editRequest = getHost(String.format(Constants.CUSTOMER_EDIT,CUSTOMER_ID));
+            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -206,6 +214,8 @@ public class CustomerClientTest extends BaseTest{
             Token fetch = customerClient.fetchToken(CUSTOMER_ID,TOKEN_ID);
             assertNotNull(fetch);
             assertEquals(TOKEN_ID,fetch.get("id"));
+            String fetchToken = getHost(String.format(Constants.TOKEN_GET,CUSTOMER_ID,TOKEN_ID));
+            verifySentRequest(false, null, fetchToken);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -261,6 +271,8 @@ public class CustomerClientTest extends BaseTest{
             List<Token> fetch = customerClient.fetchTokens(CUSTOMER_ID);
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
+            String fetchToken = getHost(String.format(Constants.TOKEN_LIST,CUSTOMER_ID));
+            verifySentRequest(false, null, fetchToken);
         } catch (IOException e) {
             assertTrue(false);
         }

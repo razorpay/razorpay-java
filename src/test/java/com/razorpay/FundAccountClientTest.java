@@ -48,6 +48,8 @@ public class FundAccountClientTest extends BaseTest{
             FundAccount fundaccount = fundAccountClient.create(request);
             assertNotNull(fundaccount);
             assertEquals(FUNDACCOUNT_ID,fundaccount.get("id"));
+            String createRequest = getHost(Constants.FUND_ACCOUNT_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -79,6 +81,8 @@ public class FundAccountClientTest extends BaseTest{
             FundAccount fetch = fundAccountClient.fetch(FUNDACCOUNT_ID);
             assertNotNull(fetch);
             assertEquals(FUNDACCOUNT_ID,fetch.get("id"));
+            String fetchRequest = getHost(String.format(Constants.FUND_ACCOUNT_FETCH,FUNDACCOUNT_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -1,16 +1,19 @@
 package com.razorpay;
 
 import okhttp3.*;
+import okio.Buffer;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -65,5 +68,30 @@ public class BaseTest {
     protected OkHttpClient getOkHttpClient()
     {
         return okHttpClient;
+    }
+
+    protected String getHost(String url) {
+        return Constants.SCHEME + "://" + Constants.HOSTNAME + "/" + Constants.VERSION + "/" + url;
+    }
+
+    protected void verifySentRequest(boolean hasBody, String request, String requestPath) {
+        ArgumentCaptor<Request> req = ArgumentCaptor.forClass(Request.class);
+        Mockito.verify(getOkHttpClient()).newCall(req.capture());
+        if(hasBody) {
+            assertEquals(new JSONObject(request).toString(), new JSONObject(bodyToString(req.getAllValues().get(0))).toString());
+        }
+        assertEquals(requestPath, req.getValue().url().toString());
+    }
+
+    private static String bodyToString(final Request request) {
+
+        try {
+            final Request copy = request.newBuilder().build();
+            final Buffer buffer = new Buffer();
+            copy.body().writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return "did not work";
+        }
     }
 }

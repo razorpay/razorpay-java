@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
@@ -51,11 +52,14 @@ public class AddonClientTest  extends BaseTest{
             mockResponseHTTPCodeFromExternalClient(200);
             Addon fetch = client.fetch(ADDON_ID);
             assertNotNull(fetch);
+            JSONObject item = fetch.toJson().getJSONObject("item");
             assertEquals(ADDON_ID,fetch.get("id"));
-            assertEquals("INR",fetch.get("currency"));
-            assertEquals("30000",fetch.get("amount"));
-            assertTrue(fetch.get("active"));
-            assertTrue(fetch.get("unit_amount"));
+            assertEquals("INR",item.get("currency"));
+            assertEquals(30000,item.get("amount"));
+            assertTrue(item.getBoolean("active"));
+            assertTrue(item.has("unit_amount"));
+            String addonCreate = getHost(String.format(Constants.ADDON_GET, ADDON_ID));
+            verifySentRequest(false, null, addonCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -85,7 +89,7 @@ public class AddonClientTest  extends BaseTest{
                 "\"type\": \"addon\",\n " +
                 "\"unit\": null,\n " +
                 "\"tax_inclusive\": false,\n " +
-                "\"hsn_code\": null,\n " +
+                "\"hsn_code\": 123,\n " +
                 "\"sac_code\": null,\n " +
                 "\"tax_rate\": null,\n" +
                 "\"tax_id\": null,\n  " +
@@ -105,8 +109,10 @@ public class AddonClientTest  extends BaseTest{
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
             assertEquals(true,fetch.get(0).has("entity"));
-            assertEquals(true,fetch.get(0).has("items"));
-            assertEquals(true,fetch.get(0).has("hsn_code"));
+            assertEquals(true,fetch.get(0).has("item"));
+            assertEquals(true,fetch.get(0).toJson().getJSONObject("item").has("hsn_code"));
+            String addonList = getHost(Constants.ADDON_LIST);
+            verifySentRequest(false, null, addonList);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -35,6 +35,8 @@ public class PaymentLinkTest extends BaseTest{
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("amount_paid"));
             assertTrue(fetch.has("upi_link"));
+            String createRequest = getHost(Constants.PAYMENTLINK_CREATE);
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -58,6 +60,8 @@ public class PaymentLinkTest extends BaseTest{
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("amount_paid"));
             assertTrue(fetch.has("upi_link"));
+            String fetchRequest = getHost(String.format(Constants.PAYMENTLINK_GET, PAYMENTLINK_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -81,6 +85,8 @@ public class PaymentLinkTest extends BaseTest{
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("callback_method"));
             assertTrue(fetch.has("cancelled_at"));
+            String cancelRequest = getHost(String.format(Constants.PAYMENTLINK_CANCEL, PAYMENTLINK_ID));
+            verifySentRequest(false, null, cancelRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -102,6 +108,8 @@ public class PaymentLinkTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals("payment_link",fetch.get("entity"));
             assertTrue(fetch.get("success"));
+            String notifyByRequest = getHost(String.format(Constants.PAYMENTLINK_NOTIFYBY, PAYMENTLINK_ID, "sms"));
+            verifySentRequest(false, null, notifyByRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -125,6 +133,8 @@ public class PaymentLinkTest extends BaseTest{
             assertTrue(fetch.has("accept_partial"));
             assertTrue(fetch.has("order_id"));
             assertTrue(fetch.has("payments"));
+            String fetchRequest = getHost(String.format(Constants.PAYMENTLINK_EDIT, PAYMENTLINK_ID));
+            verifySentRequest(true, request.toString(), fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -146,6 +156,8 @@ public class PaymentLinkTest extends BaseTest{
             assertTrue(fetch.get(0).has("reminders"));
             assertTrue(fetch.get(0).has("created_at"));
             assertTrue(fetch.get(0).has("currency"));
+            String fetchRequest = getHost(Constants.PAYMENTLINK_LIST);
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
