@@ -7,6 +7,7 @@ import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import okhttp3.HttpUrl;
 import okhttp3.Response;
 
 class ApiClient {
@@ -51,13 +52,13 @@ class ApiClient {
     return processResponse(response);
   }
 
-  public void delete(String path, JSONObject requestObject) throws RazorpayException {
+  public <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.deleteRequest(path, requestObject, auth);
-    processDeleteResponse(response);
+    return processDeleteResponse(response);
   }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
-      throws RazorpayException {
+          throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processCollectionResponse(response);
   }
@@ -75,26 +76,31 @@ class ApiClient {
     throw new RazorpayException("Unable to parse response");
   }
 
-  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONObject jsonObject)
+  private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray)
       throws RazorpayException {
 
-    ArrayList<T> modelList = new ArrayList<T>();
-    if (jsonObject.has(ENTITY) && COLLECTION.equals(jsonObject.getString(ENTITY))) {
-      JSONArray jsonArray = jsonObject.getJSONArray("items");
-      try {
-        for (int i = 0; i < jsonArray.length(); i++) {
-          JSONObject jsonObj = jsonArray.getJSONObject(i);
-          T t = parseResponse(jsonObj);
-          modelList.add(t);
-        }
-        return modelList;
-      } catch (RazorpayException e) {
-        throw e;
+   ArrayList<T> modelList = new ArrayList<T>();
+    try {
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject jsonObj = jsonArray.getJSONObject(i);
+        T t = parseResponse(jsonObj);
+        modelList.add(t);
       }
+      return modelList;
+    } catch (RazorpayException e) {
+      throw e;
     }
-
-    throw new RazorpayException("Unable to parse response");
   }
+
+  /*
+   * this method will take http url as : https://api.razorpay.com/v1/invocies
+   * and will return entity name with the help of @EntityNameURLMapping class
+   */
+  private String getEntityNameFromURL(HttpUrl url) {
+    String param = url.pathSegments().get(1);
+    return EntityNameURLMapping.getEntityName(param);
+  }
+
 
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
@@ -104,7 +110,6 @@ class ApiClient {
     int statusCode = response.code();
     String responseBody = null;
     JSONObject responseJson = null;
-
     try {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
@@ -113,6 +118,7 @@ class ApiClient {
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
+      populateEntityInResponse(responseJson, response);
       return parseResponse(responseJson);
     }
 
@@ -120,8 +126,17 @@ class ApiClient {
     return null;
   }
 
+  private void populateEntityInResponse(JSONObject responseJson, Response response) {
+      if(!responseJson.has(ENTITY)) {
+        String entityName = getEntityNameFromURL(response.request().url());
+        responseJson.put("entity",entityName);
+      }else if(responseJson.get("entity").toString().equals("settlement.ondemand")){
+        responseJson.put("entity","settlement");
+      }
+  }
+
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
-      throws RazorpayException {
+          throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -137,15 +152,29 @@ class ApiClient {
       throw new RazorpayException(e.getMessage());
     }
 
+    String collectionName  = null;
+    collectionName = responseJson.has("payment_links")?
+            "payment_links": "items";
+
+    JSONArray collection = responseJson.getJSONArray(collectionName);
+    populateEntityInCollection(response, collection);
+
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      return parseCollectionResponse(responseJson);
+      return parseCollectionResponse(collection);
     }
 
     throwException(statusCode, responseJson);
     return null;
   }
 
-  private void processDeleteResponse(Response response) throws RazorpayException {
+  private void populateEntityInCollection(Response response, JSONArray jsonArray) {
+    for (int i = 0; i < jsonArray.length(); i++) {
+      populateEntityInResponse(jsonArray.getJSONObject(i),response);
+    }
+  }
+
+
+  private <T extends Entity> T processDeleteResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -164,6 +193,7 @@ class ApiClient {
     if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
       throwException(statusCode, responseJson);
     }
+    return parseResponse(responseJson);
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {

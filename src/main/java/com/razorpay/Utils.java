@@ -17,6 +17,26 @@ public class Utils {
     return verifySignature(payload, expectedSignature, apiSecret);
   }
 
+  public static boolean verifySubscription(JSONObject attributes, String apiSecret)
+      throws RazorpayException {
+    String expectedSignature = attributes.getString("razorpay_signature");
+    String subscriptionId = attributes.getString("razorpay_subscription_id");
+    String paymentId = attributes.getString("razorpay_payment_id");
+    String payload = paymentId + '|' + subscriptionId;
+    return verifySignature(payload, expectedSignature, apiSecret);
+  }
+  
+  public static boolean verifyPaymentLink(JSONObject attributes, String apiSecret)
+	      throws RazorpayException {
+	    String expectedSignature = attributes.getString("razorpay_signature");
+	    String paymentLinkStatus = attributes.getString("payment_link_status");
+	    String paymentLinkId = attributes.getString("payment_link_id");
+	    String paymentLinkRefId = attributes.getString("payment_link_reference_id");
+	    String paymentId = attributes.getString("razorpay_payment_id");
+	    String payload = paymentLinkId + '|' + paymentLinkRefId + '|' + paymentLinkStatus + '|' + paymentId;
+	    return verifySignature(payload, expectedSignature, apiSecret);
+  }
+
   public static boolean verifyWebhookSignature(String payload, String expectedSignature,
       String webhookSecret) throws RazorpayException {
     return verifySignature(payload, expectedSignature, webhookSecret);
