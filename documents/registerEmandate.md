@@ -2,21 +2,21 @@
 
 ### Create customer
 ```java
-String json = "{\n" +
-              "  name: \"Gaurav Kumar\",\n" +
-              "  contact: 9123456780,\n" +
-              "  email: \"gaurav.kumar@example.com\",\n" +
-              "  fail_existing: 0,\n" +
-              "  gstin: \"29XAbbA4369J1PA\",\n" +
-              "  notes: {\n" +
-              "    notes_key_1: \"Tea, Earl Grey, Hot\",\n" +
-              "    notes_key_2: \"Tea, Earl Grey… decaf.\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"name\": \"Gaurav Kumar\",\n" +
+            "  \"contact\": 9123456780,\n" +
+            "  \"email\": \"gaurav.kumar@example.com\",\n" +
+            "  \"fail_existing\": 0,\n" +
+            "  \"gstin\": \"29XAbbA4369J1PA\",\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);   
+JSONObject requestJson = new JSONObject(jsonRequest);   
           
-Customer customer = instance.Customers.create(request);
+Customer customer = instance.customers.create(requestJson);
 ```
 **Parameters:**
 
@@ -49,36 +49,36 @@ Customer customer = instance.Customers.create(request);
 ### Create order
 
 ```java
-String json = "{\n" +
-              "  amount: 100,\n" +
-              "  currency: \"INR\",\n" +
-              "  method: \"emandate\",\n" +
-              "  receipt: \"Receipt No. 5\",\n" +
-              "  notes: {\n" +
-              "    \"note_key 1\": \"Beam me up Scotty\",\n" +
-              "    \"note_key 2\": \"Engage\"\n" +
-              "  },\n" +
-              "  token: {\n" +
-              "    first_payment_amount: 10000,\n" +
-              "    auth_type: \"netbanking\",\n" +
-              "    max_amount: 9999900,\n" +
-              "    expire_at: 4102444799,\n" +
-              "    notes: {\n" +
-              "      \"note_key 1\": \"Tea, Earl Grey… decaf.\",\n" +
-              "      \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
-              "    },\n" +
-              "    bank_account: {\n" +
-              "      beneficiary_name: \"Gaurav Kumar\",\n" +
-              "      account_number: 11214311215411,\n" +
-              "      account_type: \"savings\",\n" +
-              "      ifsc_code: \"HDFC0001233\"\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"amount\": 0,\n" +
+            "  \"currency\": \"INR\",\n" +
+            "  \"method\": \"emandate\",\n" +
+            "  \"customer_id\": \"cust_1Aa00000000001\",\n" +
+            "  \"receipt\": \"Receipt No. 1\",\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\": \"Beam me up Scotty\",\n" +
+            "   \"notes_key_2\": \"Engage\"\n" +
+            "  },\n" +
+            "  \"token\": {\n" +
+            "    \"auth_type\": \"netbanking\",\n" +
+            "    \"max_amount\": 9999900,\n" +
+            "    \"expire_at\": 4102444799,\n" +
+            "    \"notes\": {\n" +
+            "      \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+            "      \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+            "    },\n" +
+            "    \"bank_account\": {\n" +
+            "      \"beneficiary_name\": \"Gaurav Kumar\",\n" +
+            "      \"account_number\": 1121431121541121,\n" +
+            "      \"account_type\": \"savings\",\n" +
+            "      \"ifsc_code\": \"HDFC0000001\"\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);         
+JSONObject requestJson = new JSONObject(jsonRequest);         
        
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 
 **Parameters:**
@@ -87,13 +87,13 @@ Order order = instance.Orders.create(request);
 |-----------------|---------|------------------------------------------------------------------------------|
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
-| customerId*   | string      | The id of the customer to be fetched |
 | method*      | string  | Payment method used to make the registration transaction. Possible value is `emandate`.  |
 | receipt      | string  | Your system order reference id.  |
 | token  | object  | All keys listed [here](https://razorpay.com/docs/api/recurring-payments/emandate/auto-debit/#112-create-an-order) are supported |
 | notes | object  | A key-value pair  |
 
 **Response:**
+
 For create order response please click [here](https://razorpay.com/docs/api/recurring-payments/emandate/auto-debit/#112-create-an-order)
 
 -------------------------------------------------------------------------------------------------------
@@ -107,42 +107,41 @@ Please refer this [doc](https://razorpay.com/docs/api/recurring-payments/emandat
 ### Create registration link
 
 ```java
-String json = "{\n" +
-              "  customer: {\n" +
-              "    name: \"Gaurav Kumar\",\n" +
-              "    email: \"gaurav.kumar@example.com\",\n" +
-              "    contact: 9123456780\n" +
-              "  },\n" +
-              "  type: \"link\",\n" +
-              "  amount: 100,\n" +
-              "  currency: \"INR\",\n" +
-              "  description: \"Registration Link for Gaurav Kumar\",\n" +
-              "  subscription_registration: {\n" +
-              "    first_payment_amount: 100,\n" +
-              "    method: \"emandate\",\n" +
-              "    auth_type: \"netbanking\",\n" +
-              "    max_amount: 50000,\n" +
-              "    expire_at: 1634215992,\n" +
-              "    bank_account: {\n" +
-              "      beneficiary_name: \"Gaurav Kumar\",\n" +
-              "      account_number: 11214311215411,\n" +
-              "      account_type: \"savings\",\n" +
-              "      ifsc_code: \"HDFC0001233\"\n" +
-              "    }\n" +
-              "  },\n" +
-              "  receipt: \"Receipt No. 5\",\n" +
-              "  email_notify: 1,\n" +
-              "  sms_notify: 1,\n" +
-              "  expire_by: 1634215992,\n" +
-              "  notes: {\n" +
-              "    \"note_key 1\": \"Beam me up Scotty\",\n" +
-              "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"customer\": {\n" +
+            "    \"name\": \"Gaurav Kumar\",\n" +
+            "    \"email\": \"gaurav.kumar@example.com\",\n" +
+            "    \"contact\": 9123456780\n" +
+            "  },\n" +
+            "  \"type\": \"link\",\n" +
+            "  \"amount\": 0,\n" +
+            "  \"currency\": \"INR\",\n" +
+            "  \"description\": \"12 p.m. Meals\",\n" +
+            "  \"subscription_registration\": {\n" +
+            "    \"method\": \"emandate\",\n" +
+            "    \"auth_type\": \"netbanking\",\n" +
+            "    \"expire_at\": 1580480689,\n" +
+            "    \"max_amount\": 50000,\n" +
+            "    \"bank_account\": {\n" +
+            "      \"beneficiary_name\": \"Gaurav Kumar\",\n" +
+            "      \"account_number\": 11214311215411,\n" +
+            "      \"account_type\": \"savings\",\n" +
+            "      \"ifsc_code\": \"HDFC0001233\"\n" +
+            "    }\n" +
+            "  },\n" +
+            "  \"receipt\": \"Receipt no. 1\",\n" +
+            "  \"expire_by\": 1880480689,\n" +
+            "  \"sms_notify\": 1,\n" +
+            "  \"email_notify\": 1,\n" +
+            "  \"notes\": {\n" +
+            "    \"note_key 1\": \"Beam me up Scotty\",\n" +
+            "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);       
+JSONObject requestJson = new JSONObject(jsonRequest);       
         
-Invoice invoice = instance.Invoices.createRegistrationLink(request);
+Invoice invoice = instance.invoices.createRegistrationLink(requestJson);
 ```
 
 **Parameters:**
@@ -168,19 +167,19 @@ For create registration link response please click [here](https://razorpay.com/d
 ## Create an order to charge the customer
 
 ```java
-String json = "{\n" +
-              "  \"amount\": \"100\",\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"receipt\": \"Receipt No. 1\",\n" +
-              "  \"notes\": {\n" +
-              "    \"key1\": \"value3\",\n" +
-              "    \"key2\": \"value2\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+                  "  \"amount\": \"100\",\n" +
+                  "  \"currency\": \"INR\",\n" +
+                  "  \"receipt\": \"Receipt No. 1\",\n" +
+                  "  \"notes\": {\n" +
+                  "    \"key1\": \"value3\",\n" +
+                  "    \"key2\": \"value2\"\n" +
+                  "  }\n" +
+                  "}";
               
-JSONObject request = new JSONObject(json);         
+JSONObject requestJson = new JSONObject(jsonRequest);         
        
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 **Parameters:**
 
@@ -216,7 +215,7 @@ Order order = instance.Orders.create(request);
 ## Create a recurring payment
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"email\": \"gaurav.kumar@example.com\",\n" +
               "  \"contact\": \"9123456789\",\n" +
               "  \"amount\": 1000,\n" +
@@ -232,9 +231,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
   
-JSONObject request = new JSONObject(json);  
+JSONObject requestJson = new JSONObject(jsonRequest);  
               
-Payment payment = instance.Payments.createRecurringPayment(request);
+Payment payment = instance.payments.createRecurringPayment(requestJson);
 ```
 **Parameters:**
 
@@ -264,17 +263,17 @@ Payment payment = instance.Payments.createRecurringPayment(request);
 ## Send/Resend notifications
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
 String medium = "sms";
 
-Invoice invoice = instance.Invoices.notifyBy(InvoiceId,medium);
+Invoice invoice = instance.invoices.notifyBy(invoiceId,medium);
 ```
 **Parameters:**
 
 | Name       | Type    |Description      |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string      | The id of the invoice to be fetched |
+| invoiceId* | string      | The id of the invoice to be fetched |
 | medium*    | string      | Possible values are `sms` or `email` |
 
 **Response:**
@@ -288,9 +287,9 @@ Invoice invoice = instance.Invoices.notifyBy(InvoiceId,medium);
 ## Cancel registration link
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
-Invoice invoice = instance.Invoices.cancel(InvoiceId);
+Invoice invoice = instance.invoices.cancel(invoiceId);
 ```
 **Parameters:**
 
@@ -361,15 +360,15 @@ Invoice invoice = instance.Invoices.cancel(InvoiceId);
 ## Fetch token by payment id
 
 ```java
-String PaymentId = "pay_1Aa00000000001";
+String paymentId = "pay_1Aa00000000001";
 
-Payment payment = instance.Payments.fetch(PaymentId)
+Payment payment = instance.payments.fetch(paymentId);
 ```
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| PaymentId* | string      | The id of the payment to be fetched |
+| paymentId* | string      | The id of the payment to be fetched |
 
 **Response:**
 For fetch token by payment id response please click [here](https://razorpay.com/docs/api/recurring-payments/emandate/auto-debit/#21-fetch-token-by-payment-id)
@@ -379,15 +378,15 @@ For fetch token by payment id response please click [here](https://razorpay.com/
 ## Fetch tokens by customer id
 
 ```java
-String CustomerId = "cust_BMB3EwbqnqZ2EI";
+String customerId = "cust_BMB3EwbqnqZ2EI";
 
-List<Token> token = instance.Customers.fetchTokens(CustomerId);
+List<Token> token = instance.customers.fetchTokens(customerId);
 ```
 **Parameters:**
 
 | Name        | Type    | Description                                                                  |
 |-------------|---------|------------------------------------------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
+| customerId* | string      | The id of the customer to be fetched |
 
 **Response:**
 ```json
@@ -430,18 +429,18 @@ List<Token> token = instance.Customers.fetchTokens(CustomerId);
 ## Delete tokens
 
 ```java
-String CustomerId = "cust_BMB3EwbqnqZ2EI";
+String customerId = "cust_BMB3EwbqnqZ2EI";
 
-String TokenId = "token_FHf94Uym9tdYFJ";
+String tokenId = "token_FHf94Uym9tdYFJ";
 
-instance.Customers.deleteToken(CustomerId, TokenId);
+instance.Customers.deleteToken(customerId, tokenId);
 ```
 **Parameters:**
 
 | Name        | Type    | Description                                                                  |
 |-------------|---------|------------------------------------------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
-| TokenId*    | string      | The id of the token to be fetched |
+| customerId* | string      | The id of the customer to be fetched |
+| tokenId*    | string      | The id of the token to be fetched |
 
 **Response:**
 ```json

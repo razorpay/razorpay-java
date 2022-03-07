@@ -3,28 +3,28 @@
 ### Create a normal refund
 
 ```java
-String PaymentId = "pay_FCXKPFtYfPXJPy";
+String paymentId = "pay_FCXKPFtYfPXJPy";
 
-String json = "{\n" +
-              "  \"amount\": \"100\",\n" +
-              "  \"speed\": \"normal\",\n" +
-              "  \"notes\": {\n" +
-              "    \"notes_key_1\": \"Beam me up Scotty.\",\n" +
-              "    \"notes_key_2\": \"Engage\"\n" +
-              "  },\n" +
-              "  \"receipt\": \"Receipt No. 31\"\n" +
+String jsonRequest = "{\n" +
+              "\"amount\": \"100\",\n" +
+              "\"speed\": \"normal\",\n" +
+              "\"notes\": {\n" +
+              "\"notes_key_1\": \"Beam me up Scotty.\",\n" +
+              "\"notes_key_2\": \"Engage\"\n" +
+              "},\n" +
+              "\"receipt\": \"Receipt No. 31\"\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-Payment payment = instance.Payments.refund(PaymentId,request);
+Payment payment = instance.payments.refund(paymentId,requestRequest);
 ```
 
 **Parameters:**
 
 | Name       | Type        | Description                                 |
 |------------|-------------|---------------------------------------------|
-| PaymentId* | string      | The id of the payment                       |
+| paymentId* | string      | The id of the payment                       |
 | amount     | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |                       |
 | speed      | string      | Here, it must be normal                |
 | notes      | array       | A key-value pair                |
@@ -55,24 +55,24 @@ Payment payment = instance.Payments.refund(PaymentId,request);
 
 ```java
 
-String PaymentId = "pay_FCXKPFtYfPXJPy";
+String paymentId = "pay_FCXKPFtYfPXJPy";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": \"100\",\n" +
               "  \"speed\": \"optimum\",\n" +
               "  \"receipt\": \"Receipt No. 31\"\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-Payment payment = instance.Payments.refund(PaymentId,request);
+Payment payment = instance.payments.refund(paymentId,requestJson);
 ```
 
 **Parameters:**
 
 | Name       | Type        | Description                                 |
 |------------|-------------|---------------------------------------------|
-| PaymentId* | string      | The id of the payment                       |
+| paymentId* | string      | The id of the payment                       |
 | amount     | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | speed*     | string      | Here, it must be optimum                    |
 | receipt    | string      | A unique identifier provided by you for your internal reference. |
@@ -104,22 +104,22 @@ Payment payment = instance.Payments.refund(PaymentId,request);
 ### Fetch multiple refunds for a payment
 
 ```java
-String PaymentId = "pay_FIKOnlyii5QGNx";
+String paymentId = "pay_FIKOnlyii5QGNx";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
                
-JSONObject options = new JSONObject(json);  
+JSONObject requestRequest = new JSONObject(jsonRequest);  
  
-List<Payment> payment = instance.Payments.fetchAllRefunds(paymentId,option);
+List<Payment> payment = instance.payments.fetchAllRefunds(paymentId,requestRequest);
 ```
 
 **Parameters:**
 
 | Name       | Type      | Description                                      |
 |------------|-----------|--------------------------------------------------|
-| PaymentId* | string      | The id of the payment                       |
+| paymentId* | string      | The id of the payment                       |
 | from       | timestamp | timestamp after which the payments were created  |
 | to         | timestamp | timestamp before which the payments were created |
 | count      | integer   | number of payments to fetch (default: 10)        |
@@ -157,19 +157,19 @@ List<Payment> payment = instance.Payments.fetchAllRefunds(paymentId,option);
 
 ### Fetch a specific refund for a payment
 ```java
-String PaymentId = "pay_FIKOnlyii5QGNx";
+String paymentId = "pay_FIKOnlyii5QGNx";
 
-String RefundId = "rfnd_FP8DDKxqJif6ca";
+String refundId = "rfnd_FP8DDKxqJif6ca";
 
-Payment payment = instance.Payments.fetchRefund(paymentId,refundId);
+Payment payment = instance.payments.fetchRefund(paymentId,refundId);
 ```
 
 **Parameters:**
 
 | Name       | Type        | Description                                 |
 |------------|-------------|---------------------------------------------|
-| PaymentId* | string      | The id of the payment to be fetched        |
-| RefundId*  | string      | The id of the refund to be fetched           |
+| paymentId* | string      | The id of the payment to be fetched        |
+| refundId*  | string      | The id of the refund to be fetched           |
 
 **Response:**
 ```json
@@ -197,7 +197,13 @@ Payment payment = instance.Payments.fetchRefund(paymentId,refundId);
 
 ### Fetch all refunds
 ```java
-List<Refund> refund = instance.Refunds.fetchAll();
+String jsonRequest = "{\n" +
+        "\"count\" : 1\n" +
+        "}";
+
+JSONObject requestJson = new JSONObject(jsonRequest);
+        
+List<Refund> refund = instance.refunds.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -239,9 +245,9 @@ List<Refund> refund = instance.Refunds.fetchAll();
 
 ### Fetch particular refund
 ```java
-String RefundId = "rfnd_EqWThTE7dd7utf";
+String refundId = "rfnd_EqWThTE7dd7utf";
 
-List<Refund> refund = instance.Refunds.fetch(RefundId);
+List<Refund> refund = instance.refunds.fetch(refundId);
 ```
 
 **Parameters:**
@@ -276,18 +282,18 @@ List<Refund> refund = instance.Refunds.fetch(RefundId);
 
 ### Update the refund
 ```java
-String RefundId = "rfnd_EqWThTE7dd7utf";
+String refundId = "rfnd_EqWThTE7dd7utf";
 
-String json "{\n" +
+String jsonRequest "{\n" +
               "  \"notes\": {\n" +
               "    \"notes_key_1\": \"Beam me up Scotty.\",\n" +
               "    \"notes_key_2\": \"Engage\"\n" +
               "  }\n" +
              "}";
               
-JSONObject request = new JSONObject(json);     
+JSONObject requestJson = new JSONObject(jsonRequest);     
          
-Refund refund = instance.Refunds.edit(RefundId,request);
+Refund refund = instance.Refunds.edit(refundId,requestJson);
 
 ```
 

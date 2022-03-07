@@ -3,22 +3,22 @@
 ### Capture payment
 
 ```java
-String PaymentId = "pay_G8VQzjPLoAvm6D";
-String json = "{\n" +
+String paymentId = "pay_G8VQzjPLoAvm6D";
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\"\n" +
               "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-Payment payment = instance.Payments.capture(PaymentId, request);
+Payment payment = instance.payments.capture(paymentId, requestRequest);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                    |
 |------------|---------|--------------------------------------------------------------------------------|
-| PaymentId* | string  | Id of the payment to capture                                                   |
+| paymentId* | string  | Id of the payment to capture                                                   |
 | amount*    | integer | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency   | string  | The currency of the payment (defaults to INR)                                  |
 
@@ -64,13 +64,13 @@ Payment payment = instance.Payments.capture(PaymentId, request);
 ### Fetch all payments
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Payment> payment = instance.Payments.fetchAll(options);
+List<Payment> payment = instance.payments.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -130,9 +130,9 @@ List<Payment> payment = instance.Payments.fetchAll(options);
 ### Fetch a payment
 
 ```java
-String PaymentId = "pay_G8VQzjPLoAvm6D";
+String paymentId = "pay_G8VQzjPLoAvm6D";
 
-Payment payment = instance.Payments.fetch(PaymentId);
+Payment payment = instance.payments.fetch(paymentId);
 ```
 
 **Parameters:**
@@ -183,15 +183,15 @@ Payment payment = instance.Payments.fetch(PaymentId);
 ### Fetch payments for an order
 
 ```java
-String OrderId = "order_DovFx48wjYEr2I";
+String orderId = "order_DovFx48wjYEr2I";
 
-Order order = instance.Orders.fetchPayments(OrderId)
+Order order = instance.orders.fetchPayments(orderId)
 ```
 **Parameters**
 
 | Name     | Type   | Description                         |
 |----------|--------|-------------------------------------|
-| OrderId* | string | The id of the order to be retrieve payment info |
+| orderId* | string | The id of the order to be retrieve payment info |
 
 **Response:**
 ```json
@@ -238,17 +238,18 @@ Order order = instance.Orders.fetchPayments(OrderId)
 ### Update a payment
 
 ```java
-String PaymentId = "pay_CBYy6tLmJTzn3Q";
-String json = "{\n" +
+String paymentId = "pay_CBYy6tLmJTzn3Q";
+
+String jsonRequest = "{\n" +
               "  \"notes\": {\n" +
               "       \"key1\": \"value1\",\n" +
               "       \"key2\": \"value2\"\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-Payment payment = instance.Payments.edit(PaymentId,request);
+Payment payment = instance.payments.edit(PaymentId,requestRequest);
 ```
 
 **Parameters:**
@@ -303,20 +304,25 @@ Payment payment = instance.Payments.edit(PaymentId,request);
 Request #1: Card
 
 ```java
-JSONObject request = new JSONObject({'expand[]':'card'});
+String jsonRequest = "{\"expand[]\":\"card\"}";
 
-List<Payment> payment = instance.Payments.fetchAll(request);
+JSONObject requestRequest = new JSONObject(jsonRequest);
+
+List<Payment> payment = instance.payments.fetchAll(requestRequest);
 ```
 
 Request #2: EMI
 
 ```java
-JSONObject request = new JSONObject({'expand[]':'emi'});
+String jsonRequest = "{\"expand[]\":\"emi\"}";
 
-List<Payment> payment = instance.payments.fetchAll(request);
+JSONObject requestRequest = new JSONObject(jsonRequest);
+
+List<Payment> payment = instance.Payments.fetchAll(requestRequest);
 ```
 
-**Response:**<br>
+**Response:**
+
 For expanded card or emi details for payments response please click [here](https://razorpay.com/docs/api/payments/#fetch-expanded-card-or-emi-details-for-payments)
 
 -------------------------------------------------------------------------------------------------------
@@ -324,16 +330,16 @@ For expanded card or emi details for payments response please click [here](https
 ### Fetch card details with paymentId
 
 ```java
-String PaymentId = "pay_CBYy6tLmJTzn3Q";
+String paymentId = "pay_CBYy6tLmJTzn3Q";
 
-Card card = instance.Cards.fetchCardDetails(PaymentId);
+Card card = instance.cards.fetchCardDetails(paymentId);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                          |
 |------------|---------|--------------------------------------|
-| PaymentId* | string  | Id of the payment to update          |
+| paymentId* | string  | Id of the payment to update          |
 
 **Response:**
 ```json
@@ -354,20 +360,21 @@ Card card = instance.Cards.fetchCardDetails(PaymentId);
 
 ### Fetch Payment Downtime Details
 
-```js
+```java
 List<Payment> payment = instance.Payments.fetchPaymentDowntime();
 ```
-**Response:** <br>
+**Response:**
+
 For payment downtime response please click [here](https://razorpay.com/docs/api/payments/downtime/#fetch-payment-downtime-details)
 
 -------------------------------------------------------------------------------------------------------
 
-### Fetch Payment Downtime
+### Fetch Payment Downtime Details By Downtime Id
 
 ```java
 String DowntimeId = "down_F7LroRQAAFuswd";
 
-instance.Payments.fetchPaymentDowntimeById(DowntimeId);
+instance.payments.fetchPaymentDowntimeById(DowntimeId);
 ```
 
 **Parameters:**
@@ -383,22 +390,23 @@ For payment downtime by id response please click [here](https://razorpay.com/doc
 ### Payment capture settings API
 
 ```java
-String json = "{\n" +
-              "  amount:50000,\n" +
-              "  currency: 'INR',\n" +
-              "  receipt: 'rcptid_11',\n" +
-              "  payment: {\n" +
-              "    capture : 'automatic',\n" +
-              "    capture_options : {\n" +
-              "      automatic_expiry_period : 12,\n" +
-              "      manual_expiry_period : 7200,\n" +
-              "      refund_speed : 'optimum'\n" +
-              "    }  \n" +
-              "  }\n" +
-              "}";
-JSONObject request = new JSONObject(json);
+String jsonRequest = "{\n" +
+                   "  \"amount\":50000,\n" +
+                   "  \"currency\": \"INR\",\n" +
+                   "  \"receipt\": \"rcptid_11\",\n" +
+                   "  \"payment\": {\n" +
+                   "    \"capture\": \"automatic\",\n" +
+                   "    \"capture_options\": {\n" +
+                   "      \"automatic_expiry_period\": 12,\n" +
+                   "      \"manual_expiry_period\": 7200,\n" +
+                   "      \"refund_speed\": \"optimum\"\n" +
+                   "    }  \n" +
+                   "  }\n" +
+                   "}";
+
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-instance.Orders.create(request);
+instance.orders.create(requestRequest);
 ```
 
 **Parameters:**
@@ -410,7 +418,7 @@ instance.Orders.create(request);
 | receipt         | string  | Your system order reference id.                                              |
 | payment         | object  | please refer this [doc](https://razorpay.com/docs/payments/payments/capture-settings/api/) for params                       |
 
-**Response:** <br>
+**Response:**
 ```json
 {
   "id": "order_DBJOWzybf0sJbb",
@@ -430,29 +438,30 @@ instance.Orders.create(request);
 
 ### Create Payment Json
 
-```js
-String json = "{\n" +
-              "  amount: 100,\n" +
-              "  currency: \"INR\",\n" +
-              "  order_id: \"order_EAkbvXiCJlwhHR\",\n" +
-              "  email: \"gaurav.kumar@example.com\",\n" +
-              "  contact: 9090909090,\n" +
-              "  method: \"card\",\n" +
-              "  card:{\n" +
-              "    number: 4111111111111111,\n" +
-              "    name: \"Gaurav\",\n" +
-              "    expiry_month: 11,\n" +
-              "    expiry_year: 23,\n" +
-              "    cvv: 100\n" +
-              "  }\n" +
-              "}";
+```java
+String jsonRequest = "{\n" +
+            "  \"amount\": 100,\n" +
+            "  \"currency\": \"INR\",\n" +
+            "  \"order_id\": \"order_EAkbvXiCJlwhHR\",\n" +
+            "  \"email\": \"gaurav.kumar@example.com\",\n" +
+            "  \"contact\": 9090909090,\n" +
+            "  \"method\": \"card\",\n" +
+            "  \"card\":{\n" +
+            "    \"number\": 4111111111111111,\n" +
+            "    \"name\": \"Gaurav\",\n" +
+            "    \"expiry_month\": 11,\n" +
+            "    \"expiry_year\": 23,\n" +
+            "    \"cvv\": 100\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-instance.Payments.createJsonPayment(request);
+instance.payments.createJsonPayment(requestRequest);
 ```
 
 **Parameters:**
+
  please refer this [doc](https://razorpay.com/docs/payment-gateway/s2s-integration/payment-methods/) for params
 
 **Response:** <br>

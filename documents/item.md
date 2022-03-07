@@ -3,16 +3,16 @@
 ### Create item
 
 ```java
-String json = "{\n" +
-        "  \"name\": \"Book / English August\",\n" +
-        "  \"description\": \"An indian story, Booker prize winner.\",\n" +
-        "  \"amount\": 20000,\n" +
-        "  \"currency\": \"INR\"\n" +
+String jsonRequest = "{\n" +
+          "\"name\": \"Book / English August\",\n" +
+          "\"description\": \"An indian story, Booker prize winner.\",\n" +
+          "\"amount\": 20000,\n" +
+          "\"currency\": \"INR\"\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-Item item = instance.Items.create(request);
+Item item = instance.items.create(requestJson);
 ```
 
 **Parameters:**
@@ -41,13 +41,13 @@ Item item = instance.Items.create(request);
 ### Fetch all items
 
 ```java
-String json = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+String jsonRequest = "{\n" +
+                       "\"count\" : 1\n" +
+                      "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Item> item = instance.Items.fetchAll(options);
+List<Item> item = instance.items.fetchAll(requestJson);
 ```
 **Parameters:**
 
@@ -100,15 +100,15 @@ List<Item> item = instance.Items.fetchAll(options);
 ### Fetch particular item
 
 ```java
-String ItemId = "item_7Oxp4hmm6T4SCn";
+String itemId = "item_7Oxp4hmm6T4SCn";
 
-Item item = instance.Items.fetch(ItemId)
+Item item = instance.items.fetch(itemId)
 ```
 **Parameters**
 
 | Name    | Type   | Description                         |
 |---------|--------|-------------------------------------|
-| ItemId* | string | The id of the item to be fetched |
+| itemId* | string | The id of the item to be fetched |
 
 **Response:**
 ```json
@@ -127,9 +127,9 @@ Item item = instance.Items.fetch(ItemId)
 ### Update item
 
 ```java
-String ItemId = "item_7Oy8OMV6BdEAac";
+String itemId = "item_7Oy8OMV6BdEAac";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"name\": \"Book / Ignited Minds - Updated name!\",\n" +
               "  \"description\": \"New descirption too. :).\",\n" +
               "  \"amount\": 20000,\n" +
@@ -137,9 +137,9 @@ String json = "{\n" +
               "  \"active\": true\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-Item item = instance.Items.edit(ItemId, request);
+Item item = instance.items.edit(itemId, requestJson);
 ```
 **Parameters**
 
@@ -153,6 +153,7 @@ Item item = instance.Items.edit(ItemId, request);
 | active      | boolean  | Possible values is `0` or `1` |
 
 **Response:**
+
 ```json
 {
   "id": "item_7Oy8OMV6BdEAac",
@@ -166,8 +167,10 @@ Item item = instance.Items.edit(ItemId, request);
 -------------------------------------------------------------------------------------------------------
 ### Delete item
 
-```js
-instance.Items.delete(itemId)
+```java
+String itemId = "item_7Oy8OMV6BdEAac";
+
+instance.items.delete(itemId)
 ```
 **Parameters**
 
@@ -176,6 +179,7 @@ instance.Items.delete(itemId)
 | itemId* | string | The id of the item to be fetched |
 
 **Response:**
+
 ```json
 []
 ```

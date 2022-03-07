@@ -3,23 +3,23 @@
 ### Create Qr code
 
 ```java
-String json = "{\n" +
-              "  type: \"upi_qr\",\n" +
-              "  name: \"Store_1\",\n" +
-              "  usage: \"single_use\",\n" +
-              "  fixed_amount: true,\n" +
-              "  payment_amount: 300,\n" +
-              "  description: \"For Store 1\",\n" +
-              "  customer_id: \"cust_HKsR5se84c5LTO\",\n" +
-              "  close_by: 1681615838,\n" +
-              "  notes: {\n" +
-              "    purpose: \"Test UPI QR code notes\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"type\": \"upi_qr\",\n" +
+            "  \"name\": \"Store_1\",\n" +
+            "  \"usage\": \"single_use\",\n" +
+            "  \"fixed_amount\": true,\n" +
+            "  \"payment_amount\": 300,\n" +
+            "  \"description\": \"For Store 1\",\n" +
+            "  \"customer_id\": \"cust_HKsR5se84c5LTO\",\n" +
+            "  \"close_by\": 1681615838,\n" +
+            "  \"notes\": {\n" +
+            "    \"purpose\": \"Test UPI QR code notes\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-QrCode qrcode = instance.qrCode.create(request);
+QrCode qrcode = instance.qrCode.create(requestJson);
 ```
 
 **Parameters:**
@@ -64,32 +64,32 @@ QrCode qrcode = instance.qrCode.create(request);
 ### Create Qr code with GST
 
 ```java
-String json = "{\n" +
-              "  type: \"upi_qr\",\n" +
-              "  name: \"Store_1\",\n" +
-              "  usage: \"single_use\",\n" +
-              "  fixed_amount: true,\n" +
-              "  payment_amount: 300,\n" +
-              "  description: \"For Store 1\",\n" +
-              "  customer_id: \"cust_HKsR5se84c5LTO\",\n" +
-              "  close_by: 1681615838,\n" +
-              "  notes: {\n" +
-              "    purpose: \"Test UPI QR code notes\"\n" +
-              "  },\n" +
-              "  tax_invoice: {\n" +
-              "    number: \"INV001\",\n" +
-              "    date: 1589994898,\n" +
-              "    customer_name: \"Gaurav Kumar\",\n" +
-              "    business_gstin: \"06AABCU9605R1ZR\",\n" +
-              "    gst_amount: 4000,\n" +
-              "    cess_amount: 0,\n" +
-              "    supply_type: \"interstate\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"type\": \"upi_qr\",\n" +
+            "  \"name\": \"Store_1\",\n" +
+            "  \"usage\": \"single_use\",\n" +
+            "  \"fixed_amount\": true,\n" +
+            "  \"payment_amount\": 300,\n" +
+            "  \"description\": \"For Store 1\",\n" +
+            "  \"customer_id\": \"cust_HKsR5se84c5LTO\",\n" +
+            "  \"close_by\": 1681615838,\n" +
+            "  \"notes\": {\n" +
+            "    \"purpose\": \"Test UPI QR code notes\"\n" +
+            "  },\n" +
+            "  \"tax_invoice\": {\n" +
+            "    \"number\": \"INV001\",\n" +
+            "    \"date\": 1589994898,\n" +
+            "    \"customer_name\": \"Gaurav Kumar\",\n" +
+            "    \"business_gstin\": \"06AABCU9605R1ZR\",\n" +
+            "    \"gst_amount\": 4000,\n" +
+            "    \"cess_amount\": 0,\n" +
+            "    \"supply_type\": \"interstate\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-QrCode qrcode = instance.qrCode.create(request);
+QrCode qrcode = instance.qrCode.create(requestJson);
 ```
 
 **Parameters:**
@@ -144,13 +144,13 @@ QrCode qrcode = instance.qrCode.create(request);
 ### Fetch all Qr code
 
 ```java
-String json = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+String jsonRequest = "{\n" +
+                        "\"count\" : 1\n" +
+                      "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson= new JSONObject(jsonRequest);
 
-List<QrCode> qrcode = instance.QrCode.fetchAll(options);
+List<QrCode> qrcode = instance.qrCode.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -199,16 +199,16 @@ List<QrCode> qrcode = instance.QrCode.fetchAll(options);
 ### Fetch a Qr code
 
 ```java
-String QrCodeId = "qr_HO2r1MDprYtWRT";
+String qrCodeId = "qr_HO2r1MDprYtWRT";
 
-QrCode qrcode = instance.qrCode.fetch(QrCodeId);
+QrCode qrcode = instance.qrCode.fetch(qrCodeId);
 ```
 
 **Parameters:**
 
 | Name     | Type    | Description                                                                  |
 |----------|---------|------------------------------------------------------------------------------|
-| QrCodeId | string | The id of the qr code to be fetched  |
+| qrCodeId | string | The id of the qr code to be fetched  |
 
 **Response:**
 ```json
@@ -240,11 +240,11 @@ QrCode qrcode = instance.qrCode.fetch(QrCodeId);
 ### Fetch a Qr code for customer id
 
 ```java
-String CustomerId = "cust_HKsR5se84c5LTO";
+String jsonRequest = "{\"customer_id\":\"cust_HKsR5se84c5LTO\"}";
 
-JSONObject request = new JSONObject("{\"customer_id\":"+CustomerId+"}");
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<QrCode> qrcode = instance.QrCode.fetchAll(request)
+List<QrCode> qrcode = instance.qrCode.fetchAll(request);
 ```
 
 **Parameters:**
@@ -287,18 +287,18 @@ List<QrCode> qrcode = instance.QrCode.fetchAll(request)
 ### Fetch a Qr code for payment id
 
 ```java
- String PaymentId = "pay_FVmAstJWfsD3SO";
+String jsonRequest = "{\"payment_id\":\"pay_FVmAstJWfsD3SO\"}";
 
- JSONObject request = new JSONObject("{\"payment_id\":"+PaymentId+"}");
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<QrCode> qrcode = instance.QrCode.fetchAll(request);
+List<QrCode> qrcode = instance.qrCode.fetchAll(requestRequest);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| PaymentId* | string | The id of the payment to which qr code need to be fetched  |
+| payment_id* | string | The id of the payment to which qr code need to be fetched  |
 
 **Response:**
 ```json
@@ -333,14 +333,15 @@ List<QrCode> qrcode = instance.QrCode.fetchAll(request);
 ### Fetch Payments for a QR Code
 
 ```java
-String QrCodeId = "qr_HMsVL8HOpbMcjU";
+String qrCodeId = "qr_HMsVL8HOpbMcjU";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
-JSONObject options = new JSONObject(json);   
+
+JSONObject requestJson = new JSONObject(jsonRequest);   
             
-List<QrCode> qrcode = instance.qrCode.fetchAllPayments(QrCodeId, options)
+List<QrCode> qrcode = instance.qrCode.fetchAllPayments(qrCodeId, requestJson);
 ```
 
 **Parameters:**
@@ -400,17 +401,17 @@ List<QrCode> qrcode = instance.qrCode.fetchAllPayments(QrCodeId, options)
 
 ### Close a QR Code
 
-```js
-String QrCodeId = "qr_HMsVL8HOpbMcjU";
+```java
+String qrCodeId = "qr_HMsVL8HOpbMcjU";
 
-QrCode qrcode = instance.QrCode.close(QrCodeId);
+QrCode qrcode = instance.qrCode.close(qrCodeId);
 ```
 
 **Parameters:**
 
 | Name      | Type    | Description                                                                  |
 |-----------|---------|------------------------------------------------------------------------------|
-| QrCodeId* | string | The id of the qr code to be closed |
+| qrCodeId* | string | The id of the qr code to be closed |
 
 **Response:**
 ```json

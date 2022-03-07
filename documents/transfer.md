@@ -3,7 +3,7 @@
 ### Create transfers from payment
 
 ```java
-String PaymentId = "pay_E8JR8E0XyjUSZd";
+String paymentId = "pay_E8JR8E0XyjUSZd";
 String json = "{\n" +
               "   \"transfers\": [\n" +
               "    {\n" +
@@ -25,7 +25,7 @@ String json = "{\n" +
               
 JSONObject request = new JSONObject(json);
               
-instance.Payments.transfer(PaymentId,request);
+instance.payments.transfer(paymentId,request);
 ```
 
 **Parameters:**
@@ -70,43 +70,43 @@ instance.Payments.transfer(PaymentId,request);
 ### Create transfers from order
 
 ```java
-String json = "{\n" +
-              "  amount: 2000,\n" +
-              "  currency: \"INR\",\n" +
-              "  transfers: [\n" +
-              "    {\n" +
-              "      account: \"acc_CPRsN1LkFccllA\",\n" +
-              "      amount: 1000,\n" +
-              "      currency: \"INR\",\n" +
-              "      notes: {\n" +
-              "        branch: \"Acme Corp Bangalore North\",\n" +
-              "        name: \"Gaurav Kumar\"\n" +
-              "      },\n" +
-              "      linked_account_notes: [\n" +
-              "        \"branch\"\n" +
-              "      ],\n" +
-              "      on_hold: 1,\n" +
-              "      on_hold_until: 1671222870\n" +
-              "    },\n" +
-              "    {\n" +
-              "      account: \"acc_CNo3jSI8OkFJJJ\",\n" +
-              "      amount: 1000,\n" +
-              "      currency: \"INR\",\n" +
-              "      notes: {\n" +
-              "        branch: \"Acme Corp Bangalore South\",\n" +
-              "        name: \"Saurav Kumar\"\n" +
-              "      },\n" +
-              "      linked_account_notes: [\n" +
-              "        \"branch\"\n" +
-              "      ],\n" +
-              "      on_hold: 0\n" +
-              "    }\n" +
-              "  ]\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"amount\": 2000,\n" +
+            "  \"currency\": \"INR\",\n" +
+            "  \"transfers\": [\n" +
+            "    {\n" +
+            "      \"account\": \"acc_CPRsN1LkFccllA\",\n" +
+            "      \"amount\": 1000,\n" +
+            "      \"currency\": \"INR\",\n" +
+            "      \"notes\": {\n" +
+            "        \"branch\": \"Acme Corp Bangalore North\",\n" +
+            "        \"name\": \"Gaurav Kumar\"\n" +
+            "      },\n" +
+            "      \"linked_account_notes\": [\n" +
+            "        \"branch\"\n" +
+            "      ],\n" +
+            "      \"on_hold\": 1,\n" +
+            "      \"on_hold_until\": 1671222870\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"account\": \"acc_CNo3jSI8OkFJJJ\",\n" +
+            "      \"amount\": 1000,\n" +
+            "      \"currency\": \"INR\",\n" +
+            "      \"notes\": {\n" +
+            "        \"branch\": \"Acme Corp Bangalore South\",\n" +
+            "        \"name\": \"Saurav Kumar\"\n" +
+            "      },\n" +
+            "      \"linked_account_notes\": [\n" +
+            "        \"branch\"\n" +
+            "      ],\n" +
+            "      \"on_hold\": 0\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 
 **Parameters:**
@@ -170,15 +170,15 @@ Order order = instance.Orders.create(request);
 ### Direct transfers
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\account\": \"acc_CPRsN1LkFccllA\",\n +
                  "\"amount\": 500,\n" +
                  "\"currency\": \"INR\"\n" +
                "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
                
-Transfer transfer = instance.Transfers.create(request);
+Transfer transfer = instance.transfers.create(requestJson);
 ```
 
 **Parameters:**
@@ -215,9 +215,9 @@ Transfer transfer = instance.Transfers.create(request);
 ### Fetch transfer for a payment
 
 ```java
-String PaymentId = "pay_E9up5WhIfMYnKW";
+String paymentId = "pay_E9up5WhIfMYnKW";
 
-List<Payment> payment = instance.Payments.fetchAllTransfers(PaymentId)
+List<Payment> payment = instance.payments.fetchAllTransfers(paymentId)
 ```
 
 **Parameters:**
@@ -258,9 +258,9 @@ List<Payment> payment = instance.Payments.fetchAllTransfers(PaymentId)
 ### Fetch transfer
 
 ```java
-String TransferId = "trf_E7V62rAxJ3zYMo";
+String transferId = "trf_E7V62rAxJ3zYMo";
 
-Transfer transfer = instance.Transfers.fetch(TransferId);
+Transfer transfer = instance.transfers.fetch(transferId);
 ```
 
 **Parameters:**
@@ -295,18 +295,18 @@ Transfer transfer = instance.Transfers.fetch(TransferId);
 ### Fetch transfers for a settlement
 
 ```java
-String RecipientSettlementId = "setl_DHYJ3dRPqQkAgV";
+String jsonRequest = {\"recipient_settlement_id\":\"setl_DHYJ3dRPqQkAgV\"}";
 
-JSONObject request = new JSONObject("{\"recipient_settlement_id\":"+RecipientSettlementId+"}");
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<Transfer> transfer = instance.Transfers.fetchAll(request);
+List<Transfer> transfer = instance.transfers.fetchAll(requestRequest);
 ```
 
 **Parameters:**
 
 | Name          | Type        | Description                                 |
 |---------------|-------------|---------------------------------------------|
-| recipientSettlementId*   | string    | The recipient settlement id obtained from the settlement.processed webhook payload.  |
+| recipient_settlement_id*   | string    | The recipient settlement id obtained from the settlement.processed webhook payload.  |
 
 **Response:**
 ```json
@@ -340,12 +340,13 @@ List<Transfer> transfer = instance.Transfers.fetchAll(request);
 ### Fetch settlement details
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "\"expand[]\" : \"recipient_settlement\"  \n" +
               "}";
-JSONObject request = new JSONObject(json);
+
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-List<Transfer> transfer = instance.Transfers.fetchAll(request);
+List<Transfer> transfer = instance.transfers.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -396,25 +397,25 @@ List<Transfer> transfer = instance.Transfers.fetchAll(request);
 ### Refund payments and reverse transfer from a linked account
 
 ```java
-String PaymentId = "pay_EAdwQDe4JrhOFX";
+String paymentId = "pay_EAdwQDe4JrhOFX";
 
-String json = "{\n" +
-              "    amount : 100,\n" +
-              "    reverse_all : 1\n" +
-              "}";
+String jsonRequest = "{\n" +
+                    "\"amount\" : 100,\n" +
+                    "\"reverse_all\" : 1\n" +
+                    "})";
               
-JSONObject request = new JSONObject(json);  
+JSONObject requestRequest = new JSONObject(jsonRequest);  
             
-Payment payment = instance.Payments.refund(PaymentId,request);
+Payment payment = instance.payments.refund(paymentId,requestJson);
 ```
 
 **Parameters:**
 
-| Name          | Type        | Description                                 |
-|---------------|-------------|---------------------------------------------|
-| PaymentId*   | string      | The id of the payment to be fetched  |
-| amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
-| reverse_all   | boolean    | Reverses transfer made to a linked account. Possible values:<br> * `1` - Reverses transfer made to a linked account.<br>* `0` - Does not reverse transfer made to a linked account.|
+| Name        | Type        | Description                                 |
+|-------------|-------------|---------------------------------------------|
+| paymentId*  | string      | The id of the payment to be fetched  |
+| amount*     | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
+| reverse_all | boolean    | Reverses transfer made to a linked account. Possible values:<br> * `1` - Reverses transfer made to a linked account.<br>* `0` - Does not reverse transfer made to a linked account.|
 
 **Response:**
 ```json
@@ -437,11 +438,11 @@ Payment payment = instance.Payments.refund(PaymentId,request);
 ### Fetch payments of a linked account
 
 ```java
-String LinkedAccountId = "acc_CPRsN1LkFccllA";
+String jsonRequest = "{\"X-Razorpay-Account\":\"acc_CPRsN1LkFccllA\"}"
 
-JSONObject request = new JSONObject("{\"X-Razorpay-Account\":"+LinkedAccountId+"}");
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Payment> payment = instance.Payments.fetchAll(request);
+List<Payment> payment = instance.payments.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -491,22 +492,22 @@ List<Payment> payment = instance.Payments.fetchAll(request);
 ### Reverse transfers from all linked accounts
 
 ```java
-String TransferId = "trf_EAznuJ9cDLnF7Y";
+String transferId = "trf_EAznuJ9cDLnF7Y";
 
-String json = "{\n" +
-              "amount:100\n" +
-              "}";
+String jsonRequest = "{\n" +
+                "\"amount\":100\n" +
+               "}";
               
-JSONObject request = new JSONObject(json);       
+JSONObject requestJson = new JSONObject(jsonRequest);       
         
-Transfer transfer = instance.Transfers.reversal(TransferId,request);
+Transfer transfer = instance.Transfers.reversal(transferId,requestJson);
 ```
 
 **Parameters:**
 
 | Name        | Type        | Description                                 |
 |-------------|-------------|---------------------------------------------|
-| TransferId* | string      | The id of the transfer to be fetched  |
+| transferId* | string      | The id of the transfer to be fetched  |
 | amount      | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 
 **Response:**
@@ -529,24 +530,29 @@ Transfer transfer = instance.Transfers.reversal(TransferId,request);
 
 ### Hold settlements for transfers
 ```java
-String PaymentId = "pay_EB1R2s8D4vOAKG";
+String paymentId = "pay_EB1R2s8D4vOAKG";
 
-String json = "{\n" +
-              "  \"amount\": 500,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"on_hold\": \"1\"\n" +
-              "}";
+String jsonRequest = "{\n" +
+                "  \"transfers\": [\n" +
+                "    {\n" +
+                "      \"amount\": 100,\n" +
+                "      \"account\": \"acc_CMaomTz4o0FOFz\",\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"on_hold\": 1\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
               
-JSONObject request = new JSONObject(json);    
+JSONObject requestJson = new JSONObject(jsonRequest);    
           
-Payment payment = instance.Payments.transfer(PaymentId,request);
+Payment payment = instance.payments.transfer(paymentId,requestJson);
 ```
 
 **Parameters:**
 
 | Name       | Type        | Description                                 |
 |------------|-------------|---------------------------------------------|
-| PaymentId* | string      | The id of the payment to be fetched  |
+| paymentId* | string      | The id of the payment to be fetched  |
 | transfers  | array     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
 
 **Response:**
@@ -580,24 +586,25 @@ Payment payment = instance.Payments.transfer(PaymentId,request);
 
 ### Modify settlement hold for transfers
 ```java
-String PaymentId = "pay_EAeSM2Xul8xYRo";
+String paymentId = "pay_EAeSM2Xul8xYRo";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
                 "\"on_hold\": \"1\",\n" +
                 "\"on_hold_until\": \"1679691505\"\n" +
                "}";
                
-JSONObject request = new JSONObject(json);    
+JSONObject requestJson = new JSONObject(jsonRequest);    
               
-Transfer transfer = instance.Transfers.edit(PaymentId,request);
+Transfer transfer = instance.Transfers.edit(paymentId,requestJson);
 ```
 
 **Parameters:**
 
-| Name       | Type        | Description                                 |
-|------------|-------------|---------------------------------------------|
-| PaymentId* | string      | The id of the payment to be fetched  |
-| transfers  | array     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
+| Name          | Type    | Description                                 |
+|---------------|---------|---------------------------------------------|
+| paymentId*    | string  | The id of the payment to be fetched  |
+| on_hold       | boolean | Possible value is `0` or `1` |
+| on_hold_until | integer |  |
 
 **Response:**
 ```json

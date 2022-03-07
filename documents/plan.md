@@ -3,24 +3,24 @@
 ### Create plan
 
 ```java
-String json = "{\n" +
-              "  period: \"weekly\",\n" +
-              "  interval: 1,\n" +
-              "  item: {\n" +
-              "    name: \"Test plan - Weekly\",\n" +
-              "    amount: 69900,\n" +
-              "    currency: \"INR\",\n" +
-              "    description: \"Description for the test plan\"\n" +
-              "  },\n" +
-              "  notes: {\n" +
-              "    notes_key_1: \"Tea, Earl Grey, Hot\",\n" +
-              "    notes_key_2: \"Tea, Earl Grey… decaf.\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"period\": \"weekly\",\n" +
+            "  \"interval\": 1,\n" +
+            "  \"item\": {\n" +
+            "    \"name\": \"Test plan - Weekly\",\n" +
+            "    \"amount\": 69900,\n" +
+            "    \"currency\": \"INR\",\n" +
+            "    \"description\": \"Description for the test plan\"\n" +
+            "  },\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-Plan plan = razorpayclient.Plans.create(request);
+Plan plan = razorpayclient.plans.create(requestRequest);
 ```
 
 **Parameters:**
@@ -70,13 +70,13 @@ Plan plan = razorpayclient.Plans.create(request);
 ### Fetch all plans
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-instance.Plans.fetchAll(options);
+instance.plans.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -132,16 +132,16 @@ instance.Plans.fetchAll(options);
 ### Fetch particular plan
 
 ```java
-String PlanId = "plan_00000000000001";
+String planId = "plan_00000000000001";
 
-instance.Plans.fetch(PlanId)
+instance.plans.fetch(planId);
 ```
 
 **Parameters:**
 
-| Name  | Type      | Description                                      |
-|-------|-----------|--------------------------------------------------|
-| PlanId  | string | The id of the plan to be fetched  |
+| Name   | Type      | Description                                      |
+|--------|-----------|--------------------------------------------------|
+| planId | string | The id of the plan to be fetched  |
 
 **Response:**
 ```json

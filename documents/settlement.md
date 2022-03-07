@@ -3,7 +3,7 @@
 ### Fetch all  settlements
 
 ```java
-List<Settlement> settlement = razorpayclient.Settlement.fetchAll();
+List<Settlement> settlement = razorpayclient.settlement.fetchAll();
 ```
 
 **Parameters:**
@@ -41,16 +41,16 @@ List<Settlement> settlement = razorpayclient.Settlement.fetchAll();
 ### Fetch a settlement
 
 ```java
-String SettlementId = "setl_DGlQ1Rj8os78Ec";
+String settlementId = "setl_DGlQ1Rj8os78Ec";
 
-Settlement settlement = razorpayclient.Settlement.fetch(SettlementId);
+Settlement settlement = razorpayclient.settlement.fetch(settlementId);
 ```
 
 **Parameters:**
 
 | Name          | Type        | Description                                 |
 |---------------|-------------|---------------------------------------------|
-| SettlementId* | string      | The id of the settlement to be fetched  |
+| settlementId* | string      | The id of the settlement to be fetched  |
 
 **Response:**
 ```json
@@ -70,14 +70,14 @@ Settlement settlement = razorpayclient.Settlement.fetch(SettlementId);
 ### Settlement report for a month
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                     "year: 2020,\n" +
                     "month: 9\n" +
                   "}";
                   
-JSONObject request = new JSONObject(json);      
+JSONObject requestJson = new JSONObject(jsonRequest);      
             
-List<Settlement> settlement = instance.Settlement.reports(request);
+List<Settlement> settlement = instance.settlement.reports(requestJson);
 ```
 
 **Parameters:**
@@ -216,15 +216,15 @@ List<Settlement> settlement = instance.Settlement.reports(request);
 
 ```java
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  year: 2020,\n" +
               "  month: 9,\n" +
               "  day:11\n" +
               "}";
                   
-JSONObject request = new JSONObject(json);      
+JSONObject requestJson = new JSONObject(jsonRequest);      
             
-List<Settlement> settlement = instance.Settlement.reports(request);
+List<Settlement> settlement = instance.Settlement.reports(requestJson);
 ```
 **Parameters:**
 
@@ -359,7 +359,7 @@ List<Settlement> settlement = instance.Settlement.reports(request);
 ### Create on-demand settlement
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1221,\n" +
               "  \"settle_full_balance\": false,\n" +
               "  \"description\": \"Testing\",\n" +
@@ -369,9 +369,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);       
+JSONObject requestJson = new JSONObject(jsonRequest);       
         
-Settlement settlement = instance.Settlement.create(request);
+Settlement settlement = instance.settlement.create(requestJson);
 ```
 
 **Parameters:**
@@ -430,7 +430,7 @@ Settlement settlement = instance.Settlement.create(request);
 ### Fetch all on-demand settlements
 
 ```java
-List<Settlement> settlement = instance.Settlement.fetchAllDemand(options)
+List<Settlement> settlement = instance.settlement.fetchAllDemand(options)
 ```
 **Parameters:**
 
@@ -449,16 +449,16 @@ For all on-demand settlements response please click [here](https://razorpay.com/
 ### Fetch on-demand settlement by ID
 
 ```java
-String SettlementId = "setlodp_FNj7g2cbvw8ueO";
+String settlementId = "setlodp_FNj7g2cbvw8ueO";
 
-instance.Settlement.fetchDemandSettlement(SettlementId);
+instance.settlement.fetchDemandSettlement(settlementId);
 ```
 
 **Parameters:**
 
 | Name          | Type   | Description                       |
 |---------------|--------|-----------------------------------|
-| SettlementId* | string | Settlement Id of the On-demand settlement|
+| settlementId* | string | Settlement Id of the On-demand settlement|
 
 **Response:**
 For on-demand settlement by ID response please click [here](https://razorpay.com/docs/api/settlements/#fetch-on-demand-settlements-by-id)

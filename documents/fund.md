@@ -2,7 +2,7 @@
 
 ### Create a fund account
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
         "  \"customer_id\":\"cust_Aa000000000001\",\n" +
         "  \"account_type\":\"bank_account\",\n" +
         "  \"bank_account\":{\n" +
@@ -12,9 +12,9 @@ String json = "{\n" +
         "  }\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-FundAccount fundaccount = instance.FundAccount.create(request);
+FundAccount fundaccount = instance.fundAccount.create(requestJson);
 ```
 
 **Parameters:**
@@ -47,9 +47,9 @@ FundAccount fundaccount = instance.FundAccount.create(request);
 ### Fetch all fund accounts
 
 ```java
-String CustomerId = "cust_Aa000000000001";
+String customerId = "cust_Aa000000000001";
 
-FundAccount fundaccount = instance.FundAccount.fetch(CustomerId);
+FundAccount fundaccount = instance.fundAccount.fetch(customerId);
 ```
 
 **Parameters:**

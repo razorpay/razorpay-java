@@ -23,6 +23,7 @@ public class Constants {
   static final String PAYMENT_TRANSFER_GET = "payments/%s/transfers";
   static final String PAYMENT_BANK_TRANSFER_GET = "payments/%s/bank_transfer";
   static final String PAYMENT_EDIT = "payments/%s";
+  static final String FETCH_CARD_DETAILS = "payments/%s/card";
   static final String FETCH_DOWNTIME_LIST = "payments/downtimes";
   static final String FETCH_DOWNTIME_GET = "payments/downtimes";
   static final String PAYMENT_JSON_CREATE = "payments/create/json";

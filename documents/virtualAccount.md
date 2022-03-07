@@ -2,23 +2,23 @@
 
 ### Create a virtual account
 ```java
-String json = "{\n" +
-              "  receivers: {\n" +
-              "    types: [\n" +
-              "      \"bank_account\"\n" +
-              "    ]\n" +
-              "  },\n" +
-              "  description: \"Virtual Account created for Raftar Soft\",\n" +
-              "  customer_id: \"cust_CaVDm8eDRSXYME\",\n" +
-              "  close_by: 1681615838,\n" +
-              "  notes: {\n" +
-              "    project_name: \"Banking Software\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"receivers\": {\n" +
+            "    \"types\": [\n" +
+            "      \"bank_account\"\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  \"description\": \"Virtual Account created for Raftar Soft\",\n" +
+            "  \"customer_id\": \"cust_CaVDm8eDRSXYME\",\n" +
+            "  \"close_by\": 1681615838,\n" +
+            "  \"notes\": {\n" +
+            "    \"project_name\": \"Banking Software\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
+VirtualAccount virtualaccount = instance.virtualAccounts.create(requestJson);
 ```
 
 **Parameters:**
@@ -68,31 +68,31 @@ VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
 
 ```java
 
-String json = "{\n" +
-              "  receivers: {\n" +
-              "    types: [\n" +
-              "      \"bank_account\"\n" +
-              "    ]\n" +
-              "  },\n" +
-              "  allowed_payers: [\n" +
-              "    {\n" +
-              "      type: \"bank_account\",\n" +
-              "      bank_account: {\n" +
-              "        ifsc: \"RATN0VAAPIS\",\n" +
-              "        account_number: 2223330027558515\n" +
-              "      }\n" +
-              "    }\n" +
-              "  ],\n" +
-              "  description: \"Virtual Account created for Raftar Soft\",\n" +
-              "  customer_id: \"cust_HssUOFiOd2b1TJ\",\n" +
-              "  notes: {\n" +
-              "    project_name: \"Banking Software\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"receivers\": {\n" +
+            "    \"types\": [\n" +
+            "      \"bank_account\"\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  \"allowed_payers\": [\n" +
+            "    {\n" +
+            "      \"type\": \"bank_account\",\n" +
+            "      \"bank_account\": {\n" +
+            "        \"ifsc\": \"RATN0VAAPIS\",\n" +
+            "        \"account_number\": 2223330027558515\n" +
+            "      }\n" +
+            "    }\n" +
+            "  ],\n" +
+            "  \"description\": \"Virtual Account created for Raftar Soft\",\n" +
+            "  \"customer_id\": \"cust_HssUOFiOd2b1TJ\",\n" +
+            "  \"notes\": {\n" +
+            "    \"project_name\": \"Banking Software\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
+VirtualAccount virtualaccount = instance.virtualAccounts.create(requestJson);
 
 ```
 
@@ -160,22 +160,22 @@ VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
 ### Create static/dynamic qr
 
 ```java
-String json = "{\n" +
-              "  receivers: {\n" +
-              "    types: [\n" +
-              "      \"qr_code\"\n" +
-              "    ]\n" +
-              "  },\n" +
-              "  description: \"First QR code\",\n" +
-              "  amount_expected: 100,\n" +
-              "  notes: {\n" +
-              "    receiver_key: \"receiver_value\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  receivers: {\n" +
+            "    types: [\n" +
+            "      \"qr_code\"\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  description: \"First QR code\",\n" +
+            "  amount_expected: 100,\n" +
+            "  notes: {\n" +
+            "    receiver_key: \"receiver_value\"\n" +
+            "  }\n" +
+            "}";
                
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
+VirtualAccount virtualaccount = instance.virtualAccounts.create(requestJson);
 
 ```
 
@@ -220,30 +220,31 @@ VirtualAccount virtualaccount = instance.VirtualAccounts.create(request);
 ### Fetch virtual account by id
 
 ```java
-String VirtualId = "va_4xbQrmEoA5WJ0G";
+String virtualId = "va_4xbQrmEoA5WJ0G";
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.fetch(virtualId);
+VirtualAccount virtualaccount = instance.virtualAccounts.fetch(virtualId);
 ```
 
 **Parameters:**
 
 | Name       | Type        | Description                                 |
 |------------|-------------|---------------------------------------------|
-| VirtualId* | string      | The id of the virtual to be updated  |
+| virtualId* | string      | The id of the virtual to be updated  |
 
 **Response:**
+
 For fetch virtual account by id response please click [here](https://razorpay.com/docs/api/smart-collect/#fetch-a-virtual-account-by-id)
 -------------------------------------------------------------------------------------------------------
 
 ### Fetch all virtual account
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<VirtualAccount> virtualaccount = instance.VirtualAccounts.fetchAll(options);
+List<VirtualAccount> virtualaccount = instance.virtualAccounts.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -295,22 +296,22 @@ List<VirtualAccount> virtualaccount = instance.VirtualAccounts.fetchAll(options)
 
 ### Fetch payments for a virtual account
 ```java
-String VirtualId = "va_DlGmm7jInLudH9";
+String virtualId = "va_DlGmm7jInLudH9";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
                 "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
         
-List<VirtualAccount> virtualaccount = instance.VirtualAccounts.fetchPayments(VirtualId,options);
+List<VirtualAccount> virtualaccount = instance.virtualAccounts.fetchPayments(virtualId,requestJson);
 ```
 
 **Parameters:**
 
 | Name       | Type      | Description                                      |
 |------------|-----------|--------------------------------------------------|
-| VirtualId* | string    | The id of the virtual to be updated  |
+| virtualId* | string    | The id of the virtual to be updated  |
 | from       | timestamp | timestamp after which the payments were created  |
 | to         | timestamp | timestamp before which the payments were created |
 | count      | integer   | number of payments to fetch (default: 10)        |
@@ -358,16 +359,16 @@ List<VirtualAccount> virtualaccount = instance.VirtualAccounts.fetchPayments(Vir
 
 ### Fetch payment details using id and transfer method
 ```java
-String PaymentId = "pay_CmiztqmYJPtDAu";
+String paymentId = "pay_CmiztqmYJPtDAu";
 
-Payment payment = instance.Payments.fetchBankTransfers(paymentId)
+Payment payment = instance.payments.fetchBankTransfers(paymentId)
 ```
 
 **Parameters:**
 
-| Name  | Type      | Description                                      |
-|-------|-----------|--------------------------------------------------|
-| virtualId*  | string    | The id of the virtual to be updated  |
+| Name       | Type      | Description                         |
+|------------|-----------|-------------------------------------|
+| paymentId* | string    | The id of the payment to be updated |
 
 **Response:**
 ```json
@@ -421,9 +422,9 @@ Payment payment = instance.Payments.fetchBankTransfers(paymentId)
 
 ### Refund payments made to a virtual account
 ```java
-String PaymentId = "pay_E54n391WnEAV9H";
+String paymentId = "pay_E54n391WnEAV9H";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": \"100\",\n" +
               "  \"speed\": \"normal\",\n" +
               "  \"notes\": {\n" +
@@ -433,9 +434,9 @@ String json = "{\n" +
               "  \"receipt\": \"Receipt No. 31\"\n" +
               "}";
               
-JSONObject options = new JSONObject(json);     
+JSONObject requestJson = new JSONObject(jsonRequest);     
            
-Payment payment = instance.Payments.refund(PaymentId,request);
+Payment payment = instance.payments.refund(paymentId,requestJson);
 ```
 
 **Parameters:**
@@ -471,56 +472,58 @@ Payment payment = instance.Payments.refund(PaymentId,request);
 
 ### Add receiver to an existing virtual account
 ```java
-String VirtualId = "va_Di5gbNptcWV8fQ";
+String virtualId = "va_Di5gbNptcWV8fQ";
 
-String json = "{\n" +
-              "  types: [\n" +
-              "    \"vpa\"\n" +
-              "  ],\n" +
-              "  vpa: {\n" +
-              "    descriptor: \"gauravkumar\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+                "  \"type\": [\n" +
+                "    \"vpa\"\n" +
+                "  ],\n" +
+                "  \"vpa\": {\n" +
+                "    \"descriptor\": \"gauravkumar\"\n" +
+                "  }\n" +
+                "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.addReceiver(VirtualId,request);
+VirtualAccount virtualaccount = instance.virtualAccounts.addReceiver(virtualId,requestRequest);
 ```
 
 **Parameters:**
 
 | Name       | Type      | Description                                      |
 |------------|-----------|--------------------------------------------------|
-| VirtualId* | string    | The id of the virtual to be updated  |
+| virtualId* | string    | The id of the virtual to be updated  |
 | types*     | object | The receiver type to be added to the virtual account. Possible values are `vpa` or `bank_account`  |
 | vpa        | object | This is to be passed only when `vpa` is passed as the receiver types. |
 
 **Response:**
+
 For add receiver to an existing virtual account response please click [here](https://razorpay.com/docs/api/smart-collect/#add-receiver-to-an-existing-virtual-account)
 
 -------------------------------------------------------------------------------------------------------
 
 ### Add an Allowed Payer Account
 ```java
-String VirtualId = "va_Di5gbNptcWV8fQ";
+String virtualId = "va_Di5gbNptcWV8fQ";
 
-String json = "{\n" +
-"  types: \"bank_account\",\n" +
-"  bank_account: {\n" +
-"    ifsc: \"UTIB0000013\",\n" +
-"    account_number: 914010012345679\n" +
-"  }\n" +
-"}";
+String jsonRequest = "{\n" +
+            "  \"types\": \"bank_account\",\n" +
+            "  \"bank_account\": {\n" +
+            "    \"ifsc\": \"UTIB0000013\",\n" +
+            "    \"account_number\": 914010012345679\n" +
+            "  }\n" +
+            "}";
 
-JSONObject request = new JSONObject(json);
-VirtualAccount virtualaccount = instance.VirtualAccounts.addAllowedPayers(VirtualId,request);
+JSONObject requestJson = new JSONObject(jsonRequest);
+
+VirtualAccount virtualaccount = instance.virtualAccounts.addAllowedPayers(virtualId,requestJson);
 ```
 
 **Parameters:**
 
 | Name          | Type      | Description                                      |
 |---------------|-----------|--------------------------------------------------|
-| VirtualId*    | string    | The id of the virtual to be updated  |
+| virtualId*    | string    | The id of the virtual to be updated  |
 | types*        | object | The receiver type to be added to the virtual account. Possible values are `vpa` or `bank_account`  |
 | bank_account* | object | Indicates the bank account details such as `ifsc` and `account_number` |
 
@@ -568,19 +571,19 @@ VirtualAccount virtualaccount = instance.VirtualAccounts.addAllowedPayers(Virtua
 
 ### Delete an Allowed Payer Account
 ```java
-String VirtualId = "va_Di5gbNptcWV8fQ";
+String virtualId = "va_Di5gbNptcWV8fQ";
 
-String AllowedPlayer = "ba_DlGmm9mSj8fjRM";
+String allowedPlayer = "ba_DlGmm9mSj8fjRM";
 
-instance.VirtualAccounts.deleteAllowedPayer(VirtualId,AllowedPayersId)
+instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
 ```
 
 **Parameters:**
 
 | Name             | Type      | Description                                      |
 |------------------|-----------|--------------------------------------------------|
-| VirtualId*       | string    | The id of the virtual to be updated  |
-| AllowedPayersId* | string    | The id of the allowed payers to be updated  |
+| virtualId*       | string    | The id of the virtual to be updated  |
+| allowedPayersId* | string    | The id of the allowed payers to be updated  |
 
 **Response:**
 ```json
@@ -589,18 +592,19 @@ instance.VirtualAccounts.deleteAllowedPayer(VirtualId,AllowedPayersId)
 -------------------------------------------------------------------------------------------------------
 ### Close virtual account
 ```java
-String VirtualId = "va_Di5gbNptcWV8fQ";
+String virtualId = "va_Di5gbNptcWV8fQ";
 
-instance.VirtualAccounts.close(VirtualId)
+instance.virtualAccounts.close(virtualId)
 ```
 
 **Parameters:**
 
 | Name       | Type      | Description                                      |
 |------------|-----------|--------------------------------------------------|
-| VirtualId* | string    | The id of the virtual to be updated  |
+| virtualId* | string    | The id of the virtual to be updated  |
 
 **Response:**
+
 For close virtual account response please click [here](https://razorpay.com/docs/api/smart-collect/#close-a-virtual-account)
 -------------------------------------------------------------------------------------------------------
 

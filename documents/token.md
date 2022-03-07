@@ -5,7 +5,7 @@
 ```java
 String Paymentid = "pay_FHfqtkRzWvxky4";
 
-Payment payment = instance.Payments.fetch(Paymentids);
+Payment payment = instance.payments.fetch(paymentids);
 ```
 
 **Parameters:**
@@ -60,10 +60,10 @@ Payment payment = instance.Payments.fetch(Paymentids);
 
 ### Fetch tokens by customer id
 
-```js
-String CustomerId = "cust_DtHaBuooGHTuyZ";
+```java
+String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Customer> customer = instance.Customers.fetchTokens(CustomerId);
+List<Customer> customer = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
@@ -121,20 +121,20 @@ List<Customer> customer = instance.Customers.fetchTokens(CustomerId);
 -------------------------------------------------------------------------------------------------------
 
 ### Fetch particular token
-```js
-String CustomerId = "cust_DtHaBuooGHTuyZ";
+```java
+String customerId = "cust_DtHaBuooGHTuyZ";
 
-String TokenId = "token_HouA2OQR5Z2jTL";
+String tokenId = "token_HouA2OQR5Z2jTL";
 
-Customer customer = instance.Customers.fetchToken(CustomerId, TokenId)
+Customer customer = instance.Customers.fetchToken(customerId, tokenId)
 ```
 
 **Parameters:**
 
 | Name        | Type        | Description                                 |
 |-------------|-------------|---------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
-| TokenId*    | string      | The id of the token to be fetched |
+| customerId* | string      | The id of the customer to be fetched |
+| tokenId*    | string      | The id of the token to be fetched |
 
 **Response:**
 ```json
@@ -175,11 +175,11 @@ Customer customer = instance.Customers.fetchToken(CustomerId, TokenId)
 ### Delete token
 
 ```js
-String CustomerId = "cust_DtHaBuooGHTuyZ";
+String customerId = "cust_DtHaBuooGHTuyZ";
 
-String TokenId = "token_HouA2OQR5Z2jTL";
+String tokenId = "token_HouA2OQR5Z2jTL";
 
-Customer customer = instance.Customers.deleteToken(CustomerId, TokenId)
+Customer customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 
 **Parameters:**

@@ -3,19 +3,19 @@
 ### Create order
 
 ```java
-String json = "{\n" +
-              "  amount: 50000,\n" +
-              "  currency: \"INR\",\n" +
-              "  receipt: \"receipt#1\",\n" +
-              "  notes: {\n" +
-              "    key1: \"value3\",\n" +
-              "    key2: \"value2\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+                "  \"amount\": 50000,\n" +
+                "  \"currency\": \"INR\",\n" +
+                "  \"receipt\": \"receipt#1\",\n" +
+                "  \"notes\": {\n" +
+                "    \"key1\": \"value3\",\n" +
+                "    \"key2\": \"value2\"\n" +
+                "  }\n" +
+                "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-Order order = instance.Orders.create(json)
+Order order = instance.orders.create(requestRequest);
 ```
 
 **Parameters:**
@@ -51,13 +51,13 @@ Order order = instance.Orders.create(json)
 ### Fetch all orders
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<Order> order = instance.Orders.fetchAll(options);
+List<Order> order = instance.orders.fetchAll(requestRequest);
 ```
 
 **Parameters**
@@ -99,16 +99,16 @@ List<Order> order = instance.Orders.fetchAll(options);
 
 ### Fetch particular order
 
-```js
-String OrderId = "order_DaaS6LOUAASb7Y";
+```java
+String orderId = "order_DaaS6LOUAASb7Y";
 
-Order order = instance.Orders.fetch(OrderId);
+Order order = instance.orders.fetch(orderId);
 ```
 **Parameters**
 
 | Name     | Type   | Description                         |
 |----------|--------|-------------------------------------|
-| OrderId* | string | The id of the order to be fetched |
+| orderId* | string | The id of the order to be fetched |
 
 **Response:**
 
@@ -132,15 +132,15 @@ Order order = instance.Orders.fetch(OrderId);
 ### Fetch payments for an order
 
 ```java
-String OrderId = "order_DaaS6LOUAASb7Y";
+String orderId = "order_DaaS6LOUAASb7Y";
 
-Order order = instance.Orders.fetchPayments(OrderId);
+Order order = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
 | Name     | Type   | Description                         |
 |----------|--------|-------------------------------------|
-| OrderId* | string | The id of the order to be retrieve payment info |
+| orderId* | string | The id of the order to be retrieve payment info |
 
 **Response:**
 ```json
@@ -183,18 +183,18 @@ Order order = instance.Orders.fetchPayments(OrderId);
 ### Update order
 
 ```java
-String OrderId = "order_DaaS6LOUAASb7Y";
+String orderId = "order_DaaS6LOUAASb7Y";
 
-String json = {\n" +
+String jsonRequest = {\n" +
               "  \"notes\": {\n" +
               "    \"key1\": \"value3\",\n" +
               "    \"key2\": \"value2\"\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-Order order = instance.Orders.edit(OrderId,request);
+Order order = instance.orders.edit(OrderId,requestJson);
 ```
 **Parameters**
 

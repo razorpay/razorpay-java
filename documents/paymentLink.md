@@ -6,7 +6,7 @@ Request #1
 Standard Payment Link
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 500,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -29,16 +29,16 @@ String json = "{\n" +
               "  \"callback_method\": \"get\"\n" +
               "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestRequest);
 ```
 
 Request #2
 UPI Payment Link
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"upi_link\": true,\n" +
               "  \"amount\": 500,\n" +
               "  \"currency\": \"INR\",\n" +
@@ -60,9 +60,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestRequest);
 
 ```
 
@@ -81,6 +81,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 |notes           | json object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. For example, "note_key": "Beam me up Scotty”                     |
 
 **Response:**
+
 For create payment link response please click [here](https://razorpay.com/docs/api/payment-links/#create-payment-link)
 
 -------------------------------------------------------------------------------------------------------
@@ -88,7 +89,13 @@ For create payment link response please click [here](https://razorpay.com/docs/a
 ### Fetch all payment link
 
 ```java
-List<PaymentLink> paymentlink = instance.PaymentLink.fetchAll();
+String jsonRequest = "{\n" +
+                       "\"reference_id\" : TS1989\n" +
+                     "}";
+
+JSONObject requestJson = new JSONObject(jsonRequest);
+        
+List<PaymentLink> paymentlink = instance.paymentLink.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -106,9 +113,9 @@ For fetch all payment link response please click [here](https://razorpay.com/doc
 ### Fetch specific payment link
 
 ```java
-String PaymentLinkId = "plink_FMbhpT6nqDjDei";
+String paymentLinkId = "plink_FMbhpT6nqDjDei";
  
-instance.PaymentLink.fetch(PaymentLinkId);
+instance.paymentLink.fetch(paymentLinkId);
 ```
 
 **Parameters:**
@@ -118,6 +125,7 @@ instance.PaymentLink.fetch(PaymentLinkId);
 | paymentLinkId*          | string |  Unique identifier of the Payment Link.                         |
 
 **Response:**
+
 For fetch specific payment link response please click [here](https://razorpay.com/docs/api/payment-links/#specific-payment-links-by-id)
 
 -------------------------------------------------------------------------------------------------------
@@ -125,9 +133,9 @@ For fetch specific payment link response please click [here](https://razorpay.co
 ### Update payment link
 
 ```java
-String PaymentLinkId = "plink_FMbhpT6nqDjDei";
+String paymentLinkId = "plink_FMbhpT6nqDjDei";
 
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "    \"reference_id\": \"TS35\",\n" +
               "    \"expire_by\": 1653347540,\n" +
               "    \"reminder_enable\":false,\n" +
@@ -136,9 +144,9 @@ String json = "{\n" +
               "    }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink paymentlink = instance.PaymentLink.edit(PaymentId,request);
+PaymentLink paymentlink = instance.paymentLink.edit(PaymentId,requestRequest);
 ```
 
 **Parameters:**
@@ -152,6 +160,7 @@ PaymentLink paymentlink = instance.PaymentLink.edit(PaymentId,request);
 | notes          | string | object Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. For example, "note_key": "Beam me up Scotty”.                         |
 
 **Response:**
+
 For updating payment link response please click [here](https://razorpay.com/docs/api/payment-links/#update-payment-link)
 
 -------------------------------------------------------------------------------------------------------
@@ -161,7 +170,7 @@ For updating payment link response please click [here](https://razorpay.com/docs
 ```java
 String PaymentLinkId = "plink_FMbhpT6nqDjDei";
 
-PaymentLink paymentlink = instance.PaymentLink.cancel(PaymentLinkId,medium);
+PaymentLink paymentlink = instance.PaymentLink.cancel(paymentLinkId);
 ```
 
 **Parameters:**
@@ -171,17 +180,18 @@ PaymentLink paymentlink = instance.PaymentLink.cancel(PaymentLinkId,medium);
 | paymentLinkId*          | string | Unique identifier of the Payment Link.                         |
 
 **Response:**
+
 For canceling payment link response please click [here](https://razorpay.com/docs/api/payment-links/#cancel-payment-link)
 -------------------------------------------------------------------------------------------------------
 
 ### Send notification
 
 ```java
-String PaymentLinkId = "plink_FMbhpT6nqDjDei";
+String paymentLinkId = "plink_FMbhpT6nqDjDei";
 
 String medium = "email";
 
-PaymentLink paymentlink = instance.PaymentLink.notifyBy(PaymentLinkId,medium);
+PaymentLink paymentlink = instance.paymentLink.notifyBy(paymentLinkId,medium);
 ```
 
 **Parameters:**
@@ -202,7 +212,7 @@ PaymentLink paymentlink = instance.PaymentLink.notifyBy(PaymentLinkId,medium);
 ### Transfer payments received using payment links
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 20000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": false,\n" +
@@ -235,9 +245,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestRequest);
 
 ```
 
@@ -292,7 +302,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Offers on payment links
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 3400,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": false,\n" +
@@ -318,9 +328,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 
 ```
 
@@ -375,7 +385,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Managing reminders for payment links
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -394,9 +404,9 @@ String json = "{\n" +
               "  \"reminder_enable\": false\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 
 ```
 
@@ -475,37 +485,37 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Rename labels in checkout section
 
 ```java
-String json = "{\n" +
-              "  \"amount\": 500,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"description\": \"For XYZ purpose\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\",\n" +
-              "    \"contact\": \"+919999999999\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"partial_payment\": {\n" +
-              "        \"min_amount_label\": \"Minimum Money to be paid\",\n" +
-              "        \"partial_amount_label\": \"Pay in parts\",\n" +
-              "        \"partial_amount_description\": \"Pay at least ₹100\",\n" +
-              "        \"full_amount_label\": \"Pay the entire amount\"\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+                  "  \"amount\": 500,\n" +
+                  "  \"currency\": \"INR\",\n" +
+                  "  \"accept_partial\": true,\n" +
+                  "  \"first_min_partial_amount\": 100,\n" +
+                  "  \"description\": \"For XYZ purpose\",\n" +
+                  "  \"customer\": {\n" +
+                  "    \"name\": \"Gaurav Kumar\",\n" +
+                  "    \"email\": \"gaurav.kumar@example.com\",\n" +
+                  "    \"contact\": \"+919999999999\"\n" +
+                  "  },\n" +
+                  "  \"notify\": {\n" +
+                  "    \"sms\": true,\n" +
+                  "    \"email\": true\n" +
+                  "  },\n" +
+                  "  \"reminder_enable\": true,\n" +
+                  "  \"options\": {\n" +
+                  "    \"checkout\": {\n" +
+                  "      \"partial_payment\": {\n" +
+                  "        \"min_amount_label\": \"Minimum Money to be paid\",\n" +
+                  "        \"partial_amount_label\": \"Pay in parts\",\n" +
+                  "        \"partial_amount_description\": \"Pay at least ₹100\",\n" +
+                  "        \"full_amount_label\": \"Pay the entire amount\"\n" +
+                  "      }\n" +
+                  "    }\n" +
+                  "  }\n" +
+                  "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
 
 **Parameters:**
@@ -566,7 +576,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Change Business name
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -590,9 +600,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
 
 **Parameters:**
@@ -652,7 +662,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Prefill checkout fields
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -682,9 +692,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 
 ```
 
@@ -709,8 +719,8 @@ For prefill checkout fields response please click [here](https://razorpay.com/do
 
 ### Customize payment methods
 
-```java 
-String json = "{\n" +
+```java
+String jsonRequest = "{\n" +
               "  \"amount\": 500,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -738,9 +748,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
 
 **Parameters:**
@@ -801,7 +811,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Set checkout fields as read-only
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -828,9 +838,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
 
 **Parameters:**
@@ -891,7 +901,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Implement thematic changes in payment links checkout section
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -917,9 +927,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
 
 **Parameters:**
@@ -979,7 +989,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 ### Rename labels in payment details section
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"amount\": 1000,\n" +
               "  \"currency\": \"INR\",\n" +
               "  \"accept_partial\": true,\n" +
@@ -1008,9 +1018,9 @@ String json = "{\n" +
               "  }\n" +
               "}";
               
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(request);
+PaymentLink payment = instance.PaymentLink.create(requestRequest);
 ```
 
 **Parameters:**
@@ -1028,6 +1038,7 @@ PaymentLink payment = instance.PaymentLink.create(request);
 |options*       | object  | Parent parameter under which the hosted_page and label child parameters must be passed.|
 
 **Response:**
+
 For rename labels in payment details section response please click [here](https://razorpay.com/docs/payment-links/api/new/advanced-options/customize/rename-payment-details-labels/)
 
 -------------------------------------------------------------------------------------------------------

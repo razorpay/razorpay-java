@@ -3,29 +3,31 @@
 ### Create an addon
 
 ```java
-String SubscriptionId = "sub_I55auG9GnbsR8u";
-String json = "{\n" +
-        "  item:{\n" +
-        "    name:\"Extra appala (papadum)\",\n" +
-        "    amount:30000,\n" +
-        "    currency:\"INR\",\n" +
-        "    description:\"1 extra oil fried appala with meals\"\n" +
+String subscriptionId = "sub_I55auG9GnbsR8u";
+
+String jsonRequest =
+        "{\n" +
+        "  \"item\": {\n" +
+        "    \"name\": \"Extra appala (papadum)\",\n" +
+        "    \"amount\": 30000,\n" +
+        "    \"currency\": \"INR\",\n" +
+        "    \"description\": \"1 extra oil fried appala with meals\"\n" +
         "  },\n" +
-        "  quantity:2\n" +
+        "  \"quantity\": 2\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-Subscription subscription = instance.Subscriptions.createAddon(SubscriptionId,request);
+Subscription subscription = instance.subscriptions.createAddon(subscriptionId,requestJson);
 ```
 
 **Parameters:**
 
-| Name  | Type      | Description                                      |
-|-------|-----------|--------------------------------------------------|
-| SubscriptionId*  | boolean | The subscription ID to which the add-on is being added. |
-| items*  | object | Details of the add-on you want to create. |
-| quantity*  | integer | This specifies the number of units of the add-on to be charged to the customer. |
+| Name            | Type      | Description                                      |
+|-----------------|-----------|--------------------------------------------------|
+| subscriptionId* | boolean | The subscription ID to which the add-on is being added. |
+| items*          | object | Details of the add-on you want to create. |
+| quantity*       | integer | This specifies the number of units of the add-on to be charged to the customer. |
 
 **Response:**
 ```json
@@ -62,23 +64,23 @@ Subscription subscription = instance.Subscriptions.createAddon(SubscriptionId,re
 ### Fetch all addons
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
                  "\"count\" : 1\n" +
                "}";
 
-JSONObject options = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Addon> addon = instance.Addons.fetchAll(options);
+List<Addon> addon = instance.addons.fetchAll(requestJson);
 ```
 
 **Parameters:**
 
 | Name  | Type      | Description                                      |
-|-------|-----------|--------------------------------------------------|
-| from  | timestamp | timestamp after which the payments were created  |
-| to    | timestamp | timestamp before which the payments were created |
-| count | integer   | number of payments to fetch (default: 10)        |
-| skip  | integer   | number of payments to be skipped (default: 0)    |
+|-------|-----------|---------------------------------------------------|
+| from  |  timestamp | timestamp after which the payments were created  |
+| to    |  timestamp | timestamp before which the payments were created |
+| count |  integer   | number of payments to fetch (default: 10)        |
+| skip  |  integer   | number of payments to be skipped (default: 0)    |
 
 **Response:**
 ```json
@@ -121,16 +123,16 @@ List<Addon> addon = instance.Addons.fetchAll(options);
 ### Fetch an addon
 
 ```java
-String AddonId = "ao_00000000000001";
+String addonId = "ao_00000000000001";
 
-Addon addon = instance.Addons.fetch(AddonId);
+Addon addon = instance.addons.fetch(addonId);
 ```
 
 **Parameters:**
 
-| Name            | Type    | Description     |
-|-----------------|---------|------------------------------------|
-| AddonId*          | string | addon id to be fetched            |
+| Name     | Type    | Description     |
+|----------|---------|------------------------------------|
+| addonId* | string | addon id to be fetched            |
 
 **Response:**
 ```json
@@ -167,16 +169,16 @@ Addon addon = instance.Addons.fetch(AddonId);
 ### Delete an addon
 
 ```java
-String AddonId = "ao_00000000000001";
+String addonId = "ao_00000000000001";
 
-instance.Addons.delete(AddonId)
+instance.addons.delete(addonId)
 ```
 
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| AddonId*          | string | addon id to be deleted |
+| Name     | Type    | Description                                                                  |
+|----------|---------|------------------------------------------------------------------------------|
+| addonId* | string | addon id to be deleted |
 
 **Response:**
 ```json

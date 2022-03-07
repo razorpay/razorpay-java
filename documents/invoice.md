@@ -5,68 +5,68 @@
 Request #1
 In this example, an invoice is created using the customer and item details. Here, the customer and item are created while creating the invoice.
 ```java
-String json = "{\n" +
-        "  type: \"invoice\",\n" +
-        "  description: \"Invoice for the month of January 2020\",\n" +
-        "  partial_payment: true,\n" +
-        "  customer: {\n" +
-        "    name: \"Gaurav Kumar\",\n" +
-        "    contact: 9999999999,\n" +
-        "    email: \"gaurav.kumar@example.com\",\n" +
-        "    billing_address: {\n" +
-        "      line1: \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
-        "      line2: \"Hosur Road\",\n" +
-        "      zipcode: 560068,\n" +
-        "      city: \"Bengaluru\",\n" +
-        "      state: \"Karnataka\",\n" +
-        "      country: \"in\"\n" +
+String jsonRequest = "{\n" +
+        "  \"type\": \"invoice\",\n" +
+        "  \"description\": \"Invoice for the month of January 2020\",\n" +
+        "  \"partial_payment\": 1,\n" +
+        "  \"customer\": {\n" +
+        "    \"name\": \"Gaurav Kumar\",\n" +
+        "    \"contact\": 9999999999,\n" +
+        "    \"email\": \"gaurav.kumar@example.com\",\n" +
+        "    \"billing_address\": {\n" +
+        "      \"line1\": \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
+        "      \"line2\": \"Hosur Road\",\n" +
+        "      \"zipcode\": 560068,\n" +
+        "      \"city\": \"Bengaluru\",\n" +
+        "      \"state\": \"Karnataka\",\n" +
+        "      \"country\": \"in\"\n" +
         "    },\n" +
-        "    shipping_address: {\n" +
-        "      line1: \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
-        "      line2: \"Hosur Road\",\n" +
-        "      zipcode: 560068,\n" +
-        "      city: \"Bengaluru\",\n" +
-        "      state: \"Karnataka\",\n" +
-        "      country: \"in\"\n" +
+        "    \"shipping_address\": {\n" +
+        "      \"line1\": \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
+        "      \"line2\": \"Hosur Road\",\n" +
+        "      \"zipcode\": 560068,\n" +
+        "      \"city\": \"Bengaluru\",\n" +
+        "      \"state\": \"Karnataka\",\n" +
+        "      \"country\": \"in\"\n" +
         "    }\n" +
         "  },\n" +
-        "  line_items: [\n" +
+        "  \"line_items\": [\n" +
         "    {\n" +
-        "      name: \"Master Cloud Computing in 30 Days\",\n" +
-        "      description: \"Book by Ravena Ravenclaw\",\n" +
-        "      amount: 399,\n" +
-        "      currency: \"USD\",\n" +
-        "      quantity: 1\n" +
+        "      \"name\": \"Master Cloud Computing in 30 Days\",\n" +
+        "      \"description\": \"Book by Ravena Ravenclaw\",\n" +
+        "      \"amount\": 399,\n" +
+        "     \"currency\": \"USD\",\n" +
+        "      \"quantity\": 1\n" +
         "    }\n" +
         "  ],\n" +
-        "  sms_notify: 1,\n" +
-        "  email_notify: 1,\n" +
-        "  currency: \"USD\",\n" +
-        "  expire_by: 1589765167\n" +
+        "  \"sms_notify\": 1,\n" +
+        "  \"email_notify\": 1,\n" +
+        "  \"currency\": \"USD\",\n" +
+        "  \"expire_by\": 1589765167\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-Order order = instance.Invoices.create(request);
+Order order = instance.invoices.create(requestRequest);
 ```
 
 Request #2
 In this example, an invoice is created using existing `customer_id` and `item_id`
 ```java
-String json = "{\n" +
-        "  type: \"invoice\",\n" +
-        "  date: 1589994898,\n" +
-        "  customer_id: \"cust_E7q0trFqXgExmT\",\n" +
-        "  line_items: [\n" +
+String jsonRequest = "{\n" +
+        "  \"type:\": \"invoice\",\n" +
+        "  \"date\": 1589994898,\n" +
+        "  \"customer_id\": \"cust_E7q0trFqXgExmT\",\n" +
+        "  \"line_items\": [\n" +
         "    {\n" +
         "      \"item_id\": \"item_DRt61i2NnL8oy6\"\n" +
         "    }\n" +
         "  ]\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestRequest = new JSONObject(jsonRequest);
 
-Invoice invoice = instance.Invoices.create(request);
+Invoice invoice = instance.invoices.create(requestRequest);
 ```
 
 **Parameters:**
@@ -79,6 +79,7 @@ Invoice invoice = instance.Invoices.create(request);
 |customer           | object  | customer details in a object format                     |
 
 **Response:**
+
 For create invoice response please click [here](https://razorpay.com/docs/api/invoices/#create-an-invoice)
 
 -------------------------------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ For create invoice response please click [here](https://razorpay.com/docs/api/in
 ### Fetch all invoices
 
 ```java
-List<Invoice> invoice = instance.Invoices.fetchAll();
+List<Invoice> invoice = instance.invoices.fetchAll();
 ```
 
 **Parameters:**
@@ -99,6 +100,7 @@ List<Invoice> invoice = instance.Invoices.fetchAll();
 |receipt           | string  |  The unique receipt number that you entered for internal purposes.                     |
 
 **Response:**
+
 For fetch all invoice response please click [here](https://razorpay.com/docs/api/invoices/#fetch-multiple-invoices)
 
 -------------------------------------------------------------------------------------------------------
@@ -106,16 +108,16 @@ For fetch all invoice response please click [here](https://razorpay.com/docs/api
 ### Fetch invoice
 
 ```java
-String InvoiceId = "inv_E7q0tqkxBRzdau";
+String invoiceId = "inv_E7q0tqkxBRzdau";
 
-Invoice invoice = instance.Invoices.fetch(InvoiceId);
+Invoice invoice = instance.invoices.fetch(invoiceId);
 ```
 
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| InvoiceId*          | string | The id of the invoice to be fetched                         |
+| Name       | Type    | Description                                                                  |
+|------------|---------|------------------------------------------------------------------------------|
+| invoiceId* | string | The id of the invoice to be fetched                         |
 
 **Response:**
 ```json
@@ -220,28 +222,22 @@ Invoice invoice = instance.Invoices.fetch(InvoiceId);
 ### Update invoice
 
 ```java
-String json = "{\n" +
-        "  line_items: [\n" +
+String invoiceId = "inv_DAweOiQ7amIUVd";
+
+String jsonRequest = "{\n" +
+        "  \"type:\": \"invoice\",\n" +
+        "  \"date\": 1589994898,\n" +
+        "  \"customer_id\": \"cust_E7q0trFqXgExmT\",\n" +
+        "  \"line_items\": [\n" +
         "    {\n" +
-        "      id: \"li_DAweOizsysoJU6\",\n" +
-        "      name: \"Book / English August - Updated name and quantity\",\n" +
-        "      quantity: 1\n" +
-        "    },\n" +
-        "    {\n" +
-        "      name: \"Book / A Wild Sheep Chase\",\n" +
-        "      amount: 200,\n" +
-        "      currency: \"INR\",\n" +
-        "      quantity: 1\n" +
+        "      \"item_id\": \"item_DRt61i2NnL8oy6\"\n" +
         "    }\n" +
-        "  ],\n" +
-        "  notes: {\n" +
-        "    \"updated-key\": \"An updated note.\"\n" +
-        "  }\n" +
+        "  ]\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-Invoice invoice = instance.Invoices.edit(invoiceId,request);
+Invoice invoice = instance.invoices.edit(invoiceId,requestJson);
 ```
 
 **Parameters:**
@@ -258,16 +254,16 @@ For update invoice response please click [here](https://razorpay.com/docs/api/in
 ### Issue an invoice
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
-Invoice invoice = instance.Invoices.issue(invoiceId);
+Invoice invoice = instance.invoices.issue(invoiceId);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string | The id of the invoice to be issued                         |
+| invoiceId* | string | The id of the invoice to be issued                         |
 
 **Response:**
 ```json
@@ -384,16 +380,16 @@ Invoice invoice = instance.Invoices.issue(invoiceId);
 ### Delete an invoice
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
-instance.Invoices.delete(InvoiceId);
+instance.invoices.delete(InvoiceId);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string | The id of the invoice to be deleted                         |
+| invoiceId* | string | The id of the invoice to be deleted                         |
 
 **Response:**
 ```
@@ -404,16 +400,16 @@ instance.Invoices.delete(InvoiceId);
 ### Cancel an invoice
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
-Invoice invoice = instance.Invoices.cancel(InvoiceId);
+Invoice invoice = instance.invoices.cancel(invoiceId);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string | The id of the invoice to be cancelled                         |
+| invoiceId* | string | The id of the invoice to be cancelled                         |
 
 **Response:**
 ```json
@@ -519,11 +515,11 @@ Invoice invoice = instance.Invoices.cancel(InvoiceId);
 ### Send notification
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
 String medium = "sms";
 
-Invoice invoice = instance.Invoices.notifyBy(InvoiceId,medium);
+Invoice invoice = instance.invoices.notifyBy(invoiceId,medium);
 ```
 
 **Parameters:**

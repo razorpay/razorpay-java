@@ -2,19 +2,19 @@
 
 ### Create customer
 ```java
-String json = "{\n" +
-              "  name: \"Gaurav Kumar\",\n" +
-              "  contact: 9123456780,\n" +
-              "  email: \"gaurav.kumar@example.com\",\n" +
-              "  notes: {\n" +
-              "    notes_key_1: \"Tea, Earl Grey, Hot\",\n" +
-              "    notes_key_2: \"Tea, Earl Grey… decaf.\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"name\": \"Gaurav Kumar\",\n" +
+            "  \"contact\": 9123456780,\n" +
+            "  \"email\": \"gaurav.kumar@example.com\",\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);   
+JSONObject requestJson = new JSONObject(jsonRequest);   
           
-Customer customer = instance.Customers.create(request);
+Customer customer = instance.customers.create(requestJson);
 ```
 
 **Parameters:**
@@ -48,30 +48,30 @@ Customer customer = instance.Customers.create(request);
 ### Create order
 
 ```java
-String json = "{\n" +
-              "  amount: 0,\n" +
-              "  currency: \"INR\",\n" +
-              "  method: \"upi\",\n" +
-              "  customer_id: \"cust_1Aa00000000001\",\n" +
-              "  receipt: \"Receipt No. 1\",\n" +
-              "  notes: {\n" +
-              "    notes_key_1: \"Beam me up Scotty\",\n" +
-              "    notes_key_2: \"Engage\"\n" +
-              "  },\n" +
-              "  token: {\n" +
-              "    auth_type: \"netbanking\",\n" +
-              "    max_amount: 9999900,\n" +
-              "    expire_at: 4102444799,\n" +
-              "    notes: {\n" +
-              "      notes_key_1: \"Tea, Earl Grey, Hot\",\n" +
-              "      notes_key_2: \"Tea, Earl Grey… decaf.\"\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"amount\": 0,\n" +
+            "  \"currency\": \"INR\",\n" +
+            "  \"method\": \"upi\",\n" +
+            "  \"customer_id\": \"cust_1Aa00000000001\",\n" +
+            "  \"receipt\": \"Receipt No. 1\",\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\": \"Beam me up Scotty\",\n" +
+            "   \"notes_key_2\": \"Engage\"\n" +
+            "  },\n" +
+            "  \"token\": {\n" +
+            "    \"auth_type\": \"netbanking\",\n" +
+            "    \"max_amount\": 9999900,\n" +
+            "    \"expire_at\": 4102444799,\n" +
+            "    \"notes\": {\n" +
+            "      \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+            "      \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);         
+JSONObject requestJson = new JSONObject(jsonRequest);         
        
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 
 ```
 
@@ -117,33 +117,41 @@ Please refer this [doc](https://razorpay.com/docs/api/recurring-payments/upi/aut
 ### Create registration link
 
 ```java
-String json = "{\n" +
-              "  customer: {\n" +
-              "    name: \"Gaurav Kumar\",\n" +
-              "    email: \"gaurav.kumar@example.com\",\n" +
-              "    contact: 9123456780\n" +
-              "  },\n" +
-              "  type: \"link\",\n" +
-              "  amount: 100,\n" +
-              "  currency: \"INR\",\n" +
-              "  description: \"Registration Link for Gaurav Kumar\",\n" +
-              "  subscription_registration: {\n" +
-              "    method: \"upi\",\n" +
-              "    max_amount: 500,\n" +
-              "    expire_at: 1634215992\n" +
-              "  },\n" +
-              "  receipt: \"Receipt No. 5\",\n" +
-              "  email_notify: 1,\n" +
-              "  sms_notify: 1,\n" +
-              "  expire_by: 1634215992,\n" +
-              "  notes: {\n" +
-              "    \"note_key 1\": \"Beam me up Scotty\",\n" +
-              "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
-              "  }\n" +
-              "}";
-JSONObject request = new JSONObject(json);       
-        
-Invoice invoice = instance.Invoices.createRegistrationLink(request);
+String jsonRequest = "{\n" +
+        "  \"customer\": {\n" +
+        "    \"name\": \"Gaurav Kumar\",\n" +
+        "    \"email\": \"gaurav.kumar@example.com\",\n" +
+        "    \"contact\": 9123456780\n" +
+        "  },\n" +
+        "  \"type\": \"link\",\n" +
+        "  \"amount\": 0,\n" +
+        "  \"currency\": \"INR\",\n" +
+        "  \"description\": \"12 p.m. Meals\",\n" +
+        "  \"subscription_registration\": {\n" +
+        "    \"method\": \"emandate\",\n" +
+        "    \"auth_type\": \"netbanking\",\n" +
+        "    \"expire_at\": 1580480689,\n" +
+        "    \"max_amount\": 50000,\n" +
+        "    \"bank_account\": {\n" +
+        "      \"beneficiary_name\": \"Gaurav Kumar\",\n" +
+        "      \"account_number\": 11214311215411,\n" +
+        "      \"account_type\": \"savings\",\n" +
+        "      \"ifsc_code\": \"HDFC0001233\"\n" +
+        "    }\n" +
+        "  },\n" +
+        "  \"receipt\": \"Receipt no. 1\",\n" +
+        "  \"expire_by\": 1880480689,\n" +
+        "  \"sms_notify\": 1,\n" +
+        "  \"email_notify\": 1,\n" +
+        "  \"notes\": {\n" +
+        "    \"note_key 1\": \"Beam me up Scotty\",\n" +
+        "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
+        "  }\n" +
+        "}";
+
+        JSONObject requestJson = new JSONObject(jsonRequest);
+
+        Invoice invoice = instance.invoices.createRegistrationLink(requestJson);
 ```
 
 **Parameters:**
@@ -221,18 +229,18 @@ Invoice invoice = instance.Invoices.createRegistrationLink(request);
 ### Send/Resend notifications
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
 String medium = "sms";
 
-Invoice invoice = instance.Invoices.notifyBy(InvoiceId,medium);
+Invoice invoice = instance.invoices.notifyBy(invoiceId,medium);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string | The id of the invoice to be notified                         |
+| invoiceId* | string | The id of the invoice to be notified                         |
 | medium*    | string | `sms`/`email`, Medium through which notification should be sent.                         |
 
 **Response:**
@@ -246,16 +254,16 @@ Invoice invoice = instance.Invoices.notifyBy(InvoiceId,medium);
 ### Cancel a registration link
 
 ```java
-String InvoiceId = "inv_DAweOiQ7amIUVd";
+String invoiceId = "inv_DAweOiQ7amIUVd";
 
-Invoice invoice = instance.Invoices.cancel(InvoiceId);
+Invoice invoice = instance.invoices.cancel(invoiceId);
 ```
 
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string | The id of the invoice to be cancelled                         |
+| invoiceId* | string | The id of the invoice to be cancelled                         |
 
 **Response:**
 ```json
@@ -320,16 +328,16 @@ Invoice invoice = instance.Invoices.cancel(InvoiceId);
 ### Fetch token by payment ID
 
 ```java
-String PaymentId = "pay_1Aa00000000001";
+String paymentId = "pay_1Aa00000000001";
 
-Payment payment = instance.Payments.fetch(PaymentId)
+Payment payment = instance.payments.fetch(paymentId)
 ```
 
 **Parameters:**
 
 | Name       | Type   | Description                       |
 |------------|--------|-----------------------------------|
-| PaymentId* | string | Id of the payment to be retrieved |
+| paymentId* | string | Id of the payment to be retrieved |
 
 **Response:**
 ```json
@@ -378,16 +386,16 @@ Payment payment = instance.Payments.fetch(PaymentId)
 ### Fetch tokens by customer ID
 
 ```java
-String CustomerId = "cust_BMB3EwbqnqZ2EI";
+String customerId = "cust_BMB3EwbqnqZ2EI";
 
-List<Token> token = instance.Customers.fetchTokens(CustomerId);
+List<Token> token = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
 
 | Name        | Type        | Description                                 |
 |-------------|-------------|---------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
+| customerId* | string      | The id of the customer to be fetched |
 
 **Response:**
 ```json
@@ -427,19 +435,19 @@ List<Token> token = instance.Customers.fetchTokens(CustomerId);
 ### Delete token
 
 ```java
-String CustomerId = "cust_BMB3EwbqnqZ2EI";
+String customerId = "cust_BMB3EwbqnqZ2EI";
 
-String TokenId = "token_FHf94Uym9tdYFJ";
+String tokenId = "token_FHf94Uym9tdYFJ";
 
-instance.Customers.deleteToken(CustomerId, TokenId);
+instance.customers.deleteToken(customerId, tokenId);
 ```
 
 **Parameters:**
 
 | Name        | Type        | Description                                 |
 |-------------|-------------|---------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
-| TokenId*    | string      | The id of the token to be fetched |
+| customerId* | string      | customer id for which token to deleted |
+| tokenId*    | string      | The id of the token to be fetched |
 
 **Response:**
 ```json
@@ -452,19 +460,19 @@ instance.Customers.deleteToken(CustomerId, TokenId);
 ### Create an order to charge the customer
 
 ```java
-String json = "{\n" +
-              "  \"amount\": \"100\",\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"receipt\": \"Receipt No. 1\",\n" +
-              "  \"notes\": {\n" +
-              "    \"key1\": \"value3\",\n" +
-              "    \"key2\": \"value2\"\n" +
-              "  }\n" +
-              "}";
+String jsonRequest = "{\n" +
+            "  \"amount\":1000,\n" +
+            "  \"currency\":\"INR\",\n" +
+            "  \"receipt\":\"Receipt No. 1\",\n" +
+            "  \"notes\": {\n" +
+            "    \"notes_key_1\":\"Tea, Earl Grey, Hot\",\n" +
+            "    \"notes_key_2\":\"Tea, Earl Grey… decaf.\"\n" +
+            "  }\n" +
+            "}";
               
-JSONObject request = new JSONObject(json);         
+JSONObject requestJson = new JSONObject(jsonRequest);         
        
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 
 **Parameters:**
@@ -501,7 +509,7 @@ Order order = instance.Orders.create(request);
 ### Create a recurring payment
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
               "  \"email\": \"gaurav.kumar@example.com\",\n" +
               "  \"contact\": \"9123456789\",\n" +
               "  \"amount\": 1000,\n" +
@@ -517,25 +525,25 @@ String json = "{\n" +
               "  }\n" +
               "}";
   
-JSONObject request = new JSONObject(json);  
+JSONObject requestJson = new JSONObject(jsonRequest);  
               
-Payment payment = instance.Payments.createRecurringPayment(request);
+Payment payment = instance.payments.createRecurringPayment(requestJson);
 ```
 
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| email*          | string | The customer's email address.                                               |
-| contact*        | string  | The customer's phone number.                      |
-| amount*         | integer  | The amount you want to charge your customer. This should be the same as the amount in the order.                        |
-| currency*        | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
-| order_id*        | string  | The unique identifier of the order created. |
-| customer_id*        | string  | The `customer_id` for the customer you want to charge.  |
-| token*        | string  | The `token_id` generated when the customer successfully completes the authorization payment. Different payment instruments for the same customer have different `token_id`.|
-| recurring*        | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `1` - Recurring is enabled.* `0` - Recurring is not enabled.|
-| description*        | string  | A user-entered description for the payment.|
-| notes*        | object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. |
+| Name           | Type    | Description                                                                  |
+|----------------|---------|------------------------------------------------------------------------------|
+| email*         | string | The customer's email address.                                               |
+| contact*       | string  | The customer's phone number.                      |
+| amount*        | integer  | The amount you want to charge your customer. This should be the same as the amount in the order.                        |
+| currency*       | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
+| order_id*       | string  | The unique identifier of the order created. |
+| customer_id*      | string  | The `customer_id` for the customer you want to charge.  |
+| token*       | string  | The `token_id` generated when the customer successfully completes the authorization payment. Different payment instruments for the same customer have different `token_id`.|
+| recurring*       | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `1` - Recurring is enabled.* `0` - Recurring is not enabled.|
+| description       | string  | A user-entered description for the payment.|
+| notes        | object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. |
 
 **Response:**
 ```json

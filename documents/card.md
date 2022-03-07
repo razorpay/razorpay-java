@@ -2,7 +2,7 @@
 
 ### Create customer
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
         "  name: \"Gaurav Kumar\",\n" +
         "  email: \"gaurav.kumar@example.com\",\n" +
         "  contact: \"9123456780\",\n" +
@@ -13,9 +13,9 @@ String json = "{\n" +
         "  }\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-Customer customer = instance.Customers.create(request);
+Customer customer = instance.customers.create(requestJson);
 ```
 
 **Parameters:**
@@ -49,7 +49,7 @@ Customer customer = instance.Customers.create(request);
 ### Create Order
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
         "   \"amount\":100,\n" +
         "   \"currency\":\"INR\",\n" +
         "   \"customer_id\":\"cust_4xbQrmEoA5WJ01\",\n" +
@@ -66,9 +66,9 @@ String json = "{\n" +
         "   }\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(jsonRequest);
 
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 
 **Parameters:**
@@ -116,7 +116,7 @@ Order order = instance.Orders.create(request);
 ### Create registration link
 
 ```java
-String json = "{\n" +
+String JsonRequest = "{\n" +
         "  customer: {\n" +
         "    name: \"Gaurav Kumar\",\n" +
         "    email: \"gaurav.kumar@example.com\",\n" +
@@ -141,9 +141,9 @@ String json = "{\n" +
         "  }\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(request);
 
-Invoice invoice = instance.Invoices.createRegistrationLink(request);
+Invoice invoice = instance.invoices.createRegistrationLink(requestJson);
 ```
 
 **Parameters:**
@@ -225,7 +225,7 @@ Invoice invoice = instance.Invoices.createRegistrationLink(request);
 ## Create an order to charge the customer
 
 ```java
-String json = "{\n" +
+String jsonRequest = "{\n" +
         "  amount: 100,\n" +
         "  currency: \"INR\",\n" +
         "  customer_id: \"cust_4xbQrmEoA5WJ01\",\n" +
@@ -242,9 +242,9 @@ String json = "{\n" +
         "  }\n" +
         "}";
 
-JSONObject request = new JSONObject(json);
+JSONObject requestJson = new JSONObject(JsonRequest);
 
-Order order = instance.Orders.create(request);
+Order order = instance.orders.create(requestJson);
 ```
 **Parameters:**
 
@@ -291,7 +291,7 @@ Order order = instance.Orders.create(request);
 ## Create a recurring payment
 
 ```java
-   String json = "{\n" +
+   String jsonRequest = "{\n" +
                "  \"email\": \"gaurav.kumar@example.com\",\n" +
                "  \"contact\": \"9123456789\",\n" +
                "  \"amount\": 1000,\n" +
@@ -307,9 +307,9 @@ Order order = instance.Orders.create(request);
                "  }\n" +
                "}";
    
-   JSONObject request = new JSONObject(json);  
+   JSONObject requestJson = new JSONObject(jsonRequest);  
                
-   Payment payment = instance.Payments.createRecurringPayment(request);
+   Payment payment = instance.payments.createRecurringPayment(requestJson);
 ```
 **Parameters:**
 
@@ -345,9 +345,11 @@ Please refer this [doc](https://razorpay.com/docs/api/recurring-payments/cards/a
 ## Send/Resend notifications
 
 ```java
-String InvoiceId = "inv_FHrXGIpd3N17DX";
+String invoiceId = "inv_FHrXGIpd3N17DX";
 
-Invoice invoice = instance.Invoices.notifyBy(InvoiceId,"sms");
+String medium = "sms";
+
+Invoice invoice = instance.invoices.notifyBy(invoiceId,medium);
 ```
 **Parameters:**
 
@@ -367,15 +369,15 @@ Invoice invoice = instance.Invoices.notifyBy(InvoiceId,"sms");
 ## Cancel registration link
 
 ```java
-String InvoiceId = "inv_FHrXGIpd3N17DX";
+String invoiceId = "inv_FHrXGIpd3N17DX";
 
-instance.Invoices.cancel(InvoiceId)
+instance.invoices.cancel(invoiceId)
 ```
 **Parameters:**
 
 | Name       | Type    | Description                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
-| InvoiceId* | string      | The id of the invoice to be fetched |
+| invoiceId* | string      | The id of the invoice to be fetched |
 
 **Response:**
 ```json
@@ -440,9 +442,9 @@ instance.Invoices.cancel(InvoiceId)
 ## Fetch token by payment id
 
 ```java
-String PaymentId = "pay_FHfqtkRzWvxky4";
+String paymentId = "pay_FHfqtkRzWvxky4";
 
-Payment payment = instance.Payments.fetch(PaymentId)
+Payment payment = instance.payments.fetch(paymentId)
 ```
 **Parameters:**
 
@@ -496,15 +498,15 @@ Payment payment = instance.Payments.fetch(PaymentId)
 ## Fetch tokens by customer id
 
 ```java
-String CustomerId = "cust_DtHaBuooGHTuyZ";
+String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Token> tokens = instance.Customers.fetchTokens(CustomerId)
+List<Token> tokens = instance.customers.fetchTokens(customerId)
 ```
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| CustomerId*   | string      | The id of the customer to be fetched |
+| Name        | Type    | Description                                                                  |
+|-------------|---------|------------------------------------------------------------------------------|
+| customerId* | string      | The id of the customer to be fetched |
 
 **Response:**
 ```json
@@ -557,16 +559,16 @@ List<Token> tokens = instance.Customers.fetchTokens(CustomerId)
 ### Fetch card
 
 ```java
-String CardId = "card_F0zoXUp4IPPGoI";
+String cardId = "card_F0zoXUp4IPPGoI";
 
-Card card=instance.Cards.fetch(CardId);
+Card card=instance.cards.fetch(cardId);
 ```
 
 **Parameters:**
 
 | Name    | Type    | Description                                                                  |
 |---------|---------|------------------------------------------------------------------------------|
-| CardId* | string | card id to be fetched                                               |
+| cardId* | string | card id to be fetched                                               |
 
 **Response**
 ```json
@@ -585,18 +587,18 @@ Card card=instance.Cards.fetch(CardId);
 ## Delete tokens
 
 ```java
-String CustomerId = "cust_Hwq7Ba6TDXl1ga";
+String customerId = "cust_Hwq7Ba6TDXl1ga";
 
-String TokenId = "token_1Aa00000000001";
+String tokenId = "token_1Aa00000000001";
 
-Customer customer = instance.Customers.deleteToken(CustomerId,TokenId)
+Customer customer = instance.customers.deleteToken(customerId,tokenId)
 ```
 **Parameters:**
 
 | Name        | Type    | Description                                                                  |
 |-------------|---------|------------------------------------------------------------------------------|
-| CustomerId* | string      | The id of the customer to be fetched |
-| TokenId*    | string      | The id of the token to be fetched |
+| customerId* | string      | The id of the customer to be fetched |
+| tokenId*    | string      | The id of the token to be fetched |
 
 **Response:**
 ```json
