@@ -3,6 +3,7 @@ package com.razorpay;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -184,8 +185,12 @@ class ApiClient {
     JSONObject responseJson = null;
 
     try {
-      responseBody = response.body().string();
-      responseJson = new JSONObject(responseBody);
+      if(response.body()!=null) {
+        responseBody = response.body().string();
+        if(StringUtils.isNotEmpty(responseBody)) {
+          responseJson = new JSONObject(responseBody);
+        }
+      }
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
