@@ -244,7 +244,7 @@ String jsonRequest = "{\"customer_id\":\"cust_HKsR5se84c5LTO\"}";
 
 JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<QrCode> qrcode = instance.qrCode.fetchAll(request);
+List<QrCode> qrcodes = instance.qrCode.fetchAll(request);
 ```
 
 **Parameters:**
@@ -291,7 +291,7 @@ String jsonRequest = "{\"payment_id\":\"pay_FVmAstJWfsD3SO\"}";
 
 JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<QrCode> qrcode = instance.qrCode.fetchAll(requestRequest);
+List<QrCode> qrcodes = instance.qrCode.fetchAll(requestRequest);
 ```
 
 **Parameters:**

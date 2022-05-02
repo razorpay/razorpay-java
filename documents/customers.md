@@ -26,6 +26,8 @@ Customer customer = instance.customers.create(request);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `0` or `1`|
+| gstin         | string      | Customer's GST number, if available. For example, 29XAbbA4369J1PA  |
 | notes         | object      | A key-value pair                            |
 
 **Response:**

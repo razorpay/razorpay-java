@@ -112,7 +112,7 @@ String jsonRequest = "{\n" +
                
 JSONObject requestRequest = new JSONObject(jsonRequest);  
  
-List<Payment> payment = instance.payments.fetchAllRefunds(paymentId,requestRequest);
+List<Payment> payments = instance.payments.fetchAllRefunds(paymentId,requestRequest);
 ```
 
 **Parameters:**

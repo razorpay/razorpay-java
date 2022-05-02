@@ -166,7 +166,7 @@ String jsonRequest = "{\n" +
 
 JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Subscription> subscription = instance.subscriptions.fetchAll(requestJson);
+List<Subscription> subscriptions = instance.subscriptions.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -330,7 +330,7 @@ Subscription subscription = instance.subscription.cancel(subscriptionId,requestJ
 
 String subscriptionId = "sub_00000000000002"; 
  
-Subscription subscription = instance.subscription.update(subscriptionId);
+Subscription subscription = instance.subscription.update(subscriptionId,options);
 ```
 
 **Parameters:**
@@ -598,7 +598,7 @@ String jsonRequest = "{\n" +
               
 JSONObject requestJson = new JSONObject(jsonRequest); 
               
-List<Invoice> invoice = instance.invoices.fetchAll(requestJson);
+List<Invoice> invoices = instance.invoices.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -702,7 +702,7 @@ String subscriptionId = "sub_I3GGEs7Xgmnozy";
 
 String offerId = "offer_JHD834hjbxzhd38d";
 
-instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
+JSONObject subscription = instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
 ```
 
 **Parameters:**

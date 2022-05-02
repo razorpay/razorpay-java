@@ -88,6 +88,7 @@ Order order = instance.orders.create(requestJson);
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 | method*      | string  | Payment method used to make the registration transaction. Possible value is `emandate`.  |
+| payment_capture* |  boolean  | Indicates whether payment status should be changed to `captured` automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically.|
 | receipt      | string  | Your system order reference id.  |
 | token  | object  | All keys listed [here](https://razorpay.com/docs/api/recurring-payments/emandate/auto-debit/#112-create-an-order) are supported |
 | notes | object  | A key-value pair  |
@@ -188,6 +189,7 @@ Order order = instance.orders.create(requestJson);
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 | receipt      | string  | Your system order reference id.  |
+| payment_capture* |  boolean  | Indicates whether payment status should be changed to `captured` automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically.|
 | notes | object  | A key-value pair  |
 
 **Response:**
@@ -433,7 +435,7 @@ String customerId = "cust_BMB3EwbqnqZ2EI";
 
 String tokenId = "token_FHf94Uym9tdYFJ";
 
-instance.Customers.deleteToken(customerId, tokenId);
+JSONObject customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 **Parameters:**
 

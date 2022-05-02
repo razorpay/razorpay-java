@@ -170,7 +170,7 @@ For updating payment link response please click [here](https://razorpay.com/docs
 ```java
 String PaymentLinkId = "plink_FMbhpT6nqDjDei";
 
-PaymentLink paymentlink = instance.PaymentLink.cancel(paymentLinkId);
+PaymentLink paymentlink = instance.paymentLink.cancel(paymentLinkId);
 ```
 
 **Parameters:**
@@ -1020,7 +1020,7 @@ String jsonRequest = "{\n" +
               
 JSONObject requestRequest = new JSONObject(jsonRequest);
               
-PaymentLink payment = instance.PaymentLink.create(requestRequest);
+PaymentLink payment = instance.paymentLink.create(requestRequest);
 ```
 
 **Parameters:**

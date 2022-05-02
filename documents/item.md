@@ -57,10 +57,6 @@ List<Item> item = instance.items.fetchAll(requestJson);
 | to    | timestamp | timestamp before which the item were created |
 | count | integer   | number of item to fetch (default: 10)        |
 | skip  | integer   | number of item to be skipped (default: 0)    |
-| name        | string | Name of the item.                    |
-| description        | string  | A brief description of the item.  |
-| amount         | integer  | Amount of the order to be paid     |
-| currency           | string  | Currency of the order. Currently only `INR` is supported.    |
 | active   | boolean  | Possible values is `0` or `1` |
 
 **Response:**
@@ -170,7 +166,7 @@ Item item = instance.items.edit(itemId, requestJson);
 ```java
 String itemId = "item_7Oy8OMV6BdEAac";
 
-instance.items.delete(itemId)
+JSONObject item  = instance.items.delete(itemId)
 ```
 **Parameters**
 
@@ -181,7 +177,7 @@ instance.items.delete(itemId)
 **Response:**
 
 ```json
-[]
+{}
 ```
 -------------------------------------------------------------------------------------------------------
 

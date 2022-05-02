@@ -16,7 +16,7 @@ String jsonRequest = "{\n" +
               
 JSONObject requestRequest = new JSONObject(jsonRequest);
               
-instance.customers.create(requestRequest);
+Customer customer = instance.customers.create(requestRequest);
 ```
 
 **Parameters:**
@@ -201,7 +201,7 @@ String jsonRequest = "{\n" +
 
 JSONObject requestRequest = new JSONObject(jsonRequest);
 
-Payment payment = instance.invoices.createRegistrationLink(requestRequest);
+Invoice invoice = instance.invoices.createRegistrationLink(requestRequest);
 ```
 
 **Parameters:**
@@ -493,7 +493,7 @@ Order order = instance.orders.fetchPayments(orderId);
 ```java
 String paymentId = "pay_1Aa00000000003";
 
-instance.payments.fetch(paymentId);
+Payment payment = instance.payments.fetch(paymentId);
 ```
 
 **Parameters:**
@@ -594,7 +594,7 @@ String customerId = "cust_DtHaBuooGHTuyZ";
 
 String tokenId = "token_EhYgIE3pOyMQpD";
 
-instance.customers.deleteToken(customerId, tokenId);
+JSONObject customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 
 **Parameters:**
@@ -683,7 +683,7 @@ String jsonRequest = "{\n" +
   
 JSONObject requestRequest = new JSONObject(jsonRequest);  
               
-Payment payment = instance.Payments.createRecurringPayment(requestRequest);
+Payment payment = instance.payments.createRecurringPayment(requestRequest);
 ```
 
 **Parameters:**

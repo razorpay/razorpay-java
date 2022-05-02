@@ -186,6 +186,7 @@ VirtualAccount virtualaccount = instance.virtualAccounts.create(requestJson);
 | receivers*    | array      | Array that defines what receivers are available for this Virtual Account                        |
 | description  | string      | A brief description of the payment.   |
 | amount_expected  | integer   | The maximum amount you expect to receive in this virtual account. Pass `69999` for ₹699.99.   |
+| customer_id  | string      | Unique identifier of the customer to whom the virtual account must be tagged.                    |
 | notes       | object | All keys listed [here](https://razorpay.com/docs/payments/payments/payment-methods/bharatqr/api/#create) are supported   |
 
 **Response:**
@@ -304,7 +305,7 @@ String jsonRequest = "{\n" +
 
 JSONObject requestJson = new JSONObject(jsonRequest);
         
-List<VirtualAccount> virtualaccount = instance.virtualAccounts.fetchPayments(virtualId,requestJson);
+List<VirtualAccount> virtualaccounts = instance.virtualAccounts.fetchPayments(virtualId,requestJson);
 ```
 
 **Parameters:**
@@ -507,7 +508,7 @@ For add receiver to an existing virtual account response please click [here](htt
 String virtualId = "va_Di5gbNptcWV8fQ";
 
 String jsonRequest = "{\n" +
-            "  \"types\": \"bank_account\",\n" +
+            "  \"type\": \"bank_account\",\n" +
             "  \"bank_account\": {\n" +
             "    \"ifsc\": \"UTIB0000013\",\n" +
             "    \"account_number\": 914010012345679\n" +
@@ -524,7 +525,7 @@ VirtualAccount virtualaccount = instance.virtualAccounts.addAllowedPayers(virtua
 | Name          | Type      | Description                                      |
 |---------------|-----------|--------------------------------------------------|
 | virtualId*    | string    | The id of the virtual to be updated  |
-| types*        | object | The receiver type to be added to the virtual account. Possible values are `vpa` or `bank_account`  |
+| type*        | object | The receiver type to be added to the virtual account. Possible values are `vpa` or `bank_account`  |
 | bank_account* | object | Indicates the bank account details such as `ifsc` and `account_number` |
 
 **Response:**
@@ -575,7 +576,7 @@ String virtualId = "va_Di5gbNptcWV8fQ";
 
 String allowedPlayer = "ba_DlGmm9mSj8fjRM";
 
-instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
+JSONObject virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
 ```
 
 **Parameters:**

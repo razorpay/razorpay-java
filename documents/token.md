@@ -126,7 +126,7 @@ String customerId = "cust_DtHaBuooGHTuyZ";
 
 String tokenId = "token_HouA2OQR5Z2jTL";
 
-Customer customer = instance.Customers.fetchToken(customerId, tokenId)
+Customer customer = instance.customers.fetchToken(customerId, tokenId)
 ```
 
 **Parameters:**
@@ -174,12 +174,12 @@ Customer customer = instance.Customers.fetchToken(customerId, tokenId)
 
 ### Delete token
 
-```js
+```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
 String tokenId = "token_HouA2OQR5Z2jTL";
 
-Customer customer = instance.customers.deleteToken(customerId, tokenId);
+JSONObject customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 
 **Parameters:**

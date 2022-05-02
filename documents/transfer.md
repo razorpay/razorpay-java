@@ -25,7 +25,7 @@ String json = "{\n" +
               
 JSONObject request = new JSONObject(json);
               
-instance.payments.transfer(paymentId,request);
+Payment payment = instance.payments.transfer(paymentId,request);
 ```
 
 **Parameters:**
@@ -217,7 +217,7 @@ Transfer transfer = instance.transfers.create(requestJson);
 ```java
 String paymentId = "pay_E9up5WhIfMYnKW";
 
-List<Payment> payment = instance.payments.fetchAllTransfers(paymentId)
+List<Payment> payments = instance.payments.fetchAllTransfers(paymentId)
 ```
 
 **Parameters:**
@@ -299,7 +299,7 @@ String jsonRequest = {\"recipient_settlement_id\":\"setl_DHYJ3dRPqQkAgV\"}";
 
 JSONObject requestRequest = new JSONObject(jsonRequest);
 
-List<Transfer> transfer = instance.transfers.fetchAll(requestRequest);
+List<Transfer> transfers = instance.transfers.fetchAll(requestRequest);
 ```
 
 **Parameters:**
@@ -442,7 +442,7 @@ String jsonRequest = "{\"X-Razorpay-Account\":\"acc_CPRsN1LkFccllA\"}"
 
 JSONObject requestJson = new JSONObject(jsonRequest);
 
-List<Payment> payment = instance.payments.fetchAll(requestJson);
+List<Payment> payments = instance.payments.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -500,7 +500,7 @@ String jsonRequest = "{\n" +
               
 JSONObject requestJson = new JSONObject(jsonRequest);       
         
-Transfer transfer = instance.Transfers.reversal(transferId,requestJson);
+Transfer transfer = instance.transfers.reversal(transferId,requestJson);
 ```
 
 **Parameters:**
@@ -586,7 +586,7 @@ Payment payment = instance.payments.transfer(paymentId,requestJson);
 
 ### Modify settlement hold for transfers
 ```java
-String paymentId = "pay_EAeSM2Xul8xYRo";
+String transferId = "trf_EB17rqOUbzSCEE";
 
 String jsonRequest = "{\n" +
                 "\"on_hold\": \"1\",\n" +
@@ -595,16 +595,16 @@ String jsonRequest = "{\n" +
                
 JSONObject requestJson = new JSONObject(jsonRequest);    
               
-Transfer transfer = instance.Transfers.edit(paymentId,requestJson);
+Transfer transfer = instance.transfers.edit(transferId,requestJson);
 ```
 
 **Parameters:**
 
 | Name          | Type    | Description                                 |
 |---------------|---------|---------------------------------------------|
-| paymentId*    | string  | The id of the payment to be fetched  |
-| on_hold       | boolean | Possible value is `0` or `1` |
-| on_hold_until | integer |  |
+| transferId*   | string      | The id of the transfer to be fetched  |
+| on_hold*   | boolean      | Possible values is `0` or `1`  |
+| on_hold_until   | integer      | Timestamp, in Unix, that indicates until when the settlement of the transfer must be put on hold |
 
 **Response:**
 ```json

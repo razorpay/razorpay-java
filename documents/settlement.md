@@ -3,7 +3,7 @@
 ### Fetch all  settlements
 
 ```java
-List<Settlement> settlement = razorpayclient.settlement.fetchAll();
+List<Settlement> settlements = razorpayclient.settlement.fetchAll();
 ```
 
 **Parameters:**
@@ -224,7 +224,7 @@ String jsonRequest = "{\n" +
                   
 JSONObject requestJson = new JSONObject(jsonRequest);      
             
-List<Settlement> settlement = instance.Settlement.reports(requestJson);
+List<Settlement> settlements = instance.settlement.reports(requestJson);
 ```
 **Parameters:**
 
@@ -451,7 +451,7 @@ For all on-demand settlements response please click [here](https://razorpay.com/
 ```java
 String settlementId = "setlodp_FNj7g2cbvw8ueO";
 
-instance.settlement.fetchDemandSettlement(settlementId);
+Settlement settlement = instance.settlement.fetchDemandSettlement(settlementId);
 ```
 
 **Parameters:**

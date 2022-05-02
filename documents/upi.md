@@ -388,7 +388,7 @@ Payment payment = instance.payments.fetch(paymentId)
 ```java
 String customerId = "cust_BMB3EwbqnqZ2EI";
 
-List<Token> token = instance.customers.fetchTokens(customerId);
+List<Token> tokens = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
@@ -439,7 +439,7 @@ String customerId = "cust_BMB3EwbqnqZ2EI";
 
 String tokenId = "token_FHf94Uym9tdYFJ";
 
-instance.customers.deleteToken(customerId, tokenId);
+JSONObject customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 
 **Parameters:**

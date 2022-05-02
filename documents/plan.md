@@ -76,7 +76,7 @@ String jsonRequest = "{\n" +
 
 JSONObject requestJson = new JSONObject(jsonRequest);
 
-instance.plans.fetchAll(requestJson);
+List<Plan> plans =  instance.plans.fetchAll(requestJson);
 ```
 
 **Parameters:**
@@ -134,14 +134,14 @@ instance.plans.fetchAll(requestJson);
 ```java
 String planId = "plan_00000000000001";
 
-instance.plans.fetch(planId);
+Plan plan = instance.plans.fetch(planId);
 ```
 
 **Parameters:**
 
 | Name   | Type      | Description                                      |
 |--------|-----------|--------------------------------------------------|
-| planId | string | The id of the plan to be fetched  |
+| planId* | string | The id of the plan to be fetched  |
 
 **Response:**
 ```json

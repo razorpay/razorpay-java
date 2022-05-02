@@ -47,8 +47,24 @@ String jsonRequest = "{\n" +
 
 JSONObject requestRequest = new JSONObject(jsonRequest);
 
-Order order = instance.invoices.create(requestRequest);
+Invoice invoice = instance.invoices.create(requestRequest);
 ```
+
+**Parameters:**
+
+| Name            | Type    | Description                                                                  |
+|-----------------|---------|------------------------------------------------------------------------------|
+|type*          | string | entity type (here its invoice)                                               |
+|description        | string  | A brief description of the invoice.                      |
+|customer_id           | string  | customer id for which invoice need be raised                     |
+|customer           | array  | customer details in a array format                     |
+|line_items*           | array  | Details of the line item that is billed in the invoice.  |
+|expire_by           | array  | Details of the line item that is billed in the invoice.  |
+|sms_notify           | array  | Details of the line item that is billed in the invoice.  |
+|email_notify           | array  | Details of the line item that is billed in the invoice.  |
+|partial_payment | boolean  | Indicates whether customers can make partial payments on the invoice . Possible values: true - Customer can make partial payments. false (default) - Customer cannot make partial payments. |
+| currency*   | string  | The currency of the payment (defaults to INR)  |
+
 
 Request #2
 In this example, an invoice is created using existing `customer_id` and `item_id`
@@ -382,7 +398,7 @@ Invoice invoice = instance.invoices.issue(invoiceId);
 ```java
 String invoiceId = "inv_DAweOiQ7amIUVd";
 
-instance.invoices.delete(InvoiceId);
+JSONObject invoice = instance.invoices.delete(InvoiceId);
 ```
 
 **Parameters:**
@@ -393,7 +409,7 @@ instance.invoices.delete(InvoiceId);
 
 **Response:**
 ```
-[]
+{}
 ```
 -------------------------------------------------------------------------------------------------------
 

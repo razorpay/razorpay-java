@@ -203,7 +203,7 @@ String jsonRequest = "{\n" +
 
         JSONObject requestRequest = new JSONObject(jsonRequest);
 
-        Payment payment = instance.invoices.createRegistrationLink(requestRequest);
+        Invoice invoice = instance.invoices.createRegistrationLink(requestRequest);
 ```
 
 **Parameters:**
@@ -338,6 +338,7 @@ Order order = instance.orders.create(requestRequest);
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 | receipt      | string  | Your system order reference id.  |
+| payment_capture  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
 | notes | object  | A key-value pair  |
 
 **Response:**
@@ -644,7 +645,7 @@ String customerId = "cust_BMB3EwbqnqZ2EI";
 
 String tokenId = "token_FHf94Uym9tdYFJ";
 
-instance.customers.deleteToken(customerId, tokenId);
+JSONObject customer = instance.customers.deleteToken(customerId, tokenId);
 ```
 **Parameters:**
 
