@@ -52,15 +52,41 @@ class ApiClient {
     return processResponse(response);
   }
 
-  public <T extends Entity> T delete(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
-    return processDeleteResponse(response);
-  }
 
   <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
           throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processCollectionResponse(response);
+  }
+
+  public JSONObject delete(String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
+    if (response == null) {
+      throw new RazorpayException("Invalid Response from server");
+    }
+
+    int statusCode = response.code();
+    String responseBody = null;
+    JSONObject responseJson = null;
+
+    try {
+      responseBody = response.body().string();
+      if(response.code()==204 || responseBody.length()==2){
+        responseJson = new JSONObject("{}");
+      }else{
+        responseJson = new JSONObject(responseBody);
+      }
+
+    } catch (IOException e) {
+      throw new RazorpayException(e.getMessage());
+    }
+
+    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
+      return responseJson;
+    }
+
+    throwException(statusCode, responseJson);
+    return null;
   }
 
   private <T extends Entity> T parseResponse(JSONObject jsonObject) throws RazorpayException {

@@ -54,7 +54,7 @@ public class SubscriptionClient extends ApiClient {
     return post(String.format(Constants.RESUME_SUBSCRIPTION, id), request);
   }
 
-  public Subscription deleteSubscriptionOffer(String subId, String offerId) throws RazorpayException {
+  public JSONObject deleteSubscriptionOffer(String subId, String offerId) throws RazorpayException {
     return delete(String.format(Constants.SUBSCRIPTION_OFFER, subId, offerId), null);
   }
 }

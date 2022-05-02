@@ -32,7 +32,7 @@ public class AddonClient extends ApiClient {
       return getCollection(Constants.ADDON_LIST, request);
     }
 
-  public void delete(String id) throws RazorpayException {
-    delete(String.format(Constants.ADDON_DELETE, id), null);
+  public JSONObject delete(String id) throws RazorpayException {
+    return delete(String.format(Constants.ADDON_DELETE, id), null);
   }
 }

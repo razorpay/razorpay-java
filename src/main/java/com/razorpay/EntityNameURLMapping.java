@@ -3,10 +3,10 @@ package com.razorpay;
 import java.util.Arrays;
 
  /**
- * Enum name is acting as url & entity is denoting Entity class
+ * Enum name is acting as url and entity is denoting Entity class
   * ex: https://api.razorpay.com/v1/invocies
   * getEntityName method will take "invoices" from above mentioned url
-  * & will return "invoice" as entity name as mentioned below in mapping INVOICES("invoice")
+  * and will return "invoice" as entity name as mentioned below in mapping INVOICES("invoice")
  */
 
 public enum EntityNameURLMapping {
