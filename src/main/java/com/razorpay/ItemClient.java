@@ -30,7 +30,7 @@ public class ItemClient extends ApiClient{
 	    return getCollection(Constants.ITEMS, request);
 	}
 
-	public JSONObject delete(String id) throws RazorpayException {
+	public List<Item> delete(String id) throws RazorpayException {
 	   return delete(String.format(Constants.ITEM, id), null);
 	}
 }

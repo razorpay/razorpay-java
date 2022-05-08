@@ -50,7 +50,7 @@ public class VirtualAccountClient extends ApiClient {
     return post(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, id), request);
   }
 
-  public JSONObject deleteAllowedPayer(String virtual_id, String payer_id) throws RazorpayException {
-    return delete(String.format(Constants.VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS, virtual_id, payer_id), null);
+  public VirtualAccount deleteAllowedPayer(String virtual_id, String payer_id) throws RazorpayException {
+      return delete(String.format(Constants.VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS, virtual_id, payer_id), null);
   }
 }

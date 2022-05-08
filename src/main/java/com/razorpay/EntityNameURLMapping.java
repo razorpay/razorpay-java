@@ -13,9 +13,10 @@ public enum EntityNameURLMapping {
   
     INVOICES("invoice"),
     SETTLEMENTS("settlement"),
-	  PAYMENTS("payment"),
+     PAYMENTS("payment"),
     PAYMENT_LINKS("payment_link"),
-    ITEMS("item"); 
+    ITEMS("item"),
+    CUSTOMERS("customer");
 
     private String entity;
 

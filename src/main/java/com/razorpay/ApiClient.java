@@ -2,6 +2,9 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -59,8 +62,12 @@ class ApiClient {
     return processCollectionResponse(response);
   }
 
-  public JSONObject delete(String path, JSONObject requestObject) throws RazorpayException {
+  public <T> T delete(String path, JSONObject requestObject) throws RazorpayException {
     Response response = ApiUtils.deleteRequest(path, requestObject, auth);
+    return processDeleteResponse(response);
+  }
+
+  private <T extends Object> T processDeleteResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -71,22 +78,23 @@ class ApiClient {
 
     try {
       responseBody = response.body().string();
-      if(response.code()==204 || responseBody.length()==2){
-        responseJson = new JSONObject("{}");
-      }else{
+      if(responseBody.equals("[]")){
+        return (T) Collections.emptyList();
+      }
+      else if(response.code()==204){
+        return null;
+      }
+      else{
         responseJson = new JSONObject(responseBody);
       }
-
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
 
-    if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      return responseJson;
+    if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
+      throwException(statusCode, responseJson);
     }
-
-    throwException(statusCode, responseJson);
-    return null;
+    return (T) parseResponse(responseJson, getEntity(responseJson, response.request().url()));
   }
 
   private <T extends Entity> T parseResponse(JSONObject jsonObject, String entity) throws RazorpayException {
@@ -185,8 +193,9 @@ class ApiClient {
       return getEntityNameFromURL(url);
     }else if(jsonObj.get("entity").toString().equals("settlement.ondemand")){
       return "settlement";
+    }else{
+      return jsonObj.getString(ENTITY);
     }
-    return null;
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
