@@ -249,7 +249,7 @@ public class SubscriptionClientTest extends BaseTest {
         String mockedResponseJson = getMockedResponseJson();
         mockResponseFromExternalClient(mockedResponseJson);
         mockResponseHTTPCodeFromExternalClient(200);
-        JSONObject subscription = subscriptionClient.deleteSubscriptionOffer(TEST_SUBSCRIPTION_ID, TEST_OFFER);
+        Subscription subscription = subscriptionClient.deleteSubscriptionOffer(TEST_SUBSCRIPTION_ID, TEST_OFFER);
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
         verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_OFFER, TEST_SUBSCRIPTION_ID,TEST_OFFER)));
     }

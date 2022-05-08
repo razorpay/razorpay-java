@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -155,6 +156,25 @@ public class ItemClientTest extends BaseTest{
             assertTrue(item.has("description"));
             String editRequest = getHost(String.format(Constants.ITEM, ITEM_ID));
             verifySentRequest(true, request.toString(), editRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Delete an Item
+     * @throws RazorpayException
+     */
+    @Test
+    public void testDeleteItem() throws IOException, RazorpayException {
+        try {
+            ArrayList<String> mockedResponseJson = new ArrayList<String>();
+            mockResponseFromExternalClient(String.valueOf(mockedResponseJson));
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Item> item = itemClient.delete(ITEM_ID);
+            assertNotNull(item);
+            String editRequest = getHost(String.format(Constants.ITEM,ITEM_ID));
+            verifySentRequest(false, null, editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
