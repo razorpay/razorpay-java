@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -30,7 +31,7 @@ public class BaseTest {
 
         MockitoAnnotations.initMocks(this);
         mockGetCall();
-
+        mockURL(Collections.emptyList());
     }
 
     private void mockGetCall() throws IOException, IllegalAccessException {
@@ -59,10 +60,16 @@ public class BaseTest {
         when(mockedResponse.request()).thenReturn(request);
     }
     protected void mockResponseFromExternalClient(String response) throws IOException {
-        JSONObject parse = new JSONObject(response);
-        ResponseBody rb = mock(ResponseBody.class);
-        when(rb.string()).thenReturn(parse.toString());
-        when(mockedResponse.body()).thenReturn(rb);
+        if(response.equals("[]")){
+            ResponseBody rb = mock(ResponseBody.class);
+            when(rb.string()).thenReturn(response);
+            when(mockedResponse.body()).thenReturn(rb);
+        }else{
+            JSONObject parse = new JSONObject(response);
+            ResponseBody rb = mock(ResponseBody.class);
+            when(rb.string()).thenReturn(parse.toString());
+            when(mockedResponse.body()).thenReturn(rb);
+        }
     }
 
     protected OkHttpClient getOkHttpClient()
