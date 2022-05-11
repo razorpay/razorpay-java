@@ -702,7 +702,7 @@ String subscriptionId = "sub_I3GGEs7Xgmnozy";
 
 String offerId = "offer_JHD834hjbxzhd38d";
 
-JSONObject subscription = instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
+Subscription subscription = instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
 ```
 
 **Parameters:**

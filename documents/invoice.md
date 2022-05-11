@@ -398,7 +398,7 @@ Invoice invoice = instance.invoices.issue(invoiceId);
 ```java
 String invoiceId = "inv_DAweOiQ7amIUVd";
 
-JSONObject invoice = instance.invoices.delete(InvoiceId);
+List<Invoice> invoice = instance.invoices.delete(InvoiceId);
 ```
 
 **Parameters:**
@@ -409,7 +409,7 @@ JSONObject invoice = instance.invoices.delete(InvoiceId);
 
 **Response:**
 ```
-{}
+[]
 ```
 -------------------------------------------------------------------------------------------------------
 

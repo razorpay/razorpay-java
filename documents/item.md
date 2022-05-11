@@ -17,12 +17,12 @@ Item item = instance.items.create(requestJson);
 
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| name*          | string | Name of the item.                    |
-| description        | string  | A brief description of the item.  |
-| amount         | integer  | Amount of the order to be paid     |
-| currency           | string  | Currency of the order. Currently only `INR` is supported.    |
+| Name        | Type    | Description                                                                  |
+|-------------|---------|------------------------------------------------------------------------------|
+| name*       | string | Name of the item.                    |
+| description | string  | A brief description of the item.  |
+| amount*     | integer  | Amount of the order to be paid     |
+| currency*   | string  | Currency of the order. Currently only `INR` is supported.    |
 
 **Response:**
 ```json
@@ -166,7 +166,7 @@ Item item = instance.items.edit(itemId, requestJson);
 ```java
 String itemId = "item_7Oy8OMV6BdEAac";
 
-JSONObject item  = instance.items.delete(itemId)
+List<Item> item  = instance.items.delete(itemId)
 ```
 **Parameters**
 
@@ -177,7 +177,7 @@ JSONObject item  = instance.items.delete(itemId)
 **Response:**
 
 ```json
-{}
+[]
 ```
 -------------------------------------------------------------------------------------------------------
 

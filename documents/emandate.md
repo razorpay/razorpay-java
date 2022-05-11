@@ -91,6 +91,7 @@ Order order = instance.orders.create(requestJson);
 | method*        | string  | The authorization method. In this case the value will be `emandate`                      |
 | receipt         | string  | Your system order reference id.                                              |
 | notes           | object  | A key-value pair                                                             |
+| payment_capture  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
 | token           | object  | A key-value pair                                                             |
 
 **Response:**
@@ -467,18 +468,18 @@ Payment payment = instance.payments.createRecurringPayment(requestJson);
 
 **Parameters:**
 
-| Name            | Type    | Description                                                                  |
-|-----------------|---------|------------------------------------------------------------------------------|
-| email*          | string | The customer's email address.                                               |
-| contact*        | string  | The customer's phone number.                      |
-| amount*         | integer  | The amount you want to charge your customer. This should be the same as the amount in the order.                        |
-| currency*        | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
-| order_id*        | string  | The unique identifier of the order created. |
-| customer_id*        | string  | The `customer_id` for the customer you want to charge.  |
-| token*        | string  | The `token_id` generated when the customer successfully completes the authorization payment. Different payment instruments for the same customer have different `token_id`.|
-| recurring*        | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `1` - Recurring is enabled.* `0` - Recurring is not enabled.|
-| description*        | string  | A user-entered description for the payment.|
-| notes*        | object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. |
+| Name           | Type    | Description                                                                  |
+|----------------|---------|------------------------------------------------------------------------------|
+| email*         | string | The customer's email address.                                               |
+| contact*       | string  | The customer's phone number.                      |
+| amount*        | integer  | The amount you want to charge your customer. This should be the same as the amount in the order.                        |
+| currency*       | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
+| order_id*       | string  | The unique identifier of the order created. |
+| customer_id*      | string  | The `customer_id` for the customer you want to charge.  |
+| token*       | string  | The `token_id` generated when the customer successfully completes the authorization payment. Different payment instruments for the same customer have different `token_id`.|
+| recurring*       | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `1` - Recurring is enabled.* `0` - Recurring is not enabled.|
+| description       | string  | A user-entered description for the payment.|
+| notes        | object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. |
 
 **Response:**
 ```json

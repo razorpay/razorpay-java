@@ -24,6 +24,7 @@ Customer customer = instance.customers.create(requestJson);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `0` or `1`|
 | notes         | object      | A key-value pair                            |
 
 **Response:**
@@ -164,6 +165,10 @@ String jsonRequest = "{\n" +
 | amount*         | integer  | The payment amount in the smallest currency sub-unit.                 |
 | description*    | string  | A description that appears on the hosted page. For example, `12:30 p.m. Thali meals (Gaurav Kumar`).                                                             |
 | subscription_registration           | object  | Details of the authorization payment.                      |
+|sms_notify           | array  | Details of the line item that is billed in the invoice.  |
+|email_notify           | array  | Details of the line item that is billed in the invoice.  |
+|expire_by           | array  | Details of the line item that is billed in the invoice.  |
+|receipt         | string  | Your system order reference id.  |
 | notes           | object  | A key-value pair                                                             |
 
 **Response:**

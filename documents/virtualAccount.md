@@ -576,7 +576,7 @@ String virtualId = "va_Di5gbNptcWV8fQ";
 
 String allowedPlayer = "ba_DlGmm9mSj8fjRM";
 
-JSONObject virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
+VirtualAccount virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
 ```
 
 **Parameters:**
@@ -588,7 +588,7 @@ JSONObject virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualI
 
 **Response:**
 ```json
-{}
+null
 ```
 -------------------------------------------------------------------------------------------------------
 ### Close virtual account
