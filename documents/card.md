@@ -592,7 +592,7 @@ String customerId = "cust_Hwq7Ba6TDXl1ga";
 
 String tokenId = "token_1Aa00000000001";
 
-JSONObject customer = instance.customers.deleteToken(customerId,tokenId)
+Customer customer = instance.customers.deleteToken(customerId,tokenId)
 ```
 **Parameters:**
 
