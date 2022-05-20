@@ -32,7 +32,10 @@ public class BaseTest {
         MockitoAnnotations.initMocks(this);
         mockGetCall();
         mockURL(Collections.emptyList());
+<<<<<<< otp_api
 
+=======
+>>>>>>> delete_method_v1
     }
 
     private void mockGetCall() throws IOException, IllegalAccessException {
@@ -62,9 +65,15 @@ public class BaseTest {
     }
     protected void mockResponseFromExternalClient(String response) throws IOException {
         if(response.equals("[]")){
+<<<<<<< otp_api
              ResponseBody rb = mock(ResponseBody.class);
              when(rb.string()).thenReturn(response);
              when(mockedResponse.body()).thenReturn(rb);
+=======
+            ResponseBody rb = mock(ResponseBody.class);
+            when(rb.string()).thenReturn(response);
+            when(mockedResponse.body()).thenReturn(rb);
+>>>>>>> delete_method_v1
         }else{
             JSONObject parse = new JSONObject(response);
             ResponseBody rb = mock(ResponseBody.class);
