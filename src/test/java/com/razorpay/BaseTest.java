@@ -32,7 +32,6 @@ public class BaseTest {
         MockitoAnnotations.initMocks(this);
         mockGetCall();
         mockURL(Collections.emptyList());
-        
     }
 
     private void mockGetCall() throws IOException, IllegalAccessException {
