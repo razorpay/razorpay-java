@@ -23,6 +23,9 @@ public class Constants {
   static final String PAYMENT_TRANSFER_GET = "payments/%s/transfers";
   static final String PAYMENT_BANK_TRANSFER_GET = "payments/%s/bank_transfer";
   static final String PAYMENT_EDIT = "payments/%s";
+  static final String PAYMENT_OTP_GENERATE = "payments/%s/otp_generate";
+  static final String PAYMENT_OTP_SUBMIT = "payments/%s/otp/submit";
+  static final String PAYMENT_OTP_RESEND = "payments/%s/otp/resend";
   static final String FETCH_CARD_DETAILS = "payments/%s/card";
   static final String FETCH_DOWNTIME_LIST = "payments/downtimes";
   static final String FETCH_DOWNTIME_GET = "payments/downtimes";

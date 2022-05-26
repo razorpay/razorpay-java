@@ -101,4 +101,16 @@ public class PaymentClient extends ApiClient {
     return post(Constants.PAYMENT_RECURRING, request);
   }
 
+  public Payment otpGenerate(String id) throws RazorpayException {
+    return post(String.format(Constants.PAYMENT_OTP_GENERATE, id), null);
+  }
+
+  public Payment otpSubmit(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.PAYMENT_OTP_SUBMIT, id), request);
+  }
+
+  public Payment otpResend(String id) throws RazorpayException {
+    return post(String.format(Constants.PAYMENT_OTP_RESEND, id), null);
+  }
+
 }

@@ -527,4 +527,111 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    /**
+     * OTP Generation
+     * @throws RazorpayException
+     */
+    @Test
+    public void otpGenerate() throws RazorpayException {
+
+        JSONObject request = new JSONObject("{\n" +
+             "\"otp\": \"\",\n" +
+         "}");
+
+        String mockedResponseJson = "{\n" +
+                " \"entity\": \"payment\", " +
+                "  \"next\": [\n" +
+                "    {\n" +
+                "      \"action\": \"otp_submit\",\n" +
+                "      \"url\": \"https://api.razorpay.com/v1/payments/pay_JWaNvYmrx75sXo/otp_submit/4f59d1f402f17f4cd9f9561ec9916573d63e48e6?key_id=rzp_test_z98FBYYhU5lDjb\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"action\": \"otp_resend\",\n" +
+                "      \"url\": \"https://api.razorpay.com/v1/payments/pay_JWaNvYmrx75sXo/otp_resend/json?key_id=rzp_test_z98FBYYhU5lDjb\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"metadata\": {\n" +
+                "    \"last4\": \"8430\",\n" +
+                "    \"issuer\": \"HDFC\",\n" +
+                "    \"network\": \"VISA\",\n" +
+                "    \"iin\": \"485498\"\n" +
+                "  },\n" +
+                "  \"razorpay_payment_id\": "+PAYMENT_ID+"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.otpGenerate(PAYMENT_ID);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
+            assertTrue(fetch.has("next"));
+            assertEquals("payment",fetch.get("entity"));
+            String otpRequest = getHost(String.format(Constants.PAYMENT_OTP_GENERATE, PAYMENT_ID));
+            verifySentRequest(false, null, otpRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Response on Submitting OTP
+     * @throws RazorpayException
+     */
+    @Test
+    public void otpSubmit() throws RazorpayException {
+
+        String jsonRequest = "{\n" +
+                "  \"otp\": \"123456\",\n" +
+                "}";
+
+        JSONObject request = new JSONObject(jsonRequest);
+
+        String mockedResponseJson = "{\n" +
+                " \"entity\": \"payment\", " +
+                "  \"razorpay_signature\": \"6b6e4fc7e63d559bbb1088bd8d6e09a461b50c6d33b50319abca0c339449d448\",\n" +
+                "  \"razorpay_order_id\": "+ORDER_ID+",\n" +
+                "  \"razorpay_payment_id\": "+PAYMENT_ID+"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.otpSubmit(PAYMENT_ID,request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
+            assertEquals(ORDER_ID,fetch.get("razorpay_order_id"));
+            assertTrue(fetch.has("razorpay_signature"));
+            String otpRequest = getHost(String.format(Constants.PAYMENT_OTP_SUBMIT, PAYMENT_ID));
+            verifySentRequest(true, request.toString(), otpRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * OTP Resend
+     * @throws RazorpayException
+     */
+    @Test
+    public void otpResend() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"next\": [\"otp_submit\", \"otp_resend\"],\n" +
+                "  \"razorpay_payment_id\": "+PAYMENT_ID+",\n" +
+                "  \"entity\" : \"payment\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.otpResend(PAYMENT_ID);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
+            assertTrue(fetch.has("next"));
+            assertEquals("payment",fetch.get("entity"));
+            String otpRequest = getHost(String.format(Constants.PAYMENT_OTP_RESEND, PAYMENT_ID));
+            verifySentRequest(false, null, otpRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
