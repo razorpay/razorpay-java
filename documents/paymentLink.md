@@ -6,63 +6,57 @@ Request #1
 Standard Payment Link
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 500,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"description\": \"For XYZ purpose\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\",\n" +
-              "    \"contact\": \"+919999999999\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"notes\": {\n" +
-              "    \"policy_name\": \"Jeevan Bima\"\n" +
-              "  },\n" +
-              "  \"callback_url\": \"https://example-callback-url.com/\",\n" +
-              "  \"callback_method\": \"get\"\n" +
-              "}";
-
-JSONObject requestRequest = new JSONObject(jsonRequest);
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("expire_by",1691097057);
+paymentLinkRequest.put("reference_id","TS1989");
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("reminder_enable",true);
+JSONObject notes = new JSONObject();
+notes.put("policy_name","Jeevan Bima");
+paymentLinkRequest.put("notes",notes);
+paymentLinkRequest.put("callback_url","https://example-callback-url.com/");
+paymentLinkRequest.put("callback_method","get");
               
-PaymentLink payment = instance.paymentLink.create(requestRequest);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 ```
 
 Request #2
 UPI Payment Link
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"upi_link\": true,\n" +
-              "  \"amount\": 500,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"description\": \"For XYZ purpose\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\",\n" +
-              "    \"contact\": \"+919999999999\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"notes\": {\n" +
-              "    \"policy_name\": \"Jeevan Bima\"\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("upi_link",true);
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("reminder_enable",true);
+JSONObject notes = new JSONObject();
+notes.put("policy_name","Jeevan Bima");
+paymentLinkRequest.put("notes",notes);
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestRequest);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 
 ```
 
@@ -89,13 +83,10 @@ For create payment link response please click [here](https://razorpay.com/docs/a
 ### Fetch all payment link
 
 ```java
-String jsonRequest = "{\n" +
-                       "\"reference_id\" : TS1989\n" +
-                     "}";
-
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject params = new JSONObject();
+params.put("reference_id","TS1989");
         
-List<PaymentLink> paymentlink = instance.paymentLink.fetchAll(requestJson);
+List<PaymentLink> paymentlink = instance.paymentLink.fetchAll(params);
 ```
 
 **Parameters:**
@@ -114,8 +105,8 @@ For fetch all payment link response please click [here](https://razorpay.com/doc
 
 ```java
 String paymentLinkId = "plink_FMbhpT6nqDjDei";
- 
-instance.paymentLink.fetch(paymentLinkId);
+
+PaymentLink payment = instance.paymentLink.fetch(paymentLinkId);
 ```
 
 **Parameters:**
@@ -135,18 +126,15 @@ For fetch specific payment link response please click [here](https://razorpay.co
 ```java
 String paymentLinkId = "plink_FMbhpT6nqDjDei";
 
-String jsonRequest = "{\n" +
-              "    \"reference_id\": \"TS35\",\n" +
-              "    \"expire_by\": 1653347540,\n" +
-              "    \"reminder_enable\":false,\n" +
-              "    \"notes\":{\n" +
-              "      \"policy_name\": \"Jeevan Saral\"\n" +
-              "    }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("reference_id","TS35");
+paymentLinkRequest.put("expire_by",1653347540);
+paymentLinkRequest.put("reminder_enable",true);
+JSONObject notes = new JSONObject();
+notes.put("policy_name","Jeevan Bima");
+paymentLinkRequest.put("notes",notes);
               
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-PaymentLink paymentlink = instance.paymentLink.edit(PaymentId,requestRequest);
+PaymentLink paymentlink = instance.paymentLink.edit(PaymentId,paymentLinkRequest);
 ```
 
 **Parameters:**
@@ -212,42 +200,45 @@ PaymentLink paymentlink = instance.paymentLink.notifyBy(paymentLinkId,medium);
 ### Transfer payments received using payment links
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 20000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": false,\n" +
-              "  \"description\": \"For XYZ purpose\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\",\n" +
-              "    \"contact\": \"+919999999999\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"order\": [\n" +
-              "      {\n" +
-              "        \"account\": \"acc_CNo3jSI8OkFJJJ\",\n" +
-              "        \"amount\": 500,\n" +
-              "        \"currency\": \"INR\",\n" +
-              "        \"notes\": {\n" +
-              "          \"branch\": \"Acme Corp Bangalore North\",\n" +
-              "          \"name\": \"Saurav Kumar\",\n" +
-              "          \"linked_account_notes\": [\n" +
-              "            \"branch\"\n" +
-              "          ]\n" +
-              "        }\n" +
-              "      }\n" +
-              "    ]\n" +
-              "  }\n" +
-              "}";
+        JSONObject paymentLinkRequest = new JSONObject();
+        paymentLinkRequest.put("amount",1000);
+        paymentLinkRequest.put("currency","INR");
+        paymentLinkRequest.put("accept_partial",false);
+        paymentLinkRequest.put("reference_id","#aasasw8");
+        paymentLinkRequest.put("description","Payment for policy no #23456");
+        JSONObject customer = new JSONObject();
+        customer.put("name","+919999999999");
+        customer.put("contact","Gaurav Kumar");
+        customer.put("email","gaurav.kumar@example.com");
+        paymentLinkRequest.put("customer",customer);
+        JSONObject notify = new JSONObject();
+        notify.put("sms",true);
+        notify.put("email",true);
+        paymentLinkRequest.put("notify",notify);
+        paymentLinkRequest.put("reminder_enable",true);
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
+        JSONObject options = new JSONObject();
+        JSONObject transferRequest = new JSONObject();
+        List<Object> transfers = new ArrayList<>();
+
+        JSONObject transferParams = new JSONObject();
+        transferParams.put("account","acc_I0QRP7PpvaHhpB");
+        transferParams.put("amount",500);
+        transferParams.put("currency","INR");
+        JSONObject notes = new JSONObject();
+        notes.put("branch","Acme Corp Bangalore North");
+        notes.put("name","Bhairav Kumar");
+        transferParams.put("notes",notes);
+        List<Object> linkedAccountNotes = new ArrayList<>();
+        linkedAccountNotes.add("branch");
+        transferParams.put("linked_account_notes",linkedAccountNotes);
+        transfers.add(transferParams);
+        JSONObject order = new JSONObject();
+        order.put("transfer",transfers);
+        options.put("order",order);
+        paymentLinkRequest.put("options",options);
               
-PaymentLink payment = instance.paymentLink.create(requestRequest);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 
 ```
 
@@ -302,35 +293,34 @@ PaymentLink payment = instance.paymentLink.create(requestRequest);
 ### Offers on payment links
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 3400,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": false,\n" +
-              "  \"reference_id\": \"#425\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": false,\n" +
-              "  \"options\": {\n" +
-              "    \"order\": {\n" +
-              "      \"offers\": [\n" +
-              "        \"offer_F4WMTC3pwFKnzq\",\n" +
-              "        \"offer_F4WJHqvGzw8dWF\"\n" +
-              "      ]\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",3400);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",false);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",false);
+JSONObject options = new JSONObject();
+JSONObject transferRequest = new JSONObject();
+List<Object> transfers = new ArrayList<>();
+List<Object> offerParams = new ArrayList<>();
+offerParams.add("offer_JTUADI4ZWBGWur");
+offerParams.add("offer_F4WJHqvGzw8dWF");
+JSONObject order = new JSONObject();
+order.put("offers",offerParams);
+options.put("order",order);
+paymentLinkRequest.put("options",options);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 
 ```
 
@@ -385,28 +375,25 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Managing reminders for payment links
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#425\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": false\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",3400);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",false);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 
 ```
 
@@ -485,37 +472,40 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Rename labels in checkout section
 
 ```java
-String jsonRequest = "{\n" +
-                  "  \"amount\": 500,\n" +
-                  "  \"currency\": \"INR\",\n" +
-                  "  \"accept_partial\": true,\n" +
-                  "  \"first_min_partial_amount\": 100,\n" +
-                  "  \"description\": \"For XYZ purpose\",\n" +
-                  "  \"customer\": {\n" +
-                  "    \"name\": \"Gaurav Kumar\",\n" +
-                  "    \"email\": \"gaurav.kumar@example.com\",\n" +
-                  "    \"contact\": \"+919999999999\"\n" +
-                  "  },\n" +
-                  "  \"notify\": {\n" +
-                  "    \"sms\": true,\n" +
-                  "    \"email\": true\n" +
-                  "  },\n" +
-                  "  \"reminder_enable\": true,\n" +
-                  "  \"options\": {\n" +
-                  "    \"checkout\": {\n" +
-                  "      \"partial_payment\": {\n" +
-                  "        \"min_amount_label\": \"Minimum Money to be paid\",\n" +
-                  "        \"partial_amount_label\": \"Pay in parts\",\n" +
-                  "        \"partial_amount_description\": \"Pay at least ₹100\",\n" +
-                  "        \"full_amount_label\": \"Pay the entire amount\"\n" +
-                  "      }\n" +
-                  "    }\n" +
-                  "  }\n" +
-                  "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject partialPayment = new JSONObject();
+partialPayment.put("min_amount_label","Minimum Money to be pai");
+partialPayment.put("partial_amount_label","Pay in parts");
+partialPayment.put("partial_amount_description","Pay at least ₹100");
+partialPayment.put("full_amount_label","Pay the entire amount");
+JSONObject checkout = new JSONObject();
+checkout.put("partial_payment",partialPayment);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 ```
 
 **Parameters:**
@@ -576,33 +566,35 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Change Business name
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#2234542\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"name\": \"Lacme Corp\"\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject checkout = new JSONObject();
+checkout.put("name","Lacme Corp");
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 ```
 
 **Parameters:**
@@ -662,37 +654,39 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Prefill checkout fields
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#417\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"prefill\": {\n" +
-              "        \"method\": \"card\",\n" +
-              "        \"card[name]\": \"Gaurav Kumar\",\n" +
-              "        \"card[number]\": \"4111111111111111\",\n" +
-              "        \"card[expiry]\": \"12/21\",\n" +
-              "        \"card[cvv]\": \"123\"\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject prefill = new JSONObject();
+prefill.put("method","card");
+prefill.put("card[name]","Gaurav Kumar");
+prefill.put("card[number]","4111111111111111");
+prefill.put("card[expiry]","12/21");
+prefill.put("card[cvv]","123");
+JSONObject checkout = new JSONObject();
+checkout.put("prefill",prefill);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
 PaymentLink payment = instance.paymentLink.create(requestJson);
 
@@ -720,37 +714,40 @@ For prefill checkout fields response please click [here](https://razorpay.com/do
 ### Customize payment methods
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 500,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"description\": \"For XYZ purpose\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\",\n" +
-              "    \"contact\": \"+919999999999\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"method\": {\n" +
-              "        \"netbanking\": \"1\",\n" +
-              "        \"card\": \"1\",\n" +
-              "        \"upi\": \"0\",\n" +
-              "        \"wallet\": \"0\"\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject method = new JSONObject();
+method.put("netbanking",1);
+method.put("card",1);
+method.put("upi",1);
+method.put("wallet",1);
+JSONObject checkout = new JSONObject();
+checkout.put("method",method);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 ```
 
 **Parameters:**
@@ -811,34 +808,36 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Set checkout fields as read-only
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#20\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"readonly\": {\n" +
-              "        \"email\": \"1\",\n" +
-              "        \"contact\": \"1\"\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject readonly = new JSONObject();
+readonly.put("email",1);
+readonly.put("contact",1);
+JSONObject checkout = new JSONObject();
+checkout.put("readonly",readonly);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
 PaymentLink payment = instance.paymentLink.create(requestJson);
 ```
@@ -901,35 +900,37 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Implement thematic changes in payment links checkout section
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#423212\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"theme\": {\n" +
-              "        \"hide_topbar\": true\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject theme = new JSONObject();
+theme.put("hide_topbar",true);
+JSONObject checkout = new JSONObject();
+checkout.put("theme",theme);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-PaymentLink payment = instance.paymentLink.create(requestJson);
+PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 ```
 
 **Parameters:**
@@ -989,36 +990,38 @@ PaymentLink payment = instance.paymentLink.create(requestJson);
 ### Rename labels in payment details section
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"accept_partial\": true,\n" +
-              "  \"first_min_partial_amount\": 100,\n" +
-              "  \"reference_id\": \"#421\",\n" +
-              "  \"description\": \"Payment for policy no #23456\",\n" +
-              "  \"customer\": {\n" +
-              "    \"name\": \"Gaurav Kumar\",\n" +
-              "    \"contact\": \"+919999999999\",\n" +
-              "    \"email\": \"gaurav.kumar@example.com\"\n" +
-              "  },\n" +
-              "  \"notify\": {\n" +
-              "    \"sms\": true,\n" +
-              "    \"email\": true\n" +
-              "  },\n" +
-              "  \"reminder_enable\": true,\n" +
-              "  \"options\": {\n" +
-              "    \"checkout\": {\n" +
-              "      \"partial_payment\": {\n" +
-              "        \"min_amount_label\": \"Minimum Money to be paid\",\n" +
-              "        \"partial_amount_label\": \"Pay in parts\",\n" +
-              "        \"partial_amount_description\": \"Pay at least ₹100\",\n" +
-              "        \"full_amount_label\": \"Pay the entire amount\"\n" +
-              "      }\n" +
-              "    }\n" +
-              "  }\n" +
-              "}";
-              
-JSONObject requestRequest = new JSONObject(jsonRequest);
+JSONObject paymentLinkRequest = new JSONObject();
+paymentLinkRequest.put("amount",1000);
+paymentLinkRequest.put("currency","INR");
+paymentLinkRequest.put("accept_partial",true);
+paymentLinkRequest.put("reference_id","#aasasw8");
+paymentLinkRequest.put("first_min_partial_amount",100);
+paymentLinkRequest.put("description","Payment for policy no #23456");
+JSONObject customer = new JSONObject();
+customer.put("name","+919999999999");
+customer.put("contact","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+paymentLinkRequest.put("customer",customer);
+JSONObject notify = new JSONObject();
+notify.put("sms",true);
+notify.put("email",true);
+paymentLinkRequest.put("notify",notify);
+paymentLinkRequest.put("reminder_enable",true);
+
+JSONObject options = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("branch","Acme Corp Bangalore North");
+notes.put("name","Bhairav Kumar");
+
+JSONObject partialPayment = new JSONObject();
+partialPayment.put("min_amount_label","Minimum Money to be pai");
+partialPayment.put("partial_amount_label","Pay in parts");
+partialPayment.put("partial_amount_description","Pay at least ₹100");
+partialPayment.put("full_amount_label","Pay the entire amount");
+JSONObject checkout = new JSONObject();
+checkout.put("partial_payment",partialPayment);
+options.put("checkout",checkout);
+paymentLinkRequest.put("options",options);
               
 PaymentLink payment = instance.paymentLink.create(requestRequest);
 ```

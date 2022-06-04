@@ -2,19 +2,16 @@
 
 ### Create a fund account
 ```java
-String jsonRequest = "{\n" +
-        "  \"customer_id\":\"cust_Aa000000000001\",\n" +
-        "  \"account_type\":\"bank_account\",\n" +
-        "  \"bank_account\":{\n" +
-        "    \"name\":\"Gaurav Kumar\",\n" +
-        "    \"account_number\":\"11214311215411\",\n" +
-        "    \"ifsc\":\"HDFC0000053\"\n" +
-        "  }\n" +
-        "}";
+JSONObject fundAccountRequest = new JSONObject();
+fundAccountRequest.put("customer_id", "cust_JDdNazagOgg9Ig");
+fundAccountRequest.put("account_type", "bank_account");
+JSONObject bankAccount = new JSONObject();
+bankAccount.put("name","Gaurav Kumar");
+bankAccount.put("account_number","11214311215411");
+bankAccount.put("ifsc","HDFC0000053");
+fundAccountRequest.put("bank_account", bankAccount);
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-FundAccount fundaccount = instance.fundAccount.create(requestJson);
+FundAccount fundaccount = instance.fundAccount.create(fundAccountRequest);
 ```
 
 **Parameters:**

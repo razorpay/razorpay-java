@@ -3,7 +3,7 @@
 ### Fetch all  settlements
 
 ```java
-List<Settlement> settlements = razorpayclient.settlement.fetchAll();
+List<Settlement> settlements = instance.settlement.fetchAll();
 ```
 
 **Parameters:**
@@ -43,7 +43,7 @@ List<Settlement> settlements = razorpayclient.settlement.fetchAll();
 ```java
 String settlementId = "setl_DGlQ1Rj8os78Ec";
 
-Settlement settlement = razorpayclient.settlement.fetch(settlementId);
+Settlement settlement = instance.settlement.fetch(settlementId);
 ```
 
 **Parameters:**
@@ -67,164 +67,15 @@ Settlement settlement = razorpayclient.settlement.fetch(settlementId);
 ```
 -------------------------------------------------------------------------------------------------------
 
-### Settlement report for a month
-
-```java
-String jsonRequest = "{\n" +
-                    "year: 2020,\n" +
-                    "month: 9\n" +
-                  "}";
-                  
-JSONObject requestJson = new JSONObject(jsonRequest);      
-            
-List<Settlement> settlement = instance.settlement.reports(requestJson);
-```
-
-**Parameters:**
-
-| Name          | Type        | Description                                 |
-|---------------|-------------|---------------------------------------------|
-| year* | integer      | The year the settlement was received in the `YYYY` format. For example, `2020`   |
-| month* | integer      | The month the settlement was received in the `MM` format. For example, `09`   |
-| day | integer      | The date the settlement was received in the `DD` format. For example, `01`   |
-| count | integer   | number of settlements to fetch (default: 10)        |
-| skip  | integer   | number of settlements to be skipped (default: 0)    |
-
-**Response:**
-```json
-{
-  "entity": "collection",
-  "count": 4,
-  "items": [
-    {
-      "entity_id": "pay_DEXrnipqTmWVGE",
-      "type": "payment",
-      "debit": 0,
-      "credit": 97100,
-      "amount": 100000,
-      "currency": "INR",
-      "fee": 2900,
-      "tax": 0,
-      "on_hold": false,
-      "settled": true,
-      "created_at": 1567692556,
-      "settled_at": 1568176960,
-      "settlement_id": "setl_DGlQ1Rj8os78Ec",
-      "posted_at": null,
-      "credit_type": "default",
-      "description": "Recurring Payment via Subscription",
-      "notes": "{}",
-      "payment_id": null,
-      "settlement_utr": "1568176960vxp0rj",
-      "order_id": "order_DEXrnRiR3SNDHA",
-      "order_receipt": null,
-      "method": "card",
-      "card_network": "MasterCard",
-      "card_issuer": "KARB",
-      "card_type": "credit",
-      "dispute_id": null
-    },
-    {
-      "entity_id": "rfnd_DGRcGzZSLyEdg1",
-      "type": "refund",
-      "debit": 242500,
-      "credit": 0,
-      "amount": 242500,
-      "currency": "INR",
-      "fee": 0,
-      "tax": 0,
-      "on_hold": false,
-      "settled": true,
-      "created_at": 1568107224,
-      "settled_at": 1568176960,
-      "settlement_id": "setl_DGlQ1Rj8os78Ec",
-      "posted_at": null,
-      "credit_type": "default",
-      "description": null,
-      "notes": "{}",
-      "payment_id": "pay_DEXq1pACSqFxtS",
-      "settlement_utr": "1568176960vxp0rj",
-      "order_id": "order_DEXpmZgffXNvuI",
-      "order_receipt": null,
-      "method": "card",
-      "card_network": "MasterCard",
-      "card_issuer": "KARB",
-      "card_type": "credit",
-      "dispute_id": null
-    },
-    {
-      "entity_id": "trf_DEUoCEtdsJgvl7",
-      "type": "transfer",
-      "debit": 100296,
-      "credit": 0,
-      "amount": 100000,
-      "currency": "INR",
-      "fee": 296,
-      "tax": 46,
-      "on_hold": false,
-      "settled": true,
-      "created_at": 1567681786,
-      "settled_at": 1568176960,
-      "settlement_id": "setl_DGlQ1Rj8os78Ec",
-      "posted_at": null,
-      "credit_type": "default",
-      "description": null,
-      "notes": null,
-      "payment_id": "pay_DEApNNTR6xmqJy",
-      "settlement_utr": "1568176960vxp0rj",
-      "order_id": null,
-      "order_receipt": null,
-      "method": null,
-      "card_network": null,
-      "card_issuer": null,
-      "card_type": null,
-      "dispute_id": null
-    },
-    {
-      "entity_id": "adj_EhcHONhX4ChgNC",
-      "type": "adjustment",
-      "debit": 0,
-      "credit": 1012,
-      "amount": 1012,
-      "currency": "INR",
-      "fee": 0,
-      "tax": 0,
-      "on_hold": false,
-      "settled": true,
-      "created_at": 1567681786,
-      "settled_at": 1568176960,
-      "settlement_id": "setl_DGlQ1Rj8os78Ec",
-      "posted_at": null,
-      "description": "test reason",
-      "notes": null,
-      "payment_id": null,
-      "settlement_utr": null,
-      "order_id": null,
-      "order_receipt": null,
-      "method": null,
-      "card_network": null,
-      "card_issuer": null,
-      "card_type": null,
-      "dispute_id": null
-    }
-  ]
-}
-```
--------------------------------------------------------------------------------------------------------
-
 ### Settlement recon
 
 ```java
-
-String jsonRequest = "{\n" +
-              "  year: 2020,\n" +
-              "  month: 9,\n" +
-              "  day:11\n" +
-              "}";
-                  
-JSONObject requestJson = new JSONObject(jsonRequest);      
+JSONObject params = new JSONObject();
+params.put("year", 2020);
+params.put("month", 9);
+params.put("day",11);
             
-List<Settlement> settlements = instance.settlement.reports(requestJson);
+List<Settlement> settlements = instance.settlement.reports(params);
 ```
 **Parameters:**
 
@@ -359,19 +210,16 @@ List<Settlement> settlements = instance.settlement.reports(requestJson);
 ### Create on-demand settlement
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"amount\": 1221,\n" +
-              "  \"settle_full_balance\": false,\n" +
-              "  \"description\": \"Testing\",\n" +
-              "  \"notes\": {\n" +
-              "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
-              "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
-              "  }\n" +
-              "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);       
+JSONObject settlementRequest = new JSONObject();
+settlementRequest.put("amount", 1221);
+settlementRequest.put("settle_full_balance", false);
+settlementRequest.put("description", "Testing");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+settlementRequest.put("notes", notes);       
         
-Settlement settlement = instance.settlement.create(requestJson);
+Settlement settlement = instance.settlement.create(settlementRequest);
 ```
 
 **Parameters:**

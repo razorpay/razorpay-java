@@ -10,6 +10,7 @@ Documentation of Razorpay's API and their usage is available at <https://docs.ra
 ## Requirements
 
 Java 1.7 or later
+Mock Tests Support till Java 1.8
 
 ## Installation
 
@@ -61,6 +62,8 @@ razorpayClient.addHeaders(headers);
 - [Payments](documents/payment.md)
 
 - [Settlements](documents/settlement.md)
+
+- [Fund](documents/fund.md)
 
 - [Refunds](documents/refund.md)
 

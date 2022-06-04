@@ -5,19 +5,16 @@
 ```java
 String paymentId = "pay_FCXKPFtYfPXJPy";
 
-String jsonRequest = "{\n" +
-              "\"amount\": \"100\",\n" +
-              "\"speed\": \"normal\",\n" +
-              "\"notes\": {\n" +
-              "\"notes_key_1\": \"Beam me up Scotty.\",\n" +
-              "\"notes_key_2\": \"Engage\"\n" +
-              "},\n" +
-              "\"receipt\": \"Receipt No. 31\"\n" +
-              "}";
+JSONObject refundRequest = new JSONObject();
+refundRequest.put("amount",100);
+refundRequest.put("speed","normal");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+refundRequest.put("notes",notes);
+refundRequest.put("receipt","Receipt No. #35");
               
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-Payment payment = instance.payments.refund(paymentId,requestRequest);
+Payment payment = instance.payments.refund(paymentId,refundRequest);
 ```
 
 **Parameters:**
@@ -57,15 +54,12 @@ Payment payment = instance.payments.refund(paymentId,requestRequest);
 
 String paymentId = "pay_FCXKPFtYfPXJPy";
 
-String jsonRequest = "{\n" +
-              "  \"amount\": \"100\",\n" +
-              "  \"speed\": \"optimum\",\n" +
-              "  \"receipt\": \"Receipt No. 31\"\n" +
-              "}";
+JSONObject refundRequest = new JSONObject();
+refundRequest.put("amount",100);
+refundRequest.put("speed","optimum");
+refundRequest.put("receipt","Receipt No. #35");
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-Payment payment = instance.payments.refund(paymentId,requestJson);
+Payment payment = instance.payments.refund(paymentId,refundRequest);
 ```
 
 **Parameters:**
@@ -106,13 +100,10 @@ Payment payment = instance.payments.refund(paymentId,requestJson);
 ```java
 String paymentId = "pay_FIKOnlyii5QGNx";
 
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
-               
-JSONObject requestRequest = new JSONObject(jsonRequest);  
+JSONObject params = new JSONObject();
+params.put("count","1");
  
-List<Payment> payments = instance.payments.fetchAllRefunds(paymentId,requestRequest);
+List<Payment> payments = instance.payments.fetchAllRefunds(paymentId,params);
 ```
 
 **Parameters:**
@@ -197,13 +188,10 @@ Payment payment = instance.payments.fetchRefund(paymentId,refundId);
 
 ### Fetch all refunds
 ```java
-String jsonRequest = "{\n" +
-        "\"count\" : 1\n" +
-        "}";
-
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject params = new JSONObject();
+params.put("count","1");
         
-List<Refund> refund = instance.refunds.fetchAll(requestJson);
+List<Refund> refund = instance.refunds.fetchAll(params);
 ```
 
 **Parameters:**
@@ -284,16 +272,13 @@ List<Refund> refund = instance.refunds.fetch(refundId);
 ```java
 String refundId = "rfnd_EqWThTE7dd7utf";
 
-String jsonRequest "{\n" +
-              "  \"notes\": {\n" +
-              "    \"notes_key_1\": \"Beam me up Scotty.\",\n" +
-              "    \"notes_key_2\": \"Engage\"\n" +
-              "  }\n" +
-             "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);     
-         
-Refund refund = instance.Refunds.edit(refundId,requestJson);
+JSONObject refundRequest = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+refundRequest.put("notes",notes);
+
+Refund refund = instance.refunds.edit(refundId,refundRequest);
 
 ```
 

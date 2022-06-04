@@ -3,30 +3,29 @@
 ### Create subscription
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"plan_id\": \"plan_7wAosPWtrkhqZw\",\n" +
-            "  \"customer_notify\": 1,\n" +
-            "  \"quantity\": 5,\n" +
-            "  \"total_count\": 6,\n" +
-            "  \"start_at\": 1495995837,\n" +
-            "  \"addons\": [\n" +
-            "    {\n" +
-            "      \"item\": {\n" +
-            "        \"name\": \"Delivery charges\",\n" +
-            "        \"amount\": 30000,\n" +
-            "        \"currency\": \"INR\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"notes\": {\n" +
-            "    \"key1\": \"value3\",\n" +
-            "    \"key2\": \"value2\"\n" +
-            "  }\n" +
-            "}";
+JSONObject subscriptionRequest = new JSONObject();
+subscriptionRequest.put("plan_id", "plan_Ja4unjXZUeCT3g");
+subscriptionRequest.put("total_count", 6);
+subscriptionRequest.put("quantity", 1);
+subscriptionRequest.put("customer_notify", 1);
+subscriptionRequest.put("start_at", 1580453311);
+subscriptionRequest.put("expire_by", 1580626111);
+List<Object> addons = new ArrayList<>();
+JSONObject linesItem = new JSONObject();
+JSONObject item = new JSONObject();
+item.put("name","Delivery charges");
+item.put("amount",30000);
+item.put("currency","INR");
+linesItem.put("item",item);
+addons.add(linesItem);
+subscriptionRequest.put("addons",addons);
+subscriptionRequest.put("offer_id","offer_JHD834hjbxzhd38d");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+subscriptionRequest.put("notes", notes);
 
-JSONObject requestRequest = new JSONObject(jsonRequest); 
-              
-Subscription subscription = instance.subscriptions.create(requestRequest);
+Subscription order = instance.subscriptions.create(subscriptionRequest);
 ```
 
 **Parameters:**
@@ -79,34 +78,33 @@ Subscription subscription = instance.subscriptions.create(requestRequest);
 ### Create subscription link
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"plan_id\": \"plan_HoYg68p5kmuvzD\",\n" +
-            "  \"total_count\": 12,\n" +
-            "  \"quantity\": 1,\n" +
-            "  \"expire_by\": 1633237807,\n" +
-            "  \"customer_notify\": 1,\n" +
-            "  \"addons\": [\n" +
-            "    {\n" +
-            "      \"item\": {\n" +
-            "       \"name\": \"Delivery charges\",\n" +
-            "       \"amount\": 30000,\n" +
-            "       \"currency\": \"INR\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"notes\": {\n" +
-            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
-            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
-            "  },\n" +
-            "  \"notify_info\": {\n" +
-            "    \"notify_phone\": 9123456789,\n" +
-            "    \"notify_email\": \"gaurav.kumar@example.com\"\n" +
-            "  }\n" +
-            "}";
+JSONObject subscriptionRequest = new JSONObject();
+subscriptionRequest.put("plan_id", "plan_Ja4unjXZUeCT3g");
+subscriptionRequest.put("total_count", 12);
+subscriptionRequest.put("quantity", 1);
+subscriptionRequest.put("customer_notify", 1);
+subscriptionRequest.put("start_at", 1580453311);
+subscriptionRequest.put("expire_by", 1580626111);
+List<Object> addons = new ArrayList<>();
+JSONObject linesItem = new JSONObject();
+JSONObject item = new JSONObject();
+item.put("name","Delivery charges");
+item.put("amount",30000);
+item.put("currency","INR");
+linesItem.put("item",item);
+addons.add(linesItem);
+subscriptionRequest.put("addons",addons);
+subscriptionRequest.put("offer_id","offer_JTUADI4ZWBGWur");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+subscriptionRequest.put("notes", notes);
+JSONObject notifyInfo = new JSONObject();
+notifyInfo.put("notify_phone","9999999999");
+notifyInfo.put("notify_phone","gaurav.kumar@example.com");
+subscriptionRequest.put("notify_info",notifyInfo);
 
-JSONObject requestRequest = new JSONObject(jsonRequest); 
-              
-Subscription subscription = instance.subscriptions.create(requestRequest);
+Subscription subscription = instance.subscriptions.create(subscriptionRequest);
 ```
 
 **Parameters:**
@@ -160,13 +158,10 @@ Subscription subscription = instance.subscriptions.create(requestRequest);
 ### Fetch all subscriptions
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Subscription> subscriptions = instance.subscriptions.fetchAll(requestJson);
+List<Subscription> subscriptions = instance.subscriptions.fetchAll(params);
 ```
 
 **Parameters:**
@@ -273,13 +268,7 @@ Subscription subscription = instance.subscriptions.fetch(subscriptionId);
 ### Cancel particular subscription
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"cancel_at_cycle_end\" : 1\n" +
-               "}";
-               
-JSONObject requestJson = new JSONObject(jsonRequest);   
-
-Subscription subscription = instance.subscription.cancel(subscriptionId,requestJson)
+Subscription subscription = instance.subscription.cancel(subscriptionId)
 ```
 
 **Parameters:**
@@ -287,7 +276,6 @@ Subscription subscription = instance.subscription.cancel(subscriptionId,requestJ
 | Name  | Type      | Description                                      |
 |-------|-----------|--------------------------------------------------|
 | subscriptionId*  | string | The id of the subscription to be cancelled  |
-| cancel_at_cycle_end  | boolean | Possible values:<br>0 (default): Cancel the subscription immediately. <br> 1: Cancel the subscription at the end of the current billing cycle.  |
 
 **Response:**
 ```json
@@ -328,9 +316,18 @@ Subscription subscription = instance.subscription.cancel(subscriptionId,requestJ
 
 ```java
 
-String subscriptionId = "sub_00000000000002"; 
+String subscriptionId = "sub_00000000000002";
+
+JSONObject params = new JSONObject();
+params.put("plan_id","plan_00000000000002");
+params.put("offer_id","offer_JHD834hjbxzhd38d");
+params.put("quantity",5);
+params.put("remaining_count",5);
+params.put("start_at",1496000432);
+params.put("schedule_change_at","now");
+params.put("customer_notify",1);
  
-Subscription subscription = instance.subscription.update(subscriptionId,options);
+Subscription subscription = instance.subscription.update(subscriptionId,params);
 ```
 
 **Parameters:**
@@ -338,7 +335,7 @@ Subscription subscription = instance.subscription.update(subscriptionId,options)
 | Name            | Type      | Description                                      |
 |-----------------|-----------|--------------------------------------------------|
 | subscriptionId* | string | The id of the subscription to be updated  |
-| options         | object | All parameters listed [here](https://razorpay.com/docs/api/subscriptions/#update-a-subscription) for update   |
+| params          | object | All parameters listed [here](https://razorpay.com/docs/api/subscriptions/#update-a-subscription) for update   |
 
 **Response:**
 ```json
@@ -479,13 +476,10 @@ Subscription subscription = instance.subscription.cancelPendingUpdate(subscripti
 ```java
 String subscriptionId = "sub_00000000000001";
 
-String jsonRequest = "{\n" +
-                "pause_at : 'now'\n" +
-              "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);  
-             
-Subscription subscription = instance.subscription.pause(SubscriptionId,requestJson);
+JSONObject params = new JSONObject();
+params.put("pause_at","now");
+        
+Subscription subscription = instance.subscription.pause(SubscriptionId,params);
 
 ```
 
@@ -537,11 +531,8 @@ Subscription subscription = instance.subscription.pause(SubscriptionId,requestJs
 ```java
 String SubscriptionId = "sub_00000000000001";
 
-String jsonRequest = "{\n" +
-                      "resume_at : 'now'\n" +
-                     "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);  
+JSONObject params = new JSONObject();
+params.put("resume_at","now");
              
 Subscription subscription = instance.subscription.resume(SubscriptionId,requestJson);
 ```
@@ -592,13 +583,11 @@ Subscription subscription = instance.subscription.resume(SubscriptionId,requestJ
 ### Fetch all invoices for a subscription
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"subscription_id\":subscriptionId\n" +
-              "}";
+
+JSONObject params = new JSONObject();
+params.put("subscription_id",subscriptionId);
               
-JSONObject requestJson = new JSONObject(jsonRequest); 
-              
-List<Invoice> invoices = instance.invoices.fetchAll(requestJson);
+List<Invoice> invoices = instance.invoices.fetchAll(params);
 ```
 
 **Parameters:**

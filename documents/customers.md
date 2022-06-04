@@ -2,21 +2,19 @@
 
 ### Create customer
 ```java
-String jsonRequest = "{\n" +
-        "\"name\": \"Gaurav Kumar\",\n" +
-        "\"contact\": 9123456780,\n" +
-        "\"email\": \"gaurav.kumar@example.com\",\n" +
-        "\"fail_existing\": 0,\n" +
-        "\"gstin: \"29XAbbA4369J1PA\",\n" +
-        "  notes: {\n" +
-        "    notes_key_1: \"Tea, Earl Grey, Hot\",\n" +
-        "    notes_key_2: \"Tea, Earl Grey… decaf.\"\n" +
-        "  }\n" +
-        "}";
 
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject customerRequest = new JSONObject();
+customerRequest.put("name","Gaurav Kumar");
+customerRequest.put("contact","9123456780");
+customerRequest.put("email","gaurav.kumar@example.com");
+customerRequest.put("fail_existing","0");
+customerRequest.put("gstin","29XAbbA4369J1PA");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+customerRequest.put("notes",notes);
 
-Customer customer = instance.customers.create(request);
+Customer customer = instance.customers.create(customerRequest);
 ```
 
 **Parameters:**
@@ -51,17 +49,14 @@ Customer customer = instance.customers.create(request);
 
 ### Edit customer
 ```java
-String customerId = "cust_1Aa00000000003"; 
+String customerId = "cust_1Aa00000000003";
 
-String jsonRequest = "{\n" +
-        "\"name\": \"Gaurav Kumar\",\n" +
-        "\"email\": \"Gaurav.Kumar@example.com\",\n" +
-        "\"contact\": 9000000000\n" +
-        "}";
+JSONObject customerRequest = new JSONObject();
+customerRequest.put("name","Gaurav Kumar");
+customerRequest.put("contact","9123456780");
+customerRequest.put("email","gaurav.kumar@example.com");
 
-JSONObject requestJson = new JSONObject(requestJson);
-
-Customer customer = instance.customers.edit(customerId,request);
+Customer customer = instance.customers.edit(customerId,customerRequest);
 ```
 
 **Parameters:**
@@ -93,13 +88,10 @@ Customer customer = instance.customers.edit(customerId,request);
 
 ### Fetch all customer
 ```java
-String jsonRequest = "{\n" +
-                       "\"count\" : 1\n" +
-                      "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Customer> customer = instance.customers.fetchAll(requestJson);
+List<Customer> customer = instance.customers.fetchAll(params);
 ```
 
 **Parameters:**

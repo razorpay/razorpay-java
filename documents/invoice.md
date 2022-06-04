@@ -5,49 +5,46 @@
 Request #1
 In this example, an invoice is created using the customer and item details. Here, the customer and item are created while creating the invoice.
 ```java
-String jsonRequest = "{\n" +
-        "  \"type\": \"invoice\",\n" +
-        "  \"description\": \"Invoice for the month of January 2020\",\n" +
-        "  \"partial_payment\": 1,\n" +
-        "  \"customer\": {\n" +
-        "    \"name\": \"Gaurav Kumar\",\n" +
-        "    \"contact\": 9999999999,\n" +
-        "    \"email\": \"gaurav.kumar@example.com\",\n" +
-        "    \"billing_address\": {\n" +
-        "      \"line1\": \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
-        "      \"line2\": \"Hosur Road\",\n" +
-        "      \"zipcode\": 560068,\n" +
-        "      \"city\": \"Bengaluru\",\n" +
-        "      \"state\": \"Karnataka\",\n" +
-        "      \"country\": \"in\"\n" +
-        "    },\n" +
-        "    \"shipping_address\": {\n" +
-        "      \"line1\": \"Ground & 1st Floor, SJR Cyber Laskar\",\n" +
-        "      \"line2\": \"Hosur Road\",\n" +
-        "      \"zipcode\": 560068,\n" +
-        "      \"city\": \"Bengaluru\",\n" +
-        "      \"state\": \"Karnataka\",\n" +
-        "      \"country\": \"in\"\n" +
-        "    }\n" +
-        "  },\n" +
-        "  \"line_items\": [\n" +
-        "    {\n" +
-        "      \"name\": \"Master Cloud Computing in 30 Days\",\n" +
-        "      \"description\": \"Book by Ravena Ravenclaw\",\n" +
-        "      \"amount\": 399,\n" +
-        "     \"currency\": \"USD\",\n" +
-        "      \"quantity\": 1\n" +
-        "    }\n" +
-        "  ],\n" +
-        "  \"sms_notify\": 1,\n" +
-        "  \"email_notify\": 1,\n" +
-        "  \"currency\": \"USD\",\n" +
-        "  \"expire_by\": 1589765167\n" +
-        "}";
+JSONObject invoiceRequest = new JSONObject();
+invoiceRequest.put("type", "invoice");
+invoiceRequest.put("description", "Invoice for the month of January 2020");
+invoiceRequest.put("partial_payment",true);
+JSONObject customer = new JSONObject();
+customer.put("name","Gaurav Kumar");
+customer.put("contact","9999999999");
+customer.put("email","gaurav.kumar@example.com");
+JSONObject billingAddress = new JSONObject();
+billingAddress.put("line1","Ground & 1st Floor, SJR Cyber Laskar");
+billingAddress.put("line2","Hosur Road");
+billingAddress.put("zipcode","560068");
+billingAddress.put("city","Bengaluru");
+billingAddress.put("state","Karnataka");
+billingAddress.put("country","in");
+customer.put("billing_address",billingAddress);
+JSONObject shippingAddress = new JSONObject();
+shippingAddress.put("line1","Ground & 1st Floor, SJR Cyber Laskar");
+shippingAddress.put("line2","Hosur Road");
+shippingAddress.put("zipcode","560068");
+shippingAddress.put("city","Bengaluru");
+shippingAddress.put("state","Karnataka");
+shippingAddress.put("country","in");
+customer.put("shipping_address",shippingAddress);
+invoiceRequest.put("customer",customer);
+List<Object> lines = new ArrayList<>();
+JSONObject lineItems = new JSONObject();
+lineItems.put("name","Master Cloud Computing in 30 Days");
+lineItems.put("description","Book by Ravena Ravenclaw");
+lineItems.put("amount",399);
+lineItems.put("currency","INR");
+lineItems.put("quantity",1);
+lines.add(lineItems);
+invoiceRequest.put("line_items",lines);
+invoiceRequest.put("email_notify", 1);
+invoiceRequest.put("sms_notify", 1);
+invoiceRequest.put("currency","INR");
+invoiceRequest.put("expire_by", 1580479824);
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-Invoice invoice = instance.invoices.create(requestRequest);
+Invoice invoice = instance.invoices.create(invoiceRequest);
 ```
 
 **Parameters:**
@@ -69,20 +66,17 @@ Invoice invoice = instance.invoices.create(requestRequest);
 Request #2
 In this example, an invoice is created using existing `customer_id` and `item_id`
 ```java
-String jsonRequest = "{\n" +
-        "  \"type:\": \"invoice\",\n" +
-        "  \"date\": 1589994898,\n" +
-        "  \"customer_id\": \"cust_E7q0trFqXgExmT\",\n" +
-        "  \"line_items\": [\n" +
-        "    {\n" +
-        "      \"item_id\": \"item_DRt61i2NnL8oy6\"\n" +
-        "    }\n" +
-        "  ]\n" +
-        "}";
+JSONObject invoiceRequest = new JSONObject();
+invoiceRequest.put("type", "invoice");
+invoiceRequest.put("date", "1589994898");
+invoiceRequest.put("customer_id","cust_JDdNazagOgg9Ig");
+List<Object> lines = new ArrayList<>();
+JSONObject lineItems = new JSONObject();
+lineItems.put("item_id","item_J7lZCyxMVeEtYB");
+lines.add(lineItems);
+invoiceRequest.put("line_items",lines);
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-Invoice invoice = instance.invoices.create(requestRequest);
+Invoice invoice = instance.invoices.create(invoiceRequest);
 ```
 
 **Parameters:**
@@ -240,20 +234,25 @@ Invoice invoice = instance.invoices.fetch(invoiceId);
 ```java
 String invoiceId = "inv_DAweOiQ7amIUVd";
 
-String jsonRequest = "{\n" +
-        "  \"type:\": \"invoice\",\n" +
-        "  \"date\": 1589994898,\n" +
-        "  \"customer_id\": \"cust_E7q0trFqXgExmT\",\n" +
-        "  \"line_items\": [\n" +
-        "    {\n" +
-        "      \"item_id\": \"item_DRt61i2NnL8oy6\"\n" +
-        "    }\n" +
-        "  ]\n" +
-        "}";
+JSONObject invoiceRequest = new JSONObject();
+List<Object> lines = new ArrayList<>();
+JSONObject lineItems = new JSONObject();
+lineItems.put("id","li_JZzL5KfAkHgEaV");
+lineItems.put("name","Book / English August - Updated name and quantity");
+lineItems.put("quantity",1);
+JSONObject lineItems1 = new JSONObject();
+lineItems1.put("name","Book / A Wild Sheep Chase");
+lineItems1.put("amount","200");
+lineItems1.put("currency","INR");
+lineItems1.put("quantity",1);
+lines.add(lineItems);
+lines.add(lineItems1);
+invoiceRequest.put("line_items",lines);
+JSONObject notes = new JSONObject();
+notes.put("updated-key","An updated note.");
+invoiceRequest.put("notes", notes);
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-Invoice invoice = instance.invoices.edit(invoiceId,requestJson);
+Invoice invoice = instance.invoices.edit(invoiceId,invoiceRequest);
 ```
 
 **Parameters:**

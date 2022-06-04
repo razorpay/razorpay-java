@@ -3,16 +3,13 @@
 ### Create item
 
 ```java
-String jsonRequest = "{\n" +
-          "\"name\": \"Book / English August\",\n" +
-          "\"description\": \"An indian story, Booker prize winner.\",\n" +
-          "\"amount\": 20000,\n" +
-          "\"currency\": \"INR\"\n" +
-        "}";
+JSONObject itemRequest = new JSONObject();
+itemRequest.put("name","Book / English August");
+itemRequest.put("description","An indian story, Booker prize winner.");
+itemRequest.put("amount", 20000);
+itemRequest.put("currency","INR");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-Item item = instance.items.create(requestJson);
+Item item = instance.items.create(itemRequest);
 ```
 
 **Parameters:**
@@ -41,13 +38,10 @@ Item item = instance.items.create(requestJson);
 ### Fetch all items
 
 ```java
-String jsonRequest = "{\n" +
-                       "\"count\" : 1\n" +
-                      "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Item> item = instance.items.fetchAll(requestJson);
+List<Item> item = instance.items.fetchAll(params);
 ```
 **Parameters:**
 
@@ -125,17 +119,14 @@ Item item = instance.items.fetch(itemId)
 ```java
 String itemId = "item_7Oy8OMV6BdEAac";
 
-String jsonRequest = "{\n" +
-              "  \"name\": \"Book / Ignited Minds - Updated name!\",\n" +
-              "  \"description\": \"New descirption too. :).\",\n" +
-              "  \"amount\": 20000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"active\": true\n" +
-              "}";
+JSONObject itemRequest = new JSONObject();
+itemRequest.put("name","Book / Ignited Minds - Updated name!");
+itemRequest.put("description","An indian story, Booker prize winner.");
+itemRequest.put("amount", 20000);
+itemRequest.put("currency","INR");
+itemRequest.put("active",true);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-Item item = instance.items.edit(itemId, requestJson);
+Item item = instance.items.edit(itemId, itemRequest);
 ```
 **Parameters**
 

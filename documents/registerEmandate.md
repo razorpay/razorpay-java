@@ -2,21 +2,18 @@
 
 ### Create customer
 ```java
-String jsonRequest = "{\n" +
-            "  \"name\": \"Gaurav Kumar\",\n" +
-            "  \"contact\": 9123456780,\n" +
-            "  \"email\": \"gaurav.kumar@example.com\",\n" +
-            "  \"fail_existing\": 0,\n" +
-            "  \"gstin\": \"29XAbbA4369J1PA\",\n" +
-            "  \"notes\": {\n" +
-            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
-            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
-            "  }\n" +
-            "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);   
-          
-Customer customer = instance.customers.create(requestJson);
+JSONObject customerRequest = new JSONObject();
+customerRequest.put("name","Gaurav Kumar");
+customerRequest.put("contact","9123456780");
+customerRequest.put("email","gaurav.kumar@example.com");
+customerRequest.put("fail_existing","0");
+customerRequest.put("gstin","29XAbbA4369J1PA");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+customerRequest.put("notes",notes);
+
+Customer customer = instance.customers.create(customerRequest);
 ```
 **Parameters:**
 
@@ -49,36 +46,34 @@ Customer customer = instance.customers.create(requestJson);
 ### Create order
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"amount\": 0,\n" +
-            "  \"currency\": \"INR\",\n" +
-            "  \"method\": \"emandate\",\n" +
-            "  \"customer_id\": \"cust_1Aa00000000001\",\n" +
-            "  \"receipt\": \"Receipt No. 1\",\n" +
-            "  \"notes\": {\n" +
-            "    \"notes_key_1\": \"Beam me up Scotty\",\n" +
-            "   \"notes_key_2\": \"Engage\"\n" +
-            "  },\n" +
-            "  \"token\": {\n" +
-            "    \"auth_type\": \"netbanking\",\n" +
-            "    \"max_amount\": 9999900,\n" +
-            "    \"expire_at\": 4102444799,\n" +
-            "    \"notes\": {\n" +
-            "      \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
-            "      \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
-            "    },\n" +
-            "    \"bank_account\": {\n" +
-            "      \"beneficiary_name\": \"Gaurav Kumar\",\n" +
-            "      \"account_number\": 1121431121541121,\n" +
-            "      \"account_type\": \"savings\",\n" +
-            "      \"ifsc_code\": \"HDFC0000001\"\n" +
-            "    }\n" +
-            "  }\n" +
-            "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);         
-       
-Order order = instance.orders.create(requestJson);
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount", 0);
+orderRequest.put("currency", "INR");
+orderRequest.put("customer_id", "cust_JDdNazagOgg9Ig");
+orderRequest.put("method", "emandate");
+orderRequest.put("receipt", "receipt#1");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+orderRequest.put("notes", notes);
+JSONObject token = new JSONObject();
+token.put("first_payment_amount",100);
+token.put("auth_type","netbanking");
+token.put("max_amount","9999900");
+token.put("expire_at","2709971120");
+JSONObject tokenNotes = new JSONObject();
+tokenNotes.put("notes_key_1","Tea, Earl Grey, Hot");
+tokenNotes.put("notes_key_2","Tea, Earl Grey… decaf.");
+token.put("notes",tokenNotes);
+orderRequest.put("token", token);
+JSONObject bankAccount = new JSONObject();
+bankAccount.put("beneficiary_name","Gaurav Kumar");
+bankAccount.put("account_number","11214311215411");
+bankAccount.put("account_type","savings");
+bankAccount.put("ifsc_code","HDFC0001233");
+token.put("bank_account",bankAccount);
+
+Order order = instance.orders.create(orderRequest);
 ```
 
 **Parameters:**
@@ -108,41 +103,38 @@ Please refer this [doc](https://razorpay.com/docs/api/recurring-payments/emandat
 ### Create registration link
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"customer\": {\n" +
-            "    \"name\": \"Gaurav Kumar\",\n" +
-            "    \"email\": \"gaurav.kumar@example.com\",\n" +
-            "    \"contact\": 9123456780\n" +
-            "  },\n" +
-            "  \"type\": \"link\",\n" +
-            "  \"amount\": 0,\n" +
-            "  \"currency\": \"INR\",\n" +
-            "  \"description\": \"12 p.m. Meals\",\n" +
-            "  \"subscription_registration\": {\n" +
-            "    \"method\": \"emandate\",\n" +
-            "    \"auth_type\": \"netbanking\",\n" +
-            "    \"expire_at\": 1580480689,\n" +
-            "    \"max_amount\": 50000,\n" +
-            "    \"bank_account\": {\n" +
-            "      \"beneficiary_name\": \"Gaurav Kumar\",\n" +
-            "      \"account_number\": 11214311215411,\n" +
-            "      \"account_type\": \"savings\",\n" +
-            "      \"ifsc_code\": \"HDFC0001233\"\n" +
-            "    }\n" +
-            "  },\n" +
-            "  \"receipt\": \"Receipt no. 1\",\n" +
-            "  \"expire_by\": 1880480689,\n" +
-            "  \"sms_notify\": 1,\n" +
-            "  \"email_notify\": 1,\n" +
-            "  \"notes\": {\n" +
-            "    \"note_key 1\": \"Beam me up Scotty\",\n" +
-            "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
-            "  }\n" +
-            "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);       
-        
-Invoice invoice = instance.invoices.createRegistrationLink(requestJson);
+JSONObject registrationLinkRequest = new JSONObject();
+JSONObject customer = new JSONObject();
+customer.put("name","Gaurav Kumar");
+customer.put("email","gaurav.kumar@example.com");
+customer.put("contact","9123456780");
+registrationLinkRequest.put("customer", customer);
+registrationLinkRequest.put("type", "link");
+registrationLinkRequest.put("amount", 0);
+registrationLinkRequest.put("currency", "INR");
+registrationLinkRequest.put("description", "12 p.m. Meals");
+JSONObject subscriptionRegistration = new JSONObject();
+subscriptionRegistration.put("method","emandate");
+subscriptionRegistration.put("auth_type","netbanking");
+subscriptionRegistration.put("max_amount",50000);
+subscriptionRegistration.put("expire_at",1609423824);
+JSONObject bankAccount = new JSONObject();
+bankAccount.put("beneficiary_name","Gaurav Kumar");
+bankAccount.put("account_number","11214311215411");
+bankAccount.put("account_type","savings");
+bankAccount.put("ifsc_code","HDFC0001233");
+subscriptionRegistration.put("bank_account",bankAccount);
+registrationLinkRequest.put("subscription_registration", subscriptionRegistration);
+registrationLinkRequest.put("receipt", "Receipt No. 1");
+registrationLinkRequest.put("email_notify", 1);
+registrationLinkRequest.put("sms_notify", 1);
+registrationLinkRequest.put("expire_by", 1580479824);
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+registrationLinkRequest.put("notes", notes);
+
+Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkRequest);
 ```
 
 **Parameters:**
@@ -168,19 +160,17 @@ For create registration link response please click [here](https://razorpay.com/d
 ## Create an order to charge the customer
 
 ```java
-String jsonRequest = "{\n" +
-                  "  \"amount\": \"100\",\n" +
-                  "  \"currency\": \"INR\",\n" +
-                  "  \"receipt\": \"Receipt No. 1\",\n" +
-                  "  \"notes\": {\n" +
-                  "    \"key1\": \"value3\",\n" +
-                  "    \"key2\": \"value2\"\n" +
-                  "  }\n" +
-                  "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);         
-       
-Order order = instance.orders.create(requestJson);
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount", 1000);
+orderRequest.put("currency", "INR");
+orderRequest.put("payment_capture", true);
+orderRequest.put("receipt", "Receipt No. 1");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+orderRequest.put("notes", notes);
+
+Order order = instance.orders.create(orderRequest);
 ```
 **Parameters:**
 
@@ -217,25 +207,22 @@ Order order = instance.orders.create(requestJson);
 ## Create a recurring payment
 
 ```java
-String jsonRequest = "{\n" +
-              "  \"email\": \"gaurav.kumar@example.com\",\n" +
-              "  \"contact\": \"9123456789\",\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\",\n" +
-              "  \"order_id\": \"order_1Aa00000000002\",\n" +
-              "  \"customer_id\": \"cust_1Aa00000000001\",\n" +
-              "  \"token\": \"token_1Aa00000000001\",\n" +
-              "  \"recurring\": \"1\",\n" +
-              "  \"description\": \"Creating recurring payment for Gaurav Kumar\",\n" +
-              "  \"notes\": {\n" +
-              "    \"note_key 1\": \"Beam me up Scotty\",\n" +
-              "    \"note_key 2\": \"Tea. Earl Gray. Hot.\"\n" +
-              "  }\n" +
-              "}";
-  
-JSONObject requestJson = new JSONObject(jsonRequest);  
-              
-Payment payment = instance.payments.createRecurringPayment(requestJson);
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("email", "gaurav.kumar@example.com");
+paymentRequest.put("contact", "9123456789");
+paymentRequest.put("amount", 1000);
+paymentRequest.put("currency", "INR");
+paymentRequest.put("order_id", "order_1Aa00000000002");
+paymentRequest.put("customer_id", "cust_1Aa00000000001");
+paymentRequest.put("token", "token_1Aa00000000001");
+paymentRequest.put("recurring", 1);
+paymentRequest.put("description", "Creating recurring payment for Gaurav Kumar");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+paymentRequest.put("notes", notes);
+
+Payment payment = instance.payments.createRecurringPayment(paymentRequest);
 ```
 **Parameters:**
 
