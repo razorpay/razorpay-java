@@ -21,6 +21,9 @@ public class ContactClient extends ApiClient {
     public Contact edit(String id, JSONObject request) throws RazorpayException {
         return put(String.format(Constants. CONTACT_EDIT, id), request);
     }
+    public Contact update(String id, JSONObject request) throws RazorpayException {
+        return put(String.format(Constants. CONTACT_UPDATE, id), request);
+    }
 
     /**
      * It is wrapper of fetchAll with parameter here sending null defines fetchAll

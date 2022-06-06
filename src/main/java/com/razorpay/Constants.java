@@ -130,4 +130,5 @@ public class Constants {
   static final String CONTACT_GET = "contacts/%s";
   static final String CONTACT_EDIT = "contacts/%s";
   static final String CONTACT_LIST = "contacts";
+  static final String CONTACT_UPDATE = "contacts/%s";
 }
