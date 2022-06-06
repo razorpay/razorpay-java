@@ -41,16 +41,4 @@ public class ContactClient extends ApiClient {
     public List<Contact> fetchAll(JSONObject request) throws RazorpayException {
         return getCollection(Constants.CONTACT_FETCH_ALL, request);
     }
-
-    public List<Token> fetchTokens(String id) throws RazorpayException {
-        return getCollection(String.format(Constants.TOKEN_LIST, id), null);
-    }
-
-    public Token fetchToken(String id, String tokenId) throws RazorpayException {
-        return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
-    }
-
-    public void deleteToken(String id, String tokenId) throws RazorpayException {
-        delete(String.format(Constants.TOKEN_DELETE, id, tokenId), null);
-    }
 }
