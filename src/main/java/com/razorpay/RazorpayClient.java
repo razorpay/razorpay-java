@@ -23,7 +23,7 @@ public class RazorpayClient {
   public FundAccountClient fundAccount;
   public VirtualAccountClient virtualAccounts;
   public PayoutClient payouts;
-  public PayoutLinkClient payoutLink;
+  public PayoutLinkClient payoutLinks;
   public TransactionsClient transactions;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
@@ -50,7 +50,7 @@ public class RazorpayClient {
     fundAccount = new FundAccountClient(auth);
     virtualAccounts = new VirtualAccountClient(auth);
     payouts = new PayoutClient(auth);
-    payoutLink = new PayoutLinkClient(auth);
+    payoutLinks = new PayoutLinkClient(auth);
     transactions = new TransactionsClient(auth);
   }
 
