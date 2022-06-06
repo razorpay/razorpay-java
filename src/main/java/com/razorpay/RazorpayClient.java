@@ -22,6 +22,7 @@ public class RazorpayClient {
   public ItemClient items;
   public FundAccountClient fundAccount;
   public VirtualAccountClient virtualAccounts;
+  public ContactClient contact;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
@@ -46,6 +47,8 @@ public class RazorpayClient {
     items = new ItemClient(auth);
     fundAccount = new FundAccountClient(auth);
     virtualAccounts = new VirtualAccountClient(auth);
+    contact = new ContactClient(auth);
+
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
