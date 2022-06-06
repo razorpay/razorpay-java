@@ -19,10 +19,10 @@ public class ContactClient extends ApiClient {
     }
 
     public Contact edit(String id, JSONObject request) throws RazorpayException {
-        return put(String.format(Constants. CONTACT_EDIT, id), request);
+        return patch(String.format(Constants. CONTACT_EDIT, id), request);
     }
     public Contact update(String id, JSONObject request) throws RazorpayException {
-        return put(String.format(Constants. CONTACT_UPDATE, id), request);
+        return patch(String.format(Constants. CONTACT_UPDATE, id), request);
     }
 
     /**

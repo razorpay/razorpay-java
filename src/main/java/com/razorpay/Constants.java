@@ -61,6 +61,8 @@ public class Constants {
 
   static final String FUND_ACCOUNT_CREATE = "fund_accounts";
   static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
+  static final String FUND_ACCOUNT_UPDATE = "fund_accounts/%s";
+  static final String FUND_ACCOUNT_FETCH_ALL = "fund_accounts";
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
