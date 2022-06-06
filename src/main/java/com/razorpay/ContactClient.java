@@ -15,7 +15,7 @@ public class ContactClient extends ApiClient {
     }
 
     public Contact fetch(String id) throws RazorpayException {
-        return get(String.format(Constants.CONTACT_GET, id), null);
+        return get(String.format(Constants.CONTACT_FETCH, id), null);
     }
 
     public Contact edit(String id, JSONObject request) throws RazorpayException {
@@ -39,7 +39,7 @@ public class ContactClient extends ApiClient {
      * @throws RazorpayException
      */
     public List<Contact> fetchAll(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.CONTACT_LIST, request);
+        return getCollection(Constants.CONTACT_FETCH_ALL, request);
     }
 
     public List<Token> fetchTokens(String id) throws RazorpayException {
