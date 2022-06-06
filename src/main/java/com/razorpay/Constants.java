@@ -61,6 +61,8 @@ public class Constants {
 
   static final String FUND_ACCOUNT_CREATE = "fund_accounts";
   static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
+  static final String FUND_ACCOUNT_UPDATE = "fund_accounts/%s";
+  static final String FUND_ACCOUNT_FETCH_ALL = "fund_accounts";
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";
@@ -125,4 +127,10 @@ public class Constants {
   static final String VIRTUAL_ACCOUNT_RECEIVERS = "virtual_accounts/%s/receivers";
   static final String VIRTUAL_ACCOUNT_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers";
   static final String VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers/%s";
+
+  static final String CONTACT_CREATE = "contacts";
+  static final String CONTACT_FETCH = "contacts/%s";
+  static final String CONTACT_EDIT = "contacts/%s";
+  static final String CONTACT_FETCH_ALL = "contacts";
+  static final String CONTACT_UPDATE = "contacts/%s";
 }
