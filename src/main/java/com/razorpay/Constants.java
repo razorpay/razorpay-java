@@ -125,4 +125,17 @@ public class Constants {
   static final String VIRTUAL_ACCOUNT_RECEIVERS = "virtual_accounts/%s/receivers";
   static final String VIRTUAL_ACCOUNT_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers";
   static final String VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers/%s";
+
+  static final String PAYOUT_CREATE = "payouts";
+  static final String PAYOUT_FETCH = "payouts/%s";
+  static final String PAYOUT_FETCH_ALL = "payouts";
+  static final String PAYOUT_CANCEL_QUEUED = "payouts/%s";
+
+  static final String PAYOUT_LINK_CREATE = "payouts-links";
+  static final String PAYOUT_LINK_FETCH = "payouts-links/%s";
+  static final String PAYOUT_LINK_FETCH_ALL = "payouts-links";
+  static final String PAYOUT_LINK_CANCEL = "payouts-links/%s";
+
+  static final String TRANSACTIONS_FETCH = "transactions/%s";
+  static final String TRANSACTIONS_FETCH_ALL = "transactions";
 }
