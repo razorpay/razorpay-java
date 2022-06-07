@@ -5,20 +5,16 @@
 ```java
 String subscriptionId = "sub_I55auG9GnbsR8u";
 
-String jsonRequest =
-        "{\n" +
-        "  \"item\": {\n" +
-        "    \"name\": \"Extra appala (papadum)\",\n" +
-        "    \"amount\": 30000,\n" +
-        "    \"currency\": \"INR\",\n" +
-        "    \"description\": \"1 extra oil fried appala with meals\"\n" +
-        "  },\n" +
-        "  \"quantity\": 2\n" +
-        "}";
+JSONObject addonRequest = new JSONObject();
+JSONObject items = new JSONObject();
+items.put("name","Extra appala (papadum)");
+items.put("amount","3000");
+items.put("currency","INR");
+items.put("description","1 extra oil fried appala with meals");
+addonRequest.put("item",items);
+addonRequest.put("quantity",2);
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-Subscription subscription = instance.subscriptions.createAddon(subscriptionId,requestJson);
+Addon addon = instance.subscriptions.createAddon(subscriptionId,addonRequest);
 ```
 
 **Parameters:**
@@ -64,13 +60,10 @@ Subscription subscription = instance.subscriptions.createAddon(subscriptionId,re
 ### Fetch all addons
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Addon> addon = instance.addons.fetchAll(requestJson);
+List<Addon> addon = instance.addons.fetchAll(params);
 ```
 
 **Parameters:**
@@ -171,7 +164,7 @@ Addon addon = instance.addons.fetch(addonId);
 ```java
 String addonId = "ao_00000000000001";
 
-instance.addons.delete(addonId)
+List<Addon> addon = instance.addons.delete(addonId)
 ```
 
 **Parameters:**

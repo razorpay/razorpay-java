@@ -3,23 +3,21 @@
 ### Create Qr code
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"type\": \"upi_qr\",\n" +
-            "  \"name\": \"Store_1\",\n" +
-            "  \"usage\": \"single_use\",\n" +
-            "  \"fixed_amount\": true,\n" +
-            "  \"payment_amount\": 300,\n" +
-            "  \"description\": \"For Store 1\",\n" +
-            "  \"customer_id\": \"cust_HKsR5se84c5LTO\",\n" +
-            "  \"close_by\": 1681615838,\n" +
-            "  \"notes\": {\n" +
-            "    \"purpose\": \"Test UPI QR code notes\"\n" +
-            "  }\n" +
-            "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject qrRequest = new JSONObject();
+qrRequest.put("type","upi_qr");
+qrRequest.put("name","Store_1");
+qrRequest.put("usage","single_use");
+qrRequest.put("fixed_amount",true);
+qrRequest.put("payment_amount",300);
+qrRequest.put("description","For Store 1");
+qrRequest.put("customer_id","cust_JDdNazagOgg9Ig");
+qrRequest.put("close_by",1681615838);
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+qrRequest.put("notes",notes);
 
-QrCode qrcode = instance.qrCode.create(requestJson);
+QrCode qrcode = instance.qrCode.create(qrRequest);
 ```
 
 **Parameters:**
@@ -64,32 +62,30 @@ QrCode qrcode = instance.qrCode.create(requestJson);
 ### Create Qr code with GST
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"type\": \"upi_qr\",\n" +
-            "  \"name\": \"Store_1\",\n" +
-            "  \"usage\": \"single_use\",\n" +
-            "  \"fixed_amount\": true,\n" +
-            "  \"payment_amount\": 300,\n" +
-            "  \"description\": \"For Store 1\",\n" +
-            "  \"customer_id\": \"cust_HKsR5se84c5LTO\",\n" +
-            "  \"close_by\": 1681615838,\n" +
-            "  \"notes\": {\n" +
-            "    \"purpose\": \"Test UPI QR code notes\"\n" +
-            "  },\n" +
-            "  \"tax_invoice\": {\n" +
-            "    \"number\": \"INV001\",\n" +
-            "    \"date\": 1589994898,\n" +
-            "    \"customer_name\": \"Gaurav Kumar\",\n" +
-            "    \"business_gstin\": \"06AABCU9605R1ZR\",\n" +
-            "    \"gst_amount\": 4000,\n" +
-            "    \"cess_amount\": 0,\n" +
-            "    \"supply_type\": \"interstate\"\n" +
-            "  }\n" +
-            "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject qrRequest = new JSONObject();
+qrRequest.put("type","upi_qr");
+qrRequest.put("name","Store_1");
+qrRequest.put("usage","single_use");
+qrRequest.put("fixed_amount",true);
+qrRequest.put("payment_amount",300);
+qrRequest.put("description","For Store 1");
+qrRequest.put("customer_id","cust_JDdNazagOgg9Ig");
+qrRequest.put("close_by",1681615838);
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+qrRequest.put("notes",notes);
+JSONObject taxInvoice = new JSONObject();
+taxInvoice.put("number","INV001");
+taxInvoice.put("date",1589994898);
+taxInvoice.put("customer_name","Gaurav Kumar");
+taxInvoice.put("business_gstin","06AABCU9605R1ZR");
+taxInvoice.put("gst_amount",4000);
+taxInvoice.put("cess_amount",0);
+taxInvoice.put("supply_type","interstate");
+qrRequest.put("tax_invoice",taxInvoice);
 
-QrCode qrcode = instance.qrCode.create(requestJson);
+QrCode qrcode = instance.qrCode.create(qrRequest);
 ```
 
 **Parameters:**
@@ -144,13 +140,10 @@ QrCode qrcode = instance.qrCode.create(requestJson);
 ### Fetch all Qr code
 
 ```java
-String jsonRequest = "{\n" +
-                        "\"count\" : 1\n" +
-                      "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson= new JSONObject(jsonRequest);
-
-List<QrCode> qrcode = instance.qrCode.fetchAll(requestJson);
+List<QrCode> qrcode = instance.qrCode.fetchAll(params);
 ```
 
 **Parameters:**
@@ -240,11 +233,10 @@ QrCode qrcode = instance.qrCode.fetch(qrCodeId);
 ### Fetch a Qr code for customer id
 
 ```java
-String jsonRequest = "{\"customer_id\":\"cust_HKsR5se84c5LTO\"}";
+JSONObject params = new JSONObject();
+params.put("customer_id","cust_JDdNazagOgg9Ig");
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-List<QrCode> qrcode = instance.qrCode.fetchAll(request);
+List<QrCode> qrcodes = instance.qrCode.fetchAll(params);
 ```
 
 **Parameters:**
@@ -287,11 +279,10 @@ List<QrCode> qrcode = instance.qrCode.fetchAll(request);
 ### Fetch a Qr code for payment id
 
 ```java
-String jsonRequest = "{\"payment_id\":\"pay_FVmAstJWfsD3SO\"}";
+JSONObject params = new JSONObject();
+params.put("payment_id","pay_FVmAstJWfsD3SO");
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-List<QrCode> qrcode = instance.qrCode.fetchAll(requestRequest);
+List<QrCode> qrcodes = instance.qrCode.fetchAll(params);
 ```
 
 **Parameters:**
@@ -335,13 +326,10 @@ List<QrCode> qrcode = instance.qrCode.fetchAll(requestRequest);
 ```java
 String qrCodeId = "qr_HMsVL8HOpbMcjU";
 
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
-
-JSONObject requestJson = new JSONObject(jsonRequest);   
+JSONObject params = new JSONObject();
+params.put("count","1");
             
-List<QrCode> qrcode = instance.qrCode.fetchAllPayments(qrCodeId, requestJson);
+List<QrCode> qrcode = instance.qrCode.fetchAllPayments(qrCodeId, params);
 ```
 
 **Parameters:**
@@ -444,4 +432,4 @@ QrCode qrcode = instance.qrCode.close(qrCodeId);
 **PN: * indicates mandatory fields**
 <br>
 <br>
-**For reference click [here](https://razorpay.com/docs/qr-codes/)**
+**For reference click [here](https://razorpay.com/docs/api/qr-codes)**

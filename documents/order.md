@@ -3,19 +3,16 @@
 ### Create order
 
 ```java
-String jsonRequest = "{\n" +
-                "  \"amount\": 50000,\n" +
-                "  \"currency\": \"INR\",\n" +
-                "  \"receipt\": \"receipt#1\",\n" +
-                "  \"notes\": {\n" +
-                "    \"key1\": \"value3\",\n" +
-                "    \"key2\": \"value2\"\n" +
-                "  }\n" +
-                "}";
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount",50000);
+orderRequest.put("currency","INR");
+orderRequest.put("receipt", "receipt#1");
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+orderRequest.put("notes",notes);
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-Order order = instance.orders.create(requestRequest);
+Order order = instance.orders.create(orderRequest);
 ```
 
 **Parameters:**
@@ -25,7 +22,8 @@ Order order = instance.orders.create(requestRequest);
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | object  | A key-value pair                                                             |
+| notes           | array  | A key-value pair |
+|partial_payment | boolean  | Indicates whether customers can make partial payments on the invoice . Possible values: true - Customer can make partial payments. false (default) - Customer cannot make partial payments. |
 
 **Response:**
 
@@ -51,13 +49,10 @@ Order order = instance.orders.create(requestRequest);
 ### Fetch all orders
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-List<Order> order = instance.orders.fetchAll(requestRequest);
+List<Order> order = instance.orders.fetchAll(params);
 ```
 
 **Parameters**
@@ -185,16 +180,13 @@ Order order = instance.orders.fetchPayments(orderId);
 ```java
 String orderId = "order_DaaS6LOUAASb7Y";
 
-String jsonRequest = {\n" +
-              "  \"notes\": {\n" +
-              "    \"key1\": \"value3\",\n" +
-              "    \"key2\": \"value2\"\n" +
-              "  }\n" +
-              "}";
+JSONObject orderRequest = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+orderRequest.put("notes",notes);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-Order order = instance.orders.edit(OrderId,requestJson);
+Order order = instance.orders.edit(OrderId,orderRequest);
 ```
 **Parameters**
 
