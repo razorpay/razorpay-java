@@ -76,6 +76,7 @@ List<Payment> payment = instance.payments.fetchAll(params);
 | to    | timestamp | timestamp before which the payments were created |
 | count | integer   | number of payments to fetch (default: 10)        |
 | skip  | integer   | number of payments to be skipped (default: 0)    |
+| expand[]  | string   | Used to retrieve additional information about the payment.Possible value is `cards` or `emi`  |
 
 **Response:**
 ```json

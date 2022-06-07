@@ -65,6 +65,7 @@ List<Order> order = instance.orders.fetchAll(params);
 | skip       | integer   | number of orders to be skipped (default: 0)                |
 | authorized | boolean   | Orders for which orders are currently in authorized state. |
 | receipt    | string    | Orders with the provided value for receipt.                  |
+| expand[]  | string   | Used to retrieve additional information about the payment.Possible value is `payments` or `payments.card`, `transfers` or `virtual_account` |
 
 **Response:**
 
