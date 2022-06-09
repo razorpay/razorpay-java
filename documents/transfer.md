@@ -4,28 +4,25 @@
 
 ```java
 String paymentId = "pay_E8JR8E0XyjUSZd";
-String json = "{\n" +
-              "   \"transfers\": [\n" +
-              "    {\n" +
-              "      \"account\": 'acc_HgzcrXeSLfNP9U',\n" +
-              "      \"amount\": 100,\n" +
-              "      \"currency\": \"INR\",\n" +
-              "      \"notes\": {\n" +
-              "        \"name\": \"Gaurav Kumar\",\n" +
-              "        \"roll_no\": \"IEC2011025\"\n" +
-              "      },\n" +
-              "      \"linked_account_notes\": [\n" +
-              "        \"branch\"\n" +
-              "      ],\n" +
-              "      \"on_hold\": 1,\n" +
-              "      \"on_hold_until\": 1671222870\n" +
-              "    }\n" +
-              "  ]\n" +
-              " }";
-              
-JSONObject request = new JSONObject(json);
-              
-instance.payments.transfer(paymentId,request);
+
+JSONObject transferRequest = new JSONObject();
+List<Object> transfers = new ArrayList<>();
+JSONObject transferParams = new JSONObject();
+transferParams.put("account","acc_I0QRP7PpvaHhpB");
+transferParams.put("amount",100);
+transferParams.put("currency","INR");
+JSONObject notes = new JSONObject();
+notes.put("name","Gaurav Kumar");
+notes.put("roll_no","IEC2011025");
+transferParams.put("notes",notes);
+List<Object> linkedAccountNotes = new ArrayList<>();
+linkedAccountNotes.add("roll_no");
+transferParams.put("linked_account_notes",linkedAccountNotes);
+transferParams.put("on_hold",true);
+transfers.add(transferParams);
+transferRequest.put("transfers", transfers);
+
+List<Transfer> transfer = instance.payments.transfer(paymentId,transferRequest);
 ```
 
 **Parameters:**
@@ -70,43 +67,27 @@ instance.payments.transfer(paymentId,request);
 ### Create transfers from order
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"amount\": 2000,\n" +
-            "  \"currency\": \"INR\",\n" +
-            "  \"transfers\": [\n" +
-            "    {\n" +
-            "      \"account\": \"acc_CPRsN1LkFccllA\",\n" +
-            "      \"amount\": 1000,\n" +
-            "      \"currency\": \"INR\",\n" +
-            "      \"notes\": {\n" +
-            "        \"branch\": \"Acme Corp Bangalore North\",\n" +
-            "        \"name\": \"Gaurav Kumar\"\n" +
-            "      },\n" +
-            "      \"linked_account_notes\": [\n" +
-            "        \"branch\"\n" +
-            "      ],\n" +
-            "      \"on_hold\": 1,\n" +
-            "      \"on_hold_until\": 1671222870\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"account\": \"acc_CNo3jSI8OkFJJJ\",\n" +
-            "      \"amount\": 1000,\n" +
-            "      \"currency\": \"INR\",\n" +
-            "      \"notes\": {\n" +
-            "        \"branch\": \"Acme Corp Bangalore South\",\n" +
-            "        \"name\": \"Saurav Kumar\"\n" +
-            "      },\n" +
-            "      \"linked_account_notes\": [\n" +
-            "        \"branch\"\n" +
-            "      ],\n" +
-            "      \"on_hold\": 0\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount",50000);
+orderRequest.put("currency","INR");
+orderRequest.put("receipt", "receipt#1");
+List<Object> transfers = new ArrayList<>();
+JSONObject transferParams = new JSONObject();
+transferParams.put("account","acc_I0QRP7PpvaHhpB");
+transferParams.put("amount",100);
+transferParams.put("currency","INR");
+JSONObject notes = new JSONObject();
+notes.put("name","Gaurav Kumar");
+notes.put("roll_no","IEC2011025");
+transferParams.put("notes",notes);
+List<Object> linkedAccountNotes = new ArrayList<>();
+linkedAccountNotes.add("roll_no");
+transferParams.put("linked_account_notes",linkedAccountNotes);
+transferParams.put("on_hold",true);
+transfers.add(transferParams);
+orderRequest.put("transfers", transfers);
               
-JSONObject requestJson = new JSONObject(jsonRequest);
-              
-Order order = instance.orders.create(requestJson);
+Order order = instance.orders.create(orderRequest);
 ```
 
 **Parameters:**
@@ -170,15 +151,12 @@ Order order = instance.orders.create(requestJson);
 ### Direct transfers
 
 ```java
-String jsonRequest = "{\n" +
-                 "\account\": \"acc_CPRsN1LkFccllA\",\n +
-                 "\"amount\": 500,\n" +
-                 "\"currency\": \"INR\"\n" +
-               "}";
-
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject transferRequest = new JSONObject();
+transferRequest.put("amount",50000);
+transferRequest.put("currency","INR");
+transferRequest.put("account","acc_I0QRP7PpvaHhpB");
                
-Transfer transfer = instance.transfers.create(requestJson);
+Transfer transfer = instance.transfers.create(transferRequest);
 ```
 
 **Parameters:**
@@ -217,7 +195,7 @@ Transfer transfer = instance.transfers.create(requestJson);
 ```java
 String paymentId = "pay_E9up5WhIfMYnKW";
 
-List<Payment> payment = instance.payments.fetchAllTransfers(paymentId)
+List<Payment> payments = instance.payments.fetchAllTransfers(paymentId)
 ```
 
 **Parameters:**
@@ -295,11 +273,11 @@ Transfer transfer = instance.transfers.fetch(transferId);
 ### Fetch transfers for a settlement
 
 ```java
-String jsonRequest = {\"recipient_settlement_id\":\"setl_DHYJ3dRPqQkAgV\"}";
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
+JSONObject params = new JSONObject();
+params.put("recipient_settlement_id","setl_DHYJ3dRPqQkAgV");
 
-List<Transfer> transfer = instance.transfers.fetchAll(requestRequest);
+List<Transfer> transfers = instance.transfers.fetchAll(params);
 ```
 
 **Parameters:**
@@ -340,13 +318,11 @@ List<Transfer> transfer = instance.transfers.fetchAll(requestRequest);
 ### Fetch settlement details
 
 ```java
-String jsonRequest = "{\n" +
-              "\"expand[]\" : \"recipient_settlement\"  \n" +
-              "}";
 
-JSONObject requestJson = new JSONObject(jsonRequest);
+JSONObject params = new JSONObject();
+params.put("expand[]","recipient_settlement");
               
-List<Transfer> transfer = instance.transfers.fetchAll(requestJson);
+List<Transfer> transfer = instance.transfers.fetchAll(params);
 ```
 
 **Parameters:**
@@ -399,14 +375,11 @@ List<Transfer> transfer = instance.transfers.fetchAll(requestJson);
 ```java
 String paymentId = "pay_EAdwQDe4JrhOFX";
 
-String jsonRequest = "{\n" +
-                    "\"amount\" : 100,\n" +
-                    "\"reverse_all\" : 1\n" +
-                    "})";
-              
-JSONObject requestRequest = new JSONObject(jsonRequest);  
-            
-Payment payment = instance.payments.refund(paymentId,requestJson);
+JSONObject params = new JSONObject();
+params.put("amount",100);
+params.put("reverse_all",1);
+
+Refund payment = instance.payments.refund(paymentId,params);
 ```
 
 **Parameters:**
@@ -438,11 +411,11 @@ Payment payment = instance.payments.refund(paymentId,requestJson);
 ### Fetch payments of a linked account
 
 ```java
-String jsonRequest = "{\"X-Razorpay-Account\":\"acc_CPRsN1LkFccllA\"}"
+Map<String, String> headers = new HashMap<String, String>();
+headers.put("X-Razorpay-Account","acc_CPRsN1LkFccllA");
+instance.addHeaders(headers);
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Payment> payment = instance.payments.fetchAll(requestJson);
+List<Payment> payments = instance.payments.fetchAll();
 ```
 
 **Parameters:**
@@ -494,13 +467,10 @@ List<Payment> payment = instance.payments.fetchAll(requestJson);
 ```java
 String transferId = "trf_EAznuJ9cDLnF7Y";
 
-String jsonRequest = "{\n" +
-                "\"amount\":100\n" +
-               "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);       
-        
-Transfer transfer = instance.Transfers.reversal(transferId,requestJson);
+JSONObject transferRequest = new JSONObject();
+transferRequest.put("amount","100");
+ 
+Transfer transfer = instance.transfers.reversal(transferId,transferRequest);
 ```
 
 **Parameters:**
@@ -532,28 +502,25 @@ Transfer transfer = instance.Transfers.reversal(transferId,requestJson);
 ```java
 String paymentId = "pay_EB1R2s8D4vOAKG";
 
-String jsonRequest = "{\n" +
-                "  \"transfers\": [\n" +
-                "    {\n" +
-                "      \"amount\": 100,\n" +
-                "      \"account\": \"acc_CMaomTz4o0FOFz\",\n" +
-                "      \"currency\": \"INR\",\n" +
-                "      \"on_hold\": 1\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
-              
-JSONObject requestJson = new JSONObject(jsonRequest);    
-          
-Payment payment = instance.payments.transfer(paymentId,requestJson);
+JSONObject transferRequest = new JSONObject();
+List<Object> transfers = new ArrayList<>();
+JSONObject transferParams = new JSONObject();
+transferParams.put("account","acc_I0QRP7PpvaHhpB");
+transferParams.put("amount",100);
+transferParams.put("currency","INR");
+transferParams.put("on_hold",true);
+transfers.add(transferParams);
+transferRequest.put("transfers", transfers);
+
+List<Transfer> transfer = instance.payments.transfer(paymentId,transferRequest);
 ```
 
 **Parameters:**
 
-| Name       | Type        | Description                                 |
-|------------|-------------|---------------------------------------------|
+| Name      | Type        | Description                                 |
+|-----------|-------------|---------------------------------------------|
 | paymentId* | string      | The id of the payment to be fetched  |
-| transfers  | array     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
+| transfer  | array     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
 
 **Response:**
 ```json
@@ -586,25 +553,22 @@ Payment payment = instance.payments.transfer(paymentId,requestJson);
 
 ### Modify settlement hold for transfers
 ```java
-String paymentId = "pay_EAeSM2Xul8xYRo";
+String transferId = "trf_EB17rqOUbzSCEE";
 
-String jsonRequest = "{\n" +
-                "\"on_hold\": \"1\",\n" +
-                "\"on_hold_until\": \"1679691505\"\n" +
-               "}";
-               
-JSONObject requestJson = new JSONObject(jsonRequest);    
+JSONObject transferRequest = new JSONObject();
+transferRequest.put("on_hold",true);
+transferRequest.put("on_hold_until",1679691505);   
               
-Transfer transfer = instance.Transfers.edit(paymentId,requestJson);
+Transfer transfer = instance.transfers.edit(transferId,transferRequest);
 ```
 
 **Parameters:**
 
 | Name          | Type    | Description                                 |
 |---------------|---------|---------------------------------------------|
-| paymentId*    | string  | The id of the payment to be fetched  |
-| on_hold       | boolean | Possible value is `0` or `1` |
-| on_hold_until | integer |  |
+| transferId*   | string      | The id of the transfer to be fetched  |
+| on_hold*   | boolean      | Possible values is `0` or `1`  |
+| on_hold_until   | integer      | Timestamp, in Unix, that indicates until when the settlement of the transfer must be put on hold |
 
 **Response:**
 ```json

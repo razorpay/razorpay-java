@@ -277,4 +277,22 @@ public class CustomerClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    /**
+     * Delete tokens
+     * @throws RazorpayException
+     */
+    @Test
+    public void testDeleteToken() throws IOException, RazorpayException {
+        String mockedResponseJson = "{\"entity\":\"customer\",\"deleted\":true}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer customer = customerClient.deleteToken(CUSTOMER_ID,TOKEN_ID);
+            assertNotNull(customer);
+            verifySentRequest(false, null, getHost(String.format(Constants.TOKEN_DELETE,CUSTOMER_ID,TOKEN_ID)));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

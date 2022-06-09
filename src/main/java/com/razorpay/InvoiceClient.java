@@ -46,7 +46,7 @@ public class InvoiceClient extends ApiClient {
     return patch(String.format(Constants.INVOICE_GET, id), request);
   }
 
-  public void delete(String id) throws RazorpayException {
-    delete(String.format(Constants.INVOICE_GET, id), null);
+  public List<Invoice> delete(String id) throws RazorpayException {
+    return delete(String.format(Constants.INVOICE_GET, id), null);
   }
 }

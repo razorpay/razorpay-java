@@ -3,24 +3,21 @@
 ### Create plan
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"period\": \"weekly\",\n" +
-            "  \"interval\": 1,\n" +
-            "  \"item\": {\n" +
-            "    \"name\": \"Test plan - Weekly\",\n" +
-            "    \"amount\": 69900,\n" +
-            "    \"currency\": \"INR\",\n" +
-            "    \"description\": \"Description for the test plan\"\n" +
-            "  },\n" +
-            "  \"notes\": {\n" +
-            "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
-            "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
-            "  }\n" +
-            "}";
+JSONObject planRequest = new JSONObject();
+planRequest.put("period","weekly");
+planRequest.put("interval",1);
+JSONObject item = new JSONObject();
+item.put("name","Test plan - Weekly");
+item.put("amount",69900);
+item.put("currency","INR");
+item.put("description","Description for the test plan");
+planRequest.put("item",item);
+JSONObject notes = new JSONObject();
+notes.put("notes_key_1","Tea, Earl Grey, Hot");
+notes.put("notes_key_2","Tea, Earl Grey… decaf.");
+planRequest.put("notes",notes);
               
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-Plan plan = razorpayclient.plans.create(requestRequest);
+Plan plan = instance.plans.create(planRequest);
 ```
 
 **Parameters:**
@@ -70,13 +67,10 @@ Plan plan = razorpayclient.plans.create(requestRequest);
 ### Fetch all plans
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-instance.plans.fetchAll(requestJson);
+List<Plan> plans =  instance.plans.fetchAll(params);
 ```
 
 **Parameters:**
@@ -134,14 +128,14 @@ instance.plans.fetchAll(requestJson);
 ```java
 String planId = "plan_00000000000001";
 
-instance.plans.fetch(planId);
+Plan plan = instance.plans.fetch(planId);
 ```
 
 **Parameters:**
 
 | Name   | Type      | Description                                      |
 |--------|-----------|--------------------------------------------------|
-| planId | string | The id of the plan to be fetched  |
+| planId* | string | The id of the plan to be fetched  |
 
 **Response:**
 ```json

@@ -4,13 +4,11 @@
 
 ```java
 String paymentId = "pay_G8VQzjPLoAvm6D";
-String jsonRequest = "{\n" +
-              "  \"amount\": 1000,\n" +
-              "  \"currency\": \"INR\"\n" +
-              "}";
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("amount", 1000);
+paymentRequest.put("currency", "INR");
+        
 Payment payment = instance.payments.capture(paymentId, requestRequest);
 ```
 
@@ -64,13 +62,10 @@ Payment payment = instance.payments.capture(paymentId, requestRequest);
 ### Fetch all payments
 
 ```java
-String jsonRequest = "{\n" +
-                 "\"count\" : 1\n" +
-               "}";
+JSONObject params = new JSONObject();
+params.put("count","1");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-List<Payment> payment = instance.payments.fetchAll(requestJson);
+List<Payment> payment = instance.payments.fetchAll(params);
 ```
 
 **Parameters:**
@@ -81,6 +76,7 @@ List<Payment> payment = instance.payments.fetchAll(requestJson);
 | to    | timestamp | timestamp before which the payments were created |
 | count | integer   | number of payments to fetch (default: 10)        |
 | skip  | integer   | number of payments to be skipped (default: 0)    |
+| expand[]  | string   | Used to retrieve additional information about the payment.Possible value is `cards` or `emi`  |
 
 **Response:**
 ```json
@@ -240,16 +236,13 @@ Order order = instance.orders.fetchPayments(orderId)
 ```java
 String paymentId = "pay_CBYy6tLmJTzn3Q";
 
-String jsonRequest = "{\n" +
-              "  \"notes\": {\n" +
-              "       \"key1\": \"value1\",\n" +
-              "       \"key2\": \"value2\"\n" +
-              "  }\n" +
-              "}";
+JSONObject paymentRequest = new JSONObject();
+JSONObject notes = new JSONObject();
+notes.put("key1","value1");
+notes.put("key2","value2");
+paymentRequest.put("notes",notes);
               
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-Payment payment = instance.payments.edit(PaymentId,requestRequest);
+Payment payment = instance.payments.edit(PaymentId,paymentRequest);
 ```
 
 **Parameters:**
@@ -304,21 +297,19 @@ Payment payment = instance.payments.edit(PaymentId,requestRequest);
 Request #1: Card
 
 ```java
-String jsonRequest = "{\"expand[]\":\"card\"}";
+JSONObject params = new JSONObject();
+params.put("expand[]","card");
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-List<Payment> payment = instance.payments.fetchAll(requestRequest);
+List<Payment> payment = instance.payments.fetchAll(params);
 ```
 
 Request #2: EMI
 
 ```java
-String jsonRequest = "{\"expand[]\":\"emi\"}";
+JSONObject params = new JSONObject();
+params.put("expand[]","emi");
 
-JSONObject requestRequest = new JSONObject(jsonRequest);
-
-List<Payment> payment = instance.Payments.fetchAll(requestRequest);
+List<Payment> payment = instance.payments.fetchAll(params);
 ```
 
 **Response:**
@@ -361,7 +352,7 @@ Card card = instance.cards.fetchCardDetails(paymentId);
 ### Fetch Payment Downtime Details
 
 ```java
-List<Payment> payment = instance.Payments.fetchPaymentDowntime();
+List<Payment> payment = instance.payments.fetchPaymentDowntime();
 ```
 **Response:**
 
@@ -374,7 +365,7 @@ For payment downtime response please click [here](https://razorpay.com/docs/api/
 ```java
 String DowntimeId = "down_F7LroRQAAFuswd";
 
-instance.payments.fetchPaymentDowntimeById(DowntimeId);
+Payment payment = instance.payments.fetchPaymentDowntimeById(DowntimeId);
 ```
 
 **Parameters:**
@@ -385,38 +376,45 @@ instance.payments.fetchPaymentDowntimeById(DowntimeId);
 
 **Response:**
 For payment downtime by id response please click [here](https://razorpay.com/docs/api/payments/downtime/#fetch-payment-downtime-details-by-id)
+
 -------------------------------------------------------------------------------------------------------
 
 ### Payment capture settings API
 
 ```java
-String jsonRequest = "{\n" +
-                   "  \"amount\":50000,\n" +
-                   "  \"currency\": \"INR\",\n" +
-                   "  \"receipt\": \"rcptid_11\",\n" +
-                   "  \"payment\": {\n" +
-                   "    \"capture\": \"automatic\",\n" +
-                   "    \"capture_options\": {\n" +
-                   "      \"automatic_expiry_period\": 12,\n" +
-                   "      \"manual_expiry_period\": 7200,\n" +
-                   "      \"refund_speed\": \"optimum\"\n" +
-                   "    }  \n" +
-                   "  }\n" +
-                   "}";
-
-JSONObject requestRequest = new JSONObject(jsonRequest);
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount",50000);
+orderRequest.put("currency","INR");
+orderRequest.put("receipt", "rcptid_11");
+JSONObject payment = new JSONObject();
+payment.put("capture","automatic");
+JSONObject captureOptions = new JSONObject();
+captureOptions.put("automatic_expiry_period",12);
+captureOptions.put("manual_expiry_period",7200);
+captureOptions.put("refund_speed","optimum");
+payment.put("capture_options",captureOptions);
+orderRequest.put("payment",payment);
               
-instance.orders.create(requestRequest);
+Order order = instance.orders.create(orderRequest);
 ```
 
 **Parameters:**
 
 | Name        | Type    | Description                          |
 |-------------|---------|--------------------------------------|
-| amount*          | integer | Amount of the order to be paid                                               |
-| currency*        | string  | Currency of the order. Currently only `INR` is supported.       |
-| receipt         | string  | Your system order reference id.                                              |
-| payment         | object  | please refer this [doc](https://razorpay.com/docs/payments/payments/capture-settings/api/) for params                       |
+| amount*          | integer | Amount of the order to be paid  |
+| currency*   | string  | The currency of the payment (defaults to INR)                                  |
+| order_id*        | string  | The unique identifier of the order created. |
+| email*        | string      | Email of the customer                       |
+| contact*      | string      | Contact number of the customer              |
+| method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
+| card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
+| bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
+| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
+| wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
+| notes | array  | A key-value pair  |
+
 
 **Response:**
 ```json
@@ -439,28 +437,39 @@ instance.orders.create(requestRequest);
 ### Create Payment Json
 
 ```java
-String jsonRequest = "{\n" +
-            "  \"amount\": 100,\n" +
-            "  \"currency\": \"INR\",\n" +
-            "  \"order_id\": \"order_EAkbvXiCJlwhHR\",\n" +
-            "  \"email\": \"gaurav.kumar@example.com\",\n" +
-            "  \"contact\": 9090909090,\n" +
-            "  \"method\": \"card\",\n" +
-            "  \"card\":{\n" +
-            "    \"number\": 4111111111111111,\n" +
-            "    \"name\": \"Gaurav\",\n" +
-            "    \"expiry_month\": 11,\n" +
-            "    \"expiry_year\": 23,\n" +
-            "    \"cvv\": 100\n" +
-            "  }\n" +
-            "}";
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("amount",500);
+paymentRequest.put("currency","INR");
+paymentRequest.put("email", "gaurav.kumar@example.com");
+paymentRequest.put("contact", "9123456789");
+paymentRequest.put("order_id", "order_JZluwjknyWdhnU");
+paymentRequest.put("method", "card");
+JSONObject card = new JSONObject();
+card.put("number","4854980604708430");
+card.put("cvv","123");
+card.put("expiry_month","12");
+card.put("expiry_year","25");
+card.put("name","Gaurav Kumar");
+paymentRequest.put("card",card);
               
-JSONObject requestRequest = new JSONObject(jsonRequest);
-              
-instance.payments.createJsonPayment(requestRequest);
+Payment payment = instance.payments.createJsonPayment(paymentRequest);
 ```
 
 **Parameters:**
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| amount*          | integer | Amount of the order to be paid  |
+| currency*   | string  | The currency of the payment (defaults to INR)                                  |
+| order_id*        | string  | The unique identifier of the order created. |
+| email*        | string      | Email of the customer                       |
+| contact*      | string      | Contact number of the customer              |
+| method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
+| card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
+| bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
+| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
+| wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
+| notes | array  | A key-value pair  |
 
  please refer this [doc](https://razorpay.com/docs/payment-gateway/s2s-integration/payment-methods/) for params
 
@@ -480,7 +489,117 @@ instance.payments.createJsonPayment(requestRequest);
   ]
 }
 ```
+-------------------------------------------------------------------------------------------------------
 
+### OTP Generate
+
+```java
+
+RazorpayClient razorpayclient = new RazorpayClient("key",""); // Use Only razorpay key
+
+String paymentId = "pay_JWjI5kbJKUDE1a";
+
+Payment payment = razorpayclient.payments.otpGenerate(paymentId);
+```
+
+**Parameters:**
+
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| paymentId*    | integer | Unique identifier of the payment                                               |
+
+Doc reference [doc](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/json/v2/build-integration/cards/#otp-generation-)
+
+**Response:** <br>
+
+```json
+{
+ "razorpay_payment_id": "pay_FVmAstJWfsD3SO",
+ "next": [
+  {
+   "action": "otp_submit",
+   "url": "https://api.razorpay.com/v1/payments/pay_FVmAstJWfsD3SO/otp_submit/ac2d415a8be7595de09a24b41661729fd9028fdc?key_id=<YOUR_KEY_ID>"
+  },
+  {
+   "action": "otp_resend",
+   "url": "https://api.razorpay.com/v1/payments/pay_FVmAstJWfsD3SO/otp_resend/json?key_id=<YOUR_KEY_ID>"
+  }
+ ],
+ "metadata": {
+  "issuer": "HDFC",
+  "network": "MC",
+  "last4": "1111",
+  "iin": "411111"
+ }
+}
+```
+
+-------------------------------------------------------------------------------------------------------
+
+### OTP Submit
+
+```java
+String paymentId = "pay_JWjI5kbJKUDE1a";
+
+String jsonRequest = "{\n" +
+                "  \"otp\": \"123456\",\n" +
+                "}";
+
+JSONObject requestJson = new JSONObject(jsonRequest);
+
+Payment payment = razorpayclient.payments.otpSubmit(paymentId, requestJson);
+```
+
+**Parameters:**
+
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| paymentId*    | integer | Unique identifier of the payment                                               |
+| otp*    | string | The customer receives the OTP using their preferred notification medium - SMS or email |
+
+Doc reference [doc](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/json/v2/build-integration/cards/#response-on-submitting-otp)
+
+**Response:** <br>
+Success
+```json
+{
+ "razorpay_payment_id": "pay_D5jmY2H6vC7Cy3",
+ "razorpay_order_id": "order_9A33XWu170gUtm",
+ "razorpay_signature": "9ef4dffbfd84f1318f6739a3ce19f9d85851857ae648f114332d8401e0949a3d"
+}
+```
+-------------------------------------------------------------------------------------------------------
+
+### OTP Resend
+
+```java
+
+String paymentId = "pay_JWjI5kbJKUDE1a";
+
+Payment payment = razorpayclient.payments.otpResend(paymentId);
+```
+
+**Parameters:**
+
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| paymentId*    | integer | Unique identifier of the payment                                               |
+
+Doc reference [doc](https://razorpay.com/docs/payments/payment-methods/cards/authentication/native-otp/#otp-resend)
+
+**Response:** <br>
+
+```json
+{
+  "next": [
+    "otp_submit",
+    "otp_resend"
+  ],
+  "razorpay_payment_id": "pay_JWaNvYmrx75sXo"
+}
+```
+
+-------------------------------------------------------------------------------------------------------
 **PN: * indicates mandatory fields**
 <br>
 <br>
