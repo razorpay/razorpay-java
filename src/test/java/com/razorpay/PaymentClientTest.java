@@ -634,4 +634,73 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void createUpi() throws RazorpayException {
+
+        JSONObject request = new JSONObject("{\n" +
+                "  \"amount\": 200,\n" +
+                "  \"currency\": \"INR\",\n" +
+                "  \"order_id\": \"order_GAWRjlWkVcRh0V\",\n" +
+                "  \"email\": \"gaurav.kumar@example.com\",\n" +
+                "  \"contact\": \"9123456789\",\n" +
+                "  \"method\": \"upi\",\n" +
+                "  \"customer_id\": \"cust_EIW4T2etiweBmG\",\n" +
+                "  \"save\": 1,\n" +
+                "  \"ip\": \"192.168.0.103\",\n" +
+                "  \"referer\": \"http\",\n" +
+                "  \"user_agent\": \"Mozilla/5.0\",\n" +
+                "  \"description\": \"Test flow\",\n" +
+                "  \"notes\": {\n" +
+                "    \"note_key\": \"value1\"\n" +
+                "  },\n" +
+                "  \"upi\": {\n" +
+                "    \"flow\": \"collect\",\n" +
+                "    \"vpa\": \"gauravkumar@exampleupi\",\n" +
+                "    \"expiry_time\": 5\n" +
+                "  }\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"payment\",  \n" +
+                "  \"razorpay_payment_id\": "+PAYMENT_ID+",\n"+
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.createUpi(request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("razorpay_payment_id"));
+            String createUpiRequest = getHost(Constants.PAYMENT_CREATE_UPI);
+            verifySentRequest(true, request.toString(), createUpiRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void validateUpi() throws RazorpayException {
+
+        JSONObject request = new JSONObject("{\n" +
+                "  \"vpa\": \"gauravkumar@exampleupi\"\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                 "  \"entity\": \"payment\",\n" +
+                 "  \"vpa\": \"gauravkumar@exampleupi\",\n" +
+                 "  \"success\": true,\n" +
+                 "  \"customer_name\": \"Gaurav Kumar\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.validateUpi(request);
+            assertNotNull(fetch);
+            assertTrue(fetch.get("success"));
+            String validateUpiRequest = getHost(Constants.VALIDATE_VPA);
+            verifySentRequest(true, request.toString(), validateUpiRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

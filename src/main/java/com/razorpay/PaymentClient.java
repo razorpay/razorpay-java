@@ -112,5 +112,11 @@ public class PaymentClient extends ApiClient {
   public Payment otpResend(String id) throws RazorpayException {
     return post(String.format(Constants.PAYMENT_OTP_RESEND, id), null);
   }
+  public Payment createUpi(JSONObject request) throws RazorpayException {
+    return post(Constants.PAYMENT_CREATE_UPI, request);
+  }
+  public Payment validateUpi(JSONObject request) throws RazorpayException {
+    return post(Constants.VALIDATE_VPA, request);
+  }
 
 }
