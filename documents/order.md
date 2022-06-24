@@ -45,6 +45,53 @@ Order order = instance.orders.create(orderRequest);
 ```
 
 -------------------------------------------------------------------------------------------------------
+### Create order (Third party validation)
+
+```java
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount",50000);
+orderRequest.put("method","netbanking");
+orderRequest.put("receipt","BILL13375649");
+orderRequest.put("currency","INR");
+JSONObject bankAccount = new JSONObject();
+bankAccount.put("account_number","765432123456789");
+bankAccount.put("name","Gaurav Kumar");
+bankAccount.put("ifsc","HDFC0000053");
+orderRequest.put("bank_account",bankAccount);
+
+Order order = instance.orders.create(orderRequest);
+```
+
+**Parameters:**
+
+| Name            | Type    | Description                                                                  |
+|-----------------|---------|------------------------------------------------------------------------------|
+| amount*          | integer | Amount of the order to be paid                                               |
+| method        | string  | The payment method used to make the payment. If this parameter is not passed, customers will be able to make payments using both netbanking and UPI payment methods. Possible values is `netbanking` or `upi`|
+| currency*        | string  | Currency of the order. Currently only `INR` is supported.       |
+| receipt         | string  | Your system order reference id.                                              |
+|bank_account | array  | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/#step-2-create-an-order) are supported |
+
+**Response:**
+
+```json
+{
+  "id": "order_GAWN9beXgaqRyO",
+  "entity": "order",
+  "amount": 500,
+  "amount_paid": 0,
+  "amount_due": 500,
+  "currency": "INR",
+  "receipt": "BILL13375649",
+  "offer_id": null,
+  "status": "created",
+  "attempts": 0,
+  "notes": [],
+  "created_at": 1573044247
+}
+```
+
+-------------------------------------------------------------------------------------------------------
 
 ### Fetch all orders
 
