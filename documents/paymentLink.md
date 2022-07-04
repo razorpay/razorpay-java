@@ -333,10 +333,10 @@ PaymentLink payment = instance.paymentLink.create(paymentLinkRequest);
 |currency           | string  |  A three-letter ISO code for the currency in which you want to accept the payment. For example, INR.                     |
 |description           | string  | A brief description of the Payment Link                     |
 |reference_id           | string  | AReference number tagged to a Payment Link.                      |
-|customer           | array  | name, email, contact                 |
+|customer           | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/payment-links/offers/#step-2-pass-offer_id-in-payment-link-create) are supported |
 |expire_by           | integer  | Timestamp, in Unix, at which the Payment Link will expire. By default, a Payment Link will be valid for six months from the date of creation.                     |
 |notify           | object  | sms or email (boolean)                     |
-|options*        | array  | Options to associate the offer_id with the Payment Link. Parent parameter under which the order child parameter must be passed.                     |
+|options*        | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/payment-links/offers/#step-2-pass-offer_id-in-payment-link-create) are supported                 |
 
 **Response:**
 ```json
