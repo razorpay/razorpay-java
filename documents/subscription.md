@@ -268,7 +268,7 @@ Subscription subscription = instance.subscriptions.fetch(subscriptionId);
 ### Cancel particular subscription
 
 ```java
-Subscription subscription = instance.subscription.cancel(subscriptionId)
+Subscription subscription = instance.subscriptions.cancel(subscriptionId)
 ```
 
 **Parameters:**
@@ -327,7 +327,7 @@ params.put("start_at",1496000432);
 params.put("schedule_change_at","now");
 params.put("customer_notify",1);
  
-Subscription subscription = instance.subscription.update(subscriptionId,params);
+Subscription subscription = instance.subscriptions.update(subscriptionId,params);
 ```
 
 **Parameters:**
@@ -378,7 +378,7 @@ Subscription subscription = instance.subscription.update(subscriptionId,params);
 ```java
 String subscriptionId = "sub_00000000000001";
 
-Subscription subscription = instance.subscription.fetchPendingUpdate(subscriptionId);
+Subscription subscription = instance.subscriptions.fetchPendingUpdate(subscriptionId);
 ```
 
 **Parameters:**
@@ -427,7 +427,7 @@ Subscription subscription = instance.subscription.fetchPendingUpdate(subscriptio
 ```java
 String subscriptionId = "sub_00000000000001";
 
-Subscription subscription = instance.subscription.cancelPendingUpdate(subscriptionId);
+Subscription subscription = instance.subscriptions.cancelPendingUpdate(subscriptionId);
 ```
 
 **Parameters:**
@@ -479,7 +479,7 @@ String subscriptionId = "sub_00000000000001";
 JSONObject params = new JSONObject();
 params.put("pause_at","now");
         
-Subscription subscription = instance.subscription.pause(SubscriptionId,params);
+Subscription subscription = instance.subscriptions.pause(SubscriptionId,params);
 
 ```
 
@@ -534,7 +534,7 @@ String SubscriptionId = "sub_00000000000001";
 JSONObject params = new JSONObject();
 params.put("resume_at","now");
              
-Subscription subscription = instance.subscription.resume(SubscriptionId,requestJson);
+Subscription subscription = instance.subscriptions.resume(SubscriptionId,requestJson);
 ```
 
 **Parameters:**
@@ -689,9 +689,9 @@ List<Invoice> invoices = instance.invoices.fetchAll(params);
 ```java
 String subscriptionId = "sub_I3GGEs7Xgmnozy";
 
-String offerId = "offer_JHD834hjbxzhd38d";
+String offerId = "offer_JCTD1XMlUmzF6Z";
 
-Subscription subscription = instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
+Subscription subscription = instance.subscriptions.deleteSubscriptionOffer(subscriptionId, offerId);
 ```
 
 **Parameters:**
