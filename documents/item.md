@@ -24,12 +24,22 @@ Item item = instance.items.create(itemRequest);
 **Response:**
 ```json
 {
-  "id": "item_7Oxp4hmm6T4SCn",
-  "active": true,
-  "name": "Book / English August",
-  "description": "An indian story, Booker prize winner.",
-  "amount": 20000,
-  "currency": "INR"
+    "id": "item_JnjKnSWxjILdWu",
+    "active": true,
+    "name": "Book / English August",
+    "description": "An indian story, Booker prize winner.",
+    "amount": 20000,
+    "unit_amount": 20000,
+    "currency": "INR",
+    "type": "invoice",
+    "unit": null,
+    "tax_inclusive": false,
+    "hsn_code": null,
+    "sac_code": null,
+    "tax_rate": null,
+    "tax_id": null,
+    "tax_group_id": null,
+    "created_at": 1656597363
 }
 ```
 
@@ -56,35 +66,30 @@ List<Item> item = instance.items.fetchAll(params);
 **Response:**
 ```json
 {
-  "entity": "collection",
-  "count": 3,
-  "items": [
-    {
-      "id": "item_7Oy8OMV6BdEAac",
-      "active": true,
-      "name": "Book / Ignited Minds",
-      "description": null,
-      "amount": 15000,
-      "currency": "INR"
-    },
-    {
-      "id": "item_7Oxp4hmm6T4SCn",
-      "active": true,
-      "name": "Book / English August",
-      "description": "An indian story, Booker prize winner.",
-      "amount": 20000,
-      "currency": "INR"
-    },
-    {
-      "id": "item_7OxoGnoxCuUKbo",
-      "active": true,
-      "name": "Book / English August",
-      "description": null,
-      "amount": 20000,
-      "currency": "INR"
-    }
-  ]
+    "entity": "collection",
+    "count": 1, 
+    "items": [
+        {
+            "id": "item_JnjKnSWxjILdWu",
+            "active": true,
+            "name": "Book / English August",
+            "description": "An indian story, Booker prize winner.",
+            "amount": 20000,
+            "unit_amount": 20000,
+            "currency": "INR",
+            "type": "invoice",
+            "unit": null,
+            "tax_inclusive": false,
+            "hsn_code": null,
+            "sac_code": null,
+            "tax_rate": null,
+            "tax_id": null,
+            "tax_group_id": null,
+            "created_at": 1656597363
+        }
+    ]
 }
+
 ```
 -------------------------------------------------------------------------------------------------------
 ### Fetch particular item
@@ -92,7 +97,7 @@ List<Item> item = instance.items.fetchAll(params);
 ```java
 String itemId = "item_7Oxp4hmm6T4SCn";
 
-Item item = instance.items.fetch(itemId)
+Item item = instance.items.fetch(itemId);
 ```
 **Parameters**
 
@@ -103,12 +108,22 @@ Item item = instance.items.fetch(itemId)
 **Response:**
 ```json
 {
-  "id": "item_7Oxp4hmm6T4SCn",
-  "active": true,
-  "name": "Book / English August",
-  "description": "An indian story, Booker prize winner.",
-  "amount": 20000,
-  "currency": "INR"
+    "id": "item_JnjKnSWxjILdWu",
+    "active": true,
+    "name": "Book / English August",
+    "description": "An indian story, Booker prize winner.",
+    "amount": 20000,
+    "unit_amount": 20000,
+    "currency": "INR",
+    "type": "invoice",
+    "unit": null,
+    "tax_inclusive": false,
+    "hsn_code": null,
+    "sac_code": null,
+    "tax_rate": null,
+    "tax_id": null,
+    "tax_group_id": null,
+    "created_at": 1656597363
 }
 ```
 
@@ -143,12 +158,22 @@ Item item = instance.items.edit(itemId, itemRequest);
 
 ```json
 {
-  "id": "item_7Oy8OMV6BdEAac",
-  "active": true,
-  "name": "Book / Ignited Minds - Updated name!",
-  "description": "New descirption too. :)",
-  "amount": 15000,
-  "currency": "INR"
+    "id": "item_JnjKnSWxjILdWu",
+    "active": true,
+    "name": "Book / Ignited Minds - Updated name!",
+    "description": "New descirption too.",
+    "amount": 20000,
+    "unit_amount": 20000,
+    "currency": "INR",
+    "type": "invoice",
+    "unit": null,
+    "tax_inclusive": false,
+    "hsn_code": null,
+    "sac_code": null,
+    "tax_rate": null,
+    "tax_id": null,
+    "tax_group_id": null,
+    "created_at": 1656597363
 }
 ```
 -------------------------------------------------------------------------------------------------------
