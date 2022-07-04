@@ -12,9 +12,9 @@ JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
 notes.put("notes_key_2","Tea, Earl Grey… decaf.");
 refundRequest.put("notes",notes);
-refundRequest.put("receipt","Receipt No. #35");
+refundRequest.put("receipt","Receipt No. 31");
               
-Payment payment = instance.payments.refund(paymentId,refundRequest);
+Refund refund = instance.payments.refund(paymentId,refundRequest);
 ```
 
 **Parameters:**
@@ -57,9 +57,9 @@ String paymentId = "pay_FCXKPFtYfPXJPy";
 JSONObject refundRequest = new JSONObject();
 refundRequest.put("amount",100);
 refundRequest.put("speed","optimum");
-refundRequest.put("receipt","Receipt No. #35");
+refundRequest.put("receipt","Receipt No. 31");
               
-Payment payment = instance.payments.refund(paymentId,refundRequest);
+Refund refund = instance.payments.refund(paymentId,refundRequest);
 ```
 
 **Parameters:**
@@ -103,7 +103,7 @@ String paymentId = "pay_FIKOnlyii5QGNx";
 JSONObject params = new JSONObject();
 params.put("count","1");
  
-List<Payment> payments = instance.payments.fetchAllRefunds(paymentId,params);
+List<Refund> refunds = instance.payments.fetchAllRefunds(paymentId,params);
 ```
 
 **Parameters:**
@@ -152,7 +152,7 @@ String paymentId = "pay_FIKOnlyii5QGNx";
 
 String refundId = "rfnd_FP8DDKxqJif6ca";
 
-Payment payment = instance.payments.fetchRefund(paymentId,refundId);
+Refund refund = instance.payments.fetchRefund(paymentId,refundId);
 ```
 
 **Parameters:**
@@ -235,7 +235,7 @@ List<Refund> refund = instance.refunds.fetchAll(params);
 ```java
 String refundId = "rfnd_EqWThTE7dd7utf";
 
-List<Refund> refund = instance.refunds.fetch(refundId);
+Refund refund = instance.refunds.fetch(refundId);
 ```
 
 **Parameters:**
