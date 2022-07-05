@@ -319,7 +319,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-Customer customer = instance.customers.fetchTokens(customerId);
+List<Token> tokens = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
@@ -417,7 +417,6 @@ Order order = instance.orders.create(orderRequest);
 | receipt         | string  | Your system order reference id.                                              |
 | notes           | object  | A key-value pair       |
 | payment_capture*  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
-
 
 **Response:**
 ```json
