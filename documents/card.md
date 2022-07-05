@@ -141,8 +141,8 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 
 | Name            | Type    | Description                                                                  |
 |-----------------|---------|------------------------------------------------------------------------------|
-| customer   | object      | Details of the customer to whom the registration link will be sent. |
-| type*  | string | the value is `link`. |
+| customer   | object      | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/cards/create-authorization-transaction/#121-create-a-registration-link) are supported |
+| type*  | array | the value is `link`. |
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 | description*  | string      | A brief description of the payment.   |
@@ -151,7 +151,7 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 | sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : 1)  |
 | email_notify | boolean  | Email notifications are to be sent by Razorpay (default : 1)  |
 | expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
-| notes | object  | A key-value pair  |
+| notes | array  | A key-value pair  |
 
 **Response:**
 ```json
@@ -357,7 +357,7 @@ Invoice invoice = instance.invoices.notifyBy(invoiceId,medium);
 ```java
 String invoiceId = "inv_FHrXGIpd3N17DX";
 
-Invoice invoice = instance.invoices.cancel(invoiceId)
+Invoice invoice = instance.invoices.cancel(invoiceId);
 ```
 **Parameters:**
 
@@ -430,7 +430,7 @@ Invoice invoice = instance.invoices.cancel(invoiceId)
 ```java
 String paymentId = "pay_FHfqtkRzWvxky4";
 
-Payment payment = instance.payments.fetch(paymentId)
+Payment payment = instance.payments.fetch(paymentId);
 ```
 **Parameters:**
 
@@ -486,7 +486,7 @@ Payment payment = instance.payments.fetch(paymentId)
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Token> tokens = instance.customers.fetchTokens(customerId)
+List<Token> tokens = instance.customers.fetchTokens(customerId);
 ```
 **Parameters:**
 
@@ -577,7 +577,7 @@ String customerId = "cust_Hwq7Ba6TDXl1ga";
 
 String tokenId = "token_1Aa00000000001";
 
-Customer customer = instance.customers.deleteToken(customerId,tokenId)
+Customer customer = instance.customers.deleteToken(customerId,tokenId);
 ```
 **Parameters:**
 
