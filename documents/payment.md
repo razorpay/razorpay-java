@@ -541,13 +541,11 @@ Doc reference [doc](https://razorpay.com/docs/payments/payment-gateway/s2s-integ
 ```java
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-String jsonRequest = "{\n" +
-                "  \"otp\": \"123456\",\n" +
-                "}";
+JSONObject paymentRequest = new JSONObject();
 
-JSONObject requestJson = new JSONObject(jsonRequest);
+paymentRequest.put("otp","123456");
 
-Payment payment = razorpayclient.payments.otpSubmit(paymentId, requestJson);
+Payment payment = razorpayclient.payments.otpSubmit(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -624,7 +622,7 @@ Payment payment = instance.payments.createJsonPayment(paymentRequest);
 | email*        | string      | Email of the customer                       |
 | contact*      | string      | Contact number of the customer              |
 | method*      | string  | Possible value is `netbanking` |
-| bank      | string      | The customer's bank code.For example, `HDFC`.|
+| bank*      | string      | The customer's bank code.For example, `HDFC`.|
 
 please refer this [doc](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/netbanking#step-3-create-a-payment) for params
 
