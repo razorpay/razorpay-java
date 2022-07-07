@@ -201,7 +201,7 @@ Customer customer = instance.customers.deleteToken(customerId, tokenId);
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Customer> customer = instance.customers.fetchTokens(customerId);
+List<Token> token = razorpayclient.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
