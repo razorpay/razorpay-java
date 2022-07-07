@@ -27,7 +27,11 @@ public class SubscriptionClient extends ApiClient {
   }
 
   public Subscription cancel(String id) throws RazorpayException {
-    return post(String.format(Constants.SUBSCRIPTION_CANCEL, id), null);
+    return cancel(id, null);
+  }
+
+  public Subscription cancel(String id, JSONObject request) throws RazorpayException {
+    return post(String.format(Constants.SUBSCRIPTION_CANCEL, id), request);
   }
 
   public Addon createAddon(String id, JSONObject request) throws RazorpayException {

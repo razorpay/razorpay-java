@@ -22,7 +22,7 @@ VirtualAccount virtualaccount = instance.virtualAccounts.create(virtualRequest);
 
 | Name          | Type        | Description                                 |
 |---------------|-------------|---------------------------------------------|
-| receivers*    | object      | Array that defines what receivers are available for this Virtual Account                        |
+| receivers*    | object      | All parameters listed [here](https://razorpay.com/docs/api/payments/smart-collect/#create-virtual-account) are supported |
 | description  | string      | A brief description of the virtual account.                    |
 | customer_id  | string      | Unique identifier of the customer to whom the virtual account must be tagged.                    |
 | close_by  | integer      | UNIX timestamp at which the virtual account is scheduled to be automatically closed.                  |
@@ -292,7 +292,7 @@ String virtualId = "va_DlGmm7jInLudH9";
 JSONObject params = new JSONObject();
 params.put("count","1");
         
-List<VirtualAccount> virtualaccounts = instance.virtualAccounts.fetchPayments(virtualId,params);
+List<Payment> payments = instance.virtualAccounts.fetchPayments(virtualId,params);
 ```
 
 **Parameters:**
@@ -349,7 +349,7 @@ List<VirtualAccount> virtualaccounts = instance.virtualAccounts.fetchPayments(vi
 ```java
 String paymentId = "pay_CmiztqmYJPtDAu";
 
-Payment payment = instance.payments.fetchBankTransfers(paymentId)
+Payment payment = instance.payments.fetchBankTransfers(paymentId);
 ```
 
 **Parameters:**
@@ -421,7 +421,7 @@ notes.put("notes_key_2","Tea, Earl Grey… decaf.");
 refundRequest.put("notes",notes);
 refundRequest.put("receipt","Receipt No. #35");
 
-Payment payment = instance.payments.refund(paymentId,refundRequest);
+Refund refund = instance.payments.refund(paymentId,refundRequest);
 ```
 
 **Parameters:**
@@ -554,7 +554,7 @@ String virtualId = "va_Di5gbNptcWV8fQ";
 
 String allowedPlayer = "ba_DlGmm9mSj8fjRM";
 
-VirtualAccount virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId)
+VirtualAccount virtualaccount = instance.VirtualAccounts.deleteAllowedPayer(virtualId,allowedPayersId);
 ```
 
 **Parameters:**
@@ -573,7 +573,7 @@ null
 ```java
 String virtualId = "va_Di5gbNptcWV8fQ";
 
-instance.virtualAccounts.close(virtualId)
+instance.virtualAccounts.close(virtualId);
 ```
 
 **Parameters:**

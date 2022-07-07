@@ -9,7 +9,7 @@ JSONObject paymentRequest = new JSONObject();
 paymentRequest.put("amount", 1000);
 paymentRequest.put("currency", "INR");
         
-Payment payment = instance.payments.capture(paymentId, requestRequest);
+Payment payment = instance.payments.capture(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -181,7 +181,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String orderId = "order_DovFx48wjYEr2I";
 
-Order order = instance.orders.fetchPayments(orderId)
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
@@ -242,7 +242,7 @@ notes.put("key1","value1");
 notes.put("key2","value2");
 paymentRequest.put("notes",notes);
               
-Payment payment = instance.payments.edit(PaymentId,paymentRequest);
+Payment payment = instance.payments.edit(paymentId,paymentRequest);
 ```
 
 **Parameters:**

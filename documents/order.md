@@ -177,7 +177,7 @@ Order order = instance.orders.fetch(orderId);
 ```java
 String orderId = "order_DaaS6LOUAASb7Y";
 
-Order order = instance.orders.fetchPayments(orderId);
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
@@ -234,7 +234,7 @@ notes.put("notes_key_1","Tea, Earl Grey, Hot");
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
 orderRequest.put("notes",notes);
               
-Order order = instance.orders.edit(OrderId,orderRequest);
+Order order = instance.orders.edit(orderId,orderRequest);
 ```
 **Parameters**
 

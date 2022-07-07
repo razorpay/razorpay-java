@@ -40,6 +40,7 @@ Subscription order = instance.subscriptions.create(subscriptionRequest);
 | expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
 | addons    | object | Object that contains details of any upfront amount you want to collect as part of the authorization transaction. |
 | notes          | object | Notes you can enter for the contact for future reference.   |
+| offer_id   | string | The unique identifier of the offer that is linked to the subscription. |
 
 **Response:**
 ```json
@@ -120,6 +121,7 @@ Subscription subscription = instance.subscriptions.create(subscriptionRequest);
 | addons    | object | Object that contains details of any upfront amount you want to collect as part of the authorization transaction. |
 | notes          | object | Notes you can enter for the contact for future reference.   |
 | notify_info          | object | The customer's email and phone number to which notifications are to be sent. (PN: Use this object only if you have set the `customer_notify` parameter to 1. That is, Razorpay sends notifications to the customer.)  |
+| offer_id   | string | The unique identifier of the offer that is linked to the subscription. |
 
 **Response:**
 ```json
@@ -268,7 +270,10 @@ Subscription subscription = instance.subscriptions.fetch(subscriptionId);
 ### Cancel particular subscription
 
 ```java
-Subscription subscription = instance.subscription.cancel(subscriptionId)
+JSONObject params = new JSONObject();
+params.put("cancel_at_cycle_end", 1);
+
+Subscription subscription = instance.subscription.cancel(subscriptionId, params)
 ```
 
 **Parameters:**
@@ -276,6 +281,7 @@ Subscription subscription = instance.subscription.cancel(subscriptionId)
 | Name  | Type      | Description                                      |
 |-------|-----------|--------------------------------------------------|
 | subscriptionId*  | string | The id of the subscription to be cancelled  |
+| cancel_at_cycle_end  | boolean | Possible values:<br>0 (default): Cancel the subscription immediately. <br> 1: Cancel the subscription at the end of the current billing cycle.  |
 
 **Response:**
 ```json
@@ -327,7 +333,7 @@ params.put("start_at",1496000432);
 params.put("schedule_change_at","now");
 params.put("customer_notify",1);
  
-Subscription subscription = instance.subscription.update(subscriptionId,params);
+Subscription subscription = instance.subscriptions.update(subscriptionId,params);
 ```
 
 **Parameters:**
@@ -378,7 +384,7 @@ Subscription subscription = instance.subscription.update(subscriptionId,params);
 ```java
 String subscriptionId = "sub_00000000000001";
 
-Subscription subscription = instance.subscription.fetchPendingUpdate(subscriptionId);
+Subscription subscription = instance.subscriptions.fetchPendingUpdate(subscriptionId);
 ```
 
 **Parameters:**
@@ -427,7 +433,7 @@ Subscription subscription = instance.subscription.fetchPendingUpdate(subscriptio
 ```java
 String subscriptionId = "sub_00000000000001";
 
-Subscription subscription = instance.subscription.cancelPendingUpdate(subscriptionId);
+Subscription subscription = instance.subscriptions.cancelPendingUpdate(subscriptionId);
 ```
 
 **Parameters:**
@@ -479,7 +485,7 @@ String subscriptionId = "sub_00000000000001";
 JSONObject params = new JSONObject();
 params.put("pause_at","now");
         
-Subscription subscription = instance.subscription.pause(SubscriptionId,params);
+Subscription subscription = instance.subscriptions.pause(SubscriptionId,params);
 
 ```
 
@@ -534,7 +540,7 @@ String SubscriptionId = "sub_00000000000001";
 JSONObject params = new JSONObject();
 params.put("resume_at","now");
              
-Subscription subscription = instance.subscription.resume(SubscriptionId,requestJson);
+Subscription subscription = instance.subscriptions.resume(SubscriptionId,requestJson);
 ```
 
 **Parameters:**
@@ -689,9 +695,9 @@ List<Invoice> invoices = instance.invoices.fetchAll(params);
 ```java
 String subscriptionId = "sub_I3GGEs7Xgmnozy";
 
-String offerId = "offer_JHD834hjbxzhd38d";
+String offerId = "offer_JCTD1XMlUmzF6Z";
 
-Subscription subscription = instance.subscription.deleteSubscriptionOffer(subscriptionId, offerId);
+Subscription subscription = instance.subscriptions.deleteSubscriptionOffer(subscriptionId, offerId);
 ```
 
 **Parameters:**

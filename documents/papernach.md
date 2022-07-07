@@ -23,7 +23,8 @@ Customer customer = instance.customers.create(customerRequest);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
-| notes         | object      | A key-value pair                            |
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `0` or `1`|
+| notes         | array      | A key-value pair                            |
 
 **Response:**
 ```json
@@ -641,6 +642,7 @@ Order order = instance.orders.create(orderRequest);
 |-----------------|---------|------------------------------------------------------------------------------|
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
+ payment_capture*  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
 | receipt         | string  | Your system order reference id.                                              |
 | notes           | object  | A key-value pair                                                             |
 
