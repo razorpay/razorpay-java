@@ -55,11 +55,11 @@ Invoice invoice = instance.invoices.create(invoiceRequest);
 |description        | string  | A brief description of the invoice.                      |
 |customer_id           | string  | customer id for which invoice need be raised   |
 |draft           | string  |  Invoice is created in draft state when value is set to `1`   |
-| customer*     | array | All parameters listed [here](https://razorpay.com/docs/api/payments/invoices/#create-an-invoice) are supported           |
+| customer*     | object | All parameters listed [here](https://razorpay.com/docs/api/payments/invoices/#create-an-invoice) are supported           |
 | line_items    | array | All parameters listed [here](https://razorpay.com/docs/api/payments/invoices/#create-an-invoice) are supported |
-|expire_by           | array  | Details of the line item that is billed in the invoice.  |
-|sms_notify           | array  | Details of the line item that is billed in the invoice.  |
-|email_notify           | array  | Details of the line item that is billed in the invoice.  |
+|expire_by           | integer  | Details of the line item that is billed in the invoice.  |
+|sms_notify           | boolean  | Details of the line item that is billed in the invoice.  |
+|email_notify           | boolean  | Details of the line item that is billed in the invoice.  |
 |partial_payment | boolean  | Indicates whether customers can make partial payments on the invoice . Possible values: true - Customer can make partial payments. false (default) - Customer cannot make partial payments. |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 

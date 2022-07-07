@@ -618,7 +618,7 @@ List<Transfer> transfer = instance.payments.transfer(paymentId,transferRequest);
 | Name      | Type        | Description                                 |
 |-----------|-------------|---------------------------------------------|
 | paymentId* | string      | The id of the payment to be fetched  |
-| transfer  | array     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
+| transfer  | object     | All parameters listed here https://razorpay.com/docs/api/route/#hold-settlements-for-transfers are supported |
 
 **Response:**
 ```json

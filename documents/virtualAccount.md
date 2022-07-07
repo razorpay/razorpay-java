@@ -585,6 +585,7 @@ instance.virtualAccounts.close(virtualId);
 **Response:**
 
 For close virtual account response please click [here](https://razorpay.com/docs/api/smart-collect/#close-a-virtual-account)
+
 -------------------------------------------------------------------------------------------------------
 
 **PN: * indicates mandatory fields**

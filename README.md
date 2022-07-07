@@ -9,7 +9,7 @@ Documentation of Razorpay's API and their usage is available at <https://docs.ra
 
 ## Requirements
 
-Java 1.7 or later
+Java 1.8 or later
 
 Mock Tests Support till Java 1.8
 

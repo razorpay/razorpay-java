@@ -155,6 +155,7 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 
 **Response:**
 For create registration link response please click [here](https://razorpay.com/docs/api/recurring-payments/emandate/auto-debit/#12-using-a-registration-link)
+
 -------------------------------------------------------------------------------------------------------
 
 ## Create an order to charge the customer

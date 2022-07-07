@@ -142,7 +142,7 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 | Name            | Type    | Description                                                                  |
 |-----------------|---------|------------------------------------------------------------------------------|
 | customer   | object      | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/cards/create-authorization-transaction/#121-create-a-registration-link) are supported |
-| type*  | array | the value is `link`. |
+| type*  | object | the value is `link`. |
 | amount*   | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
 | currency*   | string  | The currency of the payment (defaults to INR)  |
 | description*  | string      | A brief description of the payment.   |
@@ -243,8 +243,8 @@ Order order = instance.orders.create(orderRequest);
 | customerId*   | string      | The id of the customer to be fetched |
 | method      | string  | Payment method used to make the registration transaction. Possible value is `card`.  |
 | receipt      | string  | Your system order reference id.  |
-| token  | array  | All keys listed [here](https://razorpay.com/docs/api/recurring-payments/cards/subsequent-payments/#31-create-an-order-to-charge-the-customer) are supported |
-| notes | array  | A key-value pair  |
+| token  | object  | All keys listed [here](https://razorpay.com/docs/api/recurring-payments/cards/subsequent-payments/#31-create-an-order-to-charge-the-customer) are supported |
+| notes | object  | A key-value pair  |
 | payment_capture  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
 
 **Response:**

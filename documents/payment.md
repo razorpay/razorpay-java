@@ -410,7 +410,7 @@ Order order = instance.orders.create(orderRequest);
 | method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
 | card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
 | bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
-| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| bank_account | object      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
 | vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
 | wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
 | notes | array  | A key-value pair  |
@@ -464,12 +464,12 @@ Payment payment = instance.payments.createJsonPayment(paymentRequest);
 | email*        | string      | Email of the customer                       |
 | contact*      | string      | Contact number of the customer              |
 | method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
-| card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
+| card      | object      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
 | bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
-| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| bank_account | object      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
 | vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
 | wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
-| notes | array  | A key-value pair  |
+| notes | object  | A key-value pair  |
 
  please refer this [doc](https://razorpay.com/docs/payment-gateway/s2s-integration/payment-methods/) for params
 
@@ -495,11 +495,11 @@ Payment payment = instance.payments.createJsonPayment(paymentRequest);
 
 ```java
 
-RazorpayClient razorpayclient = new RazorpayClient("key",""); // Use Only razorpay key
+RazorpayClient instance = new RazorpayClient("key",""); // Use Only razorpay key
 
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-Payment payment = razorpayclient.payments.otpGenerate(paymentId);
+Payment payment = instance.payments.otpGenerate(paymentId);
 ```
 
 **Parameters:**
@@ -545,7 +545,7 @@ JSONObject paymentRequest = new JSONObject();
 
 paymentRequest.put("otp","123456");
 
-Payment payment = razorpayclient.payments.otpSubmit(paymentId, paymentRequest);
+Payment payment = instance.payments.otpSubmit(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -574,7 +574,7 @@ Success
 
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-Payment payment = razorpayclient.payments.otpResend(paymentId);
+Payment payment = instance.payments.otpResend(paymentId);
 ```
 
 **Parameters:**
@@ -676,14 +676,14 @@ Payment payment = instance.payments.createUpi(paymentRequest);
 | email*        | string      | Email of the customer                       |
 | customer_id*   | string      | The id of the customer to be fetched |
 | contact*      | string      | Contact number of the customer              |
-| notes | array  | A key-value pair  |
+| notes | object  | A key-value pair  |
 | description | string  | Descriptive text of the payment. |
 | save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
 | callback_url   | string      | URL where Razorpay will submit the final payment status. |
 | ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
 | referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |
 | user_agent*   | string      | Value of `user_agent` header passed by the client's browser. For example, `Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36` |
-| upi* (for Upi only)  | array      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/collect#step-14-initiate-a-payment) are supported  |
+| upi* (for Upi only)  | object      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/collect#step-14-initiate-a-payment) are supported  |
 
 **Response:** <br>
 ```json
@@ -726,14 +726,14 @@ Payment payment = instance.payments.createUpi(paymentRequest);
 | email*        | string      | Email of the customer                       |
 | customer_id*   | string      | The id of the customer to be fetched |
 | contact*      | string      | Contact number of the customer              |
-| notes | array  | A key-value pair  |
+| notes | object  | A key-value pair  |
 | description | string  | Descriptive text of the payment. |
 | save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
 | callback_url   | string      | URL where Razorpay will submit the final payment status. |
 | ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
 | referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |
 | user_agent*   | string      | Value of `user_agent` header passed by the client's browser. For example, `Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36` |
-| upi* (for Upi only)  | array      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/intent/#step-2-initiate-a-payment) are supported  |
+| upi* (for Upi only)  | object      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/intent/#step-2-initiate-a-payment) are supported  |
 
 **Response:** <br>
 ```json

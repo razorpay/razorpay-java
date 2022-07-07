@@ -22,7 +22,7 @@ Order order = instance.orders.create(orderRequest);
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | array  | A key-value pair |
+| notes           | object  | A key-value pair |
 |partial_payment | boolean  | Indicates whether customers can make partial payments on the invoice . Possible values: true - Customer can make partial payments. false (default) - Customer cannot make partial payments. |
 
 **Response:**
@@ -70,7 +70,7 @@ Order order = instance.orders.create(orderRequest);
 | method        | string  | The payment method used to make the payment. If this parameter is not passed, customers will be able to make payments using both netbanking and UPI payment methods. Possible values is `netbanking` or `upi`|
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.       |
 | receipt         | string  | Your system order reference id.                                              |
-|bank_account | array  | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/#step-2-create-an-order) are supported |
+|bank_account | object  | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/#step-2-create-an-order) are supported |
 
 **Response:**
 
