@@ -292,7 +292,7 @@ String virtualId = "va_DlGmm7jInLudH9";
 JSONObject params = new JSONObject();
 params.put("count","1");
         
-List<Payment> payments = razorpayclient.virtualAccounts.fetchPayments(virtualId,params);
+List<Payment> payments = instance.virtualAccounts.fetchPayments(virtualId,params);
 ```
 
 **Parameters:**
