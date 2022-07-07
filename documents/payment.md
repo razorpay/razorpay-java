@@ -9,7 +9,7 @@ JSONObject paymentRequest = new JSONObject();
 paymentRequest.put("amount", 1000);
 paymentRequest.put("currency", "INR");
         
-Payment payment = instance.payments.capture(paymentId, requestRequest);
+Payment payment = instance.payments.capture(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -181,7 +181,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String orderId = "order_DovFx48wjYEr2I";
 
-Order order = instance.orders.fetchPayments(orderId)
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
@@ -242,7 +242,7 @@ notes.put("key1","value1");
 notes.put("key2","value2");
 paymentRequest.put("notes",notes);
               
-Payment payment = instance.payments.edit(PaymentId,paymentRequest);
+Payment payment = instance.payments.edit(paymentId,paymentRequest);
 ```
 
 **Parameters:**
@@ -541,13 +541,10 @@ Doc reference [doc](https://razorpay.com/docs/payments/payment-gateway/s2s-integ
 ```java
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-String jsonRequest = "{\n" +
-                "  \"otp\": \"123456\",\n" +
-                "}";
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("otp","123456");
 
-JSONObject requestJson = new JSONObject(jsonRequest);
-
-Payment payment = razorpayclient.payments.otpSubmit(paymentId, requestJson);
+Payment payment = razorpayclient.payments.otpSubmit(paymentId, paymentRequest);
 ```
 
 **Parameters:**
