@@ -40,6 +40,7 @@ Subscription order = instance.subscriptions.create(subscriptionRequest);
 | expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
 | addons    | object | Object that contains details of any upfront amount you want to collect as part of the authorization transaction. |
 | notes          | object | Notes you can enter for the contact for future reference.   |
+| offer_id   | string | The unique identifier of the offer that is linked to the subscription. |
 
 **Response:**
 ```json
@@ -120,6 +121,7 @@ Subscription subscription = instance.subscriptions.create(subscriptionRequest);
 | addons    | object | Object that contains details of any upfront amount you want to collect as part of the authorization transaction. |
 | notes          | object | Notes you can enter for the contact for future reference.   |
 | notify_info          | object | The customer's email and phone number to which notifications are to be sent. (PN: Use this object only if you have set the `customer_notify` parameter to 1. That is, Razorpay sends notifications to the customer.)  |
+| offer_id   | string | The unique identifier of the offer that is linked to the subscription. |
 
 **Response:**
 ```json
@@ -268,7 +270,10 @@ Subscription subscription = instance.subscriptions.fetch(subscriptionId);
 ### Cancel particular subscription
 
 ```java
-Subscription subscription = instance.subscriptions.cancel(subscriptionId)
+JSONObject params = new JSONObject();
+params.put("cancel_at_cycle_end", 1);
+
+Subscription subscription = instance.subscription.cancel(subscriptionId, params)
 ```
 
 **Parameters:**
@@ -276,6 +281,7 @@ Subscription subscription = instance.subscriptions.cancel(subscriptionId)
 | Name  | Type      | Description                                      |
 |-------|-----------|--------------------------------------------------|
 | subscriptionId*  | string | The id of the subscription to be cancelled  |
+| cancel_at_cycle_end  | boolean | Possible values:<br>0 (default): Cancel the subscription immediately. <br> 1: Cancel the subscription at the end of the current billing cycle.  |
 
 **Response:**
 ```json
