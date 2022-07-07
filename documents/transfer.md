@@ -195,7 +195,7 @@ Transfer transfer = instance.transfers.create(transferRequest);
 ```java
 String paymentId = "pay_E9up5WhIfMYnKW";
 
-List<Payment> payments = instance.payments.fetchAllTransfers(paymentId)
+List<Transfer> transfers = instance.payments.fetchAllTransfers(paymentId);
 ```
 
 **Parameters:**
@@ -233,6 +233,71 @@ List<Payment> payments = instance.payments.fetchAllTransfers(paymentId)
 ```
 -------------------------------------------------------------------------------------
 
+### Fetch transfer for an order
+
+```java
+String orderId = "order_JkaIDdkgGXVcwS";
+
+JSONObject request = new JSONObject();
+request.put("expand[]","transfers");
+
+Order response = instance.orders.get("orders/"+orderId,request);
+```
+
+**Parameters:**
+
+| Name          | Type        | Description                                 |
+|---------------|-------------|---------------------------------------------|
+| orderId*   | string      | The id of the order to be fetched  |
+| expand*   | string    | Supported value is `status`  |
+
+**Response:**
+```json
+{
+  "id": "order_DSkl2lBNvueOly",
+  "entity": "order",
+  "amount": 1000,
+  "amount_paid": 1000,
+  "amount_due": 0,
+  "currency": "INR",
+  "receipt": null,
+  "offer_id": null,
+  "status": "paid",
+  "attempts": 1,
+  "notes": [],
+  "created_at": 1570794714,
+  "transfers": {
+    "entity": "collection",
+    "count": 1,
+    "items": [
+      {
+        "id": "trf_DSkl2lXWbiADZG",
+        "entity": "transfer",
+        "source": "order_DSkl2lBNvueOly",
+        "recipient": "acc_CNo3jSI8OkFJJJ",
+        "amount": 500,
+        "currency": "INR",
+        "amount_reversed": 0,
+        "notes": {
+          "branch": "Acme Corp Bangalore North",
+          "name": "Gaurav Kumar"
+        },
+        "fees": 2,
+        "tax": 0,
+        "on_hold": true,
+        "on_hold_until": 1670776632,
+        "recipient_settlement_id": null,
+        "created_at": 1570794714,
+        "linked_account_notes": [
+          "Acme Corp Bangalore North"
+        ],
+        "processed_at": 1570794772
+      }
+    ]
+  }
+}
+```
+-------------------------------------------------------------------------------------------------------
 ### Fetch transfer
 
 ```java
@@ -250,22 +315,39 @@ Transfer transfer = instance.transfers.fetch(transferId);
 **Response:**
 ```json
 {
-  "id": "trf_E7V62rAxJ3zYMo",
-  "entity": "transfer",
-  "source": "pay_E6j30Iu1R7XbIG",
-  "recipient": "acc_CMaomTz4o0FOFz",
-  "amount": 100,
-  "currency": "INR",
-  "amount_reversed": 0,
-  "notes": [],
-  "fees": 1,
-  "tax": 0,
-  "on_hold": false,
-  "on_hold_until": null,
-  "recipient_settlement_id": null,
-  "created_at": 1579691505,
-  "linked_account_notes": [],
-  "processed_at": 1579691505
+    "id": "trf_IJOI2DHWQYwqU3",
+    "entity": "transfer",
+    "status": "created",
+    "source": "order_IJOI2CD6CNIywP",
+    "recipient": "acc_HjVXbtpSCIxENR",
+    "amount": 100,
+    "currency": "INR",
+    "amount_reversed": 0,
+    "fees": 0,
+    "tax": null,
+    "notes": {
+        "branch": "Acme Corp Bangalore North",
+        "name": "Gaurav Kumar"
+    },
+    "linked_account_notes": [
+        "branch"
+    ],
+    "on_hold": true,
+    "on_hold_until": 1671222870,
+    "settlement_status": null,
+    "recipient_settlement_id": null,
+    "created_at": 1636435963,
+    "processed_at": null,
+    "error": {
+        "code": null,
+        "description": null,
+        "reason": null,
+        "field": null,
+        "step": null,
+        "id": "trf_IJOI2DHWQYwqU3",
+        "source": null,
+        "metadata": null
+    }
 }
 ```
 -------------------------------------------------------------------------------------------------------
@@ -293,22 +375,34 @@ List<Transfer> transfers = instance.transfers.fetchAll(params);
   "count": 1,
   "items": [
     {
-      "id": "trf_DGSTeXzBkEVh48",
+      "id": "trf_HWjmkReRGPhguR",
       "entity": "transfer",
-      "source": "pay_DGSRhvMbOqeCe7",
-      "recipient": "acc_CMaomTz4o0FOFz",
-      "amount": 500,
+      "status": "processed",
+      "source": "pay_HWjY9DZSMsbm5E",
+      "recipient": "acc_HWjl1kqobJzf4i",
+      "amount": 1000,
       "currency": "INR",
       "amount_reversed": 0,
-      "notes": [],
-      "fees": 2,
+      "fees": 3,
       "tax": 0,
+      "notes": [],
+      "linked_account_notes": [],
       "on_hold": false,
       "on_hold_until": null,
-      "recipient_settlement_id": "setl_DHYJ3dRPqQkAgV",
-      "created_at": 1568110256,
-      "linked_account_notes": [],
-      "processed_at": null
+      "settlement_status": "settled",
+      "recipient_settlement_id": "setl_HYIIk3H0J4PYdX",
+      "created_at": 1625812996,
+      "processed_at": 1625812996,
+      "error": {
+        "code": null,
+        "description": null,
+        "reason": null,
+        "field": null,
+        "step": null,
+        "id": "trf_HWjmkReRGPhguR",
+        "source": null,
+        "metadata": null
+      }
     }
   ]
 }
@@ -393,17 +487,21 @@ Refund payment = instance.payments.refund(paymentId,params);
 **Response:**
 ```json
 {
-  "id": "rfnd_EAzovSwG8jBnGf",
+  "id": "rfnd_JJFNlNXPHY640A",
   "entity": "refund",
   "amount": 100,
   "currency": "INR",
-  "payment_id": "pay_EAdwQDe4JrhOFX",
+  "payment_id": "pay_JJCqynf4fQS0N1",
   "notes": [],
   "receipt": null,
   "acquirer_data": {
-    "rrn": null
+    "arn": null
   },
-  "created_at": 1580454723
+  "created_at": 1649941680,
+  "batch_id": null,
+  "status": "processed",
+  "speed_processed": "normal",
+  "speed_requested": "normal"
 }
 ```
 -------------------------------------------------------------------------------------------------------
@@ -470,7 +568,7 @@ String transferId = "trf_EAznuJ9cDLnF7Y";
 JSONObject transferRequest = new JSONObject();
 transferRequest.put("amount","100");
  
-Transfer transfer = instance.transfers.reversal(transferId,transferRequest);
+Reversal reversal = instance.transfers.reversal(transferId,transferRequest);
 ```
 
 **Parameters:**
@@ -529,22 +627,31 @@ List<Transfer> transfer = instance.payments.transfer(paymentId,transferRequest);
   "count": 1,
   "items": [
     {
-      "id": "trf_EB1VJ4Ux4GMmxQ",
+      "id": "trf_Jfm1KCF6w1oWgy",
       "entity": "transfer",
-      "source": "pay_EB1R2s8D4vOAKG",
-      "recipient": "acc_CMaomTz4o0FOFz",
+      "status": "pending",
+      "source": "pay_JXPULbHbkkkS8D",
+      "recipient": "acc_I0QRP7PpvaHhpB",
       "amount": 100,
       "currency": "INR",
       "amount_reversed": 0,
       "notes": [],
-      "fees": 1,
-      "tax": 0,
+      "linked_account_notes": [],
       "on_hold": true,
       "on_hold_until": null,
       "recipient_settlement_id": null,
-      "created_at": 1580460652,
-      "linked_account_notes": [],
-      "processed_at": 1580460652
+      "created_at": 1654860101,
+      "processed_at": null,
+      "error": {
+        "code": null,
+        "description": null,
+        "reason": null,
+        "field": null,
+        "step": null,
+        "id": "trf_Jfm1KCF6w1oWgy",
+        "source": null,
+        "metadata": null
+      }
     }
   ]
 }
@@ -573,22 +680,37 @@ Transfer transfer = instance.transfers.edit(transferId,transferRequest);
 **Response:**
 ```json
 {
-  "id": "trf_EB17rqOUbzSCEE",
-  "entity": "transfer",
-  "source": "pay_EAeSM2Xul8xYRo",
-  "recipient": "acc_CMaomTz4o0FOFz",
-  "amount": 100,
-  "currency": "INR",
-  "amount_reversed": 0,
-  "notes": [],
-  "fees": 1,
-  "tax": 0,
-  "on_hold": true,
-  "on_hold_until": 1679691505,
-  "recipient_settlement_id": null,
-  "created_at": 1580459321,
-  "linked_account_notes": [],
-  "processed_at": 1580459321
+    "entity": "collection",
+    "count": 1,
+    "items": [
+        {
+            "id": "trf_JhemwjNekar9Za",
+            "entity": "transfer",
+            "status": "pending",
+            "source": "pay_I7watngocuEY4P",
+            "recipient": "acc_HjVXbtpSCIxENR",
+            "amount": 100,
+            "currency": "INR",
+            "amount_reversed": 0,
+            "notes": [],
+            "linked_account_notes": [],
+            "on_hold": true,
+            "on_hold_until": null,
+            "recipient_settlement_id": null,
+            "created_at": 1655271313,
+            "processed_at": null,
+            "error": {
+                "code": null,
+                "description": null,
+                "reason": null,
+                "field": null,
+                "step": null,
+                "id": "trf_JhemwjNekar9Za",
+                "source": null,
+                "metadata": null
+            }
+        }
+    ]
 }
 ```
 
