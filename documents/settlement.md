@@ -278,20 +278,65 @@ Settlement settlement = instance.settlement.create(settlementRequest);
 ### Fetch all on-demand settlements
 
 ```java
-List<Settlement> settlement = instance.settlement.fetchAllDemand(options)
+List<Settlement> settlement = instance.settlement.fetchAllDemand(options);
 ```
 **Parameters:**
 
 | Name  | Type      | Description                                      |
 |-------|-----------|--------------------------------------------------|
-| from  | timestamp | timestamp after which the payments were created  |
-| to    | timestamp | timestamp before which the payments were created |
-| count | integer   | number of payments to fetch (default: 10)        |
-| skip  | integer   | number of payments to be skipped (default: 0)    |
+| from  | timestamp | timestamp after which the settlements were created  |
+| to    | timestamp | timestamp before which the settlements were created |
+| count | integer   | number of settlements to fetch (default: 10)        |
+| skip  | integer   | number of settlements to be skipped (default: 0)    |
 
-**Response:**<br>
-For all on-demand settlements response please click [here](https://razorpay.com/docs/api/settlements/#fetch-all-on-demand-settlements)
+**Response:**
 
+```json
+{
+  "entity": "collection",
+  "count": 2,
+  "items": [
+    {
+      "id": "setlod_FNj7g2YS5J67Rz",
+      "entity": "settlement.ondemand",
+      "amount_requested": 200000,
+      "amount_settled": 199410,
+      "amount_pending": 0,
+      "amount_reversed": 0,
+      "fees": 590,
+      "tax": 90,
+      "currency": "INR",
+      "settle_full_balance": false,
+      "status": "processed",
+      "description": "Need this to make vendor payments.",
+      "notes": {
+        "notes_key_1": "Tea, Earl Grey, Hot",
+        "notes_key_2": "Tea, Earl Grey… decaf."
+      },
+      "created_at": 1596771429
+    },
+    {
+      "id": "setlod_FJOp0jOWlalIvt",
+      "entity": "settlement.ondemand",
+      "amount_requested": 300000,
+      "amount_settled": 299114,
+      "amount_pending": 0,
+      "amount_reversed": 0,
+      "fees": 886,
+      "tax": 136,
+      "currency": "INR",
+      "settle_full_balance": false,
+      "status": "processed",
+      "description": "Need this to buy stock.",
+      "notes": {
+        "notes_key_1": "Tea, Earl Grey, Hot",
+        "notes_key_2": "Tea, Earl Grey… decaf."
+      },
+      "created_at": 1595826576
+    }
+  ]
+}
+```
 -------------------------------------------------------------------------------------------------------
 
 ### Fetch on-demand settlement by ID
@@ -309,7 +354,28 @@ Settlement settlement = instance.settlement.fetchDemandSettlement(settlementId);
 | settlementId* | string | Settlement Id of the On-demand settlement|
 
 **Response:**
-For on-demand settlement by ID response please click [here](https://razorpay.com/docs/api/settlements/#fetch-on-demand-settlements-by-id)
+
+```json
+{
+  "id": "setlod_FNj7g2YS5J67Rz",
+  "entity": "settlement.ondemand",
+  "amount_requested": 200000,
+  "amount_settled": 199410,
+  "amount_pending": 0,
+  "amount_reversed": 0,
+  "fees": 590,
+  "tax": 90,
+  "currency": "INR",
+  "settle_full_balance": false,
+  "status": "processed",
+  "description": "Need this to make vendor payments.",
+  "notes": {
+    "notes_key_1": "Tea, Earl Grey, Hot",
+    "notes_key_2": "Tea, Earl Grey… decaf."
+  },
+  "created_at": 1596771429
+}
+```
 
 -------------------------------------------------------------------------------------------------------
 
