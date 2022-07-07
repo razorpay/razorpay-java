@@ -181,7 +181,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String orderId = "order_DovFx48wjYEr2I";
 
-List<Payment> payments = instance.orders.fetchPayments(orderId)
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
