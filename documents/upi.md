@@ -71,10 +71,11 @@ Order order = instance.orders.create(orderRequest);
 |-----------------|---------|------------------------------------------------------------------------------|
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
-| method*        | string  | The authorization method. In this case the value will be `emandate`                      |
+| method*        | string  | The authorization method. In this case the value will be `upi`                      |
 | receipt         | string  | Your system order reference id.                                              |
 | notes           | object  | A key-value pair                                                             |
-| token           | object  | A key-value pair                                                             |
+| token*  | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/upi/create-authorization-transaction/#112-create-an-order) are supported  |
+
 
 **Response:**
 ```json
@@ -139,17 +140,16 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 
 | Name            | Type    | Description                                                                  |
 |-----------------|---------|------------------------------------------------------------------------------|
-| customer          | object | Details of the customer to whom the registration link will be sent.           |
+| customer   | object      | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/upi/create-authorization-transaction/#121-create-a-registration-link) are supported |
 | type*        | string  | In this case, the value is `link`.                      |
 | currency*        | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
 | amount*         | integer  | The payment amount in the smallest currency sub-unit.                 |
 | description*    | string  | A description that appears on the hosted page. For example, `12:30 p.m. Thali meals (Gaurav Kumar`).                                                             |
-| subscription_registration           | object  | Details of the authorization payment.                      |
-|sms_notify           | array  | Details of the line item that is billed in the invoice.  |
-|email_notify           | array  | Details of the line item that is billed in the invoice.  |
-|expire_by           | array  | Details of the line item that is billed in the invoice.  |
-|receipt         | string  | Your system order reference id.  |
-| notes           | object  | A key-value pair                                                             |
+| subscription_registration      | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/upi/create-authorization-transaction/#121-create-a-registration-link) are supported |
+| sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : 1)  |
+| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : 1)  |
+| expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
+| notes | object  | A key-value pair  |
 
 **Response:**
 ```json
@@ -315,7 +315,7 @@ Invoice invoice = instance.invoices.cancel(invoiceId);
 ```java
 String paymentId = "pay_1Aa00000000001";
 
-Payment payment = instance.payments.fetch(paymentId)
+Payment payment = instance.payments.fetch(paymentId);
 ```
 
 **Parameters:**
@@ -449,6 +449,7 @@ Customer customer = instance.customers.deleteToken(customerId, tokenId);
 JSONObject orderRequest = new JSONObject();
 orderRequest.put("amount", 1000);
 orderRequest.put("currency", "INR");
+orderRequest.put("payment_capture",true);
 orderRequest.put("receipt", "Receipt No. 1");
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -465,7 +466,9 @@ Order order = instance.orders.create(orderRequest);
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | object  | A key-value pair                                                             |
+| notes           | object  | A key-value pair    |
+| payment_capture  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
+
 
 **Response:**
 ```json
