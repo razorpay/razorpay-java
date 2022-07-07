@@ -63,7 +63,7 @@ Payment payment = instance.payments.fetch(paymentids);
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Customer> customer = instance.customers.fetchTokens(customerId);
+List<Token> token = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
@@ -201,7 +201,7 @@ Customer customer = instance.customers.deleteToken(customerId, tokenId);
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-List<Token> token = razorpayclient.customers.fetchTokens(customerId);
+List<Token> token = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
