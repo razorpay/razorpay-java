@@ -241,7 +241,7 @@ String orderId = "order_JkaIDdkgGXVcwS";
 JSONObject request = new JSONObject();
 request.put("expand[]","transfers");
 
-Order response = razorpayclient.orders.get("orders/"+orderId,request);
+Order response = instance.orders.get("orders/"+orderId,request);
 ```
 
 **Parameters:**
