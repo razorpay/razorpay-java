@@ -31,6 +31,10 @@ public class Constants {
   static final String FETCH_DOWNTIME_GET = "payments/downtimes";
   static final String PAYMENT_JSON_CREATE = "payments/create/json";
   static final String PAYMENT_RECURRING = "payments/create/recurring";
+  static final String PAYMENT_CREATE_UPI = "payments/create/upi";
+  static final String VALIDATE_VPA = "payments/validate/vpa";
+
+  static final String FETCH_PAYMENT_METHODS = "methods";
 
   static final String PAYMENTLINK_CREATE = "payment_links";
   static final String PAYMENTLINK_LIST = "payment_links";
@@ -64,6 +68,7 @@ public class Constants {
 
   static final String FUND_ACCOUNT_CREATE = "fund_accounts";
   static final String FUND_ACCOUNT_FETCH = "fund_accounts/%s";
+  static final String FUND_ACCOUNT_LIST = "fund_accounts";
 
   static final String ORDER_CREATE = "orders";
   static final String ORDER_GET = "orders/%s";

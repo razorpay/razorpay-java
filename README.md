@@ -9,7 +9,7 @@ Documentation of Razorpay's API and their usage is available at <https://docs.ra
 
 ## Requirements
 
-Java 1.7 or later
+Java 1.8 or later
 
 Mock Tests Support till Java 1.8
 
@@ -23,7 +23,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.4.2</version>
+ <version>1.4.3</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.razorpay:razorpay-java:1.4.2"
+implementation "com.razorpay:razorpay-java:1.4.3"
 ```
 
 ## Usage

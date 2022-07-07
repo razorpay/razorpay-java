@@ -85,9 +85,11 @@ Order order = instance.orders.create(orderRequest);
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | method*        | string  | The authorization method. In this case the value will be `emandate`                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | object  | A key-value pair                                                             |
+| customer_id*         | string  | The `customer_id` for the customer you want to charge.|
 | payment_capture  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
-| token           | object  | A key-value pair                                                             |
+| notes           | object  | A key-value pair                                                             |
+| token  | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/emandate/create-authorization-transaction/#112-create-an-order) are supported|
+
 
 **Response:**
 
@@ -142,13 +144,16 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 
 | Name            | Type    | Description                                                                  |
 |-----------------|---------|------------------------------------------------------------------------------|
-| customer          | object | Details of the customer to whom the registration link will be sent.           |
+| customer*          | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/emandate/create-authorization-transaction/#121-create-a-registration-link) are supported  |
 | type*        | string  | In this case, the value is `link`.                      |
 | currency*        | string  | The 3-letter ISO currency code for the payment. Currently, only `INR` is supported. |
 | amount*         | integer  | The payment amount in the smallest currency sub-unit.                 |
 | description*    | string  | A description that appears on the hosted page. For example, `12:30 p.m. Thali meals (Gaurav Kumar`).                                                             |
-| subscription_registration           | object  | Details of the authorization payment.                      |
-| notes           | object  | A key-value pair                                                             |
+| subscription_registration  | array  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/emandate/create-authorization-transaction/#121-create-a-registration-link) are supported  |
+| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : 1)  |
+| expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
+| receipt      | string  | Your system order reference id.  |
+| notes           | object  | A key-value pair  |
 
 **Response:**
 
@@ -314,7 +319,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String customerId = "cust_DtHaBuooGHTuyZ";
 
-Customer customer = instance.customers.fetchTokens(customerId);
+List<Token> tokens = instance.customers.fetchTokens(customerId);
 ```
 
 **Parameters:**
@@ -410,7 +415,8 @@ Order order = instance.orders.create(orderRequest);
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | object  | A key-value pair                                                             |
+| notes           | object  | A key-value pair       |
+| payment_capture*  | boolean  | Indicates whether payment status should be changed to captured automatically or not. Possible values: true - Payments are captured automatically. false - Payments are not captured automatically. |
 
 **Response:**
 ```json

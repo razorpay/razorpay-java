@@ -164,7 +164,7 @@ Addon addon = instance.addons.fetch(addonId);
 ```java
 String addonId = "ao_00000000000001";
 
-List<Addon> addon = instance.addons.delete(addonId)
+List<Addon> addon = instance.addons.delete(addonId);
 ```
 
 **Parameters:**

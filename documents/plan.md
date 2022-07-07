@@ -26,8 +26,8 @@ Plan plan = instance.plans.create(planRequest);
 |-----------------|---------|------------------------------------------------------------------------------|
 | period*          | string | Used together with `interval` to define how often the customer should be charged.Possible values:<br>1.`daily` <br>2.`weekly`<br>3.`monthly` <br>4.`yearly`  |
 | interval*          | string | Used together with `period` to define how often the customer should be charged  |
-| items*          | array | Details of the plan. For more details please refer [here](https://razorpay.com/docs/api/subscriptions/#create-a-plan) |
-| notes          | array | Notes you can enter for the contact for future reference.   |
+| items*          | object | Details of the plan. For more details please refer [here](https://razorpay.com/docs/api/subscriptions/#create-a-plan) |
+| notes          | object | Notes you can enter for the contact for future reference.   |
 
 **Response:**
 ```json

@@ -22,7 +22,7 @@ Order order = instance.orders.create(orderRequest);
 | amount*          | integer | Amount of the order to be paid                                               |
 | currency*        | string  | Currency of the order. Currently only `INR` is supported.                      |
 | receipt         | string  | Your system order reference id.                                              |
-| notes           | array  | A key-value pair |
+| notes           | object  | A key-value pair |
 |partial_payment | boolean  | Indicates whether customers can make partial payments on the invoice . Possible values: true - Customer can make partial payments. false (default) - Customer cannot make partial payments. |
 
 **Response:**
@@ -41,6 +41,53 @@ Order order = instance.orders.create(orderRequest);
   "attempts": 0,
   "notes": [],
   "created_at": 1582628071
+}
+```
+
+-------------------------------------------------------------------------------------------------------
+### Create order (Third party validation)
+
+```java
+JSONObject orderRequest = new JSONObject();
+orderRequest.put("amount",50000);
+orderRequest.put("method","netbanking");
+orderRequest.put("receipt","BILL13375649");
+orderRequest.put("currency","INR");
+JSONObject bankAccount = new JSONObject();
+bankAccount.put("account_number","765432123456789");
+bankAccount.put("name","Gaurav Kumar");
+bankAccount.put("ifsc","HDFC0000053");
+orderRequest.put("bank_account",bankAccount);
+
+Order order = instance.orders.create(orderRequest);
+```
+
+**Parameters:**
+
+| Name            | Type    | Description                                                                  |
+|-----------------|---------|------------------------------------------------------------------------------|
+| amount*          | integer | Amount of the order to be paid                                               |
+| method        | string  | The payment method used to make the payment. If this parameter is not passed, customers will be able to make payments using both netbanking and UPI payment methods. Possible values is `netbanking` or `upi`|
+| currency*        | string  | Currency of the order. Currently only `INR` is supported.       |
+| receipt         | string  | Your system order reference id.                                              |
+|bank_account | object  | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/#step-2-create-an-order) are supported |
+
+**Response:**
+
+```json
+{
+  "id": "order_GAWN9beXgaqRyO",
+  "entity": "order",
+  "amount": 500,
+  "amount_paid": 0,
+  "amount_due": 500,
+  "currency": "INR",
+  "receipt": "BILL13375649",
+  "offer_id": null,
+  "status": "created",
+  "attempts": 0,
+  "notes": [],
+  "created_at": 1573044247
 }
 ```
 
@@ -130,7 +177,7 @@ Order order = instance.orders.fetch(orderId);
 ```java
 String orderId = "order_DaaS6LOUAASb7Y";
 
-Order order = instance.orders.fetchPayments(orderId);
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
@@ -187,7 +234,7 @@ notes.put("notes_key_1","Tea, Earl Grey, Hot");
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
 orderRequest.put("notes",notes);
               
-Order order = instance.orders.edit(OrderId,orderRequest);
+Order order = instance.orders.edit(orderId,orderRequest);
 ```
 **Parameters**
 

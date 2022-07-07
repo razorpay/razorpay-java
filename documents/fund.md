@@ -44,9 +44,10 @@ FundAccount fundaccount = instance.fundAccount.create(fundAccountRequest);
 ### Fetch all fund accounts
 
 ```java
-String customerId = "cust_Aa000000000001";
+JSONObject fundAccountRequest = new JSONObject();
+fundAccountRequest.put("customer_id","cust_JDdNazagOgg9Ig");
 
-FundAccount fundaccount = instance.fundAccount.fetch(customerId);
+List<FundAccount> fundaccount = instance.fundAccount.fetchAll(fundAccountRequest);
 ```
 
 **Parameters:**
@@ -58,18 +59,26 @@ FundAccount fundaccount = instance.fundAccount.fetch(customerId);
 **Response:**
 ```json
 {
-  "id":"fa_Aa00000000001",
-  "entity":"fund_account",
-  "customer_id":"cust_Aa000000000001",
-  "account_type":"bank_account",
-  "bank_account":{
-    "name":"Gaurav Kumar",
-    "account_number":"11214311215411",
-    "ifsc":"HDFC0000053",
-    "bank_name":"HDFC Bank"
-  },
-  "active":true,
-  "created_at":1543650891
+    "entity": "collection",
+    "count": 2,
+    "items": [
+        {
+            "id": "fa_JcXaLomo4ck5IY",
+            "entity": "fund_account",
+            "customer_id": "cust_JZse2vlC5nK9AQ",
+            "account_type": "bank_account",
+            "bank_account": {
+                "ifsc": "HDFC0000053",
+                "bank_name": "HDFC Bank",
+                "name": "Gaurav Kumar",
+                "notes": [],
+                "account_number": "11214311215411"
+            },
+            "batch_id": null,
+            "active": true,
+            "created_at": 1654154246
+        }
+    ]
 }
 ```
 -------------------------------------------------------------------------------------------------------

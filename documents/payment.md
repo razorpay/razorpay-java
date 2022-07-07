@@ -9,7 +9,7 @@ JSONObject paymentRequest = new JSONObject();
 paymentRequest.put("amount", 1000);
 paymentRequest.put("currency", "INR");
         
-Payment payment = instance.payments.capture(paymentId, requestRequest);
+Payment payment = instance.payments.capture(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -181,7 +181,7 @@ Payment payment = instance.payments.fetch(paymentId);
 ```java
 String orderId = "order_DovFx48wjYEr2I";
 
-Order order = instance.orders.fetchPayments(orderId)
+List<Payment> payments = instance.orders.fetchPayments(orderId);
 ```
 **Parameters**
 
@@ -242,7 +242,7 @@ notes.put("key1","value1");
 notes.put("key2","value2");
 paymentRequest.put("notes",notes);
               
-Payment payment = instance.payments.edit(PaymentId,paymentRequest);
+Payment payment = instance.payments.edit(paymentId,paymentRequest);
 ```
 
 **Parameters:**
@@ -410,7 +410,7 @@ Order order = instance.orders.create(orderRequest);
 | method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
 | card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
 | bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
-| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| bank_account | object      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
 | vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
 | wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
 | notes | array  | A key-value pair  |
@@ -464,12 +464,12 @@ Payment payment = instance.payments.createJsonPayment(paymentRequest);
 | email*        | string      | Email of the customer                       |
 | contact*      | string      | Contact number of the customer              |
 | method*      | string  | Possible value is `card`, `netbanking`, `wallet`,`emi`, `upi`, `cardless_emi`, `paylater`.  |
-| card      | array      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
+| card      | object      | All keys listed [here](https://razorpay.com/docs/payments/payment-gateway/s2s-integration/payment-methods/#supported-payment-fields) are supported  |
 | bank      | string      | Bank code of the bank used for the payment. Required if the method is `netbanking`.|
-| bank_account | array      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
+| bank_account | object      | All keys listed [here](https://razorpay.com/docs/payments/customers/customer-fund-account-api/#create-a-fund-account) are supported |
 | vpa      | string      | Virtual payment address of the customer. Required if the method is `upi`. |
 | wallet | string      | Wallet code for the wallet used for the payment. Required if the method is `wallet`. |
-| notes | array  | A key-value pair  |
+| notes | object  | A key-value pair  |
 
  please refer this [doc](https://razorpay.com/docs/payment-gateway/s2s-integration/payment-methods/) for params
 
@@ -495,11 +495,11 @@ Payment payment = instance.payments.createJsonPayment(paymentRequest);
 
 ```java
 
-RazorpayClient razorpayclient = new RazorpayClient("key",""); // Use Only razorpay key
+RazorpayClient instance = new RazorpayClient("key",""); // Use Only razorpay key
 
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-Payment payment = razorpayclient.payments.otpGenerate(paymentId);
+Payment payment = instance.payments.otpGenerate(paymentId);
 ```
 
 **Parameters:**
@@ -541,13 +541,11 @@ Doc reference [doc](https://razorpay.com/docs/payments/payment-gateway/s2s-integ
 ```java
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-String jsonRequest = "{\n" +
-                "  \"otp\": \"123456\",\n" +
-                "}";
+JSONObject paymentRequest = new JSONObject();
 
-JSONObject requestJson = new JSONObject(jsonRequest);
+paymentRequest.put("otp","123456");
 
-Payment payment = razorpayclient.payments.otpSubmit(paymentId, requestJson);
+Payment payment = instance.payments.otpSubmit(paymentId, paymentRequest);
 ```
 
 **Parameters:**
@@ -576,7 +574,7 @@ Success
 
 String paymentId = "pay_JWjI5kbJKUDE1a";
 
-Payment payment = razorpayclient.payments.otpResend(paymentId);
+Payment payment = instance.payments.otpResend(paymentId);
 ```
 
 **Parameters:**
@@ -598,7 +596,192 @@ Doc reference [doc](https://razorpay.com/docs/payments/payment-methods/cards/aut
   "razorpay_payment_id": "pay_JWaNvYmrx75sXo"
 }
 ```
+-------------------------------------------------------------------------------------------------------
+### Create Payment Json (Third party validation)
 
+```java
+
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("amount",500);
+paymentRequest.put("currency","INR");
+paymentRequest.put("email", "gaurav.kumar@example.com");
+paymentRequest.put("contact", "9123456789");
+paymentRequest.put("order_id", "order_JZluwjknyWdhnU");
+paymentRequest.put("method", "netbanking");
+paymentRequest.put("bank", "HDFC");
+              
+Payment payment = instance.payments.createJsonPayment(paymentRequest);
+```
+
+**Parameters:**
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| amount*          | integer | Amount of the order to be paid  |
+| currency*   | string  | The currency of the payment (defaults to INR)                                  |
+| order_id*        | string  | The unique identifier of the order created. |
+| email*        | string      | Email of the customer                       |
+| contact*      | string      | Contact number of the customer              |
+| method*      | string  | Possible value is `netbanking` |
+| bank*      | string      | The customer's bank code.For example, `HDFC`.|
+
+please refer this [doc](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/netbanking#step-3-create-a-payment) for params
+
+**Response:** <br>
+```json
+{
+  "razorpay_payment_id": "pay_GAWOYqPlvrtPSi",
+  "next": [
+    {
+      "action": "redirect",
+      "url": "https://api.razorpay.com/v1/payments/pay_GAWOYqPlvrtPSi/authorize"
+    }
+  ]
+}
+```
+-------------------------------------------------------------------------------------------------------
+### Create Payment UPI s2s / VPA token (Third party validation)
+
+```java
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("amount",500);
+paymentRequest.put("currency","INR");
+paymentRequest.put("order_id", "order_JZluwjknyWdhnU");
+paymentRequest.put("email", "gaurav.kumar@example.com");
+paymentRequest.put("contact", "9123456789");
+paymentRequest.put("method", "upi");
+paymentRequest.put("customer_id", "cust_EIW4T2etiweBmG");
+paymentRequest.put("save", 1);
+paymentRequest.put("ip", "192.168.0.103");
+paymentRequest.put("referer", "http");
+paymentRequest.put("user_agent", "Mozilla/5.0");
+paymentRequest.put("description", "Test flow");
+JSONObject notes = new JSONObject();
+notes.put("note_key","value1");
+JSONObject upi = new JSONObject();
+upi.put("flow","collect");
+upi.put("vpa","gauravkumar@exampleupi");
+upi.put("expiry_time",5);
+paymentRequest.put("notes",notes);
+paymentRequest.put("upi",upi);
+              
+Payment payment = instance.payments.createUpi(paymentRequest);
+```
+
+**Parameters:**
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| amount*          | integer | Amount of the order to be paid  |
+| currency*   | string  | The currency of the payment (defaults to INR)                                  |
+| order_id*        | string  | The unique identifier of the order created. |
+| email*        | string      | Email of the customer                       |
+| customer_id*   | string      | The id of the customer to be fetched |
+| contact*      | string      | Contact number of the customer              |
+| notes | object  | A key-value pair  |
+| description | string  | Descriptive text of the payment. |
+| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
+| callback_url   | string      | URL where Razorpay will submit the final payment status. |
+| ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
+| referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |
+| user_agent*   | string      | Value of `user_agent` header passed by the client's browser. For example, `Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36` |
+| upi* (for Upi only)  | object      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/collect#step-14-initiate-a-payment) are supported  |
+
+**Response:** <br>
+```json
+{
+  "razorpay_payment_id": "pay_EAm09NKReXi2e0"
+}
+```
+-------------------------------------------------------------------------------------------------------
+### Create Payment UPI s2s / VPA token (Third party validation)
+
+```java
+
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("amount",500);
+paymentRequest.put("currency","INR");
+paymentRequest.put("order_id", "order_JZluwjknyWdhnU");
+paymentRequest.put("email", "gaurav.kumar@example.com");
+paymentRequest.put("contact", "9123456789");
+paymentRequest.put("method", "upi");
+paymentRequest.put("ip", "192.168.0.103");
+paymentRequest.put("referer", "http");
+paymentRequest.put("user_agent", "Mozilla/5.0");
+paymentRequest.put("description", "Test flow");
+JSONObject notes = new JSONObject();
+notes.put("purpose","UPI test payment");
+JSONObject upi = new JSONObject();
+upi.put("flow","intent");
+paymentRequest.put("notes",notes);
+paymentRequest.put("upi",upi);
+
+Payment payment = instance.payments.createUpi(paymentRequest);
+```
+
+**Parameters:**
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| amount*          | integer | Amount of the order to be paid  |
+| currency*   | string  | The currency of the payment (defaults to INR)                                  |
+| order_id*        | string  | The unique identifier of the order created. |
+| email*        | string      | Email of the customer                       |
+| customer_id*   | string      | The id of the customer to be fetched |
+| contact*      | string      | Contact number of the customer              |
+| notes | object  | A key-value pair  |
+| description | string  | Descriptive text of the payment. |
+| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
+| callback_url   | string      | URL where Razorpay will submit the final payment status. |
+| ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
+| referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |
+| user_agent*   | string      | Value of `user_agent` header passed by the client's browser. For example, `Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36` |
+| upi* (for Upi only)  | object      | All keys listed [here](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/intent/#step-2-initiate-a-payment) are supported  |
+
+**Response:** <br>
+```json
+{
+  "razorpay_payment_id": "pay_CMeM6XvOPGFiF",
+  "link": "upi://pay?pa=success@razorpay&pn=xyz&tr=xxxxxxxxxxx&tn=gourav&am=1&cu=INR&mc=xyzw"
+}
+```
+-------------------------------------------------------------------------------------------------------
+
+### Valid VPA (Third party validation)
+
+```java
+JSONObject paymentRequest = new JSONObject();
+paymentRequest.put("vpa","gauravkumar@exampleupi");
+
+Payment payment = instance.payments.validateUpi(paymentRequest);
+```
+
+**Parameters:**
+| Name        | Type    | Description                          |
+|-------------|---------|--------------------------------------|
+| vpa*          | string | The virtual payment address (VPA) you want to validate. For example,   `gauravkumar@exampleupi`  |
+
+please refer this [doc](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/upi/collect#step-13-validate-the-vpa) for params
+
+**Response:** <br>
+```json
+{
+  "vpa": "gauravkumar@exampleupi",
+  "success": true,
+  "customer_name": "Gaurav Kumar"
+}
+```
+-------------------------------------------------------------------------------------------------------
+
+### Fetch payment methods (Third party validation)
+
+```java
+RazorpayClient instance  = new RazorpayClient("key",""); // Use only razorpay key
+
+Methods response = instance.payments.get("methods",null);
+```
+
+**Response:** <br>
+please refer this [doc](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/methods-api/#fetch-payment-methods) for response
+
+```
 -------------------------------------------------------------------------------------------------------
 **PN: * indicates mandatory fields**
 <br>
