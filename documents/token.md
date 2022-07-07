@@ -126,7 +126,7 @@ String customerId = "cust_DtHaBuooGHTuyZ";
 
 String tokenId = "token_HouA2OQR5Z2jTL";
 
-Customer customer = instance.customers.fetchToken(customerId, tokenId)
+Token token = instance.customers.fetchToken(customerId, tokenId)
 ```
 
 **Parameters:**
