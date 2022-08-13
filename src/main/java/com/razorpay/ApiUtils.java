@@ -6,15 +6,10 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import javax.net.ssl.HttpsURLConnection;
 
 
-class ApiUtils implements IApiUtils {
-
-    private static HttpsURLConnection client;
+class ApiUtils implements IAppUtils {
     private static Map<String, String> headers = new HashMap<String, String>();
 
     private static String version = null;
@@ -25,7 +20,7 @@ class ApiUtils implements IApiUtils {
 
 
     @Override
-    public String processGetRequest(String path, JSONObject requestObject, String auth) throws RazorpayException, IOException, URISyntaxException, JSONException {
+    public String processGetRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
         HttpsURLConnection httpconn =  createRequest(Method.GET.name(), new URL(path), null, auth);
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -47,7 +42,7 @@ class ApiUtils implements IApiUtils {
     }
 
     @Override
-    public String processPostRequest(String path, JSONObject requestObject, String auth) throws RazorpayException, IOException, URISyntaxException, JSONException {
+    public String processPostRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
 
         HttpsURLConnection httpconn =  createRequest(Method.POST.name(), new URL(path), requestObject, auth);
         try {
@@ -70,7 +65,7 @@ class ApiUtils implements IApiUtils {
     }
 
     @Override
-    public String processDeleteRequest(String path, JSONObject requestObject, String auth) throws RazorpayException, IOException, URISyntaxException, JSONException {
+    public String processDeleteRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
 
         HttpsURLConnection httpconn = createRequest(Method.DELETE.name(), new URL(path), requestObject, auth);
         try {
@@ -93,7 +88,7 @@ class ApiUtils implements IApiUtils {
     }
 
     @Override
-    public String processPutRequest(String path, JSONObject requestObject, String auth) throws RazorpayException, IOException, URISyntaxException, JSONException {
+    public String processPutRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
 
         HttpsURLConnection httpconn = createRequest(Method.PUT.name(), new URL(path), requestObject, auth);
         try {
@@ -116,7 +111,7 @@ class ApiUtils implements IApiUtils {
     }
 
     @Override
-    public String processPatchRequest(String path, JSONObject requestObject, String auth) throws RazorpayException, IOException, URISyntaxException, JSONException {
+    public String processPatchRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
 
         HttpsURLConnection httpconn = createRequest(Method.PATCH.name(), new URL(path), requestObject, auth);
         try {
@@ -138,8 +133,8 @@ class ApiUtils implements IApiUtils {
         }
     }
 
-    private static HttpsURLConnection createRequest(String method, URL url, JSONObject requestBody,
-                                                    String auth) throws RazorpayException, IOException {
+    private static HttpsURLConnection createRequest(String method, URL url, String requestBody,
+                                                    String auth) throws IOException {
           HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
           conn.setConnectTimeout(60*1000);
           conn.setReadTimeout(60*1000);
@@ -165,7 +160,7 @@ class ApiUtils implements IApiUtils {
           if (conn.getRequestMethod() == Method.POST.name() || conn.getRequestMethod() == Method.PUT.name()) {
               conn.setRequestProperty("Content-Type", "application/json");
               if(requestBody != null ) {
-                  byte[] out = requestBody.toString().getBytes("UTF-8");
+                  byte[] out = requestBody.getBytes("UTF-8");
                   conn.setDoOutput(true);
                   OutputStream stream = conn.getOutputStream();
                   stream.write(out);
@@ -198,6 +193,6 @@ class ApiUtils implements IApiUtils {
                 bis.close();
             }
         }
-    }
+      }
     }
 
