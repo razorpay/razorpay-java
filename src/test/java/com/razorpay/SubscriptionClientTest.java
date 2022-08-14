@@ -1,24 +1,25 @@
 package com.razorpay;
 
-import okhttp3.Request;
-import okio.Buffer;
+
 import org.json.JSONObject;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
+
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 public class SubscriptionClientTest extends BaseTest {
 
-    public static final String TEST_PLAN_ID = "testPlanId";
-    public static final String TEST_SUBSCRIPTION_ID = "testSubId";
+    public static final String TEST_PLAN_ID = "plan_00000000000001";
+    public static final String TEST_SUBSCRIPTION_ID = "sub_00000000000001";
     public static final String TEST_SUBSCRIPTION_ID_2 = "testSubId";
     public static final String PLAN_ID = "plan_id";
     public static final String SUBSCRIPTION_ID = "id";
@@ -27,55 +28,133 @@ public class SubscriptionClientTest extends BaseTest {
     public static final String TEST_ADDON_ID = "ao_00000000000001";
     public static final String ADDON_ITEM_ID = "item_00000000000001";
     public static final String TEST_OFFER = "TEST_OFFER";
-    @InjectMocks
-    private SubscriptionClient subscriptionClient = new SubscriptionClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     @Test
-    public void testCreate() throws IOException, RazorpayException {
-        String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
-        Subscription subscription = subscriptionClient.create(new JSONObject(getRequest()));
+    public void testCreate() throws Exception {
+        JSONObject request =  new JSONObject("{\n" +
+                "  \"plan_id\":\"plan_00000000000001\",\n" +
+                "  \"total_count\":6,\n" +
+                "  \"quantity\": 1,\n" +
+                "  \"customer_notify\":1,\n" +
+                "  \"start_at\":1580453311,\n" +
+                "  \"expire_by\":1580626111,\n" +
+                "  \"addons\":[\n" +
+                "    {\n" +
+                "      \"item\":{\n" +
+                "        \"name\":\"Delivery charges\",\n" +
+                "        \"amount\":30000,\n" +
+                "        \"currency\":\"INR\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"offer_id\":\"offer_JHD834hjbxzhd38d\",\n" +
+                "  \"notes\":{\n" +
+                "    \"notes_key_1\":\"Tea, Earl Grey, Hot\",\n" +
+                "    \"notes_key_2\":\"Tea, Earl Grey… decaf.\"\n" +
+                "  }\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"id\": \"sub_00000000000001\",\n" +
+                "  \"entity\": \"subscription\",\n" +
+                "  \"plan_id\": \"plan_00000000000001\",\n" +
+                "  \"status\": \"created\",\n" +
+                "  \"current_start\": null,\n" +
+                "  \"current_end\": null,\n" +
+                "  \"ended_at\": null,\n" +
+                "  \"quantity\": 1,\n" +
+                "  \"notes\":{\n" +
+                "    \"notes_key_1\":\"Tea, Earl Grey, Hot\",\n" +
+                "    \"notes_key_2\":\"Tea, Earl Grey… decaf.\"\n" +
+                "  },\n" +
+                "  \"charge_at\": 1580453311,\n" +
+                "  \"start_at\": 1580626111,\n" +
+                "  \"end_at\": 1583433000,\n" +
+                "  \"auth_attempts\": 0,\n" +
+                "  \"total_count\": 6,\n" +
+                "  \"paid_count\": 0,\n" +
+                "  \"customer_notify\": true,\n" +
+                "  \"created_at\": 1580280581,\n" +
+                "  \"expire_by\": 1580626111,\n" +
+                "  \"short_url\": \"https://rzp.io/i/z3b1R61A9\",\n" +
+                "  \"has_scheduled_changes\": false,\n" +
+                "  \"change_scheduled_at\": null,\n" +
+                "  \"source\": \"api\",\n" +
+                "  \"offer_id\":\"offer_JHD834hjbxzhd38d\",\n" +
+                "  \"remaining_count\": 5\n" +
+                "}";
+
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(Constants.SUBSCRIPTION_CREATE, null);
+        mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
+        Subscription subscription = subscriptionClient.create(request);
         assertEquals(TEST_PLAN_ID, subscription.get(PLAN_ID));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        String subscriptionCreate = getHost(Constants.SUBSCRIPTION_CREATE);
-        verifySentRequest(true, getRequest(), subscriptionCreate);
     }
 
-    @Test(expected = RazorpayException.class)
-    public void testCreateWithException() throws IOException, RazorpayException {
-
-        String mockedResponseJson = getMockedErrorResponse();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(400);
-        Subscription subscription = subscriptionClient.create(new JSONObject(getRequest()));
-        assertEquals(TEST_PLAN_ID, subscription.get(PLAN_ID));
-        assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-    }
 
     @Test
-    public void testFetch() throws IOException, RazorpayException {
+    public void testFetch() throws Exception {
 
-        String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        String mockedResponseJson = "{\n" +
+                "  \"id\": \"sub_00000000000001\",\n" +
+                "  \"entity\": \"subscription\",\n" +
+                "  \"plan_id\": \"plan_00000000000001\",\n" +
+                "  \"customer_id\": \"cust_D00000000000001\",\n" +
+                "  \"status\": \"active\",\n" +
+                "  \"current_start\": 1577355871,\n" +
+                "  \"current_end\": 1582655400,\n" +
+                "  \"ended_at\": null,\n" +
+                "  \"quantity\": 1,\n" +
+                "  \"notes\":{\n" +
+                "    \"notes_key_1\": \"Tea, Earl Grey, Hot\",\n" +
+                "    \"notes_key_2\": \"Tea, Earl Grey… decaf.\"\n" +
+                "  },\n" +
+                "  \"charge_at\": 1577385991,\n" +
+                "  \"start_at\": 1577385991,\n" +
+                "  \"end_at\": 1603737000,\n" +
+                "  \"auth_attempts\": 0,\n" +
+                "  \"total_count\": 6,\n" +
+                "  \"paid_count\": 1,\n" +
+                "  \"customer_notify\": true,\n" +
+                "  \"created_at\": 1577356081,\n" +
+                "  \"expire_by\": 1577485991,\n" +
+                "  \"short_url\": \"https://rzp.io/i/z3b1R61A9\",\n" +
+                "  \"has_scheduled_changes\": false,\n" +
+                "  \"change_scheduled_at\": null,\n" +
+                "  \"source\": \"api\",\n" +
+                "  \"offer_id\":\"offer_JHD834hjbxzhd38d\",\n" +
+                "  \"remaining_count\": 5\n" +
+                "}";
+
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION, TEST_SUBSCRIPTION_ID), null);
+        mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.fetch(TEST_SUBSCRIPTION_ID);
         assertEquals(TEST_PLAN_ID, subscription.get(PLAN_ID));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION, TEST_SUBSCRIPTION_ID)));
     }
 
     @Test
-    public void testFetchAll() throws IOException, RazorpayException {
+    public void testFetchAll() throws Exception {
         String mockedResponseJson = getSubscriptionCollectionMockedResponse();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(Constants.SUBSCRIPTION_LIST, null);
+        mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
+
         List<Subscription> subscriptionList = subscriptionClient.fetchAll();
         assertEquals(TEST_PLAN_ID, subscriptionList.get(0).get(PLAN_ID));
         assertEquals(TEST_SUBSCRIPTION_ID, subscriptionList.get(0).get(SUBSCRIPTION_ID));
         assertEquals(TEST_PLAN_ID, subscriptionList.get(1).get(PLAN_ID));
         assertEquals(TEST_SUBSCRIPTION_ID_2, subscriptionList.get(1).get(SUBSCRIPTION_ID));
-        verifySentRequest(false, null, getHost(Constants.SUBSCRIPTION_LIST));
     }
 
     private String getSubscriptionCollectionMockedResponse() {
@@ -147,111 +226,105 @@ public class SubscriptionClientTest extends BaseTest {
                 "}";
     }
 
-    @Test
-    public void testTestFetchAllFilteredByPlan() throws IOException, RazorpayException {
-
-        String mockedResponseJson = getSubscriptionCollectionMockedResponse();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
-        List<Subscription> subscriptionList =
-                subscriptionClient.fetchAll(new JSONObject(getFetchAllFilteredRequestPlanIdAndCount2()));
-        //as count 1 in filter
-        assertEquals(2, subscriptionList.size());
-        assertEquals(TEST_PLAN_ID, subscriptionList.get(0).get(PLAN_ID));
-        assertEquals(TEST_SUBSCRIPTION_ID, subscriptionList.get(0).get(SUBSCRIPTION_ID));
-        String host = getHost(Constants.SUBSCRIPTION_LIST)+"?count=1&plan_id="+TEST_PLAN_ID;
-        verifySentRequest(false, null, host);
-    }
 
     @Test
-    public void testCancel() throws IOException, RazorpayException {
+    public void testCancel() throws Exception {
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
-        mockURL(Arrays.asList("v1", "subscriptions"));
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION_CANCEL, TEST_SUBSCRIPTION_ID), null);
+        mockPostRequest(apiUtils,builder,null, mockedResponseJson);
+
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.cancel(TEST_SUBSCRIPTION_ID);
         assertEquals(TEST_PLAN_ID, subscription.get(PLAN_ID));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_CANCEL, TEST_SUBSCRIPTION_ID)));
     }
 
     @Test
-    public void testCreateAddon() throws IOException, RazorpayException {
+    public void testCreateAddon() throws Exception {
         String mockedResponseJson = getAddonMockedResponse();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION_ADDON_CREATE, TEST_SUBSCRIPTION_ID), null);
+        mockPostRequest(apiUtils,builder,new JSONObject(getCreateAddonRequest()).toString(), mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Addon addon = subscriptionClient.createAddon(TEST_SUBSCRIPTION_ID, new JSONObject(getCreateAddonRequest()));
         assertEquals(TEST_SUBSCRIPTION_ID, addon.get(ADDON_SUBSCRIPTION_ID));
         assertEquals(TEST_ADDON_ID, addon.get(ADDON_ID));
-        verifySentRequest(true, getCreateAddonRequest(), getHost(String.format(Constants.SUBSCRIPTION_ADDON_CREATE, TEST_SUBSCRIPTION_ID)));
     }
 
 
     @Test
-    public void testUpdate() throws IOException, RazorpayException {
+    public void testUpdate() throws Exception {
         String mockedResponseJson = getResponse(TEST_PLAN_ID, TEST_SUBSCRIPTION_ID, 2);
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION, TEST_SUBSCRIPTION_ID), null);
+        mockPatchRequest(apiUtils,builder,new JSONObject(getRequest()).toString(), mockedResponseJson);
+
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.update(TEST_SUBSCRIPTION_ID, new JSONObject(getRequest()));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        assertEquals(2, (int) subscription.get("quantity"));
-        verifySentRequest(true, getRequest(), getHost(String.format(Constants.SUBSCRIPTION, TEST_SUBSCRIPTION_ID)));
+        assertEquals(2, subscription.get("quantity"));
     }
 
     @Test
-    public void testFetchPendingUpdate() throws IOException, RazorpayException {
+    public void testFetchPendingUpdate() throws Exception {
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION_PENDING_UPDATE, TEST_SUBSCRIPTION_ID), null);
+        mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.fetchPendingUpdate(TEST_SUBSCRIPTION_ID);
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        assertEquals(1, (int) subscription.get("quantity"));
-        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_PENDING_UPDATE, TEST_SUBSCRIPTION_ID)));
+        assertEquals(1, subscription.get("quantity"));
     }
 
     @Test
-    public void testCancelPendingUpdate() throws IOException, RazorpayException {
+    public void testCancelPendingUpdate() throws Exception {
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION_CANCEL_SCHEDULED_UPDATE, TEST_SUBSCRIPTION_ID), null);
+        mockPostRequest(apiUtils,builder,null, mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.cancelPendingUpdate(TEST_SUBSCRIPTION_ID);
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        assertEquals(1, (int) subscription.get("quantity"));
-        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_CANCEL_SCHEDULED_UPDATE, TEST_SUBSCRIPTION_ID)));
+        assertEquals(1, subscription.get("quantity"));
     }
 
     @Test
-    public void testPause() throws RazorpayException, IOException {
+    public void testPause() throws Exception {
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.PAUSE_SUBSCRIPTION, TEST_SUBSCRIPTION_ID), null);
+        mockPostRequest(apiUtils,builder,new JSONObject(getRequest()).toString(), mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.pause(TEST_SUBSCRIPTION_ID, new JSONObject(getRequest()));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        assertEquals(1, (int) subscription.get("quantity"));
-        verifySentRequest(true, getRequest(), getHost(String.format(Constants.PAUSE_SUBSCRIPTION, TEST_SUBSCRIPTION_ID)));
+        assertEquals(1, subscription.get("quantity"));
     }
 
     @Test
-    public void testResume() throws IOException, RazorpayException {
+    public void testResume() throws Exception {
 
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.RESUME_SUBSCRIPTION, TEST_SUBSCRIPTION_ID), null);
+        mockPostRequest(apiUtils,builder,new JSONObject(getRequest()).toString(), mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.resume(TEST_SUBSCRIPTION_ID, new JSONObject(getRequest()));
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        assertEquals(1, (int) subscription.get("quantity"));
-        verifySentRequest(true, getRequest(), getHost(String.format(Constants.RESUME_SUBSCRIPTION, TEST_SUBSCRIPTION_ID)));
+        assertEquals(1, subscription.get("quantity"));
     }
 
     @Test
-    public void testDeleteSubscriptionOffer() throws IOException, RazorpayException {
+    public void testDeleteSubscriptionOffer() throws Exception {
 
         String mockedResponseJson = getMockedResponseJson();
-        mockResponseFromExternalClient(mockedResponseJson);
-        mockResponseHTTPCodeFromExternalClient(200);
+        apiUtils = mock(ApiUtils.class);
+        URL builder = ApiClient.getBuilder(String.format(Constants.SUBSCRIPTION_OFFER, TEST_SUBSCRIPTION_ID, TEST_OFFER), null);
+        mockDeleteRequest(apiUtils,builder,null, mockedResponseJson);
+        SubscriptionClient subscriptionClient = new SubscriptionClient("test",apiUtils);
         Subscription subscription = subscriptionClient.deleteSubscriptionOffer(TEST_SUBSCRIPTION_ID, TEST_OFFER);
         assertEquals(TEST_SUBSCRIPTION_ID, subscription.get(SUBSCRIPTION_ID));
-        verifySentRequest(false, null, getHost(String.format(Constants.SUBSCRIPTION_OFFER, TEST_SUBSCRIPTION_ID,TEST_OFFER)));
     }
 
     private String getAddonMockedResponse() {
