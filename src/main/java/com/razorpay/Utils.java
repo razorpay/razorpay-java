@@ -78,7 +78,7 @@ public class Utils {
         }
         return result == 0;
     }
-    private static String getHexString(byte[] b) throws Exception {
+    private static String getHexString(byte[] b) {
         String result = "";
         for (int i=0; i < b.length; i++) {
             result +=
