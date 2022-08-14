@@ -1,22 +1,20 @@
 package com.razorpay;
 
-import okhttp3.Request;
-import okio.Buffer;
+
 import org.json.JSONObject;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-
+import org.mockito.Mock;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class VirtualAccountClientTest extends BaseTest{
 
-    @InjectMocks
-    protected VirtualAccountClient virtualAccountClient = new VirtualAccountClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String VIRTUAL_ACCOUNT_ID = "va_DlGmm7jInLudH9";
     private static final String CUSTOMER_ID = "cust_DzbSeP2RJD1ZHg";
@@ -29,7 +27,7 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void create() throws RazorpayException{
+    public void create() throws Exception{
 
         JSONObject request = new JSONObject("{\"receivers\":" +
                 "{\"types\":[\"bank_account\"]}," +
@@ -91,16 +89,17 @@ public class VirtualAccountClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.VIRTUAL_ACCOUNT_CREATE, null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             VirtualAccount fetch = virtualAccountClient.create(request);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
             assertEquals(ACTIVE_STATUS,fetch.get("status"));
             assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("allowed_payers"));
-            String virtualAccountCreate = getHost(Constants.VIRTUAL_ACCOUNT_CREATE);
-            verifySentRequest(true, String.valueOf(request), virtualAccountCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -111,7 +110,7 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException{
+    public void fetch() throws Exception{
         String mockedResponseJson = "{\n" +
                 "  \"id\": "+VIRTUAL_ACCOUNT_ID+",\n" +
                 "  \"name\": \"Acme Corp\",\n" +
@@ -157,15 +156,17 @@ public class VirtualAccountClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.VIRTUAL_ACCOUNT_GET, VIRTUAL_ACCOUNT_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             VirtualAccount fetch = virtualAccountClient.fetch(VIRTUAL_ACCOUNT_ID);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
             assertEquals(ACTIVE_STATUS,fetch.get("status"));
             assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("allowed_payers"));
-            verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_GET, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -176,69 +177,70 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAll() throws RazorpayException{
-      String mockedResponseJson = "{\n" +
-              "  \"entity\": \"collection\",\n" +
-              "  \"count\": 1,\n" +
-              "  \"items\": [\n" +
-              "    {\n" +
-              "      \"id\": \"va_Di5gbNptcWV8fQ\",\n" +
-              "      \"name\": \"Acme Corp\",\n" +
-              "      \"entity\": \"virtual_account\",\n" +
-              "      \"status\": \"closed\",\n" +
-              "      \"description\": \"Virtual Account created for M/S ABC Exports\",\n" +
-              "      \"amount_expected\": 2300,\n" +
-              "      \"notes\": {\n" +
-              "        \"material\": \"teakwood\"\n" +
-              "      },\n" +
-              "      \"amount_paid\": 239000,\n" +
-              "      \"customer_id\": \"cust_DOMUFFiGdCaCUJ\",\n" +
-              "      \"receivers\": [\n" +
-              "        {\n" +
-              "          \"id\": \"ba_Di5gbQsGn0QSz3\",\n" +
-              "          \"entity\": \"bank_account\",\n" +
-              "          \"ifsc\": \"RATN0VAAPIS\",\n" +
-              "          \"bank_name\": \"RBL Bank\",\n" +
-              "          \"name\": \"Acme Corp\",\n" +
-              "          \"notes\": [],\n" +
-              "          \"account_number\": \"1112220061746877\"\n" +
-              "        }\n" +
-              "      ],\n" +
-              "      \"allowed_payers\": [\n" +
-              "        {\n" +
-              "          \"type\": \"bank_account\",\n" +
-              "          \"id\":\"ba_DlGmm9mSj8fjRM\",\n" +
-              "          \"bank_account\": {\n" +
-              "            \"ifsc\": \"UTIB0000013\",\n" +
-              "            \"account_number\": \"914010012345679\"\n" +
-              "          }\n" +
-              "        },\n" +
-              "        {\n" +
-              "          \"type\": \"bank_account\",\n" +
-              "          \"id\":\"ba_Cmtnm5tSj6agUW\",\n" +
-              "          \"bank_account\": {\n" +
-              "            \"ifsc\": \"UTIB0000014\",\n" +
-              "            \"account_number\": \"914010012345680\"\n" +
-              "          }\n" +
-              "        }\n" +
-              "      ],\n" +
-              "      \"close_by\": 1574427237,\n" +
-              "      \"closed_at\": 1574164078,\n" +
-              "      \"created_at\": 1574143517\n" +
-              "    },\n" +
-              "  ]\n" +
-              "}";
+    public void fetchAll() throws Exception{
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": \"va_Di5gbNptcWV8fQ\",\n" +
+                "      \"name\": \"Acme Corp\",\n" +
+                "      \"entity\": \"virtual_account\",\n" +
+                "      \"status\": \"closed\",\n" +
+                "      \"description\": \"Virtual Account created for M/S ABC Exports\",\n" +
+                "      \"amount_expected\": 2300,\n" +
+                "      \"notes\": {\n" +
+                "        \"material\": \"teakwood\"\n" +
+                "      },\n" +
+                "      \"amount_paid\": 239000,\n" +
+                "      \"customer_id\": \"cust_DOMUFFiGdCaCUJ\",\n" +
+                "      \"receivers\": [\n" +
+                "        {\n" +
+                "          \"id\": \"ba_Di5gbQsGn0QSz3\",\n" +
+                "          \"entity\": \"bank_account\",\n" +
+                "          \"ifsc\": \"RATN0VAAPIS\",\n" +
+                "          \"bank_name\": \"RBL Bank\",\n" +
+                "          \"name\": \"Acme Corp\",\n" +
+                "          \"notes\": [],\n" +
+                "          \"account_number\": \"1112220061746877\"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"allowed_payers\": [\n" +
+                "        {\n" +
+                "          \"type\": \"bank_account\",\n" +
+                "          \"id\":\"ba_DlGmm9mSj8fjRM\",\n" +
+                "          \"bank_account\": {\n" +
+                "            \"ifsc\": \"UTIB0000013\",\n" +
+                "            \"account_number\": \"914010012345679\"\n" +
+                "          }\n" +
+                "        },\n" +
+                "        {\n" +
+                "          \"type\": \"bank_account\",\n" +
+                "          \"id\":\"ba_Cmtnm5tSj6agUW\",\n" +
+                "          \"bank_account\": {\n" +
+                "            \"ifsc\": \"UTIB0000014\",\n" +
+                "            \"account_number\": \"914010012345680\"\n" +
+                "          }\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"close_by\": 1574427237,\n" +
+                "      \"closed_at\": 1574164078,\n" +
+                "      \"created_at\": 1574143517\n" +
+                "    },\n" +
+                "  ]\n" +
+                "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.VIRTUAL_ACCOUNT_LIST,  null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             List<VirtualAccount> fetch = virtualAccountClient.fetchAll();
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("name"));
             assertTrue(fetch.get(0).has("status"));
-            verifySentRequest(false, null, getHost(Constants.VIRTUAL_ACCOUNT_LIST));
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -249,7 +251,7 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void close() throws RazorpayException{
+    public void close() throws Exception{
         String mockedResponseJson = "{\n" +
                 "  \"id\":"+VIRTUAL_ACCOUNT_ID+",\n" +
                 "  \"name\":\"Acme Corp\",\n" +
@@ -277,15 +279,16 @@ public class VirtualAccountClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, VIRTUAL_ACCOUNT_ID),  null);
+            mockPostRequest(apiUtils,builder,null, mockedResponseJson);
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             VirtualAccount fetch = virtualAccountClient.close(VIRTUAL_ACCOUNT_ID);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
             assertEquals(CLOSED_STATUS,fetch.get("status"));
             assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("receivers"));
-            verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -296,7 +299,7 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void addReceiver() throws RazorpayException{
+    public void addReceiver() throws Exception{
         JSONObject request = new JSONObject("{\"types\":[\"vpa\"],\"vpa\":{\"descriptor\":\"gaurikumar\"}}");
 
         String mockedResponseJson = "{\n" +
@@ -333,15 +336,16 @@ public class VirtualAccountClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, VIRTUAL_ACCOUNT_ID),  null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             VirtualAccount fetch = virtualAccountClient.addReceiver(VIRTUAL_ACCOUNT_ID, request);
             assertNotNull(fetch);
             assertEquals(VIRTUAL_ACCOUNT_ID,fetch.get("id"));
             assertEquals(CUSTOMER_ID,fetch.get("customer_id"));
             assertEquals(CORP_NAME,fetch.get("name"));
             assertTrue(fetch.has("receivers"));
-            verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -352,7 +356,7 @@ public class VirtualAccountClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void addAllowedPayers() throws RazorpayException{
+    public void addAllowedPayers() throws Exception{
         JSONObject request = new JSONObject("{\"type\":\"bank_account\"," +
                 "\"bank_account\":" +
                 "{\"ifsc\":\"UTIB0000013\"," +
@@ -397,15 +401,16 @@ public class VirtualAccountClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, VIRTUAL_ACCOUNT_ID),  null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+            VirtualAccountClient virtualAccountClient = new VirtualAccountClient("test",apiUtils);
             VirtualAccount response = virtualAccountClient.addAllowedPayers(VIRTUAL_ACCOUNT_ID, request);
             assertNotNull(response);
             assertEquals(VIRTUAL_ACCOUNT_ID,response.get("id"));
             assertEquals(CUSTOMER_ID,response.get("customer_id"));
             assertEquals(CORP_NAME,response.get("name"));
             assertTrue(response.has("allowed_payers"));
-            verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, VIRTUAL_ACCOUNT_ID)));
         } catch (IOException e) {
             assertTrue(false);
         }
