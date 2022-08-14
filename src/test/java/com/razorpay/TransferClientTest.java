@@ -2,17 +2,19 @@ package com.razorpay;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class TransferClientTest extends BaseTest{
 
-    @InjectMocks
-    protected TransferClient transferClient = new TransferClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String TRANSFER_ID = "trf_E9uhYLFLLZ2pks";
 
@@ -23,7 +25,7 @@ public class TransferClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void create() throws RazorpayException{
+    public void create() throws Exception{
 
         JSONObject request = new JSONObject("{\n" +
                 "  \"amount\": 500,\n" +
@@ -49,15 +51,16 @@ public class TransferClientTest extends BaseTest{
                 "  \"processed_at\": 1580219046\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.TRANSFER_CREATE, null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+
+            TransferClient transferClient = new TransferClient("test",apiUtils);
             Transfer fetch = transferClient.create(request);
             assertNotNull(fetch);
             assertEquals(TRANSFER_ID,fetch.get("id"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("currency"));
-            String createRequest = getHost(Constants.TRANSFER_CREATE);
-            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -68,9 +71,9 @@ public class TransferClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException{
+    public void fetch() throws Exception{
 
-        String json = "{\n" +
+        String mockedResponseJson = "{\n" +
                 "  \"id\": "+TRANSFER_ID+",\n" +
                 "  \"entity\": \"transfer\",\n" +
                 "  \"source\": \"pay_E6j30Iu1R7XbIG\",\n" +
@@ -89,15 +92,16 @@ public class TransferClientTest extends BaseTest{
                 "  \"processed_at\": 1579691505\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(json);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.TRANSFER_GET, TRANSFER_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            TransferClient transferClient = new TransferClient("test",apiUtils);
             Transfer fetch = transferClient.fetch(TRANSFER_ID);
             assertNotNull(fetch);
             assertEquals(TRANSFER_ID,fetch.get("id"));
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("amount_reversed"));
-            String addonCreate = getHost(String.format(Constants.TRANSFER_GET, TRANSFER_ID));
-            verifySentRequest(false, null, addonCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -108,9 +112,9 @@ public class TransferClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAll() throws RazorpayException{
+    public void fetchAll() throws Exception{
 
-        String json = "{\n" +
+        String mockedResponseJson = "{\n" +
                 "  \"entity\": \"collection\",\n" +
                 "  \"count\": 1,\n" +
                 "  \"items\": [\n" +
@@ -145,16 +149,16 @@ public class TransferClientTest extends BaseTest{
                 "  ]\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(json);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.TRANSFER_LIST, null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+            TransferClient transferClient = new TransferClient("test",apiUtils);
             List<Transfer> fetch = transferClient.fetchAll();
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
             assertEquals(true,fetch.get(0).has("entity"));
             assertEquals(true,fetch.get(0).has("amount_reversed"));
             assertEquals(true,fetch.get(0).toJson().getJSONObject("recipient_settlement").has("amount"));
-            String transferList = getHost(Constants.TRANSFER_LIST);
-            verifySentRequest(false, null, transferList);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -165,14 +169,14 @@ public class TransferClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void edit() throws RazorpayException{
+    public void edit() throws Exception{
 
         JSONObject request = new JSONObject("{\n" +
                 "  \"on_hold\": \"1\",\n" +
                 "  \"on_hold_until\": \"1679691505\"\n" +
                 "}");
 
-        String json = "{\n" +
+        String mockedResponseJson = "{\n" +
                 "  \"id\": "+TRANSFER_ID+",\n" +
                 "  \"entity\": \"transfer\",\n" +
                 "  \"source\": \"pay_EAeSM2Xul8xYRo\",\n" +
@@ -191,15 +195,16 @@ public class TransferClientTest extends BaseTest{
                 "  \"processed_at\": 1580459321\n" +
                 "}\n";
         try {
-            mockResponseFromExternalClient(json);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.TRANSFER_EDIT, TRANSFER_ID), null);
+            mockPatchRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+            TransferClient transferClient = new TransferClient("test",apiUtils);
+
             Transfer fetch = transferClient.edit(TRANSFER_ID,request);
             assertNotNull(fetch);
             assertEquals(TRANSFER_ID,fetch.get("id"));
             assertEquals("INR",fetch.get("currency"));
             assertTrue(fetch.has("amount_reversed"));
-            String editRequest = getHost(String.format(Constants.TRANSFER_EDIT, TRANSFER_ID));
-            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
