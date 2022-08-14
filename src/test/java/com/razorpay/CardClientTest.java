@@ -1,17 +1,23 @@
 package com.razorpay;
 
+import org.json.JSONException;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CardClientTest extends BaseTest{
 
-    @InjectMocks
-    protected CardClient cardClientClient = new CardClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String CARD_ID = "card_DZon6fd8J3IcA2";
 
@@ -21,18 +27,20 @@ public class CardClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException {
+    public void fetch() throws RazorpayException, JSONException, URISyntaxException {
 
         String mockedResponseJson = "{\n  \"id\": "+CARD_ID+",\n  \"entity\": \"card\",\n  \"international\": false,\n  \"last4\": 1111,\n  \"name\": \"sample name\",\n  \"network\": \"Visa\",\n  \"type\": \"debit\"\n}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
-            Card fetch = cardClientClient.fetch(CARD_ID);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.CARD_GET, CARD_ID), null);
+            when(apiUtils.processGetRequest(builder.toString(),null,"test")).thenReturn(mockedResponseJson);
+
+            CardClient cardClient = new CardClient("test",apiUtils);
+
+            Card fetch = cardClient.fetch(CARD_ID);
             assertNotNull(fetch);
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("international"));
-            String addonCreate = getHost(String.format(Constants.CARD_GET, CARD_ID));
-            verifySentRequest(false, null, addonCreate);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -43,19 +51,21 @@ public class CardClientTest extends BaseTest{
      * @return void
      */
     @Test
-    public void fetchCardDetails() throws RazorpayException {
+    public void fetchCardDetails() throws RazorpayException, JSONException, URISyntaxException {
 
         String mockedResponseJson = "{\"id\":"+CARD_ID+",\"entity\":\"card\",\"name\":\"GauravKumar\",\"last4\":\"8430\",\"network\":\"Visa\",\"type\":\"credit\",\"issuer\":\"HDFC\",\"international\":false,\"emi\":true,\"sub_type\":\"consumer\",\"token_iin\":null}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
-            Card fetch = cardClientClient.fetchCardDetails(PAYMENT_ID);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.FETCH_CARD_DETAILS, PAYMENT_ID), null);
+            when(apiUtils.processGetRequest(builder.toString(),null,"test")).thenReturn(mockedResponseJson);
+
+            CardClient cardClient = new CardClient("test",apiUtils);
+
+            Card fetch = cardClient.fetchCardDetails(PAYMENT_ID);
             assertNotNull(fetch);
             assertEquals(CARD_ID,fetch.get("id"));
             assertTrue(fetch.has("name"));
             assertTrue(fetch.has("network"));
-            String fetchCardDetails = getHost(String.format(Constants.FETCH_CARD_DETAILS, PAYMENT_ID));
-            verifySentRequest(false, null, fetchCardDetails);
         } catch (IOException e) {
             assertTrue(false);
         }
