@@ -1,53 +1,72 @@
 package com.razorpay;
 
+
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import okhttp3.Credentials;
 
 public class RazorpayClient {
 
   public PaymentClient payments;
-  public RefundClient refunds;
-  public OrderClient orders;
   public InvoiceClient invoices;
-  public CardClient cards;
   public CustomerClient customers;
-  public TransferClient transfers;
-  public SubscriptionClient subscriptions;
+  public CardClient cards;
+  public FundAccountClient fundAccount;
+  public ItemClient items;
+  public OrderClient orders;
   public AddonClient addons;
+  public RefundClient refunds;
+  public TransferClient transfers;
+  public SubscriptionRegistrationClient subscriptionRegistrations;
+  public SubscriptionClient subscriptions;
   public PlanClient plans;
   public SettlementClient settlement;
   public QrCodeClient qrCode;
   public PaymentLinkClient paymentLink;
-  public ItemClient items;
-  public FundAccountClient fundAccount;
   public VirtualAccountClient virtualAccounts;
 
-  public RazorpayClient(String key, String secret) throws RazorpayException {
+  public RazorpayClient(String key, String secret) throws RazorpayException, UnsupportedEncodingException {
     this(key, secret, false);
   }
 
-  public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException {
-    ApiUtils.createHttpClientInstance(enableLogging);
-    String auth = Credentials.basic(key, secret);
-    payments = new PaymentClient(auth);
-    refunds = new RefundClient(auth);
-    orders = new OrderClient(auth);
-    invoices = new InvoiceClient(auth);
-    cards = new CardClient(auth);
-    customers = new CustomerClient(auth);
-    transfers = new TransferClient(auth);
-    subscriptions = new SubscriptionClient(auth);
-    addons = new AddonClient(auth);
-    plans = new PlanClient(auth);
-    settlement = new SettlementClient(auth);
-    qrCode = new QrCodeClient(auth);
-    paymentLink = new PaymentLinkClient(auth);
-    items = new ItemClient(auth);
-    fundAccount = new FundAccountClient(auth);
-    virtualAccounts = new VirtualAccountClient(auth);
+  /**
+   * Initializes Razorpay client instance
+   * @param key
+   * @param secret
+   * @param enableLogging
+   * @throws RazorpayException
+   * @throws UnsupportedEncodingException
+   */
+  public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException, UnsupportedEncodingException {
+    byte[] message = (key + ":" + secret).getBytes("UTF-8");
+    String auth = javax.xml.bind.DatatypeConverter.printBase64Binary(message);
+    ApiUtils apiUtils = new ApiUtils();
+
+    cards = new CardClient(auth,apiUtils);
+    items = new ItemClient(auth,apiUtils);
+    plans = new PlanClient(auth,apiUtils);
+    orders = new OrderClient(auth,apiUtils);
+    addons = new AddonClient(auth,apiUtils);
+    qrCode = new QrCodeClient(auth,apiUtils);
+    refunds = new RefundClient(auth,apiUtils);
+    payments = new PaymentClient(auth,apiUtils);
+    invoices = new InvoiceClient(auth,apiUtils);
+    customers = new CustomerClient(auth,apiUtils);
+    transfers = new TransferClient(auth,apiUtils);
+    settlement = new SettlementClient(auth,apiUtils);
+    fundAccount = new FundAccountClient(auth,apiUtils);
+    paymentLink = new PaymentLinkClient(auth,apiUtils);
+    subscriptions = new SubscriptionClient(auth,apiUtils);
+    virtualAccounts = new VirtualAccountClient(auth,apiUtils);
+    subscriptionRegistrations = new SubscriptionRegistrationClient(auth,apiUtils);
   }
 
+  /**
+   * Add headers
+   * ex: X-Razorpay-Account
+   * @param headers
+   * @return
+   */
   public RazorpayClient addHeaders(Map<String, String> headers) {
     ApiUtils.addHeaders(headers);
     return this;

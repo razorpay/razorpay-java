@@ -2,6 +2,7 @@ package com.razorpay;
 
 import java.util.Date;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public abstract class Entity {
@@ -15,7 +16,7 @@ public abstract class Entity {
     this.modelJson = jsonObject;
   }
 
-  public <T> T get(String key) {
+  public <T> T get(String key) throws JSONException {
     // Return null if key not in JSONObject
     if (!has(key)) {
       return null;
@@ -34,7 +35,7 @@ public abstract class Entity {
   public JSONObject toJson() {
     return modelJson;
   }
-  
+
   public boolean has(String key) {
     return modelJson.has(key);
   }
