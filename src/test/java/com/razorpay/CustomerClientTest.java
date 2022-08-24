@@ -1,17 +1,23 @@
 package com.razorpay;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CustomerClientTest extends BaseTest{
 
-    @InjectMocks
-    protected CustomerClient customerClient = new CustomerClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String CUSTOMER_ID = "cust_1Aa00000000004";
 
@@ -22,7 +28,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void create() throws RazorpayException{
+    public void create() throws RazorpayException, JSONException, URISyntaxException {
 
         JSONObject request = new JSONObject("{\n  " +
                 "\"name\": \"Gaurav Kumar\",\n  " +
@@ -51,13 +57,15 @@ public class CustomerClientTest extends BaseTest{
                 "\"created_at \": 1234567890\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.CUSTOMER_CREATE, null);
+            mockPostRequest(apiUtils,builder,request.toString(),mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             Customer customer = customerClient.create(request);
             assertNotNull(customer);
             assertEquals(CUSTOMER_ID,customer.get("id"));
-            String createRequest = getHost(Constants.CUSTOMER_CREATE);
-            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -68,7 +76,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException {
+    public void fetch() throws RazorpayException, JSONException, URISyntaxException {
 
         String mockedResponseJson = "{\n  " +
                 "\"id\" : \"cust_1Aa00000000004\",\n" +
@@ -81,13 +89,15 @@ public class CustomerClientTest extends BaseTest{
                 "\"created_at \": 1234567890\n" +
                 "}\n";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.CUSTOMER_GET, CUSTOMER_ID), null);
+            mockGetRequest(apiUtils,builder,null,mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             Customer fetch = customerClient.fetch(CUSTOMER_ID);
             assertNotNull(fetch);
             assertEquals(CUSTOMER_ID,fetch.get("id"));
-            String fetchRequest = getHost(String.format(Constants.CUSTOMER_GET, CUSTOMER_ID));
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -98,7 +108,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAll() throws RazorpayException {
+    public void fetchAll() throws RazorpayException, JSONException, URISyntaxException {
         String mockedResponseJson = "{\n  " +
                 "\"entity\":\"collection\",\n  " +
                 "\"count\":1,\n  " +
@@ -118,13 +128,15 @@ public class CustomerClientTest extends BaseTest{
                 "}\n  ]" +
                 "\n}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.CUSTOMER_LIST, null);
+            mockGetRequest(apiUtils,builder,null,mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             List <Customer> fetch = customerClient.fetchAll();
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
-            String fetchRequest = getHost(Constants.CUSTOMER_LIST);
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -135,7 +147,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void edit() throws RazorpayException {
+    public void edit() throws RazorpayException, JSONException, URISyntaxException{
 
         JSONObject request = new JSONObject("{\n  " +
                 "\"name\": \"Gaurav Kumar\",\n  " +
@@ -160,13 +172,15 @@ public class CustomerClientTest extends BaseTest{
                 "1582033731\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.CUSTOMER_EDIT, CUSTOMER_ID), null);
+            mockPutRequest(apiUtils,builder,request.toString(),mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             Customer fetch = customerClient.edit(CUSTOMER_ID,request);
             assertNotNull(fetch);
             assertEquals(CUSTOMER_ID,fetch.get("id"));
-            String editRequest = getHost(String.format(Constants.CUSTOMER_EDIT,CUSTOMER_ID));
-            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -177,7 +191,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchTokens() throws RazorpayException{
+    public void fetchTokens() throws RazorpayException, JSONException, URISyntaxException{
         String mockedResponseJson = "{\n    " +
                 "\"id\": \"token_Hxe0skTXLeg9pF\",\n" +
                 "\"entity\": \"token\",\n" +
@@ -209,13 +223,16 @@ public class CustomerClientTest extends BaseTest{
                 "\"dcc_enabled\": false\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.TOKEN_GET, CUSTOMER_ID, TOKEN_ID), null);
+            mockGetRequest(apiUtils,builder,null,mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             Token fetch = customerClient.fetchToken(CUSTOMER_ID,TOKEN_ID);
             assertNotNull(fetch);
             assertEquals(TOKEN_ID,fetch.get("id"));
-            String fetchToken = getHost(String.format(Constants.TOKEN_GET,CUSTOMER_ID,TOKEN_ID));
-            verifySentRequest(false, null, fetchToken);
+
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -226,7 +243,7 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchToken() throws RazorpayException{
+    public void fetchToken() throws RazorpayException, JSONException, URISyntaxException{
         String mockedResponseJson = "{\n" +
                 "\"entity\":\"collection\",\n" +
                 "\"count\":1,\n   \"items\":[\n" +
@@ -266,13 +283,15 @@ public class CustomerClientTest extends BaseTest{
                 "\"dcc_enabled\":false,\n" +
                 "\"billing_address\":null\n}\n ]\n}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.TOKEN_LIST, CUSTOMER_ID), null);
+            mockGetRequest(apiUtils,builder,null,mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             List<Token> fetch = customerClient.fetchTokens(CUSTOMER_ID);
             assertNotNull(fetch);
             assertEquals(true,fetch.get(0).has("id"));
-            String fetchToken = getHost(String.format(Constants.TOKEN_LIST,CUSTOMER_ID));
-            verifySentRequest(false, null, fetchToken);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -283,14 +302,18 @@ public class CustomerClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void testDeleteToken() throws IOException, RazorpayException {
+    public void DeleteToken() throws RazorpayException, JSONException, URISyntaxException{
         String mockedResponseJson = "{\"entity\":\"customer\",\"deleted\":true}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.TOKEN_DELETE, CUSTOMER_ID, TOKEN_ID), null);
+            mockDeleteRequest(apiUtils,builder,null,mockedResponseJson);
+
+            CustomerClient customerClient = new CustomerClient("test",apiUtils);
+
             Customer customer = customerClient.deleteToken(CUSTOMER_ID,TOKEN_ID);
             assertNotNull(customer);
-            verifySentRequest(false, null, getHost(String.format(Constants.TOKEN_DELETE,CUSTOMER_ID,TOKEN_ID)));
+
         } catch (IOException e) {
             assertTrue(false);
         }
