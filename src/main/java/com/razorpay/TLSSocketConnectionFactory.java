@@ -69,9 +69,6 @@ public class TLSSocketConnectionFactory extends SSLSocketFactory {
     // ******************Adding Custom BouncyCastleProvider*********************//
     @Override
     public Socket createSocket(Socket socket, final String host, int port, boolean arg3) throws IOException {
-        if (socket == null) {
-            socket = new Socket();
-        }
         if (!socket.isConnected()) {
             socket.connect(new InetSocketAddress(host, port));
         }
