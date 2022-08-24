@@ -1,88 +1,197 @@
 package com.razorpay;
 
-import java.io.IOException;
-import java.util.Iterator;
 
-import org.json.JSONObject;
+import java.io.*;
+import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
+import javax.net.ssl.HttpsURLConnection;
 
-class ApiUtils {
 
-  private static OkHttpClient client;
+class ApiUtils implements IAppUtils {
+  private static Map<String, String> headers = new HashMap<String, String>();
 
-  static void createHttpClientInstance(boolean enableLogging) {
-    if (client == null) {
-      client = new OkHttpClient.Builder().build();
-    }
-    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-    if (enableLogging) {
-      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-    } else {
-      loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-    }
-    client = client.newBuilder().addInterceptor(loggingInterceptor).build();
-  }
+  private static String version = null;
 
   private enum Method {
-    GET, POST
+    GET, POST, PUT, PATCH, DELETE
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-    HttpUrl.Builder builder =
-        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
-            .addPathSegment(Constants.VERSION).addPathSegments(path);
 
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+  @Override
+  public String processGetRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+    HttpsURLConnection httpconn =  createRequest(Method.GET.name(), new URL(path), null, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
 
-    Request request =
-        createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
-    return processRequest(request);
-  }
+        sb.append(line + "\n");
+      }
+      br.close();
 
-  static Response getRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-    HttpUrl.Builder builder =
-        new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME).port(Constants.PORT)
-            .addPathSegment(Constants.VERSION).addPathSegments(path);
-
-    addQueryParams(builder, requestObject);
-
-    Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
-    return processRequest(request);
-  }
-
-  private static Request createRequest(String method, String url, RequestBody requestBody,
-      String auth) {
-    Request.Builder builder =
-        new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
-
-    return builder.method(method, requestBody).build();
-  }
-
-  private static void addQueryParams(HttpUrl.Builder builder, JSONObject request) {
-    if (request == null)
-      return;
-
-    Iterator<?> keys = request.keys();
-    while (keys.hasNext()) {
-      String key = (String) keys.next();
-      builder.addQueryParameter(key, request.get(key).toString());
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
     }
   }
 
-  private static Response processRequest(Request request) throws RazorpayException {
+  @Override
+  public String processPostRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn =  createRequest(Method.POST.name(), new URL(path), requestObject, auth);
     try {
-      return client.newCall(request).execute();
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processDeleteRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.DELETE.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processPutRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.PUT.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processPatchRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.PATCH.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  private static HttpsURLConnection createRequest(String method, URL url, String requestBody,
+                                                  String auth) throws IOException {
+    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+    conn.setConnectTimeout(60*1000);
+    conn.setReadTimeout(60*1000);
+    conn.setSSLSocketFactory(new TLSSocketConnectionFactory());
+    /* Checking headers value */
+    if(headers.size() > 0){
+      for(Map.Entry<String, String> header: headers.entrySet()){
+        conn.setRequestProperty(header.getKey(), header.getValue());
+      }
+    }
+
+    conn.setRequestProperty("Authorization", "Basic " + auth);
+    conn.setRequestProperty(Constants.USER_AGENT, "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
+
+    if (method == Method.PATCH.name()) {
+      conn.setRequestMethod("POST");
+      conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+    }else{
+      conn.setRequestMethod(method);
+    }
+
+    conn.setUseCaches(false);
+    if (conn.getRequestMethod() == Method.POST.name() || conn.getRequestMethod() == Method.PUT.name()) {
+      conn.setRequestProperty("Content-Type", "application/json");
+      if(requestBody != null ) {
+        byte[] out = requestBody.getBytes("UTF-8");
+        conn.setDoOutput(true);
+        OutputStream stream = conn.getOutputStream();
+        stream.write(out);
+      }
+    }
+
+    return conn;
+  }
+
+  static void addHeaders(Map<String, String> header) {
+    headers.putAll(header);
+  }
+
+  private static String HttpException(InputStream errorStream) throws IOException {
+    String responseString = null;
+    BufferedInputStream bis = null;
+    try {
+      StringBuilder sb = new StringBuilder();
+      bis = new BufferedInputStream(errorStream);
+      byte[] byteContents = new byte[4096];
+      int bytesRead;
+      String strContents;
+      while ((bytesRead = bis.read(byteContents)) != -1) {
+        strContents = new String(byteContents, 0, bytesRead, "UTF-8"); // You might need to replace the charSet as per the responseEncoding returned by httpurlconnection above
+        sb.append(strContents);
+      }
+      return sb.toString();
+    } finally {
+      if (bis != null) {
+        bis.close();
+      }
     }
   }
 }
