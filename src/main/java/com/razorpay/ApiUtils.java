@@ -1,179 +1,197 @@
 package com.razorpay;
 
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+
+import java.io.*;
+import java.net.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.HttpsURLConnection;
 
-import org.json.JSONObject;
 
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
-
-class ApiUtils {
-
-  private static OkHttpClient client;
+class ApiUtils implements IAppUtils {
   private static Map<String, String> headers = new HashMap<String, String>();
 
   private static String version = null;
-
-  static void createHttpClientInstance(boolean enableLogging) throws RazorpayException {
-    if (client == null) {
-      HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-      if (enableLogging) {
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-      } else {
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
-      }
-      
-      try {
-        client = new OkHttpClient.Builder()
-                                 .readTimeout(60, TimeUnit.SECONDS)
-                                 .writeTimeout(60, TimeUnit.SECONDS)
-                                 .addInterceptor(loggingInterceptor)
-                                 .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
-                                 .build();
-      } catch (Exception e) {
-        throw new RazorpayException(e);
-      }
-    }
-
-    Properties properties = new Properties();
-    try {
-      properties.load(ApiUtils.class.getResourceAsStream("/project.properties"));
-      version = (String) properties.get("version");
-    } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
-    }
-  }
 
   private enum Method {
     GET, POST, PUT, PATCH, DELETE
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
-
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
-
-    Request request =
-        createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
-    return processRequest(request);
-  }
-
-  static Response putRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-
-    HttpUrl.Builder builder = getBuilder(path);
-
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
-
-    Request request =
-        createRequest(Method.PUT.name(), builder.build().toString(), requestBody, auth);
-    return processRequest(request);
-  }
-
-  static Response patchRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-
-    HttpUrl.Builder builder = getBuilder(path);
-
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
-
-    Request request =
-        createRequest(Method.PATCH.name(), builder.build().toString(), requestBody, auth);
-    return processRequest(request);
-  }
-
-  static Response getRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-
-    HttpUrl.Builder builder = getBuilder(path);
-    addQueryParams(builder, requestObject);
-
-    Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
-    return processRequest(request);
-  }
-
-  static Response deleteRequest(String path, JSONObject requestObject, String auth)
-      throws RazorpayException {
-
-    HttpUrl.Builder builder = getBuilder(path);
-    addQueryParams(builder, requestObject);
-
-    Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
-    return processRequest(request);
-  }
-
-  private static HttpUrl.Builder getBuilder(String path) {
-    return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
-        .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
-  }
-
-  private static Request createRequest(String method, String url, RequestBody requestBody,
-      String auth) {
-    Request.Builder builder =
-        new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
-    builder.addHeader(Constants.USER_AGENT,
-        "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
-
-    for (Map.Entry<String, String> header : headers.entrySet()) {
-      builder.addHeader(header.getKey(), header.getValue());
-    }
-
-    return builder.method(method, requestBody).build();
-  }
-
-  private static void addQueryParams(HttpUrl.Builder builder, JSONObject request) {
-    if (request == null)
-      return;
-
-    Iterator<?> keys = request.keys();
-    while (keys.hasNext()) {
-      String key = (String) keys.next();
-      builder.addQueryParameter(key, request.get(key).toString());
-    }
-  }
-
-  private static Response processRequest(Request request) throws RazorpayException {
+  @Override
+  public String processGetRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+    HttpsURLConnection httpconn =  createRequest(Method.GET.name(), new URL(path), null, auth);
     try {
-      return client.newCall(request).execute();
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
     }
+  }
+
+  @Override
+  public String processPostRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn =  createRequest(Method.POST.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processDeleteRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.DELETE.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processPutRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.PUT.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  @Override
+  public String processPatchRequest(String path, String requestObject, String auth) throws RazorpayException, IOException, URISyntaxException {
+
+    HttpsURLConnection httpconn = createRequest(Method.PATCH.name(), new URL(path), requestObject, auth);
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+              httpconn.getInputStream()));
+      StringBuilder sb = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+
+        sb.append(line + "\n");
+      }
+      br.close();
+
+      return sb.toString();
+    } catch (IOException e) {
+      InputStream errorStream = httpconn.getErrorStream();
+      String getMessage = HttpException(errorStream);
+      throw new RazorpayException(getMessage);
+    }
+  }
+
+  private static HttpsURLConnection createRequest(String method, URL url, String requestBody,
+                                                  String auth) throws IOException {
+    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+    conn.setConnectTimeout(60*1000);
+    conn.setReadTimeout(60*1000);
+    conn.setSSLSocketFactory(new TLSSocketConnectionFactory());
+    /* Checking headers value */
+    if(headers.size() > 0){
+      for(Map.Entry<String, String> header: headers.entrySet()){
+        conn.setRequestProperty(header.getKey(), header.getValue());
+      }
+    }
+
+    conn.setRequestProperty("Authorization", "Basic " + auth);
+    conn.setRequestProperty(Constants.USER_AGENT, "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
+
+    if (method == Method.PATCH.name()) {
+      conn.setRequestMethod("POST");
+      conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+    }else{
+      conn.setRequestMethod(method);
+    }
+
+    conn.setUseCaches(false);
+    if (conn.getRequestMethod() == Method.POST.name() || conn.getRequestMethod() == Method.PUT.name()) {
+      conn.setRequestProperty("Content-Type", "application/json");
+      if(requestBody != null ) {
+        byte[] out = requestBody.getBytes("UTF-8");
+        conn.setDoOutput(true);
+        OutputStream stream = conn.getOutputStream();
+        stream.write(out);
+      }
+    }
+
+    return conn;
   }
 
   static void addHeaders(Map<String, String> header) {
     headers.putAll(header);
   }
-  
-  private static X509TrustManager createDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
-    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-    trustManagerFactory.init((KeyStore) null);
-    TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-    if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-      throw new IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers));
+
+  private static String HttpException(InputStream errorStream) throws IOException {
+    String responseString = null;
+    BufferedInputStream bis = null;
+    try {
+      StringBuilder sb = new StringBuilder();
+      bis = new BufferedInputStream(errorStream);
+      byte[] byteContents = new byte[4096];
+      int bytesRead;
+      String strContents;
+      while ((bytesRead = bis.read(byteContents)) != -1) {
+        strContents = new String(byteContents, 0, bytesRead, "UTF-8"); // You might need to replace the charSet as per the responseEncoding returned by httpurlconnection above
+        sb.append(strContents);
+      }
+      return sb.toString();
+    } finally {
+      if (bis != null) {
+        bis.close();
+      }
     }
-    X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
-    return trustManager;
   }
 }
