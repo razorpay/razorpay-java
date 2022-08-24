@@ -40,6 +40,16 @@ class ApiClient {
         this.apiUtils = apiUtils;
     }
 
+    /**
+     * Create get request
+     * @param path
+     * @param requestObject
+     * @return
+     * @throws RazorpayException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws JSONException
+     */
     public <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException, IOException, URISyntaxException, JSONException {
 
         String query = null;
@@ -52,6 +62,16 @@ class ApiClient {
         return processResponse(response,builder.toString());
     }
 
+    /**
+     * Create post request
+     * @param path
+     * @param requestObject
+     * @return
+     * @throws RazorpayException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws JSONException
+     */
     public <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException, IOException, URISyntaxException, JSONException {
         URL builder = getBuilder(path,null);
         String request = requestObject==null ? null : requestObject.toString();
@@ -59,18 +79,49 @@ class ApiClient {
         return processResponse(response,builder.toString());
     }
 
+    /**
+     * Create put request
+     * @param path
+     * @param requestObject
+     * @return
+     * @throws RazorpayException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws JSONException
+     */
     public <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException, JSONException, IOException, URISyntaxException {
         URL builder = getBuilder(path,null);
         String response = apiUtils.processPutRequest(builder.toString(),requestObject.toString(), auth);
         return processResponse(response,builder.toString());
     }
 
+    /**
+     * Create patch request
+     * @param path
+     * @param requestObject
+     * @return
+     * @throws RazorpayException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws JSONException
+     */
     public <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException, IOException, URISyntaxException, JSONException {
         URL builder = getBuilder(path,null);
         String response = apiUtils.processPatchRequest(builder.toString(),requestObject.toString(), auth);
         return processResponse(response,builder.toString());
     }
 
+    /**
+     * Create delete request
+     * @param path
+     * @param requestObject
+     * @param <T>
+     * @return
+     * @throws RazorpayException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws JSONException
+     */
     public <T> T delete(String path, JSONObject requestObject) throws RazorpayException, IOException, URISyntaxException, JSONException {
         URL builder = getBuilder(path,null);
         String request = requestObject==null ? null : requestObject.toString();
@@ -197,9 +248,34 @@ class ApiClient {
         return query;
     }
 
+    /**
+     * The API url is built using this method
+     * @param path
+     * @param query
+     * @return
+     * @throws URISyntaxException
+     * @throws MalformedURLException
+     */
     public static URL getBuilder(String path,String query) throws URISyntaxException, MalformedURLException {
         URI uri = new URI(Constants.SCHEME, Constants.HOSTNAME, "/"+Constants.VERSION + "/"+path+"", query,null);
         return uri.toURL();
+    }
+
+    private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException, JSONException {
+        if (responseJson.has(ERROR)) {
+            JSONObject errorResponse = responseJson.getJSONObject(ERROR);
+            String code = errorResponse.getString(STATUS_CODE);
+            String description = errorResponse.getString(DESCRIPTION);
+            throw new RazorpayException(code + ":" + description);
+        }
+        throwServerException(statusCode, responseJson.toString());
+    }
+
+    private void throwServerException(int statusCode, String responseBody) throws RazorpayException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Status Code: ").append(statusCode).append("\n");
+        sb.append("Server response: ").append(responseBody);
+        throw new RazorpayException(sb.toString());
     }
 
     private Class getClass(String entity) {

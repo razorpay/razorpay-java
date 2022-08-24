@@ -29,29 +29,44 @@ public class RazorpayClient {
         this(key, secret, false);
     }
 
+    /**
+     * Initializes Razorpay client instance
+     * @param key
+     * @param secret
+     * @param enableLogging
+     * @throws RazorpayException
+     * @throws UnsupportedEncodingException
+     */
     public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException, UnsupportedEncodingException {
         byte[] message = (key + ":" + secret).getBytes("UTF-8");
         String auth = javax.xml.bind.DatatypeConverter.printBase64Binary(message);
         ApiUtils apiUtils = new ApiUtils();
+
+        cards = new CardClient(auth,apiUtils);
+        items = new ItemClient(auth,apiUtils);
+        plans = new PlanClient(auth,apiUtils);
+        orders = new OrderClient(auth,apiUtils);
+        addons = new AddonClient(auth,apiUtils);
+        qrCode = new QrCodeClient(auth,apiUtils);
+        refunds = new RefundClient(auth,apiUtils);
         payments = new PaymentClient(auth,apiUtils);
         invoices = new InvoiceClient(auth,apiUtils);
         customers = new CustomerClient(auth,apiUtils);
-        cards = new CardClient(auth,apiUtils);
-        subscriptionRegistrations = new SubscriptionRegistrationClient(auth,apiUtils);
-        fundAccount = new FundAccountClient(auth,apiUtils);
-        items = new ItemClient(auth,apiUtils);
-        orders = new OrderClient(auth,apiUtils);
-        addons = new AddonClient(auth,apiUtils);
-        refunds = new RefundClient(auth,apiUtils);
         transfers = new TransferClient(auth,apiUtils);
-        subscriptions = new SubscriptionClient(auth,apiUtils);
-        plans = new PlanClient(auth,apiUtils);
         settlement = new SettlementClient(auth,apiUtils);
-        qrCode = new QrCodeClient(auth,apiUtils);
+        fundAccount = new FundAccountClient(auth,apiUtils);
         paymentLink = new PaymentLinkClient(auth,apiUtils);
+        subscriptions = new SubscriptionClient(auth,apiUtils);
         virtualAccounts = new VirtualAccountClient(auth,apiUtils);
-   }
+        subscriptionRegistrations = new SubscriptionRegistrationClient(auth,apiUtils);
+    }
 
+    /**
+     * Add headers
+     * ex: X-Razorpay-Account
+     * @param headers
+     * @return
+     */
     public RazorpayClient addHeaders(Map<String, String> headers) {
         ApiUtils.addHeaders(headers);
         return this;
