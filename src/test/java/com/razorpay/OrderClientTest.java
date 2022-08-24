@@ -1,18 +1,22 @@
 package com.razorpay;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class OrderClientTest extends BaseTest{
 
-    @InjectMocks
-    protected OrderClient orderClient = new OrderClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String ORDER_ID = "order_EKwxwAgItmmXdp";
 
@@ -21,7 +25,7 @@ public class OrderClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void create() throws RazorpayException {
+    public void create() throws RazorpayException, JSONException, URISyntaxException {
         JSONObject request = new JSONObject("{" +
                 "amount:50000," +
                 "currency:\"INR\"," +
@@ -44,16 +48,18 @@ public class OrderClientTest extends BaseTest{
                 "\"notes\":[]," +
                 "\"created_at\":1582628071}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.ORDER_CREATE, null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+
+            OrderClient orderClient = new OrderClient("test",apiUtils);
+
             Order fetch = orderClient.create(request);
             assertNotNull(fetch);
             assertEquals(ORDER_ID,fetch.get("id"));
             assertEquals("order",fetch.get("entity"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("amount_paid"));
-            String createRequest = getHost(Constants.ORDER_CREATE);
-            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -64,7 +70,7 @@ public class OrderClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAll() throws RazorpayException{
+    public void fetchAll() throws RazorpayException, JSONException, URISyntaxException {
         String mockedResponseJson = "{" +
                 "\"entity\":\"collection\"," +
                 "\"count\":1,\"items\":" +
@@ -81,15 +87,16 @@ public class OrderClientTest extends BaseTest{
                 "\"notes\":[]," +
                 "\"created_at\":1582637108}]}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.ORDER_LIST, null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            OrderClient orderClient = new OrderClient("test",apiUtils);
             List<Order> fetch = orderClient.fetchAll();
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("amount_paid"));
-            String fetchRequest = getHost(Constants.ORDER_LIST);
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -100,7 +107,7 @@ public class OrderClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException{
+    public void fetch() throws RazorpayException, JSONException, URISyntaxException {
         String mockedResponseJson = "{\"id\":"+ORDER_ID+"," +
                 "\"entity\":\"order\"," +
                 "\"amount\":2200," +
@@ -113,16 +120,17 @@ public class OrderClientTest extends BaseTest{
                 "\"notes\":[]," +
                 "\"created_at\":1572505143}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.ORDER_GET, ORDER_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            OrderClient orderClient = new OrderClient("test",apiUtils);
             Order fetch = orderClient.fetch(ORDER_ID);
             assertNotNull(fetch);
             assertEquals(true,fetch.has("id"));
             assertTrue(fetch.has("entity"));
             assertTrue(fetch.has("amount"));
             assertTrue(fetch.has("amount_paid"));
-            String fetchRequest = getHost(String.format(Constants.ORDER_GET,ORDER_ID));
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -133,7 +141,8 @@ public class OrderClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchPayments() throws RazorpayException{
+    public void fetchPayments() throws RazorpayException, JSONException, URISyntaxException {
+
         String mockedResponseJson = "{" +
                 "\"entity\":\"collection\"," +
                 "\"count\":1," +
@@ -163,15 +172,16 @@ public class OrderClientTest extends BaseTest{
                 "\"error_description\":null," +
                 "\"created_at\":1572505160}]}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.ORDER_PAYMENT_LIST, ORDER_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            OrderClient orderClient = new OrderClient("test",apiUtils);
             List<Payment> fetch = orderClient.fetchPayments(ORDER_ID);
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("currency"));
-            String fetchRequest = getHost(String.format(Constants.ORDER_PAYMENT_LIST, ORDER_ID));
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -182,7 +192,8 @@ public class OrderClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void edit() throws RazorpayException {
+    public void edit() throws RazorpayException, JSONException, URISyntaxException {
+
         JSONObject request = new JSONObject("{" +
                 "\"notes\":{" +
                 "\"key1\":\"value3\"," +
@@ -207,14 +218,14 @@ public class OrderClientTest extends BaseTest{
                 "\"created_at\":1572505143" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.ORDER_EDIT, ORDER_ID), null);
+            mockPatchRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+
+            OrderClient orderClient = new OrderClient("test",apiUtils);
             Order fetch = orderClient.edit(ORDER_ID,request);
             assertNotNull(fetch);
             assertEquals(ORDER_ID,fetch.get("id"));
-            assertEquals(ORDER_ID,fetch.get("id"));
-            String editRequest = getHost(String.format(Constants.ORDER_EDIT, ORDER_ID));
-            verifySentRequest(true, request.toString(), editRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
