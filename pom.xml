@@ -32,6 +32,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>6</maven.compiler.source>
     <maven.compiler.target>6</maven.compiler.target>
+    <maven.test.skip>true</maven.test.skip>
   </properties>
   <dependencies>
     <dependency>
