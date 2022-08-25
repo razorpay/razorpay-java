@@ -3,7 +3,7 @@
 ### Create a virtual account
 ```java
 JSONObject virtualRequest = new JSONObject();
-List<Object> types = new ArrayList<>();
+List<Object> types = new ArrayList();
 JSONObject typesParam = new JSONObject();
 types.add("bank_account");
 typesParam.put("types",types);
@@ -66,12 +66,12 @@ VirtualAccount virtualaccount = instance.virtualAccounts.create(virtualRequest);
 ```java
 
 JSONObject virtualRequest = new JSONObject();
-List<Object> types = new ArrayList<>();
+List<Object> types = new ArrayList();
 JSONObject typesParam = new JSONObject();
 types.add("bank_account");
 typesParam.put("types",types);
 virtualRequest.put("receivers",typesParam);
-List<Object> allowedPayer = new ArrayList<>();
+List<Object> allowedPayer = new ArrayList();
 JSONObject allowedPayerParams = new JSONObject();
 allowedPayerParams.put("type","bank_account");
 JSONObject bankAccount = new JSONObject();
@@ -156,7 +156,7 @@ VirtualAccount virtualaccount = instance.virtualAccounts.create(virtualRequest);
 
 ```java
 JSONObject virtualRequest = new JSONObject();
-List<Object> types = new ArrayList<>();
+List<Object> types = new ArrayList();
 JSONObject typesParam = new JSONObject();
 types.add("qr_code");
 typesParam.put("types",types);
@@ -460,7 +460,7 @@ Refund refund = instance.payments.refund(paymentId,refundRequest);
 String virtualId = "va_Di5gbNptcWV8fQ";
 
 JSONObject virtualRequest = new JSONObject();
-List<Object> types = new ArrayList<>();
+List<Object> types = new ArrayList();
 types.add("vpa");
 virtualRequest.put("types",types);
 JSONObject vpa = new JSONObject();
