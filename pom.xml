@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.razorpay</groupId>
   <artifactId>razorpay-java</artifactId>
-  <version>1.1.1</version>
+  <version>1.5.0</version>
   <packaging>jar</packaging>
   <name>razorpay-java</name>
   <description>Official java bindings for the Razorpay API</description>

@@ -9,7 +9,7 @@ Documentation of Razorpay's API and their usage is available at <https://docs.ra
 
 ## Requirements
 
-Java 1.6
+## Java 1.6
 
 ## Installation
 
@@ -21,7 +21,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.1.1</version>
+ <version>1.5.0</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "com.razorpay:razorpay-java:1.1.1"
+implementation "com.razorpay:razorpay-java:1.5.0"
 ```
 
 ## Usage
