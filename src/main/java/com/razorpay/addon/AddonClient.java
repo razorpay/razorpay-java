@@ -1,12 +1,15 @@
-package com.razorpay;
+package com.razorpay.addon;
 
 import java.util.List;
 
+import com.razorpay.ApiClient;
+import com.razorpay.Constants;
+import com.razorpay.RazorpayException;
 import org.json.JSONObject;
 
 public class AddonClient extends ApiClient {
 
-  AddonClient(String auth) {
+  public AddonClient(String auth) {
     super(auth);
   }
 
