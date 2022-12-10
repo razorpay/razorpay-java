@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
-class ApiClient {
+public class ApiClient {
 
   String auth;
 
@@ -31,7 +31,7 @@ class ApiClient {
 
   private final int STATUS_MULTIPLE_CHOICE = 300;
 
-  ApiClient(String auth) {
+  public ApiClient(String auth) {
     this.auth = auth;
   }
 
@@ -56,7 +56,7 @@ class ApiClient {
   }
 
 
-  <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
+  public <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
           throws RazorpayException {
     Response response = ApiUtils.getRequest(path, requestObject, auth);
     return processCollectionResponse(response);

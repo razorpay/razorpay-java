@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class RefundClient extends ApiClient {
 
-  RefundClient(String auth) {
+  public RefundClient(String auth) {
     super(auth);
   }
 
