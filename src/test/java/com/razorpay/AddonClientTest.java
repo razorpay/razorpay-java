@@ -1,5 +1,8 @@
 package com.razorpay;
 
+import com.razorpay.addon.AddOnItem;
+import com.razorpay.addon.Addon;
+import com.razorpay.addon.AddonClient;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +25,7 @@ public class AddonClientTest  extends BaseTest{
      */
     @Test
     public void fetch() throws RazorpayException {
+
 
         String json = "{\n  \"id\":"+ADDON_ID+",\n" +
                 "\"entity\":\"addon\",\n" +
@@ -115,6 +119,23 @@ public class AddonClientTest  extends BaseTest{
             verifySentRequest(false, null, addonList);
         } catch (IOException e) {
             assertTrue(false);
+        }
+    }
+
+    public void testCreate(){
+        Addon addon = Addon.builder()
+                        .items(
+                                AddOnItem.builder()
+                                        .name("Test")
+                                        .amount(3000)
+                                        .currency("INR")
+                                        .description("Test description")
+                                        .build()
+                        )
+                        .quantity(2)
+                        .build();
+        if(addon.validateAddOn()){
+
         }
     }
 }

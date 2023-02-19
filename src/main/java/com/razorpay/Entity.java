@@ -11,7 +11,7 @@ public abstract class Entity {
   private final String CREATED_AT = "created_at";
   private final String CAPTURED_AT = "captured_at";
 
-  Entity(JSONObject jsonObject) {
+  public Entity(JSONObject jsonObject) {
     this.modelJson = jsonObject;
   }
 

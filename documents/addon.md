@@ -2,7 +2,9 @@
 
 ### Create an addon
 
+#### Old Method
 ```java
+        
 String subscriptionId = "sub_I55auG9GnbsR8u";
 
 JSONObject addonRequest = new JSONObject();
@@ -16,7 +18,26 @@ addonRequest.put("quantity",2);
 
 Addon addon = instance.subscriptions.createAddon(subscriptionId,addonRequest);
 ```
+#### New Method
 
+```java
+Addon addon = Addon.builder()
+                .items(
+                    AddOnItem.builder()
+                    .name("Test")
+                    .amount(3000)
+                    .currency("INR")
+                    .description("Test description")
+                    .build()
+                )
+                .quantity(2)
+                .build();
+
+        if(addon.validateAddOn()){
+            Addon createdAddOn = instance.subscriptions.createAddon(subscriptionId,addonRequest.toJson());
+        }
+        
+```
 **Parameters:**
 
 | Name            | Type      | Description                                      |

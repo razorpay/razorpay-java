@@ -15,7 +15,7 @@ public class Constants {
   static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
   // API URI
-  static final String PAYMENT_GET = "payments/%s";
+  public static final String PAYMENT_GET = "payments/%s";
   static final String PAYMENT_LIST = "payments";
   static final String PAYMENT_CAPTURE = "payments/%s/capture";
   static final String PAYMENT_REFUND = "payments/%s/refund";
@@ -120,9 +120,9 @@ public class Constants {
   static final String SUBSCRIPTION_OFFER = "subscriptions/%s/%s";
   static final String SUBSCRIPTION_REGISTRATION_LINK = "subscription_registration/auth_links";
 
-  static final String ADDON_GET = "addons/%s";
-  static final String ADDON_DELETE = "addons/%s";
-  static final String ADDON_LIST = "addons";
+  public static final String ADDON_GET = "addons/%s";
+  public static final String ADDON_DELETE = "addons/%s";
+  public static final String ADDON_LIST = "addons";
 
   static final String VIRTUAL_ACCOUNT_CREATE = "virtual_accounts";
   static final String VIRTUAL_ACCOUNT_GET = "virtual_accounts/%s";

@@ -2,6 +2,7 @@ package com.razorpay;
 
 import java.util.List;
 
+import com.razorpay.addon.Addon;
 import org.json.JSONObject;
 
 public class SubscriptionClient extends ApiClient {
@@ -36,6 +37,10 @@ public class SubscriptionClient extends ApiClient {
 
   public Addon createAddon(String id, JSONObject request) throws RazorpayException {
     return post(String.format(Constants.SUBSCRIPTION_ADDON_CREATE, id), request);
+  }
+
+  public Addon createAddon(String id, Addon addon) throws RazorpayException {
+    return post(String.format(Constants.SUBSCRIPTION_ADDON_CREATE, id), addon.toJson());
   }
 
   public Subscription update(String id, JSONObject request) throws RazorpayException {

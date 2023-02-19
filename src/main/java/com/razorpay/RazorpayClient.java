@@ -2,6 +2,7 @@ package com.razorpay;
 
 import java.util.Map;
 
+import com.razorpay.addon.AddonClient;
 import okhttp3.Credentials;
 
 public class RazorpayClient {
