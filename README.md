@@ -9,9 +9,7 @@ Documentation of Razorpay's API and their usage is available at <https://docs.ra
 
 ## Requirements
 
-Java 1.8 or later
-
-Mock Tests Support till Java 1.8
+## Java 1.6
 
 ## Installation
 
@@ -23,7 +21,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.4.3</version>
+ <version>1.5.0</version>
 </dependency>
 ```
 
@@ -32,7 +30,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "com.razorpay:razorpay-java:1.4.3"
+implementation "com.razorpay:razorpay-java:1.5.0"
 ```
 
 ## Usage
@@ -95,10 +93,3 @@ razorpayClient.addHeaders(headers);
 - [Payment Verification](documents/paymentVerfication.md)
 ---
 
-* Make custom requests
-
-You can make custom API requests using clients. For example, here is how to make custom request to `/payments/path` endpoint.
-
-```java
-Entity response = razorpayClient.Payments.post("path", JSONObject requestBody);
-```

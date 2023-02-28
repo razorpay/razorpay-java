@@ -1,6 +1,5 @@
 package com.razorpay;
 
-import okhttp3.MediaType;
 
 public class Constants {
 
@@ -12,7 +11,6 @@ public class Constants {
 
   static final String AUTH_HEADER_KEY = "Authorization";
   static final String USER_AGENT = "User-Agent";
-  static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
   // API URI
   static final String PAYMENT_GET = "payments/%s";

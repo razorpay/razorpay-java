@@ -222,7 +222,7 @@ PaymentLink paymentlink = instance.paymentLink.notifyBy(paymentLinkId,medium);
         paymentLinkRequest.put("reminder_enable",true);
 
         JSONObject options = new JSONObject();
-        List<Object> transfers = new ArrayList<>();
+        List<Object> transfers = new ArrayList();
 
         JSONObject transferParams = new JSONObject();
         transferParams.put("account","acc_I0QRP7PpvaHhpB");
@@ -232,7 +232,7 @@ PaymentLink paymentlink = instance.paymentLink.notifyBy(paymentLinkId,medium);
         notes.put("branch","Acme Corp Bangalore North");
         notes.put("name","Bhairav Kumar");
         transferParams.put("notes",notes);
-        List<Object> linkedAccountNotes = new ArrayList<>();
+        List<Object> linkedAccountNotes = new ArrayList();
         linkedAccountNotes.add("branch");
         transferParams.put("linked_account_notes",linkedAccountNotes);
         transfers.add(transferParams);
@@ -313,7 +313,7 @@ notify.put("email",true);
 paymentLinkRequest.put("notify",notify);
 paymentLinkRequest.put("reminder_enable",false);
 JSONObject options = new JSONObject();
-List<Object> offerParams = new ArrayList<>();
+List<Object> offerParams = new ArrayList();
 offerParams.add("offer_JTUADI4ZWBGWur");
 offerParams.add("offer_F4WJHqvGzw8dWF");
 JSONObject order = new JSONObject();

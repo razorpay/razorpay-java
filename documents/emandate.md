@@ -137,7 +137,7 @@ notes.put("notes_key_1","Tea, Earl Grey, Hot");
 notes.put("notes_key_2","Tea, Earl Grey… decaf.");
 registrationLinkRequest.put("notes", notes);
 
-Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkRequest);
+Invoice invoice = instance.subscriptionRegistrations.create(registrationLinkRequest);
 ```
 
 **Parameters:**

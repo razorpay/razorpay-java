@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class UtilsTest {
      * @throws RazorpayException
      */
     @Test
-    public void verifyPaymentSignature() throws RazorpayException{
+    public void verifyPaymentSignature() throws RazorpayException, JSONException {
         JSONObject options = new JSONObject();
         options.put("razorpay_order_id", "order_IEIaMR65cu6nz3");
         options.put("razorpay_payment_id", "pay_IH4NVgf4Dreq1l");
@@ -27,7 +28,7 @@ public class UtilsTest {
      * @throws RazorpayException
      */
     @Test
-    public void verifySubscription() throws RazorpayException{
+    public void verifySubscription() throws RazorpayException, JSONException {
         JSONObject options = new JSONObject();
         options.put("razorpay_subscription_id", "sub_ID6MOhgkcoHj9I");
         options.put("razorpay_payment_id", "pay_IDZNwZZFtnjyym");
@@ -41,7 +42,7 @@ public class UtilsTest {
      * @throws RazorpayException
      */
     @Test
-    public void verifyPaymentLink() throws RazorpayException{
+    public void verifyPaymentLink() throws RazorpayException, JSONException {
         JSONObject options = new JSONObject();
         options.put("payment_link_reference_id", "TSsd1989");
         options.put("razorpay_payment_id", "pay_IH3d0ara9bSsjQ");

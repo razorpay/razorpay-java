@@ -3,16 +3,19 @@ package com.razorpay;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class SettlementClientTest extends BaseTest{
 
-    @InjectMocks
-    protected SettlementClient settlementClient = new SettlementClient(TEST_SECRET_KEY);
+    @Mock
+    ApiUtils apiUtils;
 
     private static final String SETTLEMENT_ID = "setl_DGlQ1Rj8os78Ec";
 
@@ -21,7 +24,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAll() throws RazorpayException{
+    public void fetchAll() throws Exception{
         String mockedResponseJson = "{\n" +
                 "  \"entity\": \"collection\",\n" +
                 "  \"count\": 2,\n" +
@@ -50,16 +53,17 @@ public class SettlementClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.SETTLEMENTS, null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
             List<Settlement> fetch = settlementClient.fetchAll();
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("amount"));
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("fees"));
             assertTrue(fetch.get(0).has("tax"));
-            String fetchRequest = getHost(Constants.SETTLEMENTS);
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -70,7 +74,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetch() throws RazorpayException{
+    public void fetch() throws Exception{
         String mockedResponseJson = "{\n" +
                 "    \"id\": "+SETTLEMENT_ID+",\n" +
                 "    \"entity\": \"settlement\",\n" +
@@ -83,16 +87,17 @@ public class SettlementClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.SETTLEMENT, SETTLEMENT_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
             Settlement fetch = settlementClient.fetch(SETTLEMENT_ID);
             assertNotNull(fetch);
             assertEquals(SETTLEMENT_ID,fetch.get("id"));
             assertEquals("settlement",fetch.get("entity"));
             assertEquals("processed",fetch.get("status"));
             assertEquals("1568176960vxp0rj",fetch.get("utr"));
-            String fetchRequest = getHost(String.format(Constants.SETTLEMENT,SETTLEMENT_ID));
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -103,7 +108,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void reports() throws RazorpayException{
+    public void reports() throws Exception{
         JSONObject request = new JSONObject("{year:2020,month:9}");
 
         String mockedResponseJson = "{\n" +
@@ -143,16 +148,17 @@ public class SettlementClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
-            List<Settlement> fetch = settlementClient.reports(request);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.SETTLEMENTS_REPORTS, null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
+            List<Settlement> fetch = settlementClient.reports();
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("card_network"));
             assertTrue(fetch.get(0).has("order_id"));
             assertTrue(fetch.get(0).has("method"));
             assertTrue(fetch.get(0).has("card_type"));
-            String reportRequest = getHost(Constants.SETTLEMENTS_REPORTS)+"?month=9&year=2020";
-            verifySentRequest(false, null, reportRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -163,7 +169,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void create() throws RazorpayException{
+    public void create() throws Exception{
         JSONObject request = new JSONObject("{\"amount\":200000," +
                 "\"settle_full_balance\":false," +
                 "\"description\":\"Needthistomakevendorpayments.\"," +
@@ -211,15 +217,16 @@ public class SettlementClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.SETTLEMENTS_INSTANT, null);
+            mockPostRequest(apiUtils,builder,request.toString(), mockedResponseJson);
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
+
             Settlement fetch = settlementClient.create(request);
             assertNotNull(fetch);
             assertEquals(SETTLEMENT_ID,fetch.get("id"));
             assertEquals("initiated",fetch.get("status"));
             assertTrue(fetch.has("notes"));
-            String createRequest = getHost(Constants.SETTLEMENTS_INSTANT);
-            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -230,7 +237,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchAllDemand() throws RazorpayException{
+    public void fetchAllDemand() throws Exception{
         String mockedResponseJson = "{\n" +
                 "  \"entity\": \"collection\",\n" +
                 "  \"count\": 1,\n" +
@@ -258,16 +265,16 @@ public class SettlementClientTest extends BaseTest{
                 "}";
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(Constants.SETTLEMENTS_INSTANT, null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
             List<Settlement> fetch = settlementClient.fetchAllDemand();
             assertNotNull(fetch);
             assertTrue(fetch.get(0).has("id"));
             assertTrue(fetch.get(0).has("entity"));
             assertTrue(fetch.get(0).has("amount_requested"));
             assertTrue(fetch.get(0).has("amount_pending"));
-            String fetchRequest = getHost(Constants.SETTLEMENTS_INSTANT);
-            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
@@ -278,7 +285,7 @@ public class SettlementClientTest extends BaseTest{
      * @throws RazorpayException
      */
     @Test
-    public void fetchDemandSettlement() throws RazorpayException{
+    public void fetchDemandSettlement() throws Exception{
         String mockedResponseJson = "{\n" +
                 "  \"id\": "+SETTLEMENT_ID+",\n" +
                 "  \"entity\": \"settlement.ondemand\",\n" +
@@ -299,15 +306,15 @@ public class SettlementClientTest extends BaseTest{
                 "  \"created_at\": 1596771429\n" +
                 "}";
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
-            mockResponseHTTPCodeFromExternalClient(200);
+            apiUtils = mock(ApiUtils.class);
+            URL builder = ApiClient.getBuilder(String.format(Constants.SETTLEMENT_INSTANT, SETTLEMENT_ID), null);
+            mockGetRequest(apiUtils,builder,null, mockedResponseJson);
+            SettlementClient settlementClient = new SettlementClient("test",apiUtils);
             Settlement fetch = settlementClient.fetchDemandSettlement(SETTLEMENT_ID);
             assertNotNull(fetch);
             assertEquals(SETTLEMENT_ID,fetch.get("id"));
             assertEquals("processed",fetch.get("status"));
-            assertEquals(200000,(int)fetch.get("amount_requested"));
-            String fetchRequest = getHost(String.format(Constants.SETTLEMENT_INSTANT,SETTLEMENT_ID));
-            verifySentRequest(false, null, fetchRequest);
+            assertEquals(200000,fetch.get("amount_requested"));
         } catch (IOException e) {
             assertTrue(false);
         }
