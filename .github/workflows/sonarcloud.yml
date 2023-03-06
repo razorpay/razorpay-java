@@ -33,4 +33,4 @@ jobs:
         run: mvn jacoco:prepare-agent test jacoco:report
 
       - name: Analyze with SonarCloud
-        run: mvn sonar:sonar -Dsonar.host.url=https://sonar.razorpay.com -Dsonar.login=${{ env.SONAR_TOKEN }} -Dsonar.projectKey=razorpay-java -Dsonar.organization=razorpay
+        run: mvn sonar:sonar -Dsonar.host.url=https://sonar.razorpay.com -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.projectKey=razorpay-java -Dsonar.organization=razorpay
