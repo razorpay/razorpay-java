@@ -62,6 +62,12 @@
       <artifactId>json</artifactId>
       <scope>test</scope>
     </dependency>
+           
+    <dependency>
+      <groupId>org.sonarsource.scanner.maven</groupId>
+     <artifactId>sonar-maven-plugin</artifactId>
+      <version>3.8.0.2131</version>
+    </dependency>       
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
