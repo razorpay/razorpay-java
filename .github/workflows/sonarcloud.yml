@@ -34,7 +34,7 @@ jobs:
       
       - name: Debug Env variable
         run: |
-          echo "Host is ${{ secrets.SONARQUBE_HOST }}"
+          echo "Host is ${secrets.SONARQUBE_HOST}"
           
       - name: Analyze with SonarCloud
         env:
