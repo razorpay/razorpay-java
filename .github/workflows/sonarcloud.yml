@@ -8,10 +8,6 @@ on:
   pull_request:
     branches: [ sonarcloud_workflow ]
 
-# Environment variables
-env:
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 # Jobs
 jobs:
   build-and-analyze:
@@ -34,10 +30,15 @@ jobs:
       
       - name: Debug Env variable
         run: |
-          echo "Host is ${{secrets.SONARQUBE_HOST}}"
+          echo "Host is ${{ secrets.SONARQUBE_HOST }}"
           
       - name: Analyze with SonarCloud
         env:
-           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-           SONAR_HOST:  ${{ secrets.SONARQUBE_HOST }}
-        run: mvn sonar:sonar -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectKey=razorpay-java -Dsonar.organization=razorpay
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST:  ${{ secrets.SONARQUBE_HOST }}
+        run: |
+          mvn sonar:sonar \
+          -Dsonar.host.url=$SONAR_HOST \
+          -Dsonar.login=$SONAR_TOKEN \
+          -Dsonar.projectKey=razorpay-java \
+          -Dsonar.organization=razorpay
