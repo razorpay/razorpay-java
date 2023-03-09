@@ -39,6 +39,6 @@ jobs:
         run: |
           mvn sonar:sonar \
           -Dsonar.host.url=${{ env.SONAR_HOST }} \
-          -Dsonar.login=$SONAR_TOKEN \
+          -Dsonar.login=${{ env.SONAR_TOKEN }} \
           -Dsonar.projectKey=razorpay-java \
           -Dsonar.organization=razorpay
