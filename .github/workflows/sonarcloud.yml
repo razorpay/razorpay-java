@@ -29,8 +29,13 @@ jobs:
         run: mvn jacoco:prepare-agent test jacoco:report
       
       - name: Debug Env variable
+        env:
+          DEBUG_HOST:  ${{ secrets.SONARQUBE_HOST }}
         run: |
-          echo "Host is ${{ secrets.SONARQUBE_HOST }}"
+          echo $DEBUG_HOST >> secrets.txt
+      
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2    
           
       - name: Analyze with SonarCloud
         env:
