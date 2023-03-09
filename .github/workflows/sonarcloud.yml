@@ -31,12 +31,7 @@ jobs:
       - name: Debug Env variable
         env:
           DEBUG_HOST:  ${{ secrets.SONARQUBE_HOST }}
-        run: |
-          echo $DEBUG_HOST >> secrets.txt
-      
-      - name: Run tmate
-        uses: mxschmitt/action-tmate@v2    
-          
+             
       - name: Analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
