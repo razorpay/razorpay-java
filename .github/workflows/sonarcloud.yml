@@ -29,8 +29,7 @@ jobs:
         run: mvn jacoco:prepare-agent test jacoco:report
       
       - name: Debug Env variable
-        env:
-         run: |
+        run: |
           echo "Host is ${{ secrets.SONARQUBE_HOST }}"
              
       - name: Analyze with SonarCloud
