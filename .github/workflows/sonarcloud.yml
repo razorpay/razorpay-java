@@ -38,7 +38,7 @@ jobs:
           SONAR_HOST:  ${{ secrets.SONARQUBE_HOST }}
         run: |
           mvn sonar:sonar \
-          -Dsonar.host.url=${{ env.SONAR_HOST }} \
-          -Dsonar.login=${{ env.SONAR_TOKEN }} \
+          -Dsonar.host.url=${{ SONAR_HOST }} \
+          -Dsonar.login=${{ SONAR_TOKEN }} \
           -Dsonar.projectKey=razorpay-java \
           -Dsonar.organization=razorpay
