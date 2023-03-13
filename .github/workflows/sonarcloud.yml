@@ -22,8 +22,11 @@ jobs:
           java-version: 8
           distribution: 'adopt'
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Install dependencies
+        run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+
+      - name: Run tests and collect coverage
+        run: mvn -B test
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
