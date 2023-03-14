@@ -29,7 +29,7 @@ jobs:
              gpg --list-secret-keys --keyid-format LONG  
 
       - name: Install dependencies
-        run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
            
       - name: Run tests and collect coverage
         run: mvn -B test 
