@@ -24,7 +24,13 @@ jobs:
 
       - name: Install dependencies
         run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
+     
+      - id: install-secret-key
+        name: Install gpg secret key
+        run: |
+             cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
+             gpg --list-secret-keys --keyid-format LONG  
+      
       - name: Run tests and collect coverage
         run: mvn -B test
 
