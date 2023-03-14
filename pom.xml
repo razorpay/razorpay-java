@@ -61,13 +61,7 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <scope>test</scope>
-    </dependency>
-           
-<dependency>
-    <groupId>org.sonarsource.scanner.maven</groupId>
-    <artifactId>sonar-maven-plugin</artifactId>
-    <version>3.9.1.2184</version>
-</dependency>      
+    </dependency>             
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -173,9 +167,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-         <configuration>
-           <skip>true</skip>
-        </configuration>
         <version>1.6</version>
         <executions>
           <execution>
