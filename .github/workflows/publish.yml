@@ -1,7 +1,11 @@
 name: Publish package to the Maven Central Repository
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ sonarcloud_workflow ]
+  pull_request:
+    branches: [ sonarcloud_workflow ]
+
+# Jobs
 jobs:
   publish:
     runs-on: ubuntu-latest
