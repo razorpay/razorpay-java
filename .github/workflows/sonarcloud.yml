@@ -28,6 +28,9 @@ jobs:
              cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
              gpg --list-secret-keys --keyid-format LONG  
 
+      - name: Debug Passpharse
+        run: cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}")
+             
       - name: Install dependencies
         run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
            
