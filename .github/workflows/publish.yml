@@ -30,7 +30,7 @@ jobs:
         id: check-version
         run: |
           current_version=$(echo "${{ env.current_version }}" | sed 's/-.*//')
-          previous_version=$(git describe --tags --abbrev=0 | sed 's/V//')
+          previous_version=$(echo git describe --tags --abbrev=0 | sed 's/V//')
           if [[ "$current_version" > "$previous_version" ]]; then
             echo "Deploying version $current_version"
             mvn deploy -DskipTests-true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
