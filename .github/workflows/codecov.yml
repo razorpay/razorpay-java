@@ -4,7 +4,7 @@ name: Java CI
 # Controls when the workflow will run
 on:
   push:
-    branches: [ sonarcloud_workflow ]
+    branches: [ master ]
 
 # Jobs
 jobs:
