@@ -1,0 +1,43 @@
+KB
+
+name: Publish package to the Maven Central Repository
+on:
+  push:
+    branches: [ publish_workflow ]
+
+# Jobs
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+      
+      - name: Get current version
+        id: version
+        run: echo ::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        
+      - name: Build with Maven
+        run: mvn clean package -B
+        
+      - name: Checking version before publish package
+        id: check-version
+        run: |
+          current_version=$(echo "${{ steps.version.outputs.version }}" | sed 's/-.*//')
+          previous_version=$(git describe --tags --abbrev=0 | sed 's/V//')
+          if [[ "$current_version" > "$previous_version" ]]; then
+            echo "Deploying version $current_version"
+            mvn deploy -DskipTests-true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
+          else
+            echo "Skipping deployment because the current version $current_version is not greater than the previous version $previous_version"
+          fi
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
