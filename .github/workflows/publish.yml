@@ -21,7 +21,7 @@ jobs:
       
       - name: Get current version
         id: version
-        run: echo ::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        run: echo "current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
         
       - name: Build with Maven
         run: mvn clean package -B
@@ -29,7 +29,7 @@ jobs:
       - name: Checking version before publish package
         id: check-version
         run: |
-          current_version=$(echo "${{ steps.version.outputs.version }}" | sed 's/-.*//')
+          current_version=$(echo "${{ env.current_version }}" | sed 's/-.*//')
           previous_version=$(git describe --tags --abbrev=0 | sed 's/V//')
           if [[ "$current_version" > "$previous_version" ]]; then
             echo "Deploying version $current_version"
