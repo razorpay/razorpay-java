@@ -23,7 +23,7 @@ jobs:
       - name: Publish package
         id: check-version
         run: |
-            mvn deploy -f dev_workflow/pom.xml -DskipTests -B -V -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+            mvn deploy -f dev_workflow/pom.xml -DskipTests -B -s .maven/settings.xml
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
