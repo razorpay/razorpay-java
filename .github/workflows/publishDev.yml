@@ -17,18 +17,18 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }} # Value of the GPG private key to import
+          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }} # Value of the GPG private key to import
           gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} # env variable for GPG private key passphrase
       - name: Build with Maven
         run: mvn clean package -B
 
       - name: Configure GPG Key
-        run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import --yes --pinentry-mode loopback --passphrase "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}"
-          gpg --list-secret-keys --keyid-format LONG 
         env:
           GPG_SIGNING_PRIVKEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           GPG_SIGNING_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        run: |
+          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import --yes --pinentry-mode loopback --passphrase "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}"
+          gpg --list-secret-keys --keyid-format LONG 
 
       - name: Publish package
         id: check-version
