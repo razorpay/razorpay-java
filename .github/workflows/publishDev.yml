@@ -24,7 +24,7 @@ jobs:
 
       - name: Configure GPG Key
         run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import --yes --pinentry-mode loopback
+          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import --yes --pinentry-mode loopback --passphrase "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}"
           gpg --list-secret-keys --keyid-format LONG 
         env:
           GPG_SIGNING_PRIVKEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
