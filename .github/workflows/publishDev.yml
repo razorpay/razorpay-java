@@ -21,13 +21,12 @@ jobs:
           gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} # env variable for GPG private key passphrase
 
       - name: Configure GPG Key
+        run: |
+          set -ex
+          echo $GPG_SIGNING_PRIVKEY | gpg --import --batch --yes --pinentry-mode loopback --passphrase "$GPG_SIGNING_PASSPHRASE"
         env:
           GPG_SIGNING_PRIVKEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           GPG_SIGNING_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-        run: |
-          cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-          echo "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --edit-key 13F6A77BD875425A684511DE9EB6B71DDCD54CA6 quit
-          gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish package
         id: check-version
