@@ -21,7 +21,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -B
 
-      - name: Checking version before publish package
+      - name: Publish package
         id: check-version
         run: |
             mvn deploy -f dev_workflow/pom.xml -DskipTests-true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
