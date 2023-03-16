@@ -28,7 +28,7 @@ jobs:
           GPG_SIGNING_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: |
           cat <(echo -e "${{ secrets.OSSRH_GPG_SECRET_KEY }}") | gpg --batch --import
-          echo "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --edit-key ${{ secrets.OSSRH_GPG_SECRET_KEY }} trust quit
+          echo "${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}" | gpg --batch --yes --passphrase-fd 0 --pinentry-mode loopback --edit-key 13F6A77BD875425A684511DE9EB6B71DDCD54CA6 trust quit
           gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish package
