@@ -12,7 +12,7 @@ jobs:
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v1
         with:
-          java-version: 8
+          java-version: 1.8
           distribution: 'adopt'
           server-id: ossrh
           server-username: MAVEN_USERNAME
@@ -20,18 +20,11 @@ jobs:
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }} # Value of the GPG private key to import
           gpg-passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} # env variable for GPG private key passphrase
 
-      - name: Configure GPG Key
-        run: |
-          set -ex
-          echo $GPG_SIGNING_PRIVKEY | base64 --decode | gpg --import --batch --yes --pinentry-mode loopback --passphrase "$GPG_SIGNING_PASSPHRASE"
-        env:
-          GPG_SIGNING_PRIVKEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          GPG_SIGNING_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-
       - name: Publish package
         id: check-version
         run: |
-            mvn deploy -f dev_workflow/pom.xml -DskipTests -B -V -Dgpg.passphrase="${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}"
+            mvn deploy -f dev_workflow/pom.xml -DskipTests -B -V
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
