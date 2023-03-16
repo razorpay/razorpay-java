@@ -24,7 +24,7 @@ jobs:
       - name: Checking version before publish package
         id: check-version
         run: |
-            mvn deploy -DskipTests-true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
+            mvn deploy -f dev_workflow/pom.xml -DskipTests-true -Dmaven.javadoc.skip=true -B -V
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
