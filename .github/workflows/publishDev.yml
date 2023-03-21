@@ -27,7 +27,7 @@ jobs:
       run: mvn -B package --file dev_workflow/pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn deploy -f dev_workflow/pom.xml -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -s $GITHUB_WORKSPACE/settings.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
