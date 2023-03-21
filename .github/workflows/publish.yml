@@ -1,8 +1,8 @@
 
 name: Publish package to the Maven Central Repository
 on:
-  push:
-    branches: [ publish_workflow ]
+  release:
+    types: [published]
 
 # Jobs
 jobs:
@@ -19,24 +19,13 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       
-      - name: Get current version
-        id: version
-        run: echo "current_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
         
       - name: Build with Maven
         run: mvn clean package -B
         
-      - name: Checking version before publish package
-        id: check-version
+      - name: Publish package
         run: |
-          current_version=$(echo "${{ env.current_version }}" | sed 's/-.*//')
-          previous_version=$(echo git describe --tags --abbrev=0 | sed 's/V//')
-          if [[ "$current_version" > "$previous_version" ]]; then
-            echo "Deploying version $current_version"
-            mvn deploy -DskipTests-true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
-          else
-            echo "Skipping deployment because the current version $current_version is not greater than the previous version $previous_version"
-          fi
+            mvn deploy -DskipTests -B -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
