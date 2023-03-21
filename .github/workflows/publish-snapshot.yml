@@ -5,8 +5,33 @@ on:
    branches: [publish_workflow]
 
 jobs:
-  build:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Set up Java JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+             
+      - name: Install dependencies
+        run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
+           
+      - name: Run tests and collect coverage
+        run: mvn -B test 
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          flags: tests
+          name: razorpay-java
+          fail_ci_if_error: true
+          verbose: true
+          
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,17 +50,6 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package -B
-
-    - name: Run tests and collect coverage
-      run: mvn -B test 
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        flags: tests
-        name: razorpay-java
-        fail_ci_if_error: true
-        verbose: true
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -f ${{ github.workspace }}/.github/snapshot/pom.xml -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -s $GITHUB_WORKSPACE/settings.xml
