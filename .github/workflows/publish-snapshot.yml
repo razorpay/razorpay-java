@@ -26,6 +26,20 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file ${{ github.workspace }}/.github/snapshot/pom.xml
 
+    - name: Build with Maven
+      run: mvn clean package -B
+
+    - name: Run tests and collect coverage
+      run: mvn -B test 
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        flags: tests
+        name: razorpay-java
+        fail_ci_if_error: true
+        verbose: true
+
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -f ${{ github.workspace }}/.github/snapshot/pom.xml -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }} -s $GITHUB_WORKSPACE/settings.xml
       env:
