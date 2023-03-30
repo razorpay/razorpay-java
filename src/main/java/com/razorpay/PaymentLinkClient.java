@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import okhttp3.Response;
 
 public class PaymentLinkClient extends ApiClient {
 

@@ -24,7 +24,9 @@ public class FundAccountClient extends ApiClient{
 
 	/**
 	 * This method get list of fundaccounts filtered by parameters @request
-	 * @throws RazorpayException
+	 * @throws RazorpayException RazorpayException
+	 * @param request in JSONObject request
+	 * @return List of fund accounts
 	 */
 	public List<FundAccount> fetchAll(JSONObject request) throws RazorpayException {
 		return getCollection(Constants.FUND_ACCOUNT_LIST, request);

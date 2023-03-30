@@ -18,7 +18,8 @@ public class AddonClient extends ApiClient {
   /**
    * It is wrapper of fetchAll with parameter here sending null defines fetchAll
    * with a default values without filteration
-   * @throws RazorpayException
+   * @throws RazorpayException RazorpayException
+   * @return List of AddOns
    */
   public List<Addon> fetchAll() throws RazorpayException {
       return fetchAll(null);
@@ -26,7 +27,9 @@ public class AddonClient extends ApiClient {
   
   /**
    * This method get list of Addons filtered by parameters @request
-   * @throws RazorpayException
+   * @throws RazorpayException RazorpayException
+   * @param request JSONObject request
+   * @return List of AddOns
    */  
   public List<Addon> fetchAll(JSONObject request) throws RazorpayException {
       return getCollection(Constants.ADDON_LIST, request);

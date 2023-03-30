@@ -8,8 +8,8 @@ public abstract class Entity {
 
   private JSONObject modelJson;
 
-  private final String CREATED_AT = "created_at";
-  private final String CAPTURED_AT = "captured_at";
+  private static final String CREATED_AT = "created_at";
+  private static final String CAPTURED_AT = "captured_at";
 
   Entity(JSONObject jsonObject) {
     this.modelJson = jsonObject;
