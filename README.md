@@ -1,3 +1,7 @@
+**THIS IS UNOFFICIAL UPDATED CODEBASE OF RAZORPAY JAVA SDK.**
+The codebase has been updated with Java 17 with sourcecode and compile version with all dependencies with latest versions
+The codebase is free from any security checked with checkmarx and sonarlint
+
 # Razorpay Java SDK
 
 Official java bindings for the [Razorpay API](https://docs.razorpay.com/docs/payments).
