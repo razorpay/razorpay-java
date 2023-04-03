@@ -1,11 +1,17 @@
-name: Publish package to the Maven Central Repository
+name: CI
 on:
-  release:
-    types: [published]
-
+  push:
+    branches:
+      - master
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+  pull_request:
+    branches:
+      - master
 # Jobs
 jobs:
-  codecov-coverage:
+  test:
+    name: Run tests and publish test coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,6 +38,8 @@ jobs:
           verbose: true
           
   publish:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
