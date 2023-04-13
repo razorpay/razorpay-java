@@ -6,33 +6,42 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
+
+import static com.razorpay.Constants.RAZORPAY_PAYMENT_ID;
+import static com.razorpay.Constants.RAZORPAY_SIGNATURE;
+
 public class Utils {
+
+  private Utils(){
+
+  }
 
   public static boolean verifyPaymentSignature(JSONObject attributes, String apiSecret)
       throws RazorpayException {
-    String expectedSignature = attributes.getString("razorpay_signature");
+    String expectedSignature = attributes.getString(RAZORPAY_SIGNATURE);
     String orderId = attributes.getString("razorpay_order_id");
-    String paymentId = attributes.getString("razorpay_payment_id");
+    String paymentId = attributes.getString(RAZORPAY_PAYMENT_ID);
     String payload = orderId + '|' + paymentId;
     return verifySignature(payload, expectedSignature, apiSecret);
   }
 
   public static boolean verifySubscription(JSONObject attributes, String apiSecret)
       throws RazorpayException {
-    String expectedSignature = attributes.getString("razorpay_signature");
+    String expectedSignature = attributes.getString(RAZORPAY_SIGNATURE);
     String subscriptionId = attributes.getString("razorpay_subscription_id");
-    String paymentId = attributes.getString("razorpay_payment_id");
+    String paymentId = attributes.getString(RAZORPAY_PAYMENT_ID);
     String payload = paymentId + '|' + subscriptionId;
     return verifySignature(payload, expectedSignature, apiSecret);
   }
   
   public static boolean verifyPaymentLink(JSONObject attributes, String apiSecret)
 	      throws RazorpayException {
-	    String expectedSignature = attributes.getString("razorpay_signature");
+	    String expectedSignature = attributes.getString(RAZORPAY_SIGNATURE);
 	    String paymentLinkStatus = attributes.getString("payment_link_status");
 	    String paymentLinkId = attributes.getString("payment_link_id");
 	    String paymentLinkRefId = attributes.getString("payment_link_reference_id");
-	    String paymentId = attributes.getString("razorpay_payment_id");
+	    String paymentId = attributes.getString(RAZORPAY_PAYMENT_ID);
 	    String payload = paymentLinkId + '|' + paymentLinkRefId + '|' + paymentLinkStatus + '|' + paymentId;
 	    return verifySignature(payload, expectedSignature, apiSecret);
   }
@@ -49,12 +58,12 @@ public class Utils {
   }
 
   public static String getHash(String payload, String secret) throws RazorpayException {
-    Mac sha256_HMAC;
+    Mac sha256HMAC;
     try {
-      sha256_HMAC = Mac.getInstance("HmacSHA256");
-      SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256");
-      sha256_HMAC.init(secret_key);
-      byte[] hash = sha256_HMAC.doFinal(payload.getBytes());
+      sha256HMAC = Mac.getInstance("HmacSHA256");
+      SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+      sha256HMAC.init(secretKey);
+      byte[] hash = sha256HMAC.doFinal(payload.getBytes());
       return new String(Hex.encodeHex(hash));
     } catch (Exception e) {
       throw new RazorpayException(e.getMessage());

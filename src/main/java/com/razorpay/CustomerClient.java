@@ -25,7 +25,8 @@ public class CustomerClient extends ApiClient {
   /**
    * It is wrapper of fetchAll with parameter here sending null defines fetchAll
    * with a default values without filteration
-   * @throws RazorpayException
+   * @throws RazorpayException RazorpayException
+   * @return list of customers
    */
   public List<Customer> fetchAll() throws RazorpayException {
     return fetchAll(null);
@@ -33,7 +34,9 @@ public class CustomerClient extends ApiClient {
 
   /**
    * This method get list of customers filtered by parameters @request
-   * @throws RazorpayException
+   * @throws RazorpayException RazorpayException
+   * @param request JSONObject request
+   * @return list of customers
    */
   public List<Customer> fetchAll(JSONObject request) throws RazorpayException {
     return getCollection(Constants.CUSTOMER_LIST, request);

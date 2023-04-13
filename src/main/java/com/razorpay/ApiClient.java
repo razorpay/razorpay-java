@@ -2,9 +2,7 @@ package com.razorpay;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
@@ -13,23 +11,23 @@ import org.json.JSONObject;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 
+import static com.razorpay.Constants.INVALID_RESPONSE_FROM_SERVER;
+
 class ApiClient {
 
   String auth;
 
-  private final String ENTITY = "entity";
+  private static final String ENTITY = "entity";
 
-  private final String COLLECTION = "collection";
+  private static final String ERROR = "error";
 
-  private final String ERROR = "error";
+  private static final String DESCRIPTION = "description";
 
-  private final String DESCRIPTION = "description";
+  private static final String STATUS_CODE = "code";
 
-  private final String STATUS_CODE = "code";
+  private static final int STATUS_OK = 200;
 
-  private final int STATUS_OK = 200;
-
-  private final int STATUS_MULTIPLE_CHOICE = 300;
+  private static final int STATUS_MULTIPLE_CHOICE = 300;
 
   ApiClient(String auth) {
     this.auth = auth;
@@ -69,7 +67,7 @@ class ApiClient {
 
   private <T extends Object> T processDeleteResponse(Response response) throws RazorpayException {
     if (response == null) {
-      throw new RazorpayException("Invalid Response from server");
+      throw new RazorpayException(INVALID_RESPONSE_FROM_SERVER);
     }
 
     int statusCode = response.code();
@@ -99,21 +97,22 @@ class ApiClient {
 
   private <T extends Entity> T parseResponse(JSONObject jsonObject, String entity) throws RazorpayException {
     if (entity != null) {
-      Class<T> cls = getClass(entity);
-      try {
-        return cls.getConstructor(JSONObject.class).newInstance(jsonObject);
-      } catch (Exception e) {
-        throw new RazorpayException("Unable to parse response because of " + e.getMessage());
+      Class<T> cls = (Class<T>) getClass(entity);
+      if (cls != null) {
+        try {
+          return cls.getConstructor(JSONObject.class).newInstance(jsonObject);
+        } catch (Exception e) {
+          throw new RazorpayException("Unable to parse response because of " + e.getMessage());
+        }
       }
     }
-
     throw new RazorpayException("Unable to parse response");
   }
 
   private <T extends Entity> ArrayList<T> parseCollectionResponse(JSONArray jsonArray, HttpUrl requestUrl)
       throws RazorpayException {
 
-   ArrayList<T> modelList = new ArrayList<T>();
+   ArrayList<T> modelList = new ArrayList<>();
     try {
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject jsonObj = jsonArray.getJSONObject(i);
@@ -138,7 +137,7 @@ class ApiClient {
 
   <T extends Entity> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
-      throw new RazorpayException("Invalid Response from server");
+      throw new RazorpayException(INVALID_RESPONSE_FROM_SERVER);
     }
 
     int statusCode = response.code();
@@ -162,7 +161,7 @@ class ApiClient {
   <T extends Entity> ArrayList<T> processCollectionResponse(Response response)
           throws RazorpayException {
     if (response == null) {
-      throw new RazorpayException("Invalid Response from server");
+      throw new RazorpayException(INVALID_RESPONSE_FROM_SERVER);
     }
 
     int statusCode = response.code();
@@ -185,13 +184,13 @@ class ApiClient {
     }
 
     throwException(statusCode, responseJson);
-    return null;
+    return (ArrayList)Collections.emptyList();
   }
 
   private String getEntity(JSONObject jsonObj, HttpUrl url) {
     if(!jsonObj.has(ENTITY)) {
       return getEntityNameFromURL(url);
-    }else if(jsonObj.get("entity").toString().equals("settlement.ondemand")){
+    }else if(jsonObj.get(ENTITY).toString().equals("settlement.ondemand")){
       return "settlement";
     }else{
       return jsonObj.getString(ENTITY);
@@ -215,10 +214,10 @@ class ApiClient {
     throw new RazorpayException(sb.toString());
   }
 
-  private Class getClass(String entity) {
+  private Class<Entity> getClass(String entity) {
     try {
-      String entityClass = "com.razorpay." + WordUtils.capitalize(entity, '_').replaceAll("_", "");
-      return Class.forName(entityClass);
+      String entityClass = "com.razorpay." + WordUtils.capitalize(entity, '_').replace("_", "");
+      return (Class<Entity>) Class.forName(entityClass);
     } catch (ClassNotFoundException e) {
       return null;
     }

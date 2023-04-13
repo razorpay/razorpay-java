@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import okhttp3.Response;
 
 public class QrCodeClient extends ApiClient {
 
@@ -23,7 +22,8 @@ public class QrCodeClient extends ApiClient {
     /**
      * It is wrapper of fetchAll with parameter here sending null defines fetchAll
      * with a default values without filteration
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @return List of QR Codes
      */
     public List<QrCode> fetchAll() throws RazorpayException {
         return fetchAll(null);
@@ -31,7 +31,9 @@ public class QrCodeClient extends ApiClient {
 
     /**
      * This method get list of QrCodes filtered by parameters @request
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @param request JSONObject request
+     * @return list of QR Codes
      */
     public List<QrCode> fetchAll(JSONObject request) throws RazorpayException {
        return getCollection(Constants.QRCODE_LIST, request);

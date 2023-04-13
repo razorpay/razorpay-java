@@ -1,2 +1,2 @@
-package com.razorpay;public class TokenClient {
+package com.razorpay;public interface TokenClient {
 }

@@ -6,22 +6,44 @@ import okhttp3.Credentials;
 
 public class RazorpayClient {
 
-  public PaymentClient payments;
-  public RefundClient refunds;
-  public OrderClient orders;
-  public InvoiceClient invoices;
-  public CardClient cards;
-  public CustomerClient customers;
-  public TransferClient transfers;
-  public SubscriptionClient subscriptions;
-  public AddonClient addons;
-  public PlanClient plans;
-  public SettlementClient settlement;
-  public QrCodeClient qrCode;
-  public PaymentLinkClient paymentLink;
-  public ItemClient items;
-  public FundAccountClient fundAccount;
-  public VirtualAccountClient virtualAccounts;
+  @Override
+  public String toString() {
+    return "RazorpayClient{" +
+            "payments=" + payments +
+            ", refunds=" + refunds +
+            ", orders=" + orders +
+            ", invoices=" + invoices +
+            ", cards=" + cards +
+            ", customers=" + customers +
+            ", transfers=" + transfers +
+            ", subscriptions=" + subscriptions +
+            ", addons=" + addons +
+            ", plans=" + plans +
+            ", settlement=" + settlement +
+            ", qrCode=" + qrCode +
+            ", paymentLink=" + paymentLink +
+            ", items=" + items +
+            ", fundAccount=" + fundAccount +
+            ", virtualAccounts=" + virtualAccounts +
+            '}';
+  }
+
+  private PaymentClient payments;
+  private RefundClient refunds;
+  private OrderClient orders;
+  private InvoiceClient invoices;
+  private CardClient cards;
+  private CustomerClient customers;
+  private TransferClient transfers;
+  private SubscriptionClient subscriptions;
+  private AddonClient addons;
+  private PlanClient plans;
+  private SettlementClient settlement;
+  private QrCodeClient qrCode;
+  private PaymentLinkClient paymentLink;
+  private ItemClient items;
+  private FundAccountClient fundAccount;
+  private VirtualAccountClient virtualAccounts;
 
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);

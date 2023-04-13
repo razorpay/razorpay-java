@@ -13,7 +13,8 @@ public class SettlementClient extends ApiClient {
     /**
      * It is wrapper of fetchAll with parameter here sending null defines fetchAll
      * with a default values without filteration
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @return list of settlements
      */
     public List<Settlement> fetchAll() throws RazorpayException {
         return fetchAll(null);
@@ -21,7 +22,9 @@ public class SettlementClient extends ApiClient {
 
     /**
      * This method get list of Settlements filtered by parameters @request
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @param request JSONObject request
+     * @return list of settlements
      */
     public List<Settlement> fetchAll(JSONObject request) throws RazorpayException {
         return getCollection(Constants.SETTLEMENTS, request);
@@ -46,7 +49,9 @@ public class SettlementClient extends ApiClient {
     /**
      * It is wrapper of fetchAllDemand with parameter here sending null defines fetchAllDemand
      * with a default values without filteration
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @return list of settlements
+
      */
     public List<Settlement> fetchAllDemand() throws RazorpayException {
         return fetchAllDemand(null);
@@ -54,7 +59,9 @@ public class SettlementClient extends ApiClient {
 
     /**
      * This method get list of demand Settlements filtered by parameters @request
-     * @throws RazorpayException
+     * @throws RazorpayException RazorpayException
+     * @param request JSONObject request
+     * @return List of Settlements
      */
     public List<Settlement> fetchAllDemand(JSONObject request) throws RazorpayException {
         return getCollection(Constants.SETTLEMENTS_INSTANT, request);

@@ -4,6 +4,10 @@ import okhttp3.MediaType;
 
 public class Constants {
 
+  private Constants(){
+
+  }
+
   // API constants
   static final String SCHEME = "https";
   static final String HOSTNAME = "api.razorpay.com";
@@ -133,4 +137,10 @@ public class Constants {
   static final String VIRTUAL_ACCOUNT_RECEIVERS = "virtual_accounts/%s/receivers";
   static final String VIRTUAL_ACCOUNT_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers";
   static final String VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers/%s";
+
+  static final String INVALID_RESPONSE_FROM_SERVER = "Invalid Response from server";
+
+  static final String RAZORPAY_SIGNATURE = "razorpay_signature";
+
+  static final String RAZORPAY_PAYMENT_ID = "razorpay_payment_id";
 }
