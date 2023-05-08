@@ -226,6 +226,34 @@ public class PaymentClientTest extends BaseTest{
         }
     }
 
+    @Test
+    public void refundWithOutQuery() throws Exception{
+        String mockedResponseJson = "{" +
+                "\"id\":"+REFUND_ID+"," +
+                "\"entity\":\"refund\"," +
+                "\"amount\":500100," +
+                "\"receipt\":\"ReceiptNo.31\"," +
+                "\"currency\":\"INR\"," +
+                "\"payment_id\":\"pay_FCXKPFtYfPXJPy\"," +
+                "\"notes\":[],\"acquirer_data\":{\"arn\":null}," +
+                "\"created_at\":1597078866,\"batch_id\":null," +
+                "\"status\":\"processed\"," +
+                "\"speed_processed\":\"normal\"}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Refund fetch = paymentClient.refund(PAYMENT_ID);
+            assertNotNull(fetch);
+            assertEquals(REFUND_ID,fetch.get("id"));
+            assertEquals("INR",fetch.get("currency"));
+            assertTrue(fetch.has("payment_id"));
+            String refundRequest = getHost(String.format(Constants.PAYMENT_REFUND, PAYMENT_ID));
+            verifySentRequest(false, null, refundRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
     /**
      * Retrieve all the refunds for a payment by default only last 10 refunds returned.
      * @throws RazorpayException
@@ -699,6 +727,209 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(fetch.get("success"));
             String validateUpiRequest = getHost(Constants.VALIDATE_VPA);
             verifySentRequest(true, request.toString(), validateUpiRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch a specific refund for a payment
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchRefundWithoutPaymentId() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "    \"acquirer_data\": {\n" +
+                "        \"arn\": null\n" +
+                "    },\n" +
+                "    \"amount\": 3000,\n" +
+                "    \"batch_id\": null,\n" +
+                "    \"created_at\": 1648456234,\n" +
+                "    \"currency\": \"INR\",\n" +
+                "    \"entity\": \"refund\",\n" +
+                "    \"id\": "+REFUND_ID+",\n" +
+                "    \"notes\": [],\n" +
+                "    \"payment_id\": "+PAYMENT_ID+",\n" +
+                "    \"receipt\": null,\n" +
+                "    \"speed_processed\": \"normal\",\n" +
+                "    \"speed_requested\": \"normal\",\n" +
+                "    \"status\": \"processed\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Refund fetch = paymentClient.fetchRefund(REFUND_ID);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("payment_id"));
+            String fetchRefundRequest = getHost(String.format(Constants.REFUND, REFUND_ID));
+            verifySentRequest(false, null, fetchRefundRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchRefund() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "    \"acquirer_data\": {\n" +
+                "        \"arn\": null\n" +
+                "    },\n" +
+                "    \"amount\": 3000,\n" +
+                "    \"batch_id\": null,\n" +
+                "    \"created_at\": 1648456234,\n" +
+                "    \"currency\": \"INR\",\n" +
+                "    \"entity\": \"refund\",\n" +
+                "    \"id\": "+REFUND_ID+",\n" +
+                "    \"notes\": [],\n" +
+                "    \"payment_id\": "+PAYMENT_ID+",\n" +
+                "    \"receipt\": null,\n" +
+                "    \"speed_processed\": \"normal\",\n" +
+                "    \"speed_requested\": \"normal\",\n" +
+                "    \"status\": \"processed\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Refund fetch = paymentClient.fetchRefund(PAYMENT_ID,REFUND_ID);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("payment_id"));
+            String fetchRefundRequest = getHost(String.format(Constants.PAYMENT_REFUND_GET, PAYMENT_ID, REFUND_ID));
+            verifySentRequest(false, null, fetchRefundRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch multiple refunds for a payment
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchAllRefundWithoutQuery() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": "+REFUND_ID+",\n" +
+                "      \"entity\": \"refund\",\n" +
+                "      \"amount\": 300100,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"payment_id\": "+PAYMENT_ID+",\n" +
+                "      \"notes\": {\n" +
+                "        \"comment\": \"Comment for refund\"\n" +
+                "      },\n" +
+                "      \"receipt\": null,\n" +
+                "      \"acquirer_data\": {\n" +
+                "        \"arn\": \"10000000000000\"\n" +
+                "      },\n" +
+                "      \"created_at\": 1597078124,\n" +
+                "      \"batch_id\": null,\n" +
+                "      \"status\": \"processed\",\n" +
+                "      \"speed_processed\": \"normal\",\n" +
+                "      \"speed_requested\": \"optimum\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Refund> fetch = paymentClient.fetchAllRefunds(REFUND_ID);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get(0).get("payment_id"));
+            String fetchRefundRequest = getHost(String.format(Constants.PAYMENT_REFUND_LIST, REFUND_ID));
+            verifySentRequest(false, null, fetchRefundRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch multiple refunds for a payment
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchAllRefundWithQuery() throws RazorpayException {
+        JSONObject request = new JSONObject("{" + "\"count\":\"1\"," + "}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": "+REFUND_ID+",\n" +
+                "      \"entity\": \"refund\",\n" +
+                "      \"amount\": 300100,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"payment_id\": "+PAYMENT_ID+",\n" +
+                "      \"notes\": {\n" +
+                "        \"comment\": \"Comment for refund\"\n" +
+                "      },\n" +
+                "      \"receipt\": null,\n" +
+                "      \"acquirer_data\": {\n" +
+                "        \"arn\": \"10000000000000\"\n" +
+                "      },\n" +
+                "      \"created_at\": 1597078124,\n" +
+                "      \"batch_id\": null,\n" +
+                "      \"status\": \"processed\",\n" +
+                "      \"speed_processed\": \"normal\",\n" +
+                "      \"speed_requested\": \"optimum\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Refund> fetch = paymentClient.fetchAllRefunds(request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get(0).get("payment_id"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch multiple refunds for a payment
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchAllRefund() throws RazorpayException {
+        JSONObject request = new JSONObject("{" + "\"count\":\"1\"," + "}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": "+REFUND_ID+",\n" +
+                "      \"entity\": \"refund\",\n" +
+                "      \"amount\": 300100,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"payment_id\": "+PAYMENT_ID+",\n" +
+                "      \"notes\": {\n" +
+                "        \"comment\": \"Comment for refund\"\n" +
+                "      },\n" +
+                "      \"receipt\": null,\n" +
+                "      \"acquirer_data\": {\n" +
+                "        \"arn\": \"10000000000000\"\n" +
+                "      },\n" +
+                "      \"created_at\": 1597078124,\n" +
+                "      \"batch_id\": null,\n" +
+                "      \"status\": \"processed\",\n" +
+                "      \"speed_processed\": \"normal\",\n" +
+                "      \"speed_requested\": \"optimum\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Refund> fetch = paymentClient.fetchAllRefunds(REFUND_ID, request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get(0).get("payment_id"));
         } catch (IOException e) {
             assertTrue(false);
         }

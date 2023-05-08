@@ -193,6 +193,8 @@ class ApiClient {
       return getEntityNameFromURL(url);
     }else if(jsonObj.get("entity").toString().equals("settlement.ondemand")){
       return "settlement";
+    }else if(jsonObj.get("entity").toString().equals("payment.downtime")){
+      return "payment";
     }else{
       return jsonObj.getString(ENTITY);
     }

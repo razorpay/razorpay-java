@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -82,6 +83,48 @@ public class FundAccountClientTest extends BaseTest{
             assertNotNull(fetch);
             assertEquals(FUNDACCOUNT_ID,fetch.get("id"));
             String fetchRequest = getHost(String.format(Constants.FUND_ACCOUNT_FETCH,FUNDACCOUNT_ID));
+            verifySentRequest(false, null, fetchRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Retrieve all fund account.
+     * @throws RazorpayException
+     */
+    @Test
+    public void fetchAll() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "    \"entity\": \"collection\",\n" +
+                "    \"count\": 2,\n" +
+                "    \"items\": [\n" +
+                "        {\n" +
+                "            \"id\": \"fa_Aa00000000001\",\n" +
+                "            \"entity\": \"fund_account\",\n" +
+                "            \"customer_id\": \"cust_JZse2vlC5nK9AQ\",\n" +
+                "            \"account_type\": \"bank_account\",\n" +
+                "            \"bank_account\": {\n" +
+                "                \"ifsc\": \"HDFC0000053\",\n" +
+                "                \"bank_name\": \"HDFC Bank\",\n" +
+                "                \"name\": \"Gaurav Kumar\",\n" +
+                "                \"notes\": [],\n" +
+                "                \"account_number\": \"11214311215411\"\n" +
+                "            },\n" +
+                "            \"batch_id\": null,\n" +
+                "            \"active\": true,\n" +
+                "            \"created_at\": 1654154246\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<FundAccount> fetch = fundAccountClient.fetchAll();
+            assertNotNull(fetch);
+            assertEquals(FUNDACCOUNT_ID,fetch.get(0).get("id"));
+            String fetchRequest = getHost(String.format(Constants.FUND_ACCOUNT_LIST));
             verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);

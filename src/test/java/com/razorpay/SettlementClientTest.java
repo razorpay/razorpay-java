@@ -159,6 +159,66 @@ public class SettlementClientTest extends BaseTest{
     }
 
     /**
+     * Settlement report for a month can be retrieved.
+     * @throws RazorpayException
+     */
+    @Test
+    public void reportsWithOutQuery() throws RazorpayException{
+        JSONObject request = new JSONObject("{year:2020,month:9}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 4,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"entity_id\": \"pay_DEXrnipqTmWVGE\",\n" +
+                "      \"entity\": \"settlement\",\n"+
+                "      \"type\": \"payment\",\n" +
+                "      \"debit\": 0,\n" +
+                "      \"credit\": 97100,\n" +
+                "      \"amount\": 100000,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"fee\": 2900,\n" +
+                "      \"tax\": 0,\n" +
+                "      \"on_hold\": false,\n" +
+                "      \"settled\": true,\n" +
+                "      \"created_at\": 1567692556,\n" +
+                "      \"settled_at\": 1568176960,\n" +
+                "      \"settlement_id\": \"setl_DGlQ1Rj8os78Ec\",\n" +
+                "      \"posted_at\": null,\n" +
+                "      \"credit_type\": \"default\",\n" +
+                "      \"description\": \"Recurring Payment via Subscription\",\n" +
+                "      \"notes\": \"{}\",\n" +
+                "      \"payment_id\": null,\n" +
+                "      \"settlement_utr\": \"1568176960vxp0rj\",\n" +
+                "      \"order_id\": \"order_DEXrnRiR3SNDHA\",\n" +
+                "      \"order_receipt\": null,\n" +
+                "      \"method\": \"card\",\n" +
+                "      \"card_network\": \"MasterCard\",\n" +
+                "      \"card_issuer\": \"KARB\",\n" +
+                "      \"card_type\": \"credit\",\n" +
+                "      \"dispute_id\": null\n" +
+                "    },\n" +
+                "  ]\n" +
+                "}";
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Settlement> fetch = settlementClient.reports();
+            assertNotNull(fetch);
+            assertTrue(fetch.get(0).has("card_network"));
+            assertTrue(fetch.get(0).has("order_id"));
+            assertTrue(fetch.get(0).has("method"));
+            assertTrue(fetch.get(0).has("card_type"));
+            String reportRequest = getHost(Constants.SETTLEMENTS_REPORTS);
+            verifySentRequest(false, null, reportRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
      * Settlement is created using the amount details.
      * @throws RazorpayException
      */
