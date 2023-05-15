@@ -170,7 +170,6 @@
         <version>0.8.7</version>
         <configuration>
           <excludes>
-            <exclude>com/razorpay/**/TokenClient.class</exclude>
             <exclude>com/razorpay/**/EntityNameURLMapping.class</exclude>
             <exclude>com/razorpay/**/CustomTLSSocketFactory.class</exclude>
             <exclude>com/razorpay/**/Constants.class</exclude>
