@@ -11,7 +11,7 @@ public class OrderClient extends ApiClient {
   }
 
   public Order create(JSONObject request) throws RazorpayException {
-    return post(Constants.ORDER_CREATE, request);
+    return post(Constants.VERSION, Constants.ORDER_CREATE, request);
   }
 
   public List<Order> fetchAll() throws RazorpayException {
@@ -19,18 +19,18 @@ public class OrderClient extends ApiClient {
   }
 
   public List<Order> fetchAll(JSONObject request) throws RazorpayException {
-    return getCollection(Constants.ORDER_LIST, request);
+    return getCollection(Constants.VERSION, Constants.ORDER_LIST, request);
   }
 
   public Order fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.ORDER_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.ORDER_GET, id), null);
   }
 
   public List<Payment> fetchPayments(String id) throws RazorpayException {
-    return getCollection(String.format(Constants.ORDER_PAYMENT_LIST, id), null);
+    return getCollection(Constants.VERSION, String.format(Constants.ORDER_PAYMENT_LIST, id), null);
   }
 
   public Order edit(String id, JSONObject request) throws RazorpayException {
-    return patch(String.format(Constants.ORDER_EDIT, id), request);
+    return patch(Constants.VERSION, String.format(Constants.ORDER_EDIT, id), request);
   }
 }

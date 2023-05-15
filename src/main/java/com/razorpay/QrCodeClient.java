@@ -13,11 +13,11 @@ public class QrCodeClient extends ApiClient {
     }
 
     public QrCode create(JSONObject request) throws RazorpayException {
-        return post(Constants.QRCODE_CREATE, request);
+        return post(Constants.VERSION, Constants.QRCODE_CREATE, request);
     }
 
     public QrCode fetch(String id) throws RazorpayException {
-        return get(String.format(Constants.QRCODE_FETCH, id), null);
+        return get(Constants.VERSION, String.format(Constants.QRCODE_FETCH, id), null);
     }
 
     /**
@@ -34,7 +34,7 @@ public class QrCodeClient extends ApiClient {
      * @throws RazorpayException
      */
     public List<QrCode> fetchAll(JSONObject request) throws RazorpayException {
-       return getCollection(Constants.QRCODE_LIST, request);
+       return getCollection(Constants.VERSION, Constants.QRCODE_LIST, request);
     }
 
     public List<QrCode> fetchAllPayments(String id) throws RazorpayException {
@@ -42,11 +42,11 @@ public class QrCodeClient extends ApiClient {
     }
 
     public List<QrCode> fetchAllPayments(String id,JSONObject request) throws RazorpayException {
-        return getCollection(Constants.QRCODE_LIST+"/"+id+"/"+Constants.QRCODE_FETCH_PAYMENT, request);
+        return getCollection(Constants.VERSION, Constants.QRCODE_LIST+"/"+id+"/"+Constants.QRCODE_FETCH_PAYMENT, request);
     }
     
     public QrCode close(String id) throws RazorpayException {
-        return post(String.format(Constants.QRCODE_CLOSE, id), null);
+        return post(Constants.VERSION, String.format(Constants.QRCODE_CLOSE, id), null);
     }
 
 }

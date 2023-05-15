@@ -11,11 +11,11 @@ public class VirtualAccountClient extends ApiClient {
   }
 
   public VirtualAccount create(JSONObject request) throws RazorpayException {
-    return post(Constants.VIRTUAL_ACCOUNT_CREATE, request);
+    return post(Constants.VERSION, Constants.VIRTUAL_ACCOUNT_CREATE, request);
   }
 
   public VirtualAccount fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.VIRTUAL_ACCOUNT_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_GET, id), null);
   }
 
   public List<VirtualAccount> fetchAll() throws RazorpayException {
@@ -23,15 +23,15 @@ public class VirtualAccountClient extends ApiClient {
   }
 
   public List<VirtualAccount> fetchAll(JSONObject request) throws RazorpayException {
-    return getCollection(Constants.VIRTUAL_ACCOUNT_LIST, request);
+    return getCollection(Constants.VERSION, Constants.VIRTUAL_ACCOUNT_LIST, request);
   }
 
   public VirtualAccount edit(String id, JSONObject request) throws RazorpayException {
-    return patch(String.format(Constants.VIRTUAL_ACCOUNT_EDIT, id), request);
+    return patch(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_EDIT, id), request);
   }
 
   public VirtualAccount close(String id) throws RazorpayException {
-    return post(String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, id), null);
+    return post(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_CLOSE, id), null);
   }
 
   public List<Payment> fetchPayments(String id) throws RazorpayException {
@@ -39,18 +39,18 @@ public class VirtualAccountClient extends ApiClient {
   }
 
   public List<Payment> fetchPayments(String id, JSONObject request) throws RazorpayException {
-    return getCollection(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), request);
+    return getCollection(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, id), request);
   }
 
   public VirtualAccount addReceiver(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, id), request);
+    return post(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_RECEIVERS, id), request);
   }
 
   public VirtualAccount addAllowedPayers(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, id), request);
+    return post(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_ALLOWEDPAYERS, id), request);
   }
 
   public VirtualAccount deleteAllowedPayer(String virtual_id, String payer_id) throws RazorpayException {
-      return delete(String.format(Constants.VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS, virtual_id, payer_id), null);
+      return delete(Constants.VERSION, String.format(Constants.VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS, virtual_id, payer_id), null);
   }
 }

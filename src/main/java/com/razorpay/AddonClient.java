@@ -12,7 +12,7 @@ public class AddonClient extends ApiClient {
 
   // To create an Addon, use the createAddon method of SubscriptionClient
   public Addon fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.ADDON_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.ADDON_GET, id), null);
   }
   
   /**
@@ -29,10 +29,10 @@ public class AddonClient extends ApiClient {
    * @throws RazorpayException
    */  
   public List<Addon> fetchAll(JSONObject request) throws RazorpayException {
-      return getCollection(Constants.ADDON_LIST, request);
+      return getCollection(Constants.VERSION, Constants.ADDON_LIST, request);
     }
 
   public List<Addon> delete(String id) throws RazorpayException {
-    return delete(String.format(Constants.ADDON_DELETE, id), null);
+    return delete(Constants.VERSION, String.format(Constants.ADDON_DELETE, id), null);
   }
 }

@@ -11,19 +11,19 @@ public class TransferClient extends ApiClient {
   }
 
   public Transfer create(JSONObject request) throws RazorpayException {
-    return post(Constants.TRANSFER_CREATE, request);
+    return post(Constants.VERSION, Constants.TRANSFER_CREATE, request);
   }
 
   public Transfer edit(String id, JSONObject request) throws RazorpayException {
-    return patch(String.format(Constants.TRANSFER_EDIT, id), request);
+    return patch(Constants.VERSION, String.format(Constants.TRANSFER_EDIT, id), request);
   }
 
   public Reversal reversal(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.TRANSFER_REVERSAL_CREATE, id), request);
+    return post(Constants.VERSION, String.format(Constants.TRANSFER_REVERSAL_CREATE, id), request);
   }
 
   public Transfer fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.TRANSFER_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.TRANSFER_GET, id), null);
   }
 
   public List<Transfer> fetchAll() throws RazorpayException {
@@ -31,6 +31,6 @@ public class TransferClient extends ApiClient {
   }
 
   public List<Transfer> fetchAll(JSONObject request) throws RazorpayException {
-    return getCollection(Constants.TRANSFER_LIST, request);
+    return getCollection(Constants.VERSION, Constants.TRANSFER_LIST, request);
   }
 }
