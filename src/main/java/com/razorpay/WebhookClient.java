@@ -19,7 +19,11 @@ public class WebhookClient extends ApiClient {
     }
 
     public List<Webhook> fetchAll(String id) throws RazorpayException {
-        return getCollection(Constants.VERSION_V2, String.format(Constants.WEBHOOK_FETCH_ALL, id), null);
+        return fetchAll(id,null);
+    }
+
+    public List<Webhook> fetchAll(String id, JSONObject request) throws RazorpayException {
+        return getCollection(Constants.VERSION_V2, String.format(Constants.WEBHOOK_FETCH_ALL, id), request);
     }
 
     public Webhook edit(String id, String webhook_id, JSONObject request) throws RazorpayException {
