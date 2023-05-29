@@ -26,6 +26,10 @@ public class TransferClient extends ApiClient {
     return get(Constants.VERSION, String.format(Constants.TRANSFER_GET, id), null);
   }
 
+  public List<Reversal> fetchReversal(String id) throws RazorpayException {
+    return getCollection(Constants.VERSION, String.format(Constants.TRANSFER_REVERSAL_CREATE, id), null);
+  }
+
   public List<Transfer> fetchAll() throws RazorpayException {
     return fetchAll(null);
   }
