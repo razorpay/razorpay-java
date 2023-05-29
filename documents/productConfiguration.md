@@ -7,11 +7,11 @@ String accountId = "acc_GP4lfNA0iIMn5B";
 
 JSONObject productRequest = new JSONObject();
 productRequest.put("product_name","payment_gateway");
-productRequest.put("tnc_accepted","true");
+productRequest.put("tnc_accepted",true);
 productRequest.put("ip","233.233.233.234");
 
 
-Product product = instance.product.requestProductConfiguration(accountId, productRequest);
+Account product = instance.product.requestProductConfiguration(accountId, productRequest);
 ```
 
 **Parameters:**
@@ -203,7 +203,7 @@ productRequest.put("settlements",settlements);
 productRequest.put("tnc_accepted",true);
 productRequest.put("ip","233.233.233.234");
 
-Product product = instance.product.edit(accountId, productId, productRequest);
+Account product = instance.product.edit(accountId, productId, productRequest);
 ```
 
 **Parameters:**

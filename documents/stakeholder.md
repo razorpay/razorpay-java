@@ -44,7 +44,7 @@ notes.put("random_key_by_partner","random_value");
 
 StakeRequest.put("notes",notes);
 
-Stakeholder stakeholder = instance.stakeholder.create(accountId, accountRequest);
+Stakeholder stakeholder = instance.stakeholder.create(accountId, StakeRequest);
 ```
 
 **Parameters:**

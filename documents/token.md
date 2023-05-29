@@ -358,7 +358,7 @@ List<Token> token = instance.token.delete(productRequest);
 ```java
 
 JSONObject productRequest = new JSONObject();
-productRequest.put("id","token_4lsdksD31GaZ09")
+productRequest.put("id","spt_4lsdksD31GaZ09")
 
 Token token = instance.token.processPaymentOnAlternatePAorPG(productRequest);
 ```

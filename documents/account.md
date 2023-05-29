@@ -76,22 +76,21 @@ JSONObject apps = new JSONObject();
 ArrayList<String> url = new ArrayList<String>();
 url.add("https://www.example.org");
 
-apps.put("website",url);
+apps.put("websites",url);
 ArrayList<JSONObject> android = new ArrayList<JSONObject>();
 JSONObject android_details = new JSONObject();
 android_details.put("url","playstore.example.org");
 android_details.put("name","Example");
 
 apps.put("android",android);
-
+android.add(android_details);
 ArrayList<JSONObject> ios = new ArrayList<JSONObject>();
 JSONObject ios_details = new JSONObject();
 ios_details.put("url","appstore.example.org");
 ios_details.put("name","Example");
-
-apps.put("android",android_details);
-apps.put("ios",ios_details);
-accountRequest.put("apps",apps);
+ios.add(ios_details);
+apps.put("android",android);
+apps.put("ios",ios);
 
 Account account = instance.account.create(accountRequest);
 ```
