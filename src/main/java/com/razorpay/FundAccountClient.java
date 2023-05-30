@@ -11,11 +11,11 @@ public class FundAccountClient extends ApiClient{
 	}
 
 	public FundAccount create(JSONObject request) throws RazorpayException {
-	    return post(Constants.FUND_ACCOUNT_CREATE, request);
+	    return post(Constants.VERSION, Constants.FUND_ACCOUNT_CREATE, request);
 	}
 
 	public FundAccount fetch(String id) throws RazorpayException {
-	    return get(String.format(Constants.FUND_ACCOUNT_FETCH, id), null);
+	    return get(Constants.VERSION, String.format(Constants.FUND_ACCOUNT_FETCH, id), null);
 	}
 
 	public List<FundAccount> fetchAll() throws RazorpayException {
@@ -27,6 +27,6 @@ public class FundAccountClient extends ApiClient{
 	 * @throws RazorpayException
 	 */
 	public List<FundAccount> fetchAll(JSONObject request) throws RazorpayException {
-		return getCollection(Constants.FUND_ACCOUNT_LIST, request);
+		return getCollection(Constants.VERSION, Constants.FUND_ACCOUNT_LIST, request);
 	}
 }

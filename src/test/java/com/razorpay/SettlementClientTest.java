@@ -341,7 +341,7 @@ public class SettlementClientTest extends BaseTest{
     public void fetchDemandSettlement() throws RazorpayException{
         String mockedResponseJson = "{\n" +
                 "  \"id\": "+SETTLEMENT_ID+",\n" +
-                "  \"entity\": \"settlement.ondemand\",\n" +
+                "  \"entity\": \"settlement\",\n" +
                 "  \"amount_requested\": 200000,\n" +
                 "  \"amount_settled\": 199410,\n" +
                 "  \"amount_pending\": 0,\n" +

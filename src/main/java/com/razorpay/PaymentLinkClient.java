@@ -13,11 +13,11 @@ public class PaymentLinkClient extends ApiClient {
     }
 
     public PaymentLink create(JSONObject request) throws RazorpayException {
-        return post(Constants.PAYMENTLINK_CREATE, request);
+        return post(Constants.VERSION, Constants.PAYMENTLINK_CREATE, request);
     }
     
     public PaymentLink fetch(String id) throws RazorpayException {
-        return get(String.format(Constants.PAYMENTLINK_GET, id), null);
+        return get(Constants.VERSION,String.format(Constants.PAYMENTLINK_GET, id), null);
     }
     
     public List<PaymentLink> fetchAll() throws RazorpayException {
@@ -25,18 +25,18 @@ public class PaymentLinkClient extends ApiClient {
     }
 
     public List<PaymentLink> fetchAll(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.PAYMENTLINK_LIST, request);
+        return getCollection(Constants.VERSION, Constants.PAYMENTLINK_LIST, request);
     }
 
     public PaymentLink cancel(String id) throws RazorpayException {
-        return post(String.format(Constants.PAYMENTLINK_CANCEL, id), null);
+        return post(Constants.VERSION, String.format(Constants.PAYMENTLINK_CANCEL, id), null);
     }
 
     public PaymentLink edit(String id, JSONObject request) throws RazorpayException {
-        return patch(String.format(Constants.PAYMENTLINK_EDIT, id), request);
+        return patch(Constants.VERSION, String.format(Constants.PAYMENTLINK_EDIT, id), request);
     }
 
     public PaymentLink notifyBy(String id, String medium) throws RazorpayException {
-        return post(String.format(Constants.PAYMENTLINK_NOTIFYBY, id, medium), null);
+        return post(Constants.VERSION, String.format(Constants.PAYMENTLINK_NOTIFYBY, id, medium), null);
     }
 }

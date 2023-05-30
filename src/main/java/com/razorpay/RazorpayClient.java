@@ -22,7 +22,13 @@ public class RazorpayClient {
   public ItemClient items;
   public FundAccountClient fundAccount;
   public VirtualAccountClient virtualAccounts;
-
+  public TokenClient token;
+  public IinClient iin;
+  public AccountClient account;
+  public StakeholderClient stakeholder;
+  public ProductClient product;
+  public WebhookClient webhook;
+  public TncMap tncMap;
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
   }
@@ -46,6 +52,12 @@ public class RazorpayClient {
     items = new ItemClient(auth);
     fundAccount = new FundAccountClient(auth);
     virtualAccounts = new VirtualAccountClient(auth);
+    token = new TokenClient(auth);
+    iin = new IinClient(auth);
+    account = new AccountClient(auth);
+    stakeholder = new StakeholderClient(auth);
+    product = new ProductClient(auth);
+    webhook = new WebhookClient(auth);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {

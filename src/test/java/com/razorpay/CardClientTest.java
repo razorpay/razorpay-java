@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
@@ -60,4 +61,29 @@ public class CardClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testUsingCardNumber() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"card\",\n" +
+                "  \"network\": \"Visa\",\n" +
+                "  \"payment_account_reference\": \"V0010013819231376539033235990\",\n" +
+                "  \"network_reference_id\": null\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            JSONObject request = new JSONObject();
+            request.put("number","4854980604708430");
+            Card fetch = cardClientClient.requestCardReference(request);
+            assertNotNull(fetch);
+            assertEquals(true,fetch.has("network"));
+            String fetchCardDetails = getHost(Constants.CARD_REQUEST_REFERENCE);
+            verifySentRequest(true, request.toString(), fetchCardDetails);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
 }

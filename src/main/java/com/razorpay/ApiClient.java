@@ -35,35 +35,35 @@ class ApiClient {
     this.auth = auth;
   }
 
-  public <T extends Entity> T get(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.getRequest(path, requestObject, auth);
+  public <T extends Entity> T get(String version, String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.getRequest(version, path, requestObject, auth);
     return processResponse(response);
   }
 
-  public <T extends Entity> T post(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.postRequest(path, requestObject, auth);
+  public <T> T post(String version, String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.postRequest(version, path, requestObject, auth);
     return processResponse(response);
   }
 
-  public <T extends Entity> T put(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.putRequest(path, requestObject, auth);
+  public <T extends Entity> T put(String version, String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.putRequest(version, path, requestObject, auth);
     return processResponse(response);
   }
 
-  public <T extends Entity> T patch(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.patchRequest(path, requestObject, auth);
+  public <T extends Entity> T patch(String version, String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.patchRequest(version, path, requestObject, auth);
     return processResponse(response);
   }
 
 
-  <T extends Entity> ArrayList<T> getCollection(String path, JSONObject requestObject)
+  <T extends Entity> ArrayList<T> getCollection(String version, String path, JSONObject requestObject)
           throws RazorpayException {
-    Response response = ApiUtils.getRequest(path, requestObject, auth);
+    Response response = ApiUtils.getRequest(version, path, requestObject, auth);
     return processCollectionResponse(response);
   }
 
-  public <T> T delete(String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.deleteRequest(path, requestObject, auth);
+  public <T> T delete(String version, String path, JSONObject requestObject) throws RazorpayException {
+    Response response = ApiUtils.deleteRequest(version, path, requestObject, auth);
     return processDeleteResponse(response);
   }
 
@@ -136,7 +136,7 @@ class ApiClient {
   }
 
 
-  <T extends Entity> T processResponse(Response response) throws RazorpayException {
+  <T extends Object> T processResponse(Response response) throws RazorpayException {
     if (response == null) {
       throw new RazorpayException("Invalid Response from server");
     }
@@ -146,13 +146,17 @@ class ApiClient {
     JSONObject responseJson = null;
     try {
       responseBody = response.body().string();
-      responseJson = new JSONObject(responseBody);
+      if(responseBody.equals("[]")){
+        return (T) Collections.emptyList();
+      } else{
+        responseJson = new JSONObject(responseBody);
+      }
     } catch (IOException e) {
       throw new RazorpayException(e.getMessage());
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
-      return parseResponse(responseJson, getEntity(responseJson, response.request().url()));
+      return (T) parseResponse(responseJson, getEntity(responseJson, response.request().url()));
     }
 
     throwException(statusCode, responseJson);
@@ -191,10 +195,8 @@ class ApiClient {
   private String getEntity(JSONObject jsonObj, HttpUrl url) {
     if(!jsonObj.has(ENTITY)) {
       return getEntityNameFromURL(url);
-    }else if(jsonObj.get("entity").toString().equals("settlement.ondemand")){
-      return "settlement";
-    }else if(jsonObj.get("entity").toString().equals("payment.downtime")){
-      return "payment";
+    }else if(getClass(jsonObj.get("entity").toString()) == null){
+      return getEntityNameFromURL(url);
     }else{
       return jsonObj.getString(ENTITY);
     }

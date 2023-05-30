@@ -52,6 +52,8 @@ razorpayClient.addHeaders(headers);
 ## Supported Resources
 - [Addon](documents/addon.md)
 
+- [Account](documents/account.md)
+
 - [Item](documents/item.md)
 
 - [Customer](documents/customers.md)
@@ -62,7 +64,11 @@ razorpayClient.addHeaders(headers);
 
 - [Payments](documents/payment.md)
 
+- [Product Configuration](documents/productConfiguration.md)
+
 - [Settlements](documents/settlement.md)
+
+- [Stakeholder](documents/stakeholder.md)
 
 - [Fund](documents/fund.md)
 
@@ -93,6 +99,8 @@ razorpayClient.addHeaders(headers);
 - [Register NACH and Charge First Payment Together](documents/registerNach.md)
 
 - [Payment Verification](documents/paymentVerfication.md)
+
+- [Webhook](documents/webhook.md)
 ---
 
 * Make custom requests

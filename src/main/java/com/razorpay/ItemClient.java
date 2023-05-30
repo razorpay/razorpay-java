@@ -11,11 +11,11 @@ public class ItemClient extends ApiClient{
 	}
 
 	public Item create(JSONObject request) throws RazorpayException {
-	    return post(Constants.ITEMS, request);
+	    return post(Constants.VERSION, Constants.ITEMS, request);
 	}
 
 	public Item fetch(String id) throws RazorpayException {
-	    return get(String.format(Constants.ITEM, id), null);
+	    return get(Constants.VERSION, String.format(Constants.ITEM, id), null);
 	}
 
 	public List<Item> fetchAll() throws RazorpayException {
@@ -23,14 +23,14 @@ public class ItemClient extends ApiClient{
 	}
 
 	public Item edit(String id, JSONObject request) throws RazorpayException {
-		return patch(String.format(Constants.ITEM, id), request);
+		return patch(Constants.VERSION, String.format(Constants.ITEM, id), request);
 	}
 
 	public List<Item> fetchAll(JSONObject request) throws RazorpayException {
-	    return getCollection(Constants.ITEMS, request);
+	    return getCollection(Constants.VERSION, Constants.ITEMS, request);
 	}
 
 	public List<Item> delete(String id) throws RazorpayException {
-	   return delete(String.format(Constants.ITEM, id), null);
+	   return delete(Constants.VERSION, String.format(Constants.ITEM, id), null);
 	}
 }

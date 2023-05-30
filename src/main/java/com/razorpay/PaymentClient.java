@@ -16,11 +16,11 @@ public class PaymentClient extends ApiClient {
   }
 
   public Payment fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.PAYMENT_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.PAYMENT_GET, id), null);
   }
 
   public List<Payment> fetchAll(JSONObject request) throws RazorpayException {
-    return getCollection(Constants.PAYMENT_LIST, request);
+    return getCollection(Constants.VERSION, Constants.PAYMENT_LIST, request);
   }
 
   public List<Payment> fetchAll() throws RazorpayException {
@@ -28,7 +28,7 @@ public class PaymentClient extends ApiClient {
   }
 
   public Payment capture(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.PAYMENT_CAPTURE, id), request);
+    return post(Constants.VERSION, String.format(Constants.PAYMENT_CAPTURE, id), request);
   }
 
   public Refund refund(String id) throws RazorpayException {
@@ -36,7 +36,7 @@ public class PaymentClient extends ApiClient {
   }
 
   public Refund refund(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.PAYMENT_REFUND, id), request);
+    return post(Constants.VERSION, String.format(Constants.PAYMENT_REFUND, id), request);
   }
 
   public Refund refund(JSONObject request) throws RazorpayException {
@@ -44,7 +44,7 @@ public class PaymentClient extends ApiClient {
   }
 
   public Refund fetchRefund(String id, String refundId) throws RazorpayException {
-    return get(String.format(Constants.PAYMENT_REFUND_GET, id, refundId), null);
+    return get(Constants.VERSION, String.format(Constants.PAYMENT_REFUND_GET, id, refundId), null);
   }
 
   public Refund fetchRefund(String refundId) throws RazorpayException {
@@ -52,7 +52,7 @@ public class PaymentClient extends ApiClient {
   }
 
   public List<Refund> fetchAllRefunds(String id, JSONObject request) throws RazorpayException {
-    return getCollection(String.format(Constants.PAYMENT_REFUND_LIST, id), request);
+    return getCollection(Constants.VERSION, String.format(Constants.PAYMENT_REFUND_LIST, id), request);
   }
 
   public List<Refund> fetchAllRefunds(String id) throws RazorpayException {
@@ -65,7 +65,7 @@ public class PaymentClient extends ApiClient {
 
   public List<Transfer> transfer(String id, JSONObject request) throws RazorpayException {
     Response response =
-        ApiUtils.postRequest(String.format(Constants.PAYMENT_TRANSFER_CREATE, id), request, auth);
+        ApiUtils.postRequest(Constants.VERSION, String.format(Constants.PAYMENT_TRANSFER_CREATE, id), request, auth);
     return processCollectionResponse(response);
   }
 
@@ -74,49 +74,49 @@ public class PaymentClient extends ApiClient {
   }
 
   public List<Transfer> fetchAllTransfers(String id, JSONObject request) throws RazorpayException {
-    return getCollection(String.format(Constants.PAYMENT_TRANSFER_GET, id), request);
+    return getCollection(Constants.VERSION, String.format(Constants.PAYMENT_TRANSFER_GET, id), request);
   }
 
   public BankTransfer fetchBankTransfers(String id) throws RazorpayException {
-    return get(String.format(Constants.PAYMENT_BANK_TRANSFER_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.PAYMENT_BANK_TRANSFER_GET, id), null);
   }
 
   public Payment edit(String id, JSONObject request) throws RazorpayException {
-    return patch(String.format(Constants.PAYMENT_EDIT, id), request);
+    return patch(Constants.VERSION, String.format(Constants.PAYMENT_EDIT, id), request);
   }
   
   public List<Payment> fetchPaymentDowntime() throws RazorpayException {
-    return getCollection(Constants.FETCH_DOWNTIME_LIST, null);
+    return getCollection(Constants.VERSION, Constants.FETCH_DOWNTIME_LIST, null);
   }
 
   public Payment fetchPaymentDowntimeById(String id) throws RazorpayException {
-    return get(String.format(Constants.FETCH_DOWNTIME_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.FETCH_DOWNTIME_GET, id), null);
   }
 
   public Payment createJsonPayment(JSONObject request) throws RazorpayException {
-    return post(Constants.PAYMENT_JSON_CREATE, request);
+    return post(Constants.VERSION, Constants.PAYMENT_JSON_CREATE, request);
   }
 
   public Payment createRecurringPayment(JSONObject request) throws RazorpayException {
-    return post(Constants.PAYMENT_RECURRING, request);
+    return post(Constants.VERSION, Constants.PAYMENT_RECURRING, request);
   }
 
   public Payment otpGenerate(String id) throws RazorpayException {
-    return post(String.format(Constants.PAYMENT_OTP_GENERATE, id), null);
+    return post(Constants.VERSION, String.format(Constants.PAYMENT_OTP_GENERATE, id), null);
   }
 
   public Payment otpSubmit(String id, JSONObject request) throws RazorpayException {
-    return post(String.format(Constants.PAYMENT_OTP_SUBMIT, id), request);
+    return post(Constants.VERSION, String.format(Constants.PAYMENT_OTP_SUBMIT, id), request);
   }
 
   public Payment otpResend(String id) throws RazorpayException {
-    return post(String.format(Constants.PAYMENT_OTP_RESEND, id), null);
+    return post(Constants.VERSION, String.format(Constants.PAYMENT_OTP_RESEND, id), null);
   }
   public Payment createUpi(JSONObject request) throws RazorpayException {
-    return post(Constants.PAYMENT_CREATE_UPI, request);
+    return post(Constants.VERSION, Constants.PAYMENT_CREATE_UPI, request);
   }
   public Payment validateUpi(JSONObject request) throws RazorpayException {
-    return post(Constants.VALIDATE_VPA, request);
+    return post(Constants.VERSION, Constants.VALIDATE_VPA, request);
   }
 
 }

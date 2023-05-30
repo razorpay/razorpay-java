@@ -24,15 +24,15 @@ public class SettlementClient extends ApiClient {
      * @throws RazorpayException
      */
     public List<Settlement> fetchAll(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.SETTLEMENTS, request);
+        return getCollection(Constants.VERSION, Constants.SETTLEMENTS, request);
     }
 
     public Settlement fetch(String id) throws RazorpayException {
-        return get(String.format(Constants.SETTLEMENT, id), null);
+        return get(Constants.VERSION, String.format(Constants.SETTLEMENT, id), null);
     }
 
     public List<Settlement> reports(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.SETTLEMENTS_REPORTS, request);
+        return getCollection(Constants.VERSION, Constants.SETTLEMENTS_REPORTS, request);
     }
 
     public List<Settlement> reports() throws RazorpayException {
@@ -40,7 +40,7 @@ public class SettlementClient extends ApiClient {
     }
 
     public Settlement create(JSONObject request) throws RazorpayException {
-        return post(Constants.SETTLEMENTS_INSTANT, request);
+        return post(Constants.VERSION, Constants.SETTLEMENTS_INSTANT, request);
     }
 
     /**
@@ -57,10 +57,10 @@ public class SettlementClient extends ApiClient {
      * @throws RazorpayException
      */
     public List<Settlement> fetchAllDemand(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.SETTLEMENTS_INSTANT, request);
+        return getCollection(Constants.VERSION, Constants.SETTLEMENTS_INSTANT, request);
     }
 
     public Settlement fetchDemandSettlement(String id) throws RazorpayException {
-        return get(String.format(Constants.SETTLEMENT_INSTANT, id), null);
+        return get(Constants.VERSION, String.format(Constants.SETTLEMENT_INSTANT, id), null);
     }
 }

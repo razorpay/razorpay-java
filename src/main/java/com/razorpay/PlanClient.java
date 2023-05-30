@@ -11,11 +11,11 @@ public class PlanClient extends ApiClient {
     }
 
     public Plan create(JSONObject request) throws RazorpayException {
-        return post(Constants.PLAN_CREATE, request);
+        return post(Constants.VERSION, Constants.PLAN_CREATE, request);
     }
 
     public Plan fetch(String id) throws RazorpayException {
-        return get(String.format(Constants.PLAN_GET, id), null);
+        return get(Constants.VERSION, String.format(Constants.PLAN_GET, id), null);
     }
 
     public List<Plan> fetchAll() throws RazorpayException {
@@ -23,6 +23,6 @@ public class PlanClient extends ApiClient {
     }
 
     public List<Plan> fetchAll(JSONObject request) throws RazorpayException {
-        return getCollection(Constants.PLAN_LIST, request);
+        return getCollection(Constants.VERSION, Constants.PLAN_LIST, request);
     }
 }
