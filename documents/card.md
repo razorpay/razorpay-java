@@ -601,7 +601,7 @@ Customer customer = instance.customers.deleteToken(customerId,tokenId);
 JSONObject request = new JSONObject();
 request.put("number","4854980604708430");
 
-Customer customer = instance.card.requestCardReference(request);
+Card card = instance.card.requestCardReference(request);
 ```
 **Parameters:**
 
@@ -627,7 +627,7 @@ Customer customer = instance.card.requestCardReference(request);
 JSONObject request = new JSONObject();
 request.put("token","token_4lsdksD31GaZ09");
 
-Customer customer = instance.card.requestCardReference(request);
+Card card = instance.card.requestCardReference(request);
 ```
 **Parameters:**
 
