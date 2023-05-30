@@ -283,6 +283,10 @@ Token token = instance.token.create(tokenRequest);
 | Name          | Type        | Description                                 |
 |---------------|-------------|---------------------------------------------|
 | customerId*          | string      | The id of the customer to be fetched |
+| method*          | string      |  The type of object that needs to be tokenised. Currently, `card` is the only supported value. |
+| card*         | object      | All keys listed [here](https://razorpay.com/docs/partners/aggregators/partner-auth/token-sharing/#create-token-on-behalf-of-a-sub-merchant) are supported
+|
+| authentication         | object      | All keys listed [here](https://razorpay.com/docs/partners/aggregators/partner-auth/token-sharing/#create-token-on-behalf-of-a-sub-merchant) are supported | 
 
 **Response:**
 ```json
