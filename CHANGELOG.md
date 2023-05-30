@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 1.4.4 
+## Version 1.4.4 - 2023-05-30
 [#286](https://github.com/razorpay/razorpay-java/pull/286) [`b6179a5`](https://github.com/razorpay/razorpay-java/commit/b6179a5a3425910a190f0d9e4f5ff0f8e423f6a9) feat: Added new API endpoints
 
 * Added account onboarding API (create, fetch, edit, delete)
