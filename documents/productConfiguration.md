@@ -266,7 +266,7 @@ String accountId = "acc_GP4lfNA0iIMn5B";
 
 String productId = "acc_prd_HEgNpywUFctQ9e";
 
-Product product = instance.product.fetch(accountId, productId);
+Account product = instance.product.fetch(accountId, productId);
 ```
 
 **Parameters:**
@@ -457,7 +457,7 @@ String accountId = "acc_GP4lfNA0iIMn5B";
 
 String productId = "acc_prd_HEgNpywUFctQ9e";
 
-Product product = instance.product.fetch(accountId, productId);
+Account product = instance.product.fetch(accountId, productId);
 ```
 
 **Parameters:**
