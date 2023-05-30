@@ -193,7 +193,7 @@ Stakeholder stakeholder = instance.stakeholder.edit(accountId, stakeholderId, St
 ```java
 String accountId = "acc_GP4lfNA0iIMn5B";
 
-Stakeholder stakeholder = instance.stakeholder.fetchAll(accountId);
+List<Stakeholder> stakeholder = instance.stakeholder.fetchAll(accountId);
 
 ```
 
