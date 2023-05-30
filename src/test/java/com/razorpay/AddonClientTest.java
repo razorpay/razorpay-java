@@ -117,4 +117,24 @@ public class AddonClientTest  extends BaseTest{
             assertTrue(false);
         }
     }
+
+    /**
+     * Delete an Add-on.
+     * @throws RazorpayException
+     */
+    @Test
+    public void delete() throws RazorpayException {
+
+        String mockedResponseJson = "[]";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Addon> fetch = client.delete(ADDON_ID);
+            assertNotNull(fetch);
+            String addonList = getHost(String.format(Constants.ADDON_DELETE, ADDON_ID));
+            verifySentRequest(false, null, addonList);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

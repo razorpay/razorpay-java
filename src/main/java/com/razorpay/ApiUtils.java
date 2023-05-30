@@ -65,23 +65,22 @@ class ApiUtils {
     GET, POST, PUT, PATCH, DELETE
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth)
+  static Response postRequest(String version, String path, JSONObject requestObject, String auth)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
-
     Request request =
         createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
   }
 
-  static Response putRequest(String path, JSONObject requestObject, String auth)
+  static Response putRequest(String version, String path, JSONObject requestObject, String auth)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -91,10 +90,10 @@ class ApiUtils {
     return processRequest(request);
   }
 
-  static Response patchRequest(String path, JSONObject requestObject, String auth)
+  static Response patchRequest(String version, String path, JSONObject requestObject, String auth)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -104,29 +103,28 @@ class ApiUtils {
     return processRequest(request);
   }
 
-  static Response getRequest(String path, JSONObject requestObject, String auth)
+  static Response getRequest(String version, String path, JSONObject requestObject, String auth)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path);
     addQueryParams(builder, requestObject);
-
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  static Response deleteRequest(String path, JSONObject requestObject, String auth)
+  static Response deleteRequest(String version, String path, JSONObject requestObject, String auth)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path);
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  private static HttpUrl.Builder getBuilder(String path) {
+  private static HttpUrl.Builder getBuilder(String version, String path) {
     return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
-        .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
+        .port(Constants.PORT).addPathSegment(version).addPathSegments(path);
   }
 
   private static Request createRequest(String method, String url, RequestBody requestBody,

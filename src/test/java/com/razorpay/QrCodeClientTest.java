@@ -220,4 +220,75 @@ public class QrCodeClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void fetchAllPayments() throws RazorpayException{
+        JSONObject request = new JSONObject("{\"count\":\"1\"}");
+        String mockedResponseJson = getAllPaymentsResponse();
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<QrCode> response = qrCodeClient.fetchAllPayments(QRCODE_ID);
+            assertNotNull(response);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchAllPaymentsWithOutQuery() throws RazorpayException{
+        JSONObject request = new JSONObject("{\"count\":\"1\"}");
+        String mockedResponseJson = getAllPaymentsResponse();
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<QrCode> response = qrCodeClient.fetchAllPayments(QRCODE_ID, request);
+            assertNotNull(response);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    private String getAllPaymentsResponse() {
+      return "{\n" +
+              "  \"entity\": \"collection\",\n" +
+              "  \"count\": 1,\n" +
+              "  \"items\": [\n" +
+              "    {\n" +
+              "      \"id\": \"pay_HMtDKn3TnF4D8x\",\n" +
+              "      \"entity\": \"payment\",\n" +
+              "      \"amount\": 500,\n" +
+              "      \"currency\": \"INR\",\n" +
+              "      \"status\": \"captured\",\n" +
+              "      \"order_id\": null,\n" +
+              "      \"invoice_id\": null,\n" +
+              "      \"international\": false,\n" +
+              "      \"method\": \"upi\",\n" +
+              "      \"amount_refunded\": 0,\n" +
+              "      \"refund_status\": null,\n" +
+              "      \"captured\": true,\n" +
+              "      \"description\": \"QRv2 Payment\",\n" +
+              "      \"card_id\": null,\n" +
+              "      \"bank\": null,\n" +
+              "      \"wallet\": null,\n" +
+              "      \"vpa\": \"gauri.kumari@okhdfcbank\",\n" +
+              "      \"email\": \"gauri.kumari@example.com\",\n" +
+              "      \"contact\": \"+919000090000\",\n" +
+              "      \"customer_id\": \"cust_HKsR5se84c5LTO\",\n" +
+              "      \"notes\": [],\n" +
+              "      \"fee\": 0,\n" +
+              "      \"tax\": 0,\n" +
+              "      \"error_code\": null,\n" +
+              "      \"error_description\": null,\n" +
+              "      \"error_source\": null,\n" +
+              "      \"error_step\": null,\n" +
+              "      \"error_reason\": null,\n" +
+              "      \"acquirer_data\": {\n" +
+              "        \"rrn\": \"116514257019\"\n" +
+              "      },\n" +
+              "      \"created_at\": 1623662800\n" +
+              "    }\n" +
+              "  ]\n" +
+              "}";
+    }
 }

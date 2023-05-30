@@ -11,15 +11,15 @@ public class CustomerClient extends ApiClient {
   }
 
   public Customer create(JSONObject request) throws RazorpayException {
-    return post(Constants.CUSTOMER_CREATE, request);
+    return post(Constants.VERSION, Constants.CUSTOMER_CREATE, request);
   }
 
   public Customer fetch(String id) throws RazorpayException {
-    return get(String.format(Constants.CUSTOMER_GET, id), null);
+    return get(Constants.VERSION, String.format(Constants.CUSTOMER_GET, id), null);
   }
 
   public Customer edit(String id, JSONObject request) throws RazorpayException {
-    return put(String.format(Constants.CUSTOMER_EDIT, id), request);
+    return put(Constants.VERSION, String.format(Constants.CUSTOMER_EDIT, id), request);
   }
 
   /**
@@ -36,18 +36,18 @@ public class CustomerClient extends ApiClient {
    * @throws RazorpayException
    */
   public List<Customer> fetchAll(JSONObject request) throws RazorpayException {
-    return getCollection(Constants.CUSTOMER_LIST, request);
+    return getCollection(Constants.VERSION, Constants.CUSTOMER_LIST, request);
   }
 
   public List<Token> fetchTokens(String id) throws RazorpayException {
-    return getCollection(String.format(Constants.TOKEN_LIST, id), null);
+    return getCollection(Constants.VERSION, String.format(Constants.TOKEN_LIST, id), null);
   }
 
   public Token fetchToken(String id, String tokenId) throws RazorpayException {
-    return get(String.format(Constants.TOKEN_GET, id, tokenId), null);
+    return get(Constants.VERSION, String.format(Constants.TOKEN_GET, id, tokenId), null);
   }
 
   public Customer deleteToken(String id, String tokenId) throws RazorpayException {
-    return delete(String.format(Constants.TOKEN_DELETE, id, tokenId), null);
+    return delete(Constants.VERSION, String.format(Constants.TOKEN_DELETE, id, tokenId), null);
   }
 }

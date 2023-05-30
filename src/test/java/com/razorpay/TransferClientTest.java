@@ -204,4 +204,43 @@ public class TransferClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    /**
+     * Reverse transfers from all linked accounts
+     * @throws RazorpayException
+     */
+    @Test
+    public void reversal() throws RazorpayException{
+
+        JSONObject request = new JSONObject("{\n" +
+                "  \"amount\": \"100\",\n" +
+                "}");
+
+        String json = "{\n" +
+                "  \"id\": \"rvrsl_EB0BWgGDAu7tOz\",\n" +
+                "  \"entity\": \"reversal\",\n" +
+                "  \"transfer_id\": "+TRANSFER_ID+",\n" +
+                "  \"amount\": 100,\n" +
+                "  \"fee\": 0,\n" +
+                "  \"tax\": 0,\n" +
+                "  \"currency\": \"INR\",\n" +
+                "  \"notes\": [],\n" +
+                "  \"initiator_id\": \"CJoeHMNpi0nC7k\",\n" +
+                "  \"customer_refund_id\": null,\n" +
+                "  \"created_at\": 1580456007\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(json);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Reversal fetch = transferClient.reversal(TRANSFER_ID,request);
+            assertNotNull(fetch);
+            assertEquals(TRANSFER_ID,fetch.get("transfer_id"));
+            assertEquals("INR",fetch.get("currency"));
+            assertTrue(fetch.has("customer_refund_id"));
+            String editRequest = getHost(String.format(Constants.TRANSFER_REVERSAL_CREATE, TRANSFER_ID));
+            verifySentRequest(true, request.toString(), editRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

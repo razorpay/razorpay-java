@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -411,4 +412,113 @@ public class VirtualAccountClientTest extends BaseTest{
         }
     }
 
+    @Test
+    public void fetchPayments() throws RazorpayException{
+        JSONObject request = new JSONObject("{\"count\":\"1\"}");
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": \"pay_JGmL38CqCHTyZZ\",\n" +
+                "      \"entity\": \"payment\",\n" +
+                "      \"amount\": 1000,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"status\": \"captured\",\n" +
+                "      \"order_id\": null,\n" +
+                "      \"invoice_id\": null,\n" +
+                "      \"international\": false,\n" +
+                "      \"method\": \"bank_transfer\",\n" +
+                "      \"amount_refunded\": 0,\n" +
+                "      \"refund_status\": null,\n" +
+                "      \"captured\": true,\n" +
+                "      \"description\": null,\n" +
+                "      \"card_id\": null,\n" +
+                "      \"bank\": null,\n" +
+                "      \"wallet\": null,\n" +
+                "      \"vpa\": null,\n" +
+                "      \"email\": \"gaurav.kumar@example.com\",\n" +
+                "      \"contact\": \"+919000090000\",\n" +
+                "      \"customer_id\": \"cust_DzbSeP2RJD1ZHg\",\n" +
+                "      \"notes\": [],\n" +
+                "      \"fee\": 12,\n" +
+                "      \"tax\": 2,\n" +
+                "      \"error_code\": null,\n" +
+                "      \"error_description\": null,\n" +
+                "      \"error_source\": null,\n" +
+                "      \"error_step\": null,\n" +
+                "      \"error_reason\": null,\n" +
+                "      \"acquirer_data\": {\n" +
+                "        \"rrn\": \"209817848101\"\n" +
+                "      },\n" +
+                "      \"created_at\": 1649402719\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Payment> response = virtualAccountClient.fetchPayments(VIRTUAL_ACCOUNT_ID, request);
+            assertNotNull(response);
+            assertEquals(CUSTOMER_ID,response.get(0).get("customer_id"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchPaymentsWithOutQuery() throws RazorpayException{
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"collection\",\n" +
+                "  \"count\": 1,\n" +
+                "  \"items\": [\n" +
+                "    {\n" +
+                "      \"id\": \"pay_JGmL38CqCHTyZZ\",\n" +
+                "      \"entity\": \"payment\",\n" +
+                "      \"amount\": 1000,\n" +
+                "      \"currency\": \"INR\",\n" +
+                "      \"status\": \"captured\",\n" +
+                "      \"order_id\": null,\n" +
+                "      \"invoice_id\": null,\n" +
+                "      \"international\": false,\n" +
+                "      \"method\": \"bank_transfer\",\n" +
+                "      \"amount_refunded\": 0,\n" +
+                "      \"refund_status\": null,\n" +
+                "      \"captured\": true,\n" +
+                "      \"description\": null,\n" +
+                "      \"card_id\": null,\n" +
+                "      \"bank\": null,\n" +
+                "      \"wallet\": null,\n" +
+                "      \"vpa\": null,\n" +
+                "      \"email\": \"gaurav.kumar@example.com\",\n" +
+                "      \"contact\": \"+919000090000\",\n" +
+                "      \"customer_id\": \"cust_DzbSeP2RJD1ZHg\",\n" +
+                "      \"notes\": [],\n" +
+                "      \"fee\": 12,\n" +
+                "      \"tax\": 2,\n" +
+                "      \"error_code\": null,\n" +
+                "      \"error_description\": null,\n" +
+                "      \"error_source\": null,\n" +
+                "      \"error_step\": null,\n" +
+                "      \"error_reason\": null,\n" +
+                "      \"acquirer_data\": {\n" +
+                "        \"rrn\": \"209817848101\"\n" +
+                "      },\n" +
+                "      \"created_at\": 1649402719\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            List<Payment> response = virtualAccountClient.fetchPayments(VIRTUAL_ACCOUNT_ID);
+            verifySentRequest(false, null, getHost(String.format(Constants.VIRTUAL_ACCOUNT_PAYMENTS, VIRTUAL_ACCOUNT_ID)));
+            assertNotNull(response);
+            assertEquals(CUSTOMER_ID,response.get(0).get("customer_id"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

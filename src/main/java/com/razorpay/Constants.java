@@ -10,6 +10,8 @@ public class Constants {
   static final Integer PORT = 443;
   static final String VERSION = "v1";
 
+  static final String VERSION_V2 = "v2";
+
   static final String AUTH_HEADER_KEY = "Authorization";
   static final String USER_AGENT = "User-Agent";
   static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
@@ -28,7 +30,7 @@ public class Constants {
   static final String PAYMENT_OTP_RESEND = "payments/%s/otp/resend";
   static final String FETCH_CARD_DETAILS = "payments/%s/card";
   static final String FETCH_DOWNTIME_LIST = "payments/downtimes";
-  static final String FETCH_DOWNTIME_GET = "payments/downtimes";
+  static final String FETCH_DOWNTIME_GET = "payments/downtimes/%s";
   static final String PAYMENT_JSON_CREATE = "payments/create/json";
   static final String PAYMENT_RECURRING = "payments/create/recurring";
   static final String PAYMENT_CREATE_UPI = "payments/create/upi";
@@ -133,4 +135,30 @@ public class Constants {
   static final String VIRTUAL_ACCOUNT_RECEIVERS = "virtual_accounts/%s/receivers";
   static final String VIRTUAL_ACCOUNT_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers";
   static final String VIRTUAL_ACCOUNT_DELETE_ALLOWEDPAYERS = "virtual_accounts/%s/allowed_payers/%s";
+  
+  static final String CREATE_TOKEN = "tokens";
+  static final String DELETE_TOKEN = "tokens/delete";
+  static final String TOKEN_SERVICE_PROVIDER = "tokens/service_provider_tokens/token_transactional_data";
+  static final String FETCH_TOKEN = "tokens/fetch";
+  static final String IIN_FETCH = "iins/%s";
+  static final String CARD_REQUEST_REFERENCE = "cards/fingerprints";
+
+  static final String ACCOUNT_CREATE = "accounts";
+  static final String ACCOUNT_FETCH = "accounts/%s";
+  static final String ACCOUNT_EDIT = "accounts/%s";
+  static final String ACCOUNT_DELETE = "accounts/%s";
+
+  static final String STAKEHOLDER_CREATE = "accounts/%s/stakeholders";
+  static final String STAKEHOLDER_FETCH = "accounts/%s/stakeholders/%s";
+  static final String STAKEHOLDER_FETCH_ALL = "accounts/%s/stakeholders";
+  
+  static final String PRODUCT_REQUEST_CONFIGURATION = "accounts/%s/products";
+  static final String PRODUCT_CONFIGURATION = "accounts/%s/products/%s";
+  
+  static final String WEBHOOK_CREATE = "accounts/%s/webhooks";
+  static final String WEBHOOK_FETCH = "accounts/%s/webhooks/%s";
+  static final String WEBHOOK_FETCH_ALL = "accounts/%s/webhooks";
+  static final String WEBHOOK_EDIT = "accounts/%s/webhooks/%s";
+  
+  static final String TNC_FETCH = "products/%s/tnc";
 }

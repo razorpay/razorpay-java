@@ -781,6 +781,50 @@ Methods response = instance.payments.get("methods",null);
 **Response:** <br>
 please refer this [doc](https://razorpay.com/docs/payments/third-party-validation/s2s-integration/methods-api/#fetch-payment-methods) for response
 
+-------------------------------------------------------------------------------------------------------
+
+### Token IIN API
+
+```java
+String tokenIin = "412345";
+
+Iin token = instance.iin.fetch(tokenIin);
+```
+
+**Parameters:**
+
+| Name       | Type   | Description                       |
+|------------|--------|-----------------------------------|
+| tokenIin* | string | The token IIN. |
+
+**Response:**
+```json
+{
+  "iin": "412345",
+  "entity": "iin",
+  "network": "Visa",
+  "type": "credit",
+  "sub_type": "business",
+  "issuer_code": "HDFC",
+  "issuer_name": "HDFC Bank Ltd",
+  "international": false,
+  "is_tokenized": true,
+  "card_iin": "411111",
+  "emi":{
+     "available": true
+     },
+  "recurring": {
+     "available": true
+     },
+  "authentication_types": [
+   {
+       "type":"3ds"
+   },
+   {
+       "type":"otp"
+   }
+  ]
+}
 ```
 -------------------------------------------------------------------------------------------------------
 **PN: * indicates mandatory fields**
