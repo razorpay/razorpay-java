@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 1.4.4 - 2023-05-30
+[#286](https://github.com/razorpay/razorpay-java/pull/286) [`b6179a5`](https://github.com/razorpay/razorpay-java/commit/b6179a5a3425910a190f0d9e4f5ff0f8e423f6a9) feat: Added new API endpoints
+
+* Added account onboarding API (create, fetch, edit, delete)
+* Added stakeholders API (create, fetch, fetchAll, edit)
+* Added product configuration API (requestProductConfiguration, fetch, edit, fetchTnc)
+* Added webhooks API (create, fetch, fetchAll, edit, delete)
+* Added token sharing API (create, fetch, delete, processPaymentOnAlternatePAorPG)
+
 ## Version 1.4.3 - 2022-07-07
 * Added Third party validation API for Payments (createUpi, validateVpa)
 * Added Fetch payment methods API for Payments
