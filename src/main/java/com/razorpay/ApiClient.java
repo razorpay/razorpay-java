@@ -36,22 +36,38 @@ class ApiClient {
   }
 
   public <T extends Entity> T get(String version, String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.getRequest(version, path, requestObject, auth);
+    return get(version, path, requestObject, Constants.API);
+  }
+
+  public <T extends Entity> T get(String version, String path, JSONObject requestObject, String host) throws RazorpayException {
+    Response response = ApiUtils.getRequest(version, path, requestObject, auth, host);
     return processResponse(response);
   }
 
   public <T> T post(String version, String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.postRequest(version, path, requestObject, auth);
+    return post(version, path, requestObject, Constants.API);
+  }
+
+  public <T> T post(String version, String path, JSONObject requestObject, String host) throws RazorpayException {
+    Response response = ApiUtils.postRequest(version, path, requestObject, auth, host);
     return processResponse(response);
   }
 
   public <T extends Entity> T put(String version, String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.putRequest(version, path, requestObject, auth);
+    return put(version, path, requestObject, Constants.API);
+  }
+
+  public <T extends Entity> T put(String version, String path, JSONObject requestObject, String host) throws RazorpayException {
+    Response response = ApiUtils.putRequest(version, path, requestObject, auth, host);
     return processResponse(response);
   }
 
   public <T extends Entity> T patch(String version, String path, JSONObject requestObject) throws RazorpayException {
-    Response response = ApiUtils.patchRequest(version, path, requestObject, auth);
+    return patch(version, path, requestObject, Constants.API);
+  }
+
+  public <T extends Entity> T patch(String version, String path, JSONObject requestObject, String host) throws RazorpayException {
+    Response response = ApiUtils.patchRequest(version, path, requestObject, auth, host);
     return processResponse(response);
   }
 

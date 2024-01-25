@@ -66,9 +66,14 @@ class ApiUtils {
   }
 
   static Response postRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return postRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response postRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(version, path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -78,9 +83,14 @@ class ApiUtils {
   }
 
   static Response putRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return putRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response putRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(version, path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -91,9 +101,14 @@ class ApiUtils {
   }
 
   static Response patchRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return patchRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response patchRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(version, path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -104,27 +119,58 @@ class ApiUtils {
   }
 
   static Response getRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return getRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response getRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(version, path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
     addQueryParams(builder, requestObject);
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
   static Response deleteRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return deleteRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response deleteRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(version, path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  private static HttpUrl.Builder getBuilder(String version, String path) {
+  private static HttpUrl.Builder getBuilder(String version, String path, String host) {
+    HttpUrl.Builder builder;
+    switch (host)
+    {
+      case Constants.API:
+        builder = getAPIBuilder(version, path);
+        break;
+      case Constants.AUTH:
+        builder = getOAuthBuilder(path);
+        break;
+      default:
+        builder = getAPIBuilder(version, path);
+    }
+    return builder;
+  }
+
+  private static HttpUrl.Builder getAPIBuilder(String version, String path) {
     return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
-        .port(Constants.PORT).addPathSegment(version).addPathSegments(path);
+            .port(Constants.PORT).addPathSegment(version).addPathSegments(path);
+  }
+
+  private static HttpUrl.Builder getOAuthBuilder(String path) {
+    return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.AUTH_HOSTNAME)
+            .port(Constants.PORT).addPathSegments(path);
   }
 
   private static Request createRequest(String method, String url, RequestBody requestBody,
