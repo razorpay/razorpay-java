@@ -42,15 +42,13 @@ public class OAuthTokenClient extends ApiClient {
         return AuthorizeUrl;
     }
 
-    public OAuthToken getAccessTokenViaAuthCode(JSONObject request) throws RazorpayException {
+    public OAuthToken getAccessToken(JSONObject request) throws RazorpayException {
         GetAccessTokenViaAuthCodeRequestDTO getAccessTokenViaAuthCodeRequestDTO = convertToGetAccessTokenViaAuthCodeRequestDTO(request);
         validateGetAccessTokenViaAuthCodeRequestDTO(getAccessTokenViaAuthCodeRequestDTO);
-
-        request.put("grant_type", "authorization_code");
         return post(null, "/token", request, Constants.AUTH);
     }
 
-    public OAuthToken getAccessTokenViaRefreshToken(JSONObject request) throws RazorpayException {
+    public OAuthToken getAccessTokenFromRefreshToken(JSONObject request) throws RazorpayException {
         GetAccessTokenViaRefreshTokenRequestDTO getAccessTokenViaRefreshTokenRequestDTO = convertToGetAccessTokenViaRefreshTokenRequestDTO(request);
         validateGetAccessTokenViaRefreshTokenRequestDTO(getAccessTokenViaRefreshTokenRequestDTO);
 
