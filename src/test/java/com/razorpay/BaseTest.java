@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyObject;
@@ -88,6 +89,16 @@ public class BaseTest {
             assertEquals(new JSONObject(request).toString(), new JSONObject(bodyToString(req.getAllValues().get(0))).toString());
         }
         assertEquals(requestPath, req.getValue().url().toString());
+    }
+
+    protected void verifySendRequestAndHeaders(String request, String requestPath, Map<String, String> headers) {
+        ArgumentCaptor<Request> req = ArgumentCaptor.forClass(Request.class);
+        Mockito.verify(getOkHttpClient()).newCall(req.capture());
+
+        Request capturedRequest = req.getValue();
+        headers.forEach((key, value) -> {
+            assertEquals(capturedRequest.header(key), value);
+        });
     }
 
     private static String bodyToString(final Request request) {
