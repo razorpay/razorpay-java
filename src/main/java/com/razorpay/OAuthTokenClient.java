@@ -12,6 +12,13 @@ public class OAuthTokenClient extends ApiClient {
     static final String CLIENT_ID = "client_id";
     static final String CLIENT_SECRET = "client_secret";
     static final String GRANT_TYPE = "grant_type";
+    static final String REFRESH_TOKEN = "refresh_token";
+    static final String TOKEN = "token";
+    static final String TOKEN_TYPE_HINT = "token_type_hint";
+    static final String REDIRECT_URI = "redirect_uri";
+    static final String SCOPES = "scopes";
+    static final String STATE = "state";
+    static final String MODE = "mode";
     private final PayloadValidator payloadValidator;
 
     OAuthTokenClient(String auth) {
@@ -49,7 +56,7 @@ public class OAuthTokenClient extends ApiClient {
 
     public OauthToken refreshToken(JSONObject request) throws RazorpayException {
         validateRefreshTokenRequest(request);
-        request.put("grant_type", "refresh_token");
+        request.put(GRANT_TYPE, REFRESH_TOKEN);
         return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
@@ -84,36 +91,36 @@ public class OAuthTokenClient extends ApiClient {
 
     private List<ValidationConfig> getValidationsForAuthRequestURL() {
         return Arrays.asList(
-                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
-                new ValidationConfig("redirect_uri", Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
-                new ValidationConfig("scopes", Collections.singletonList(ValidationType.NON_NULL)),
-                new ValidationConfig("state", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
+                new ValidationConfig(SCOPES, Collections.singletonList(ValidationType.NON_NULL)),
+                new ValidationConfig(STATE, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
         );
     }
 
     private List<ValidationConfig> getValidationsForAccessTokenRequest() {
         return Arrays.asList(
-                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
-                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig("redirect_uri", Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
-                new ValidationConfig("mode", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
+                new ValidationConfig(MODE, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
         );
     }
 
     private List<ValidationConfig> getValidationsForRefreshTokenRequest() {
         return Arrays.asList(
-                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
-                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig("refresh_token", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig(REFRESH_TOKEN, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
         );
     }
 
     private List<ValidationConfig> getValidationsForRevokeTokenRequest() {
         return Arrays.asList(
-                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
-                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig("token", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig("token_type_hint", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig(TOKEN, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig(TOKEN_TYPE_HINT, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
         );
     }
 }
