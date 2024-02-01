@@ -1,5 +1,9 @@
 package com.razorpay;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import java.util.Date;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -46,6 +50,20 @@ public class Utils {
       throws RazorpayException {
     String actualSignature = getHash(payload, secret);
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
+  }
+
+  public static String generateOnboardingSignature(JSONObject attributes, String secret) {
+    long expirationTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // 24 hours in milliseconds
+
+    String partnerId = attributes.getString("partner_id");
+    String submerchantId = attributes.getString("submerchant_id");
+
+    // Create and sign the token
+    return JWT.create()
+            .withClaim("partner_id", partnerId)
+            .withClaim("submerchant_id", submerchantId)
+            .withExpiresAt(new Date(expirationTime))
+            .sign(Algorithm.HMAC256(secret));
   }
 
   public static String getHash(String payload, String secret) throws RazorpayException {

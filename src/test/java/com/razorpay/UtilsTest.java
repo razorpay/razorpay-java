@@ -1,5 +1,9 @@
 package com.razorpay;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -62,6 +66,20 @@ public class UtilsTest {
         String payload = "{\"a\":1,\"b\":2,\"c\":{\"d\":3}}";
         String secret = "123456";
         assertTrue(Utils.verifyWebhookSignature(payload,signature, secret));
+    }
+
+    @Test
+    public void testGenerateOnboardingSignature() {
+        JSONObject options = new JSONObject();
+        options.put("partner_id", "Jh2SanjSsIidny");
+        options.put("submerchant_id", "NSgKfYIR2f9v2y");
+        String secret = "EnLs21M47BllR3X8PSFtjtbd";
+        String token = Utils.generateOnboardingSignature(options, secret);
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+        assertNotNull(jwt);
     }
 
 }

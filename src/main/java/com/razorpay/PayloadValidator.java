@@ -29,8 +29,10 @@ public class PayloadValidator {
                 break;
             case ID:
                 validateID(payload, field);
+                break;
             case MODE:
                 validateMode(payload, field);
+                break;
             default:
                 break;
         }
