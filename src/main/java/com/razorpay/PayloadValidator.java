@@ -39,7 +39,7 @@ public class PayloadValidator {
     private void validateMode(JSONObject payload, String field) throws RazorpayException {
         validateNonNull(payload, field);
         String mode = payload.getString(field);
-        if (Arrays.asList("test", "live").contains(mode)) {
+        if (!Arrays.asList("test", "live").contains(mode)) {
             String errorMessage = "Invalid value provided for field %s";
             throw new RazorpayException(String.format(errorMessage, field));
         }
