@@ -19,7 +19,8 @@ public enum EntityNameURLMapping {
     CUSTOMERS("customer"),
     CARDS("card"),
     TOKENS("token"),
-    ACCOUNTS("account");
+    ACCOUNTS("account"),
+    TOKEN("oauth_token");
     private String entity;
 
     EntityNameURLMapping(String entity) {

@@ -22,7 +22,7 @@ public class OAuthTokenClientTest extends BaseTest {
                 "\"scopes\": [\n        \"read_write\"\n    ]\n" +
                 "}");
 
-        String expectedAuthURL = "https://auth.razorpay.com/authorize?response_type=code&client_id=8DXCMTshWSWECc&redirect_uri=https://example.com/razorpay_callback&scope=read_write&state=NOBYtv8r6c75ex6WZ";
+        String expectedAuthURL = "https://auth.razorpay.com/authorize?response_type=code&client_id=8DXCMTshWSWECc&redirect_uri=https://example.com/razorpay_callback&scope[]=read_write&state=NOBYtv8r6c75ex6WZ";
         String authURL = oAuthTokenClient.getAuthURL(request);
         assertEquals(expectedAuthURL, authURL);
     }
@@ -37,7 +37,7 @@ public class OAuthTokenClientTest extends BaseTest {
                     "}");
             oAuthTokenClient.getAuthURL(request);
         } catch (RazorpayException ex) {
-            assertEquals("Invalid request parameters", ex.getMessage());
+            assertEquals("Field state cannot be empty", ex.getMessage());
         }
     }
 
@@ -71,7 +71,7 @@ public class OAuthTokenClientTest extends BaseTest {
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            OAuthToken oAuthToken = oAuthTokenClient.getAccessToken(request);
+            OauthToken oAuthToken = oAuthTokenClient.getAccessToken(request);
             assertNotNull(oAuthToken);
         } catch (IOException e) {
             assertTrue(false);
@@ -89,7 +89,7 @@ public class OAuthTokenClientTest extends BaseTest {
                     "\"mode\": \"test\"\n}");
             oAuthTokenClient.getAccessToken(request);
         } catch (RazorpayException ex) {
-            assertEquals("Invalid request parameters", ex.getMessage());
+            assertEquals("Field client_secret cannot be empty", ex.getMessage());
         }
     }
 
@@ -122,7 +122,7 @@ public class OAuthTokenClientTest extends BaseTest {
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            OAuthToken oAuthToken = oAuthTokenClient.getAccessToken(request);
+            OauthToken oAuthToken = oAuthTokenClient.getAccessToken(request);
             assertNotNull(oAuthToken);
         } catch (IOException e) {
             assertTrue(false);
@@ -145,7 +145,7 @@ public class OAuthTokenClientTest extends BaseTest {
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            OAuthToken oAuthToken = oAuthTokenClient.getAccessTokenFromRefreshToken(request);
+            OauthToken oAuthToken = oAuthTokenClient.refreshToken(request);
             assertNotNull(oAuthToken);
             assertEquals("rzp_test_oauth_9xu1rkZqoXlClS", oAuthToken.get("public_token"));
         } catch (IOException e) {
@@ -160,9 +160,9 @@ public class OAuthTokenClientTest extends BaseTest {
                     "\"client_id\": \"8DXCMTshWSWECc\",\n    " +
                     "\"client_secret\": \"AESSECRETKEY\",\n    " +
                     "}");
-            oAuthTokenClient.getAccessTokenFromRefreshToken(request);
+            oAuthTokenClient.refreshToken(request);
         } catch (RazorpayException ex) {
-            assertEquals("Invalid request parameters", ex.getMessage());
+            assertEquals("Field refresh_token cannot be empty", ex.getMessage());
         }
     }
 
@@ -182,7 +182,7 @@ public class OAuthTokenClientTest extends BaseTest {
         try {
             mockResponseFromExternalClient("{\n    \"message\": \"Token Revoked\"\n}");
             mockResponseHTTPCodeFromExternalClient(200);
-            OAuthToken oAuthToken = oAuthTokenClient.revokeToken(request);
+            OauthToken oAuthToken = oAuthTokenClient.revokeToken(request);
             assertNotNull(oAuthToken);
             assertEquals("Token Revoked", oAuthToken.get("message"));
         } catch (IOException e) {
@@ -199,7 +199,7 @@ public class OAuthTokenClientTest extends BaseTest {
                     "}");
             oAuthTokenClient.revokeToken(request);
         } catch (RazorpayException ex) {
-            assertEquals("Invalid request parameters", ex.getMessage());
+            assertEquals("Field token cannot be empty", ex.getMessage());
         }
     }
 }

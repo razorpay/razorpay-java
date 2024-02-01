@@ -1,33 +1,33 @@
 package com.razorpay;
 
-import com.razorpay.dto.AuthURLRequestDTO;
-import com.razorpay.dto.GetAccessTokenViaAuthCodeRequestDTO;
-import com.razorpay.dto.GetAccessTokenViaRefreshTokenRequestDTO;
-import com.razorpay.dto.RevokeTokenRequestDTO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class OAuthTokenClient extends ApiClient {
 
+    static final String CLIENT_ID = "client_id";
+    static final String CLIENT_SECRET = "client_secret";
+    static final String GRANT_TYPE = "grant_type";
+    private final PayloadValidator payloadValidator;
+
     OAuthTokenClient(String auth) {
         super(auth);
+        this.payloadValidator = new PayloadValidator();
     }
 
     public String getAuthURL(JSONObject request) throws RazorpayException {
-        AuthURLRequestDTO authURLRequestDTO = convertToAuthRequestDTO(request);
-        validateAuthRequestDTO(authURLRequestDTO);
+        validateAuthURLRequest(request);
 
         String clientId = request.getString("client_id");
         String redirectUri = request.getString("redirect_uri");
         String state = request.getString("state");
         String[] scopes = jsonArrayToStringArray(request.getJSONArray("scopes"));
 
-        String scopesArray = (scopes != null && scopes.length > 0) ?
+        String scopesArray = scopes.length > 0 ?
                 "&scope[]=" + String.join("&scope[]=", scopes) : "";
 
         String AuthorizeUrl = "https://"
@@ -42,93 +42,20 @@ public class OAuthTokenClient extends ApiClient {
         return AuthorizeUrl;
     }
 
-    public OAuthToken getAccessToken(JSONObject request) throws RazorpayException {
-        GetAccessTokenViaAuthCodeRequestDTO getAccessTokenViaAuthCodeRequestDTO = convertToGetAccessTokenViaAuthCodeRequestDTO(request);
-        validateGetAccessTokenViaAuthCodeRequestDTO(getAccessTokenViaAuthCodeRequestDTO);
+    public OauthToken getAccessToken(JSONObject request) throws RazorpayException {
+        validateAccessTokenRequest(request);
         return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
-    public OAuthToken getAccessTokenFromRefreshToken(JSONObject request) throws RazorpayException {
-        GetAccessTokenViaRefreshTokenRequestDTO getAccessTokenViaRefreshTokenRequestDTO = convertToGetAccessTokenViaRefreshTokenRequestDTO(request);
-        validateGetAccessTokenViaRefreshTokenRequestDTO(getAccessTokenViaRefreshTokenRequestDTO);
-
+    public OauthToken refreshToken(JSONObject request) throws RazorpayException {
+        validateRefreshTokenRequest(request);
         request.put("grant_type", "refresh_token");
         return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
-    public OAuthToken revokeToken(JSONObject request) throws RazorpayException {
-        RevokeTokenRequestDTO revokeTokenRequestDTO = convertToRevokeTokenRequestDTORequestDTO(request);
-        validateRevokeTokenRequestDTO(revokeTokenRequestDTO);
-
+    public OauthToken revokeToken(JSONObject request) throws RazorpayException {
+        validateRevokeTokenRequest(request);
         return patch(null, Constants.REVOKE, request, Constants.AUTH);
-    }
-
-    private AuthURLRequestDTO convertToAuthRequestDTO(JSONObject request) {
-        return new AuthURLRequestDTO(
-                request.getString("client_id"),
-                request.getString("redirect_uri"),
-                jsonArrayToStringArray(request.getJSONArray("scopes")),
-                request.getString("state")
-        );
-    }
-
-    private void validateAuthRequestDTO(AuthURLRequestDTO authRequestDTO) throws RazorpayException {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<AuthURLRequestDTO>> violations = validator.validate(authRequestDTO);
-        if (!violations.isEmpty()) {
-            throw new RazorpayException("Invalid request parameters");
-        }
-    }
-
-    private GetAccessTokenViaAuthCodeRequestDTO convertToGetAccessTokenViaAuthCodeRequestDTO(JSONObject request) {
-        return new GetAccessTokenViaAuthCodeRequestDTO(
-                request.getString("client_id"),
-                request.getString("client_secret"),
-                request.getString("redirect_uri"),
-                request.getString("code"),
-                request.getString("mode")
-        );
-    }
-
-    private void validateGetAccessTokenViaAuthCodeRequestDTO(GetAccessTokenViaAuthCodeRequestDTO getAccessTokenViaAuthCodeRequestDTO) throws RazorpayException {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<GetAccessTokenViaAuthCodeRequestDTO>> violations = validator.validate(getAccessTokenViaAuthCodeRequestDTO);
-        if (!violations.isEmpty()) {
-            throw new RazorpayException("Invalid request parameters");
-        }
-    }
-
-    private GetAccessTokenViaRefreshTokenRequestDTO convertToGetAccessTokenViaRefreshTokenRequestDTO(JSONObject request) {
-        return new GetAccessTokenViaRefreshTokenRequestDTO(
-                request.getString("client_id"),
-                request.getString("client_secret"),
-                request.getString("refresh_token")
-        );
-    }
-
-    private void validateGetAccessTokenViaRefreshTokenRequestDTO(GetAccessTokenViaRefreshTokenRequestDTO getAccessTokenViaRefreshTokenRequestDTO) throws RazorpayException {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<GetAccessTokenViaRefreshTokenRequestDTO>> violations = validator.validate(getAccessTokenViaRefreshTokenRequestDTO);
-        if (!violations.isEmpty()) {
-            throw new RazorpayException("Invalid request parameters");
-        }
-    }
-
-    private RevokeTokenRequestDTO convertToRevokeTokenRequestDTORequestDTO(JSONObject request) {
-        return new RevokeTokenRequestDTO(
-                request.getString("client_id"),
-                request.getString("client_secret"),
-                request.getString("token"),
-                request.getString("token_type_hint")
-        );
-    }
-
-    private void validateRevokeTokenRequestDTO(RevokeTokenRequestDTO revokeTokenRequestDTO) throws RazorpayException {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<RevokeTokenRequestDTO>> violations = validator.validate(revokeTokenRequestDTO);
-        if (!violations.isEmpty()) {
-            throw new RazorpayException("Invalid request parameters");
-        }
     }
 
     private String[] jsonArrayToStringArray(JSONArray jsonArray) {
@@ -137,5 +64,56 @@ public class OAuthTokenClient extends ApiClient {
             array[i] = jsonArray.getString(i);
         }
         return array;
+    }
+
+    private void validateAuthURLRequest(JSONObject request) throws RazorpayException {
+        payloadValidator.validate(request, getValidationsForAuthRequestURL());
+    }
+
+    private void validateAccessTokenRequest(JSONObject request) throws RazorpayException {
+        payloadValidator.validate(request, getValidationsForAccessTokenRequest());
+    }
+
+    private void validateRefreshTokenRequest(JSONObject request) throws RazorpayException {
+        payloadValidator.validate(request, getValidationsForRefreshTokenRequest());
+    }
+
+    private void validateRevokeTokenRequest(JSONObject request) throws RazorpayException {
+        payloadValidator.validate(request, getValidationsForRevokeTokenRequest());
+    }
+
+    private List<ValidationConfig> getValidationsForAuthRequestURL() {
+        return Arrays.asList(
+                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig("redirect_uri", Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
+                new ValidationConfig("scopes", Collections.singletonList(ValidationType.NON_NULL)),
+                new ValidationConfig("state", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+        );
+    }
+
+    private List<ValidationConfig> getValidationsForAccessTokenRequest() {
+        return Arrays.asList(
+                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig("redirect_uri", Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
+                new ValidationConfig("mode", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+        );
+    }
+
+    private List<ValidationConfig> getValidationsForRefreshTokenRequest() {
+        return Arrays.asList(
+                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig("refresh_token", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+        );
+    }
+
+    private List<ValidationConfig> getValidationsForRevokeTokenRequest() {
+        return Arrays.asList(
+                new ValidationConfig("client_id", Collections.singletonList(ValidationType.ID)),
+                new ValidationConfig("client_secret", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig("token", Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig("token_type_hint", Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+        );
     }
 }

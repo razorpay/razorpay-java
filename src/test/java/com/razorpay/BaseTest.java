@@ -69,6 +69,8 @@ public class BaseTest {
             JSONObject parse = new JSONObject(response);
             ResponseBody rb = mock(ResponseBody.class);
             when(rb.string()).thenReturn(parse.toString());
+            when(mockedResponse.request().url()).thenReturn(
+                    new HttpUrl.Builder().scheme("https").host("auth.razorpay.com").addPathSegments("/token").build());
             when(mockedResponse.body()).thenReturn(rb);
         }
     }
