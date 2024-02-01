@@ -20,8 +20,6 @@ public class GetAccessTokenViaAuthCodeRequestDTO {
 
     @NotNull
     private String redirect_uri;
-
-    @NotNull
     private String code;
 
     @NotNull
