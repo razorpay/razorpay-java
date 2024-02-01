@@ -167,7 +167,7 @@ public class Constants {
 
   // Auth constants
   static final String AUTHORIZE = "authorize";
-  static final String TOKEN     = "token";
-  static final String REVOKE     = "revoke";
+  static final String TOKEN     = "/token";
+  static final String REVOKE     = "/revoke";
 
 }

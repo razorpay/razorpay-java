@@ -45,7 +45,7 @@ public class OAuthTokenClient extends ApiClient {
     public OAuthToken getAccessToken(JSONObject request) throws RazorpayException {
         GetAccessTokenViaAuthCodeRequestDTO getAccessTokenViaAuthCodeRequestDTO = convertToGetAccessTokenViaAuthCodeRequestDTO(request);
         validateGetAccessTokenViaAuthCodeRequestDTO(getAccessTokenViaAuthCodeRequestDTO);
-        return post(null, "/token", request, Constants.AUTH);
+        return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
     public OAuthToken getAccessTokenFromRefreshToken(JSONObject request) throws RazorpayException {
@@ -53,14 +53,14 @@ public class OAuthTokenClient extends ApiClient {
         validateGetAccessTokenViaRefreshTokenRequestDTO(getAccessTokenViaRefreshTokenRequestDTO);
 
         request.put("grant_type", "refresh_token");
-        return post(null, "/token", request, Constants.AUTH);
+        return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
     public OAuthToken revokeToken(JSONObject request) throws RazorpayException {
         RevokeTokenRequestDTO revokeTokenRequestDTO = convertToRevokeTokenRequestDTORequestDTO(request);
         validateRevokeTokenRequestDTO(revokeTokenRequestDTO);
 
-        return patch(null, "/revoke", request, Constants.AUTH);
+        return patch(null, Constants.REVOKE, request, Constants.AUTH);
     }
 
     private AuthURLRequestDTO convertToAuthRequestDTO(JSONObject request) {
