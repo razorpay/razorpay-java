@@ -62,7 +62,7 @@ public class OAuthTokenClient extends ApiClient {
 
     public OauthToken revokeToken(JSONObject request) throws RazorpayException {
         validateRevokeTokenRequest(request);
-        return patch(null, Constants.REVOKE, request, Constants.AUTH);
+        return post(null, Constants.REVOKE, request, Constants.AUTH);
     }
 
     private String[] jsonArrayToStringArray(JSONArray jsonArray) {
