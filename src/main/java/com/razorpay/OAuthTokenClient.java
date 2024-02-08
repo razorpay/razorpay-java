@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import okhttp3.HttpUrl;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,19 +36,23 @@ public class OAuthTokenClient extends ApiClient {
         String state = request.getString("state");
         String[] scopes = jsonArrayToStringArray(request.getJSONArray("scopes"));
 
-        String scopesArray = scopes.length > 0 ?
-                "&scope[]=" + String.join("&scope[]=", scopes) : "";
+        HttpUrl.Builder httpUrlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(Constants.AUTH_HOSTNAME)
+                .addPathSegment(Constants.AUTHORIZE)
+                .addQueryParameter("response_type", "code")
+                .addQueryParameter("client_id", clientId)
+                .addQueryParameter("redirect_uri", redirectUri)
+                .addQueryParameter("state", state);
 
-        String AuthorizeUrl = "https://"
-                + Constants.AUTH_HOSTNAME
-                + "/" + Constants.AUTHORIZE
-                + "?response_type=code"
-                + "&client_id=" + clientId
-                + "&redirect_uri=" + redirectUri
-                + scopesArray
-                + "&state=" + state;
+        for (String scope : scopes) {
+            httpUrlBuilder.addQueryParameter("scope[]=", scope);
+        }
 
-        return AuthorizeUrl;
+        if (request.has("onboarding_signature")) {
+            httpUrlBuilder.addQueryParameter("onboarding_signature", request.getString("onboarding_signature"));
+        }
+        return httpUrlBuilder.build().toString();
     }
 
     public OauthToken getAccessToken(JSONObject request) throws RazorpayException {

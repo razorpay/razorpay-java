@@ -30,7 +30,7 @@ public class OAuthTokenClientTest extends BaseTest {
                 "\"scopes\": [\n        \"read_write\"\n    ]\n" +
                 "}");
 
-        String expectedAuthURL = "https://auth.razorpay.com/authorize?response_type=code&client_id=8DXCMTshWSWECc&redirect_uri=https://example.com/razorpay_callback&scope[]=read_write&state=NOBYtv8r6c75ex6WZ";
+        String expectedAuthURL = "https://auth.razorpay.com/authorize?response_type=code&client_id=8DXCMTshWSWECc&redirect_uri=https%3A%2F%2Fexample.com%2Frazorpay_callback&state=NOBYtv8r6c75ex6WZ&scope%5B%5D%3D=read_write";
         String authURL = oAuthTokenClient.getAuthURL(request);
         assertEquals(expectedAuthURL, authURL);
     }
