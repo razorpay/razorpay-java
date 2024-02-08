@@ -1,10 +1,6 @@
 package com.razorpay;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
