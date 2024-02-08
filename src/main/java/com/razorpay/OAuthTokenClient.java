@@ -21,8 +21,9 @@ public class OAuthTokenClient extends ApiClient {
     static final String MODE = "mode";
     private final PayloadValidator payloadValidator;
 
-    OAuthTokenClient(String auth) {
-        super(auth);
+    public OAuthTokenClient() throws RazorpayException {
+        super();
+        ApiUtils.createHttpClientInstance(false);
         this.payloadValidator = new PayloadValidator();
     }
 
@@ -102,8 +103,7 @@ public class OAuthTokenClient extends ApiClient {
         return Arrays.asList(
                 new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
                 new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
-                new ValidationConfig(MODE, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL))
         );
     }
 

@@ -11,7 +11,15 @@ import static org.junit.Assert.*;
 public class OAuthTokenClientTest extends BaseTest {
 
     @InjectMocks
-    protected OAuthTokenClient oAuthTokenClient = new OAuthTokenClient(TEST_SECRET_KEY);
+    protected OAuthTokenClient oAuthTokenClient;
+
+    {
+        try {
+            oAuthTokenClient = new OAuthTokenClient();
+        } catch (RazorpayException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     public void testGetAuthURL() throws RazorpayException {

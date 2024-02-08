@@ -176,7 +176,12 @@ class ApiUtils {
   private static Request createRequest(String method, String url, RequestBody requestBody,
       String auth) {
     Request.Builder builder =
-        new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
+        new Request.Builder().url(url);
+
+    if (auth != null) {
+      builder.addHeader(Constants.AUTH_HEADER_KEY, auth);
+    }
+
     builder.addHeader(Constants.USER_AGENT,
         "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
 

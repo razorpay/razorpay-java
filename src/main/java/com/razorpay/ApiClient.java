@@ -31,6 +31,8 @@ class ApiClient {
 
   private final int STATUS_MULTIPLE_CHOICE = 300;
 
+  ApiClient() { }
+
   ApiClient(String auth) {
     this.auth = auth;
   }
