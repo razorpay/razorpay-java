@@ -2,9 +2,13 @@ package com.razorpay;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+import javax.crypto.Cipher;
 import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
@@ -52,18 +56,39 @@ public class Utils {
     return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
   }
 
-  public static String generateOnboardingSignature(JSONObject attributes, String secret) {
-    long expirationTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000); // 24 hours in milliseconds
+  public static String generateOnboardingSignature(JSONObject attributes, String secret) throws RazorpayException {
+    String jsonString = attributes.toString();
+    return encrypt(jsonString, secret);
+  }
 
-    String partnerId = attributes.getString("partner_id");
-    String submerchantId = attributes.getString("submerchant_id");
+  public static String encrypt(String dataToEncrypt, String secret) throws RazorpayException {
+    byte[] key = secret.getBytes(StandardCharsets.UTF_8);
+    byte[] iv = secret.getBytes(StandardCharsets.UTF_8);
+    SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+    IvParameterSpec ivParameterSpec = new IvParameterSpec(iv, 0, 16);
+    try {
+      // Initialize the Cipher for encryptio
+      Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+      byte[] encryptedBytes = cipher.doFinal(dataToEncrypt.getBytes(StandardCharsets.UTF_8));
+      return bytesToHex(encryptedBytes);
+    }
+    catch (Exception e) {
+      throw new RazorpayException(e.getMessage());
+    }
+  }
 
-    // Create and sign the token
-    return JWT.create()
-            .withClaim("partner_id", partnerId)
-            .withClaim("submerchant_id", submerchantId)
-            .withExpiresAt(new Date(expirationTime))
-            .sign(Algorithm.HMAC256(secret));
+  public static String bytesToHex(byte[] bytes) {
+    StringBuilder hexBuilder = new StringBuilder();
+    for (byte b : bytes) {
+      // Convert the byte to an int (considering the byte to be unsigned)
+      int unsignedByte = b & 0xFF;
+
+      // Convert the int to a hex string and append to the builder
+      // The format "%02x" ensures the hex string is zero-padded to two characters
+      hexBuilder.append(String.format("%02x", unsignedByte));
+    }
+    return hexBuilder.toString();
   }
 
   public static String getHash(String payload, String secret) throws RazorpayException {

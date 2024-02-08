@@ -7,6 +7,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class UtilsTest {
@@ -69,17 +75,58 @@ public class UtilsTest {
     }
 
     @Test
-    public void testGenerateOnboardingSignature() {
+    public void testGenerateOnboardingSignature() throws RazorpayException {
+        long timestamp = System.currentTimeMillis();
         JSONObject options = new JSONObject();
-        options.put("partner_id", "Jh2SanjSsIidny");
         options.put("submerchant_id", "NSgKfYIR2f9v2y");
+        options.put("timestamp", timestamp);
         String secret = "EnLs21M47BllR3X8PSFtjtbd";
-        String token = Utils.generateOnboardingSignature(options, secret);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
-        DecodedJWT jwt = verifier.verify(token);
-        assertNotNull(jwt);
+        String encryptedHexData = Utils.generateOnboardingSignature(options, secret);
+        try {
+            String decryptedData = decryptData(encryptedHexData, secret);
+            JSONObject data = new JSONObject(decryptedData);
+            assertEquals("NSgKfYIR2f9v2y", data.getString("submerchant_id"));
+            assertEquals(timestamp, data.get("timestamp"));
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testGenerateSignature() throws RazorpayException {
+        long timestamp = System.currentTimeMillis();
+        JSONObject options = new JSONObject();
+        options.put("submerchant_id", "NYNySUDv1wAUH7");
+        options.put("timestamp", timestamp);
+        String secret = "AVzDyiomI3GvS5T0ZzdSY6Xt";
+        String encryptedData = Utils.generateOnboardingSignature(options, secret);
+        System.out.println("encryptedData " + encryptedData);
+    }
+
+    private String decryptData(String encryptedHexData, String secret) throws Exception {
+        byte[] encryptedData = hexStringToByteArray(encryptedHexData);
+        return decrypt(encryptedData, secret);
+    }
+    public static String decrypt(byte[] encryptedData, String secret) throws Exception {
+        byte[] key = secret.getBytes(StandardCharsets.UTF_8);
+        byte[] iv = secret.getBytes(StandardCharsets.UTF_8);
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv, 0, 16);
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
+        byte[] decryptedBytes = cipher.doFinal(encryptedData);
+        return new String(decryptedBytes);
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
 }
