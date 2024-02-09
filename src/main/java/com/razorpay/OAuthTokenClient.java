@@ -61,8 +61,8 @@ public class OAuthTokenClient extends ApiClient {
     }
 
     public OauthToken refreshToken(JSONObject request) throws RazorpayException {
-        validateRefreshTokenRequest(request);
         request.put(GRANT_TYPE, REFRESH_TOKEN);
+        validateRefreshTokenRequest(request);
         return post(null, Constants.TOKEN, request, Constants.AUTH);
     }
 
