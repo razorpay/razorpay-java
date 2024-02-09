@@ -33,6 +33,8 @@ public class PayloadValidator {
             case MODE:
                 validateMode(payload, field);
                 break;
+            case TOKEN_GRANT:
+                validateGrantType(payload, field);
             default:
                 break;
         }
@@ -78,6 +80,22 @@ public class PayloadValidator {
         if (!value.matches(idRegex)) {
             String errorMessage = "Field %s is not a valid ID";
             throw new RazorpayException(String.format(errorMessage, field));
+        }
+    }
+
+    private void validateGrantType(JSONObject payload, String field) throws RazorpayException {
+        validateNonNull(payload, field);
+        String grantType = payload.getString(field);
+        switch (grantType)
+        {
+            case "authorization_code":
+                validateNonNull(payload, "code");
+                break;
+            case "refresh_token":
+                validateNonNull(payload, "refresh_token");
+                break;
+            default:
+                break;
         }
     }
 }

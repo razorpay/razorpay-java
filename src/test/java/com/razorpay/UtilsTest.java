@@ -1,9 +1,5 @@
 package com.razorpay;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -11,12 +7,10 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
 public class UtilsTest {
-
 
     /**
      * Verify razorpay payment signature

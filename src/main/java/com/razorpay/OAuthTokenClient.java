@@ -108,7 +108,8 @@ public class OAuthTokenClient extends ApiClient {
         return Arrays.asList(
                 new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
                 new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL))
+                new ValidationConfig(REDIRECT_URI, Arrays.asList(ValidationType.NON_EMPTY_STRING, ValidationType.URL)),
+                new ValidationConfig(GRANT_TYPE, Collections.singletonList(ValidationType.TOKEN_GRANT))
         );
     }
 
@@ -116,7 +117,8 @@ public class OAuthTokenClient extends ApiClient {
         return Arrays.asList(
                 new ValidationConfig(CLIENT_ID, Collections.singletonList(ValidationType.ID)),
                 new ValidationConfig(CLIENT_SECRET, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
-                new ValidationConfig(REFRESH_TOKEN, Collections.singletonList(ValidationType.NON_EMPTY_STRING))
+                new ValidationConfig(REFRESH_TOKEN, Collections.singletonList(ValidationType.NON_EMPTY_STRING)),
+                new ValidationConfig(GRANT_TYPE, Collections.singletonList(ValidationType.TOKEN_GRANT))
         );
     }
 

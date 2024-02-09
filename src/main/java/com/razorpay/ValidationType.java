@@ -5,5 +5,6 @@ public enum ValidationType {
     NON_EMPTY_STRING,
     URL,
     ID,
-    MODE
+    MODE,
+    TOKEN_GRANT
 }
