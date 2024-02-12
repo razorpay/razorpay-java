@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Hex;
@@ -58,15 +58,14 @@ public class Utils {
   }
 
   public static String encrypt(String dataToEncrypt, String secret) throws RazorpayException {
-    byte[] key = secret.getBytes(StandardCharsets.UTF_8);
-    byte[] iv = secret.getBytes(StandardCharsets.UTF_8);
-    SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-    IvParameterSpec ivParameterSpec = new IvParameterSpec(iv, 0, 16);
+    byte[] iv = secret.getBytes();
+    SecretKeySpec key = new SecretKeySpec(iv, "AES");
     try {
-      // Initialize the Cipher for encryptio
-      Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-      cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-      byte[] encryptedBytes = cipher.doFinal(dataToEncrypt.getBytes(StandardCharsets.UTF_8));
+      // Initialize the Cipher for encryption
+      Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+      GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, iv);
+      cipher.init(Cipher.ENCRYPT_MODE, key, gcmParameterSpec);
+      byte[] encryptedBytes = cipher.doFinal(dataToEncrypt.getBytes());
       return bytesToHex(encryptedBytes);
     }
     catch (Exception e) {

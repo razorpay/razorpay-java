@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -86,29 +88,17 @@ public class UtilsTest {
         }
     }
 
-    @Test
-    public void testGenerateSignature() throws RazorpayException {
-        long timestamp = System.currentTimeMillis();
-        JSONObject options = new JSONObject();
-        options.put("submerchant_id", "NYNySUDv1wAUH7");
-        options.put("timestamp", timestamp);
-        String secret = "AVzDyiomI3GvS5T0ZzdSY6Xt";
-        String encryptedData = Utils.generateOnboardingSignature(options, secret);
-        System.out.println("encryptedData " + encryptedData);
-    }
-
     private String decryptData(String encryptedHexData, String secret) throws Exception {
         byte[] encryptedData = hexStringToByteArray(encryptedHexData);
         return decrypt(encryptedData, secret);
     }
     public static String decrypt(byte[] encryptedData, String secret) throws Exception {
-        byte[] key = secret.getBytes(StandardCharsets.UTF_8);
         byte[] iv = secret.getBytes(StandardCharsets.UTF_8);
-        SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
-        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv, 0, 16);
+        SecretKeySpec key = new SecretKeySpec(iv, "AES");
 
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
+        cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec);
         byte[] decryptedBytes = cipher.doFinal(encryptedData);
         return new String(decryptedBytes);
     }
