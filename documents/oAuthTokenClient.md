@@ -36,12 +36,12 @@ String AuthUrl = oAuth.getAuthURL(authUrlRequest);
 ### Get Access token
 ```java
 JSONObject accessTokenRequest = new JSONObject();
-authUrlRequest.put("client_id","<YOUR_CLIENT_ID>");
-authUrlRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
-authUrlRequest.put("redirect_uri","https://example.com");
-authUrlRequest.put("grant_type","authorization_code");
-authUrlRequest.put("code","def50200d844dc80cc44dce2c665d07a374d76802");
-authUrlRequest.put("mode","test");
+accessTokenRequest.put("client_id","<YOUR_CLIENT_ID>");
+accessTokenRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
+accessTokenRequest.put("redirect_uri","https://example.com");
+accessTokenRequest.put("grant_type","authorization_code");
+accessTokenRequest.put("code","def50200d844dc80cc44dce2c665d07a374d76802");
+accessTokenRequest.put("mode","test");
 
 String AuthUrl = oAuth.getAccessToken(accessTokenRequest);
 ```
@@ -73,9 +73,9 @@ String AuthUrl = oAuth.getAccessToken(accessTokenRequest);
 ### Get Access token using refresh token
 ```java
 JSONObject refreshTokenRequest = new JSONObject();
-authUrlRequest.put("client_id","<YOUR_CLIENT_ID>");
-authUrlRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
-authUrlRequest.put("refresh_token","def5020096e1c470c901d34cd60fa53abdaf3662sa0");
+refreshTokenRequest.put("client_id","<YOUR_CLIENT_ID>");
+refreshTokenRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
+refreshTokenRequest.put("refresh_token","def5020096e1c470c901d34cd60fa53abdaf3662sa0");
 
 String AuthUrl = oAuth.refreshToken(refreshTokenRequest);
 ```
@@ -105,10 +105,10 @@ String AuthUrl = oAuth.refreshToken(refreshTokenRequest);
 ### Revoke a token
 ```java
 JSONObject revokeTokenRequest = new JSONObject();
-authUrlRequest.put("client_id","<YOUR_CLIENT_ID>");
-authUrlRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
-authUrlRequest.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJKQTFwODVudE1ySEpoQSIsImp0aSI6IkpPZkd0aHFDTmhqQUhTIiwiaWF0IjoxNjUxMTI0NTU0LCJuYmYiOjE2NTExMjQ1NTQsInN1YiI6IiIsImV4cCI6MTY1ODk4Njk1MiwidXNlcl9pZCI6bnVsbCwibWVyY2hhbnRfaWQiOiJKOWpoSTdzZkM1S1V0NiIsInNjb3BlcyI6WyJyZWFkX3dyaXRlIl19.h1oL_Tik642Q18DdyEnIVziW1kgw6k09K8ALuI4uWQBH3jE4R8p1e6ysQq-Et4E_MZd7ADfC1W6kFwe3PXlkLC6emaZAKESZghbtTBM6RYnhieErAOcD7ytc0P8c75aNRlC6MWwlWaH20OFYuSay7iGFyw2jp4by4xDFlYweVLc");
-authUrlRequest.put("token_type_hint","access_token");
+revokeTokenRequest.put("client_id","<YOUR_CLIENT_ID>");
+revokeTokenRequest.put("client_secret","<YOUR_CLIENT_SECRET>");
+revokeTokenRequest.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJKQTFwODVudE1ySEpoQSIsImp0aSI6IkpPZkd0aHFDTmhqQUhTIiwiaWF0IjoxNjUxMTI0NTU0LCJuYmYiOjE2NTExMjQ1NTQsInN1YiI6IiIsImV4cCI6MTY1ODk4Njk1MiwidXNlcl9pZCI6bnVsbCwibWVyY2hhbnRfaWQiOiJKOWpoSTdzZkM1S1V0NiIsInNjb3BlcyI6WyJyZWFkX3dyaXRlIl19.h1oL_Tik642Q18DdyEnIVziW1kgw6k09K8ALuI4uWQBH3jE4R8p1e6ysQq-Et4E_MZd7ADfC1W6kFwe3PXlkLC6emaZAKESZghbtTBM6RYnhieErAOcD7ytc0P8c75aNRlC6MWwlWaH20OFYuSay7iGFyw2jp4by4xDFlYweVLc");
+revokeTokenRequest.put("token_type_hint","access_token");
 
 String AuthUrl = oAuth.revokeToken(revokeTokenRequest);
 ```
