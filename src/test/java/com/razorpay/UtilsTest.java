@@ -4,9 +4,7 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
@@ -93,12 +91,13 @@ public class UtilsTest {
         return decrypt(encryptedData, secret);
     }
     public static String decrypt(byte[] encryptedData, String secret) throws Exception {
-        byte[] iv = secret.getBytes(StandardCharsets.UTF_8);
-        SecretKeySpec key = new SecretKeySpec(iv, "AES");
-
+        byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+        byte[] iv = new byte[12];
+        System.arraycopy(keyBytes, 0, iv, 0, 12);
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-        GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
-        cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
         byte[] decryptedBytes = cipher.doFinal(encryptedData);
         return new String(decryptedBytes);
     }

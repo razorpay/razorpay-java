@@ -54,19 +54,21 @@ public class Utils {
 
   public static String generateOnboardingSignature(JSONObject attributes, String secret) throws RazorpayException {
     String jsonString = attributes.toString();
+    System.out.println("data to encrypt" + jsonString);
     return encrypt(jsonString, secret);
   }
 
   public static String encrypt(String dataToEncrypt, String secret) throws RazorpayException {
-    byte[] iv = secret.getBytes();
-    SecretKeySpec key = new SecretKeySpec(iv, "AES");
     try {
-      // Initialize the Cipher for encryption
+      byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
+      SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+      byte[] iv = new byte[12];
+      System.arraycopy(keyBytes, 0, iv, 0, 12);
       Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-      GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, iv);
-      cipher.init(Cipher.ENCRYPT_MODE, key, gcmParameterSpec);
-      byte[] encryptedBytes = cipher.doFinal(dataToEncrypt.getBytes());
-      return bytesToHex(encryptedBytes);
+      GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
+      cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
+      byte[] encryptedData = cipher.doFinal(dataToEncrypt.getBytes(StandardCharsets.UTF_8));
+      return bytesToHex(encryptedData);
     }
     catch (Exception e) {
       throw new RazorpayException(e.getMessage());
@@ -74,16 +76,15 @@ public class Utils {
   }
 
   public static String bytesToHex(byte[] bytes) {
-    StringBuilder hexBuilder = new StringBuilder();
+    StringBuilder hexString = new StringBuilder();
     for (byte b : bytes) {
-      // Convert the byte to an int (considering the byte to be unsigned)
-      int unsignedByte = b & 0xFF;
-
-      // Convert the int to a hex string and append to the builder
-      // The format "%02x" ensures the hex string is zero-padded to two characters
-      hexBuilder.append(String.format("%02x", unsignedByte));
+      String hex = Integer.toHexString(0xff & b);
+      if (hex.length() == 1) {
+        hexString.append('0');
+      }
+      hexString.append(hex);
     }
-    return hexBuilder.toString();
+    return hexString.toString();
   }
 
   public static String getHash(String payload, String secret) throws RazorpayException {
