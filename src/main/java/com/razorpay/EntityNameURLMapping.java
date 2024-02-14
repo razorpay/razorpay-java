@@ -20,7 +20,8 @@ public enum EntityNameURLMapping {
     CARDS("card"),
     TOKENS("token"),
     ACCOUNTS("account"),
-    TOKEN("oauth_token");
+    TOKEN("oauth_token"),
+    REVOKE("oauth_token");
     private String entity;
 
     EntityNameURLMapping(String entity) {

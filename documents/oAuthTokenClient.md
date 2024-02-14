@@ -8,8 +8,18 @@ OAuthTokenClient oAuth = new OAuthTokenClient();
 JSONObject authUrlRequest = new JSONObject();
 authUrlRequest.put("client_id","<YOUR_CLIENT_ID>");
 authUrlRequest.put("redirect_uri","https://example.com/razorpay_callback");
-authUrlRequest.put("scopes",["read_only", "rx_read_write"]);
+
+JSONArray scopes = new JSONArray();
+scopes.put("read_write");        
+
+authUrlRequest.put("scopes", scopes);
 authUrlRequest.put("state","NOBYtv8r6c75ex6WZ");
+
+JSONObject attributes = new JSONObject();
+attributes.put("submerchant_id", "<SUBMERCHANT_MID>");
+attributes.put("timestamp", System.currentTimeMillis()/1000L);
+String onboardingSignature = Utils.generateOnboardingSignature(attributes, "<YOUR_CLIENT_SECRET>");
+authUrlRequest.put("onboarding_signature", onboardingSignature);
 
 String AuthUrl = oAuth.getAuthURL(authUrlRequest);
 ```
