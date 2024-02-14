@@ -330,7 +330,7 @@ List<Payment> payments = instance.virtualAccounts.fetchPayments(virtualId,params
       "wallet": null,
       "vpa": null,
       "email": "saurav.kumar@example.com",
-      "contact": "+919972139994",
+      "contact": "+919999999999",
       "customer_id": "cust_DOMUFFiGdCaCUJ",
       "notes": [],
       "fee": 2820,
