@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.4.5 - 2024-02-14
+[#302](https://github.com/razorpay/razorpay-java/pull/302)
+* Added oauth APIs (getAuthURL, getAccessToken, refreshToken, revokeToken) 
+* Added support for access token based authentication mechanism
+* Added support for onboarding signature generation
+* Doc updated
+
 ## Version 1.4.4 - 2023-05-30
 [#286](https://github.com/razorpay/razorpay-java/pull/286) [`b6179a5`](https://github.com/razorpay/razorpay-java/commit/b6179a5a3425910a190f0d9e4f5ff0f8e423f6a9) feat: Added new API endpoints
 
