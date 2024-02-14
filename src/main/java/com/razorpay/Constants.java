@@ -6,7 +6,10 @@ public class Constants {
 
   // API constants
   static final String SCHEME = "https";
+  static final String API = "API";
+  static final String AUTH = "AUTH";
   static final String HOSTNAME = "api.razorpay.com";
+  static final String AUTH_HOSTNAME = "auth.razorpay.com";
   static final Integer PORT = 443;
   static final String VERSION = "v1";
 
@@ -161,4 +164,10 @@ public class Constants {
   static final String WEBHOOK_EDIT = "accounts/%s/webhooks/%s";
   
   static final String TNC_FETCH = "products/%s/tnc";
+
+  // Auth constants
+  static final String AUTHORIZE = "authorize";
+  static final String TOKEN     = "/token";
+  static final String REVOKE     = "/revoke";
+
 }

@@ -3,10 +3,14 @@ package com.razorpay;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.Assert.*;
 
 public class UtilsTest {
-
 
     /**
      * Verify razorpay payment signature
@@ -62,6 +66,50 @@ public class UtilsTest {
         String payload = "{\"a\":1,\"b\":2,\"c\":{\"d\":3}}";
         String secret = "123456";
         assertTrue(Utils.verifyWebhookSignature(payload,signature, secret));
+    }
+
+    @Test
+    public void testGenerateOnboardingSignature() throws RazorpayException {
+        long timestamp = System.currentTimeMillis();
+        JSONObject options = new JSONObject();
+        options.put("submerchant_id", "NSgKfYIR2f9v2y");
+        options.put("timestamp", timestamp);
+        String secret = "EnLs21M47BllR3X8PSFtjtbd";
+        String encryptedHexData = Utils.generateOnboardingSignature(options, secret);
+        try {
+            String decryptedData = decryptData(encryptedHexData, secret);
+            JSONObject data = new JSONObject(decryptedData);
+            assertEquals("NSgKfYIR2f9v2y", data.getString("submerchant_id"));
+            assertEquals(timestamp, data.get("timestamp"));
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
+    private String decryptData(String encryptedHexData, String secret) throws Exception {
+        byte[] encryptedData = hexStringToByteArray(encryptedHexData);
+        return decrypt(encryptedData, secret);
+    }
+    public static String decrypt(byte[] encryptedData, String secret) throws Exception {
+        byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+        byte[] iv = new byte[12];
+        System.arraycopy(keyBytes, 0, iv, 0, 12);
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
+        byte[] decryptedBytes = cipher.doFinal(encryptedData);
+        return new String(decryptedBytes);
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 
 }

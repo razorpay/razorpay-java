@@ -33,9 +33,17 @@ public class RazorpayClient {
     this(key, secret, false);
   }
 
+  public RazorpayClient(String accessToken) throws RazorpayException {
+    String auth = "Bearer " + accessToken;
+    initializeResources(auth, false);
+  }
+
   public RazorpayClient(String key, String secret, Boolean enableLogging) throws RazorpayException {
-    ApiUtils.createHttpClientInstance(enableLogging);
     String auth = Credentials.basic(key, secret);
+    initializeResources(auth, enableLogging);
+  }
+  private void initializeResources(String auth, Boolean enableLogging) throws RazorpayException {
+    ApiUtils.createHttpClientInstance(enableLogging);
     payments = new PaymentClient(auth);
     refunds = new RefundClient(auth);
     orders = new OrderClient(auth);

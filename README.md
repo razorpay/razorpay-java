@@ -36,12 +36,27 @@ implementation "com.razorpay:razorpay-java:1.4.4"
 ```
 
 ## Usage
+`RazorpayClient` can be instantiated via two ways:
 
+### Using Private Auth
 Instantiate `RazorpayClient` with `key_id` & `key_secret`. You can obtain the keys from the dashboard app <https://dashboard.razorpay.com/#/app/keys>
 
 ```java
 // Initialize client
 RazorpayClient instance = new RazorpayClient("key_id", "key_secret");
+```
+* Add custom headers to request (optional)
+```java
+Map<String, String> headers = new HashMap<String, String>();
+razorpayClient.addHeaders(headers);
+```
+
+### Using Access Token
+Instantiate `RazorpayClient` with `access_token`. The `access_token` can be obtained only in case if you are a platform partner. For more information, refer page - https://razorpay.com/docs/partners/platform/.
+
+```java
+// Initialize client
+RazorpayClient instance = new RazorpayClient("access_token");
 ```
 * Add custom headers to request (optional)
 ```java
@@ -101,6 +116,8 @@ razorpayClient.addHeaders(headers);
 - [Payment Verification](documents/paymentVerfication.md)
 
 - [Webhook](documents/webhook.md)
+
+- [OAuth Token Client](documents/oAuthTokenClient.md)
 ---
 
 * Make custom requests
