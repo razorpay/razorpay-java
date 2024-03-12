@@ -14,7 +14,8 @@ public class CustomerClientTest extends BaseTest{
     protected CustomerClient customerClient = new CustomerClient(TEST_SECRET_KEY);
 
     private static final String CUSTOMER_ID = "cust_1Aa00000000004";
-
+    private static final String BANKACCOUNT_ID = "ba_LSZht1Cm7xFTwF";
+    private static final String ELIGILITY_ID = "elig_F1cxDoHWD4fkQt";
     private static final String TOKEN_ID = "token_Hxe0skTXLeg9pF";
 
     /**
@@ -291,6 +292,170 @@ public class CustomerClientTest extends BaseTest{
             Customer customer = customerClient.deleteToken(CUSTOMER_ID,TOKEN_ID);
             assertNotNull(customer);
             verifySentRequest(false, null, getHost(String.format(Constants.TOKEN_DELETE,CUSTOMER_ID,TOKEN_ID)));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Add Bank Account
+     */
+    @Test
+    public void testaddBankAccount() throws RazorpayException{
+
+        JSONObject request = new JSONObject("{\n" +
+                "    \"ifsc_code\" : \"UTIB0000194\",\n" +
+                "    \"account_number\"         :\"916010082985661\",\n" +
+                "    \"beneficiary_name\"      : \"Pratheek\",\n" +
+                "    \"beneficiary_address1\"  : \"address 1\",\n" +
+                "    \"beneficiary_address2\"  : \"address 2\",\n" +
+                "    \"beneficiary_address3\"  : \"address 3\",\n" +
+                "    \"beneficiary_address4\"  : \"address 4\",\n" +
+                "    \"beneficiary_email\"     : \"random@email.com\",\n" +
+                "    \"beneficiary_mobile\"    : \"8762489310\",\n" +
+                "    \"beneficiary_city\"      :\"Bangalore\",\n" +
+                "    \"beneficiary_state\"     : \"KA\",\n" +
+                "    \"beneficiary_country\"   : \"IN\"\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "    \"id\": \"ba_LSZht1Cm7xFTwF\",\n" +
+                "    \"entity\": \"bank_account\",\n" +
+                "    \"ifsc\": \"ICIC0001207\",\n" +
+                "    \"bank_name\": \"ICICI Bank\",\n" +
+                "    \"name\": \"Gaurav Kumar\",\n" +
+                "    \"notes\": [],\n" +
+                "    \"account_number\": \"XXXXXXXXXXXXXXX0434\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            BankAccount customer = customerClient.addBankAccount(CUSTOMER_ID,request);
+            assertNotNull(customer);
+            assertEquals(BANKACCOUNT_ID,customer.get("id"));
+            String createRequest = getHost(String.format(Constants.ADD_BANK_ACCOUNT,CUSTOMER_ID));
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+    * Delete Bank Account
+    */
+    @Test
+    public void testDeleteBankAccount() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "    \"id\": \"ba_LSZht1Cm7xFTwF\",\n" +
+                "    \"entity\": \"customer\",\n" +
+                "    \"ifsc\": \"ICIC0001207\",\n" +
+                "    \"bank_name\": \"ICICI Bank\",\n" +
+                "    \"name\": \"Test R4zorpay\",\n" +
+                "    \"account_number\": \"XXXXXXXXXXXXXXX0434\",\n" +
+                "    \"status\": \"deleted\"\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer fetch = customerClient.deleteBankAccount(CUSTOMER_ID, BANKACCOUNT_ID);
+            assertNotNull(fetch);
+            assertEquals(BANKACCOUNT_ID,fetch.get("id"));
+            String fetchRequest = getHost(String.format(Constants.DELETE_BANK_ACCOUNT, CUSTOMER_ID, BANKACCOUNT_ID));
+            verifySentRequest(false, null, fetchRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Eligibility Check
+     */
+    @Test
+    public void testEligibilityCheck() throws RazorpayException{
+
+        JSONObject request = new JSONObject("{\n" +
+                "    \"ifsc_code\" : \"UTIB0000194\",\n" +
+                "    \"account_number\"         :\"916010082985661\",\n" +
+                "    \"beneficiary_name\"      : \"Pratheek\",\n" +
+                "    \"beneficiary_address1\"  : \"address 1\",\n" +
+                "    \"beneficiary_address2\"  : \"address 2\",\n" +
+                "    \"beneficiary_address3\"  : \"address 3\",\n" +
+                "    \"beneficiary_address4\"  : \"address 4\",\n" +
+                "    \"beneficiary_email\"     : \"random@email.com\",\n" +
+                "    \"beneficiary_mobile\"    : \"8762489310\",\n" +
+                "    \"beneficiary_city\"      :\"Bangalore\",\n" +
+                "    \"beneficiary_state\"     : \"KA\",\n" +
+                "    \"beneficiary_country\"   : \"IN\"\n" +
+                "}");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"customer\",\n" +
+                "  \"amount\": \"500000\",\n" +
+                "  \"customer\": {\n" +
+                "    \"id\": \"KkBhM9EC1Y0HTm\",\n" +
+                "    \"contact\": \"+918220722114\"\n" +
+                "  },\n" +
+                "  \"instruments\": [\n" +
+                "    {\n" +
+                "      \"method\": \"emi\",\n" +
+                "      \"issuer\": \"HDFC\",\n" +
+                "      \"type\": \"debit\",\n" +
+                "      \"eligibility_req_id\": \"elig_KkCNLzlNeMYQyZ\",\n" +
+                "      \"eligibility\": {\n" +
+                "        \"status\": \"eligible\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer customer = customerClient.requestEligibilityCheck(request);
+            assertNotNull(customer);
+            assertEquals(true, customer.has("amount"));
+            assertEquals(true, customer.has("customer"));
+            String createRequest = getHost(Constants.ELIGIBILITY);
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch Eligibility
+     */
+    @Test
+    public void testFetchEligibility() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"customer\",\n" +
+                "  \"amount\": \"500000\",\n" +
+                "  \"customer\": {\n" +
+                "    \"id\": \"KkBhM9EC1Y0HTm\",\n" +
+                "    \"contact\": \"+918220722114\"\n" +
+                "  },\n" +
+                "  \"instruments\": [\n" +
+                "    {\n" +
+                "      \"method\": \"emi\",\n" +
+                "      \"issuer\": \"HDFC\",\n" +
+                "      \"type\": \"debit\",\n" +
+                "      \"eligibility_req_id\": \"elig_KkCNLzlNeMYQyZ\",\n" +
+                "      \"eligibility\": {\n" +
+                "        \"status\": \"eligible\"\n" +
+                "      }\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer fetch = customerClient.fetchEligibility(ELIGILITY_ID);
+            assertNotNull(fetch);
+            assertEquals(true, fetch.has("amount"));
+            assertEquals(true, fetch.has("customer"));
+            String fetchRequest = getHost(String.format(Constants.ELIGIBILITY_FETCH, ELIGILITY_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
