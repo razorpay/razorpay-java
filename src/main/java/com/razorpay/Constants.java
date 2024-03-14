@@ -170,4 +170,5 @@ public class Constants {
   static final String TOKEN     = "/token";
   static final String REVOKE     = "/revoke";
 
+  static final String IIN_FETCH_LIST = "iins/list";
 }
