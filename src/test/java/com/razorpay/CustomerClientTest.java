@@ -15,7 +15,7 @@ public class CustomerClientTest extends BaseTest{
 
     private static final String CUSTOMER_ID = "cust_1Aa00000000004";
     private static final String BANKACCOUNT_ID = "ba_LSZht1Cm7xFTwF";
-    private static final String ELIGILITY_ID = "elig_F1cxDoHWD4fkQt";
+    private static final String ELIGIBILITY_ID = "elig_F1cxDoHWD4fkQt";
     private static final String TOKEN_ID = "token_Hxe0skTXLeg9pF";
 
     /**
@@ -303,20 +303,19 @@ public class CustomerClientTest extends BaseTest{
     @Test
     public void testaddBankAccount() throws RazorpayException{
 
-        JSONObject request = new JSONObject("{\n" +
-                "    \"ifsc_code\" : \"UTIB0000194\",\n" +
-                "    \"account_number\"         :\"916010082985661\",\n" +
-                "    \"beneficiary_name\"      : \"Pratheek\",\n" +
-                "    \"beneficiary_address1\"  : \"address 1\",\n" +
-                "    \"beneficiary_address2\"  : \"address 2\",\n" +
-                "    \"beneficiary_address3\"  : \"address 3\",\n" +
-                "    \"beneficiary_address4\"  : \"address 4\",\n" +
-                "    \"beneficiary_email\"     : \"random@email.com\",\n" +
-                "    \"beneficiary_mobile\"    : \"8762489310\",\n" +
-                "    \"beneficiary_city\"      :\"Bangalore\",\n" +
-                "    \"beneficiary_state\"     : \"KA\",\n" +
-                "    \"beneficiary_country\"   : \"IN\"\n" +
-                "}");
+        JSONObject request = new JSONObject();
+        request.put("account_number","916010082985661");
+        request.put("beneficiary_name","Pratheek");
+        request.put("ifsc_code","UTIB0000194");
+        request.put("beneficiary_address1","address 1");
+        request.put("beneficiary_address2","address 2");
+        request.put("beneficiary_address3","address 3");
+        request.put("beneficiary_address4","address 4");
+        request.put("beneficiary_email","random@email.com");
+        request.put("beneficiary_mobile","8762489310");
+        request.put("beneficiary_city","Bangalore");
+        request.put("beneficiary_state","KA");
+        request.put("beneficiary_country","IN");
 
         String mockedResponseJson = "{\n" +
                 "    \"id\": \"ba_LSZht1Cm7xFTwF\",\n" +
@@ -374,20 +373,17 @@ public class CustomerClientTest extends BaseTest{
     @Test
     public void testEligibilityCheck() throws RazorpayException{
 
-        JSONObject request = new JSONObject("{\n" +
-                "    \"ifsc_code\" : \"UTIB0000194\",\n" +
-                "    \"account_number\"         :\"916010082985661\",\n" +
-                "    \"beneficiary_name\"      : \"Pratheek\",\n" +
-                "    \"beneficiary_address1\"  : \"address 1\",\n" +
-                "    \"beneficiary_address2\"  : \"address 2\",\n" +
-                "    \"beneficiary_address3\"  : \"address 3\",\n" +
-                "    \"beneficiary_address4\"  : \"address 4\",\n" +
-                "    \"beneficiary_email\"     : \"random@email.com\",\n" +
-                "    \"beneficiary_mobile\"    : \"8762489310\",\n" +
-                "    \"beneficiary_city\"      :\"Bangalore\",\n" +
-                "    \"beneficiary_state\"     : \"KA\",\n" +
-                "    \"beneficiary_country\"   : \"IN\"\n" +
-                "}");
+        JSONObject request = new JSONObject();
+        request.put("inquiry","affordability");
+        request.put("amount", 500);
+        request.put("currency","INR");
+        JSONObject customerParam = new JSONObject();
+        customerParam.put("id","elig_xxxxxxxxxxxxx");
+        customerParam.put("contact","+919999999999");
+        customerParam.put("ip","105.106.107.108");
+        customerParam.put("referrer","https://merchansite.com/example/paybill");
+        customerParam.put("user_agent","Mozilla/5.0");
+        request.put("customer",customerParam);
 
         String mockedResponseJson = "{\n" +
                 "  \"entity\": \"customer\",\n" +
@@ -450,11 +446,11 @@ public class CustomerClientTest extends BaseTest{
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            Customer fetch = customerClient.fetchEligibility(ELIGILITY_ID);
+            Customer fetch = customerClient.fetchEligibility(ELIGIBILITY_ID);
             assertNotNull(fetch);
             assertEquals(true, fetch.has("amount"));
             assertEquals(true, fetch.has("customer"));
-            String fetchRequest = getHost(String.format(Constants.ELIGIBILITY_FETCH, ELIGILITY_ID));
+            String fetchRequest = getHost(String.format(Constants.ELIGIBILITY_FETCH, ELIGIBILITY_ID));
             verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);

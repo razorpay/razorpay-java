@@ -180,18 +180,18 @@ BankAccount bankaccount = instance.customers.addBankAccount(customerId, customer
 
 **Parameters:**
 
-| Name          | Type        | Description                                 |
-|---------------|-------------|---------------------------------------------|
-| customerId*  | string      | Unique identifier of the customer.  |
-| account_number | string      | Customer's bank account number.  |
-| beneficiary_name | string  | The name of the beneficiary associated with the bank account.  |
-| beneficiary_address1 | string      | The virtual payment address.  |
-| beneficiary_email  | string      | Email address of the beneficiary.  |
-| beneficiary_mobile | integer      | Mobile number of the beneficiary.  |
-| beneficiary_city  | string      | The name of the city of the beneficiary.  |
-| beneficiary_state | string      | The state of the beneficiary.  |
-| beneficiary_pin   | interger    | The pin code of the beneficiary's address.  |
-| ifsc_code          | string      | The IFSC code of the bank branch associated with the account.  |
+| Name                 | Type     | Description                                                   |
+|----------------------|----------|---------------------------------------------------------------|
+| customerId*          | string   | Unique identifier of the customer.                            |
+| account_number       | string   | Customer's bank account number.                               |
+| beneficiary_name     | string   | The name of the beneficiary associated with the bank account. |
+| beneficiary_address1 | string   | The virtual payment address.                                  |
+| beneficiary_email    | string   | Email address of the beneficiary.                             |
+| beneficiary_mobile   | integer  | Mobile number of the beneficiary.                             |
+| beneficiary_city     | string   | The name of the city of the beneficiary.                      |
+| beneficiary_state    | string   | The state of the beneficiary.                                 |
+| beneficiary_pin      | interger | The pin code of the beneficiary's address.                    |
+| ifsc_code            | string   | The IFSC code of the bank branch associated with the account. |
 
 **Response:**
 ```json
@@ -223,8 +223,8 @@ Customer customer = instance.customers.deleteBankAccount(customerId, bankaccount
 
 | Name          | Type        | Description                                 |
 |---------------|-------------|---------------------------------------------|
-| customerId*  | string      | Unique identifier of the customer.  |
-| bankAccountId  | string      | The bank_id that needs to be deleted.  |
+| customerId*   | string      | Unique identifier of the customer.          |
+| bankAccountId | string      | The bank_id that needs to be deleted.       |
 
 **Response:**
 ```json
