@@ -934,4 +934,71 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void expandedDetails() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("expand[]","payments");
+
+        String mockedResponseJson = "{\n" +
+                "  \"id\": \"pay_IDRP0tbirMSsbn\",\n" +
+                "  \"entity\": \"payment\",\n" +
+                "  \"amount\": 100,\n" +
+                "  \"currency\": \"INR\",\n" +
+                "  \"status\": \"failed\",\n" +
+                "  \"order_id\": \"order_H9o58N6qmLYQKC\",\n" +
+                "  \"invoice_id\": null,\n" +
+                "  \"terminal_id\": \"term_G5kJnYM9GhhLYT\",\n" +
+                "  \"international\": false,\n" +
+                "  \"method\": \"card\",\n" +
+                "  \"amount_refunded\": 0,\n" +
+                "  \"refund_status\": null,\n" +
+                "  \"captured\": false,\n" +
+                "  \"description\": null,\n" +
+                "  \"card_id\": \"card_H9oR0ocen1cmZq\",\n" +
+                "  \"card\": {\n" +
+                "    \"id\": \"card_H9oR0ocen1cmZq\",\n" +
+                "    \"entity\": \"card\",\n" +
+                "    \"name\": \"Gaurav\",\n" +
+                "    \"last4\": \"1213\",\n" +
+                "    \"network\": \"RuPay\",\n" +
+                "    \"type\": \"credit\",\n" +
+                "    \"issuer\": \"UTIB\",\n" +
+                "    \"international\": false,\n" +
+                "    \"emi\": false,\n" +
+                "    \"sub_type\": \"business\"\n" +
+                "  },\n" +
+                "  \"bank\": null,\n" +
+                "  \"wallet\": null,\n" +
+                "  \"vpa\": null,\n" +
+                "  \"email\": \"gaurav.kumar@example.com\",\n" +
+                "  \"contact\": \"+919000090000\",\n" +
+                "  \"notes\": {\n" +
+                "    \"email\": \"gaurav.kumar@example.com\",\n" +
+                "    \"phone\": \"09000090000\"\n" +
+                "  },\n" +
+                "  \"fee\": null,\n" +
+                "  \"tax\": null,\n" +
+                "  \"error_code\": \"BAD_REQUEST_ERROR\",\n" +
+                "  \"error_description\": \"Card issuer is invalid\",\n" +
+                "  \"error_source\": \"customer\",\n" +
+                "  \"error_step\": \"payment_authentication\",\n" +
+                "  \"error_reason\": \"incorrect_card_details\",\n" +
+                "  \"acquirer_data\": {\n" +
+                "    \"auth_code\": null,\n" +
+                "    \"authentication_reference_number\": \"100222021120200000000742753928\"\n" +
+                "  },\n" +
+                "  \"created_at\": 1620807547\n" +
+                "}";
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.expandedDetails(PAYMENT_ID, request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("id"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
