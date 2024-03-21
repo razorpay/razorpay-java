@@ -219,4 +219,72 @@ public class OrderClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void viewRtoReview() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("payment_method","upi");
+
+        String mockedResponseJson = "{\n" +
+                "  \"risk_tier\": \"high\",\n" +
+                "  \"entity\": \"order\",\n" +
+                "  \"rto_reasons\": [\n" +
+                "    {\n" +
+                "      \"reason\": \"short_shipping_address\",\n" +
+                "      \"description\": \"Short shipping address\",\n" +
+                "      \"bucket\": \"address\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"reason\": \"address_pincode_state_mismatch\",\n" +
+                "      \"description\": \"Incorrect pincode state entered\",\n" +
+                "      \"bucket\": \"address\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Order fetch = orderClient.viewRtoReview(ORDER_ID);
+            assertNotNull(fetch);
+            assertEquals(true,fetch.has("risk_tier"));
+            String createRequest = getHost(String.format(Constants.VIEW_RTO, ORDER_ID));
+            verifySentRequest(false, null, createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+    @Test
+    public void editFulfillment() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        JSONObject shipping = new JSONObject();
+        shipping.put("waybill", "123456789");
+        shipping.put("status", "rto");
+        shipping.put("provider", "Bluedart");
+
+        request.put("payment_method","upi");
+        request.put("shipping","shipping");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"order\",\n" +
+                "  \"order_id\": \"order_EKwxwAgItmmXdp\",\n" +
+                "  \"payment_method\": \"upi\",\n" +
+                "  \"shipping\": {\n" +
+                "    \"waybill\": \"123456789\",\n" +
+                "    \"status\": \"rto\",\n" +
+                "    \"provider\": \"Bluedart\"\n" +
+                "  }\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Order fetch = orderClient.editFulfillment(ORDER_ID, request);
+            assertNotNull(fetch);
+            assertEquals(ORDER_ID,fetch.get("order_id"));
+            assertEquals("order",fetch.get("entity"));
+            String createRequest = getHost(String.format(Constants.FULFILLMENT, ORDER_ID));
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
