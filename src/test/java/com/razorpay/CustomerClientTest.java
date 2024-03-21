@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -317,17 +318,18 @@ public class CustomerClientTest extends BaseTest{
         request.put("beneficiary_state","KA");
         request.put("beneficiary_country","IN");
 
-        String mockedResponseJson = "{\n" +
-                "    \"id\": \"ba_LSZht1Cm7xFTwF\",\n" +
-                "    \"entity\": \"bank_account\",\n" +
-                "    \"ifsc\": \"ICIC0001207\",\n" +
-                "    \"bank_name\": \"ICICI Bank\",\n" +
-                "    \"name\": \"Gaurav Kumar\",\n" +
-                "    \"notes\": [],\n" +
-                "    \"account_number\": \"XXXXXXXXXXXXXXX0434\"\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "ba_LSZht1Cm7xFTwF");
+        mockedResponseJson.put("entity", "bank_account");
+        mockedResponseJson.put("ifsc", "ICIC0001207");
+        mockedResponseJson.put("bank_name", "ICICI Bank");
+        mockedResponseJson.put("name", "Gaurav Kumar");
+        ArrayList<String> notes = new ArrayList<String>();
+        mockedResponseJson.put("notes", notes);
+        mockedResponseJson.put("account_number", "XXXXXXXXXXXXXXX0434");
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             BankAccount customer = customerClient.addBankAccount(CUSTOMER_ID,request);
             assertNotNull(customer);
@@ -345,17 +347,18 @@ public class CustomerClientTest extends BaseTest{
     @Test
     public void testDeleteBankAccount() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "    \"id\": \"ba_LSZht1Cm7xFTwF\",\n" +
-                "    \"entity\": \"customer\",\n" +
-                "    \"ifsc\": \"ICIC0001207\",\n" +
-                "    \"bank_name\": \"ICICI Bank\",\n" +
-                "    \"name\": \"Test R4zorpay\",\n" +
-                "    \"account_number\": \"XXXXXXXXXXXXXXX0434\",\n" +
-                "    \"status\": \"deleted\"\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "ba_LSZht1Cm7xFTwF");
+        mockedResponseJson.put("entity", "bank_account");
+        mockedResponseJson.put("ifsc", "ICIC0001207");
+        mockedResponseJson.put("bank_name", "ICICI Bank");
+        mockedResponseJson.put("name", "Gaurav Kumar");
+        ArrayList<String> notes = new ArrayList<String>();
+        mockedResponseJson.put("notes", notes);
+        mockedResponseJson.put("account_number", "XXXXXXXXXXXXXXX0434");
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Customer fetch = customerClient.deleteBankAccount(CUSTOMER_ID, BANKACCOUNT_ID);
             assertNotNull(fetch);
@@ -385,27 +388,27 @@ public class CustomerClientTest extends BaseTest{
         customerParam.put("user_agent","Mozilla/5.0");
         request.put("customer",customerParam);
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"customer\",\n" +
-                "  \"amount\": \"500000\",\n" +
-                "  \"customer\": {\n" +
-                "    \"id\": \"KkBhM9EC1Y0HTm\",\n" +
-                "    \"contact\": \"+918220722114\"\n" +
-                "  },\n" +
-                "  \"instruments\": [\n" +
-                "    {\n" +
-                "      \"method\": \"emi\",\n" +
-                "      \"issuer\": \"HDFC\",\n" +
-                "      \"type\": \"debit\",\n" +
-                "      \"eligibility_req_id\": \"elig_KkCNLzlNeMYQyZ\",\n" +
-                "      \"eligibility\": {\n" +
-                "        \"status\": \"eligible\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("amount", 500000);
+        mockedResponseJson.put("entity", "customer");
+        JSONObject _customerParam = new JSONObject();
+        _customerParam.put("id","KkBhM9EC1Y0HTm");
+        _customerParam.put("contact","+918220722114");
+        mockedResponseJson.put("customer", _customerParam);
+        ArrayList<JSONObject> instrument = new ArrayList<JSONObject>();
+        JSONObject instrumentObj = new JSONObject();
+        instrumentObj.put("method","emi");
+        instrumentObj.put("issuer","HDFC");
+        instrumentObj.put("type","debit");
+        instrumentObj.put("eligibility_req_id","elig_KkCNLzlNeMYQyZ");
+        JSONObject eligibilityObj = new JSONObject();
+        eligibilityObj.put("status","eligible");
+        instrument.add(instrumentObj);
+        mockedResponseJson.put("instruments", instrument);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Customer customer = customerClient.requestEligibilityCheck(request);
             assertNotNull(customer);
@@ -424,27 +427,26 @@ public class CustomerClientTest extends BaseTest{
     @Test
     public void testFetchEligibility() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"customer\",\n" +
-                "  \"amount\": \"500000\",\n" +
-                "  \"customer\": {\n" +
-                "    \"id\": \"KkBhM9EC1Y0HTm\",\n" +
-                "    \"contact\": \"+918220722114\"\n" +
-                "  },\n" +
-                "  \"instruments\": [\n" +
-                "    {\n" +
-                "      \"method\": \"emi\",\n" +
-                "      \"issuer\": \"HDFC\",\n" +
-                "      \"type\": \"debit\",\n" +
-                "      \"eligibility_req_id\": \"elig_KkCNLzlNeMYQyZ\",\n" +
-                "      \"eligibility\": {\n" +
-                "        \"status\": \"eligible\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("amount", 500000);
+        mockedResponseJson.put("entity", "customer");
+        JSONObject _customerParam = new JSONObject();
+        _customerParam.put("id","KkBhM9EC1Y0HTm");
+        _customerParam.put("contact","+918220722114");
+        mockedResponseJson.put("customer", _customerParam);
+        ArrayList<JSONObject> instrument = new ArrayList<JSONObject>();
+        JSONObject instrumentObj = new JSONObject();
+        instrumentObj.put("method","emi");
+        instrumentObj.put("issuer","HDFC");
+        instrumentObj.put("type","debit");
+        instrumentObj.put("eligibility_req_id","elig_KkCNLzlNeMYQyZ");
+        JSONObject eligibilityObj = new JSONObject();
+        eligibilityObj.put("status","eligible");
+        instrument.add(instrumentObj);
+        mockedResponseJson.put("instruments", instrument);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Customer fetch = customerClient.fetchEligibility(ELIGIBILITY_ID);
             assertNotNull(fetch);
