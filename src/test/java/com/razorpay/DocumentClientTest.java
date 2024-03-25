@@ -15,7 +15,6 @@ public class DocumentClientTest extends BaseTest{
 
     @Test
     public void create() throws RazorpayException {
-        RazorpayClient razorpayclient = new RazorpayClient("rzp_test_tFM6xSYWnGUa8D","47ngXj8T4IP44KFPJHRv7ST4");
         JSONObject request = new JSONObject();
         request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
         request.put("purpose","dispute_evidence");

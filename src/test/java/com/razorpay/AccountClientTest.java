@@ -230,4 +230,53 @@ public class AccountClientTest extends BaseTest{
                 "  }\n" +
                 "}";
     }
+
+    @Test
+    public void uploadAccountDoc() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("document_type","business_proof_url");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"account\",\n" +
+                "  \"business_proof_of_identification\": [\n" +
+                "    {\n" +
+                "      \"type\": \"business_proof_url\",\n" +
+                "      \"url\": \"<https://rzp.io/i/bzDKbNg>\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = accountClient.uploadAccountDoc(ACCOUNT_ID, request);
+            assertNotNull(document);
+            assertEquals(true,document.has("business_proof_of_identification"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchAccountDoc() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"account\",\n" +
+                "  \"business_proof_of_identification\": [\n" +
+                "    {\n" +
+                "      \"type\": \"business_proof_url\",\n" +
+                "      \"url\": \"<https://rzp.io/i/bzDKbNg>\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = accountClient.fetchAccountDoc(ACCOUNT_ID);
+            assertNotNull(document);
+            assertEquals(true,document.has("business_proof_of_identification"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

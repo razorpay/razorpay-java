@@ -173,4 +173,6 @@ public class Constants {
   static final String DOCUMENTS = "/documents";
 
   static final String DOCUMENT_FETCH = "/documents/%s";
+
+  static final String UPLOAD_ACCOUNT_DOCUMENT = "accounts/%s/documents";
 }
