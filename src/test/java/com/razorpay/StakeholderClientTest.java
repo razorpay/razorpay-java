@@ -200,4 +200,53 @@ public class StakeholderClientTest extends BaseTest{
                 "  \"count\": 1\n" +
                 "}";
     }
+
+    @Test
+    public void testuploadStakeholderDoc() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("document_type","aadhar_front");
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"stakeholder\",\n" +
+                "  \"individual_proof_of_address\": [\n" +
+                "    {\n" +
+                "      \"type\": \"aadhar_front\",\n" +
+                "      \"url\": \"https://rzp.io/i/bzDAbNg\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Stakeholder document = stakeholderClient.uploadStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID, request);
+            assertNotNull(document);
+            assertEquals(true,document.has("individual_proof_of_address"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testfetchStakeholderDoc() throws RazorpayException {
+
+        String mockedResponseJson = "{\n" +
+                "  \"entity\": \"stakeholder\",\n" +
+                "  \"individual_proof_of_address\": [\n" +
+                "    {\n" +
+                "      \"type\": \"aadhar_front\",\n" +
+                "      \"url\": \"https://rzp.io/i/bzDAbNg\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Stakeholder document = stakeholderClient.fetchStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID);
+            assertNotNull(document);
+            assertEquals(true,document.has("individual_proof_of_address"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }

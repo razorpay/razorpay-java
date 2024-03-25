@@ -25,4 +25,12 @@ public class StakeholderClient extends ApiClient {
     public Stakeholder edit(String id, String stakeholder_id, JSONObject request) throws RazorpayException {
         return patch(Constants.VERSION_V2, String.format(Constants.STAKEHOLDER_FETCH, id, stakeholder_id), request);
     }
+
+    public Stakeholder uploadStakeholderDoc(String id, String stakeholder_id, JSONObject request) throws RazorpayException {
+        return post(Constants.VERSION_V2, String.format(Constants.UPLOAD_STAKEHOLDER_DOCUMENT, id, stakeholder_id), request);
+    }
+
+    public Stakeholder fetchStakeholderDoc(String id, String stakeholder_id) throws RazorpayException {
+        return get(Constants.VERSION_V2, String.format(Constants.UPLOAD_STAKEHOLDER_DOCUMENT, id, stakeholder_id), null);
+    }
 }
