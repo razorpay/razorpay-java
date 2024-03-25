@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,6 +24,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.MultipartBody;
+import okhttp3.MediaType;
 
 class ApiUtils {
 
@@ -75,8 +78,15 @@ class ApiUtils {
 
     HttpUrl.Builder builder = getBuilder(version, path, host);
 
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+    RequestBody requestBody;
+
+    if(requestObject.has("file")){
+       requestBody = fileRequestBody(requestObject);
+    }else{
+      String requestContent = requestObject == null ? "" : requestObject.toString();
+      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+    }
+
     Request request =
         createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
@@ -224,5 +234,35 @@ class ApiUtils {
     }
     X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
     return trustManager;
+  }
+
+  private static String getMediaType(String fileName){
+    int extensionIndex = fileName.lastIndexOf('.');
+    String extenionName = fileName.substring(extensionIndex + 1);
+    if(extenionName == "jpg" | extenionName == "jpeg" | extenionName == "png" | extenionName == "jfif"){
+      return "image/jpg";
+    }
+      return "image/pdf";
+  }
+
+  private static RequestBody fileRequestBody(JSONObject requestObject){
+    File fileToUpload = new File((String) requestObject.get("file"));
+    String fileName = fileToUpload.getName();
+
+    MediaType mediaType = MediaType.parse(getMediaType(fileName));
+    RequestBody fileBody = RequestBody.create(mediaType, fileToUpload);
+
+    MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    multipartBodyBuilder.addFormDataPart("file",fileName, fileBody);
+
+    Iterator<?> iterator = requestObject.keys();
+    while (iterator.hasNext()) {
+      Object key = iterator.next();
+      Object value = requestObject.get(key.toString());
+      multipartBodyBuilder.addFormDataPart((String) key, (String) value);
+    }
+
+    MultipartBody requestBody = multipartBodyBuilder.build();
+    return requestBody;
   }
 }
