@@ -839,10 +839,10 @@ Payment payment = instance.payments.expandedDetails("pay_XXXXXXXXXXXXXX",request
 
 **Parameters:**
 
-| Name        | Type    | Description                          |
-|-------------|---------|--------------------------------------|
-| paymentId*  | integer | Unique identifier of the payment     |
-| expand[]    | string | Use to expand the `emi` details when the payment method is emi.   |
+| Name        | Type    | Description                                                      |
+|-------------|---------|------------------------------------------------------------------|
+| paymentId*  | integer | Unique identifier of the payment                                 |
+| expand[]    | string  | Use to expand the `emi` details when the payment method is emi.  |
 
 **Response:** <br>
 
@@ -899,10 +899,10 @@ Payment payment = instance.payments.expandedDetails("pay_XXXXXXXXXXXXXX",request
 
 **Parameters:**
 
-| Name        | Type    | Description                          |
-|-------------|---------|--------------------------------------|
-| paymentId*    | integer | Unique identifier of the payment                                               |
-| expand[]    | string | Use to expand the card details when the payment method is `card`.   |
+| Name        | Type    | Description                                                         |
+|-------------|---------|---------------------------------------------------------------------|
+| paymentId*  | integer | Unique identifier of the payment                                    |
+| expand[]    | string  | Use to expand the card details when the payment method is `card`.   |
 
 **Response:** <br>
 
@@ -972,10 +972,10 @@ Payment payment = instance.payments.expandedDetails("pay_XXXXXXXXXXXXXX",request
 
 **Parameters:**
 
-| Name        | Type    | Description                          |
-|-------------|---------|--------------------------------------|
-| paymentId*    | integer | Unique identifier of the payment                                               |
-| expand[]    | string | Use to expand the emi details when the payment method is emi.   |
+| Name        | Type    | Description                                                    |
+|-------------|---------|----------------------------------------------------------------|
+| paymentId*  | integer | Unique identifier of the payment                               |
+| expand[]    | string  | Use to expand the emi details when the payment method is emi.  |
 
 **Response:** <br>
 
@@ -1033,9 +1033,9 @@ Payment payment = instance.payments.expandedDetails("pay_XXXXXXXXXXXXXX",request
 
 **Parameters:**
 
-| Name        | Type    | Description                          |
-|-------------|---------|--------------------------------------|
-| paymentId*    | integer | Unique identifier of the payment                                               |
+| Name        | Type    | Description                                                  |
+|-------------|---------|--------------------------------------------------------------|
+| paymentId*  | integer | Unique identifier of the payment                             |
 | expand[]    | string | Use to expand the UPI details when the payment method is upi. |
 
 **Response:** <br>
