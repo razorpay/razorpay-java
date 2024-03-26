@@ -113,37 +113,38 @@ public class DisputeClientTest extends BaseTest{
     @Test
     public void TestAccept() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "  \"id\": \"disp_AHfqOvkldwsbqt\",\n" +
-                "  \"entity\": \"dispute\",\n" +
-                "  \"payment_id\": \"pay_EsyWjHrfzb59eR\",\n" +
-                "  \"amount\": 10000,\n" +
-                "  \"currency\": \"INR\",\n" +
-                "  \"amount_deducted\": 10000,\n" +
-                "  \"reason_code\": \"pre_arbitration\",\n" +
-                "  \"respond_by\": 1590604200,\n" +
-                "  \"status\": \"lost\",\n" +
-                "  \"phase\": \"pre_arbitration\",\n" +
-                "  \"created_at\": 1590059211,\n" +
-                "  \"evidence\": {\n" +
-                "    \"amount\": 10000,\n" +
-                "    \"summary\": null,\n" +
-                "    \"shipping_proof\": null,\n" +
-                "    \"billing_proof\": null,\n" +
-                "    \"cancellation_proof\": null,\n" +
-                "    \"customer_communication\": null,\n" +
-                "    \"proof_of_service\": null,\n" +
-                "    \"explanation_letter\": null,\n" +
-                "    \"refund_confirmation\": null,\n" +
-                "    \"access_activity_log\": null,\n" +
-                "    \"refund_cancellation_policy\": null,\n" +
-                "    \"term_and_conditions\": null,\n" +
-                "    \"others\": null,\n" +
-                "    \"submitted_at\": null\n" +
-                "  }\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "disp_AHfqOvkldwsbqt");
+        mockedResponseJson.put("entity", "dispute");
+        mockedResponseJson.put("payment_id", "pay_EsyWjHrfzb59eR");
+        mockedResponseJson.put("amount", 10000);
+        mockedResponseJson.put("currency", "INR");
+        mockedResponseJson.put("amount_deducted", 10000);
+        mockedResponseJson.put("reason_code", "pre_arbitration");
+        mockedResponseJson.put("respond_by", 1590604200);
+        mockedResponseJson.put("status", "lost");
+        mockedResponseJson.put("phase", "pre_arbitration");
+        mockedResponseJson.put("created_at", 1590059211);
+
+        JSONObject evidenceObject = new JSONObject();
+        evidenceObject.put("amount", 5000);
+        evidenceObject.put("summary", JSONObject.NULL);
+        evidenceObject.put("shipping_proof", JSONObject.NULL);
+        evidenceObject.put("billing_proof", JSONObject.NULL);
+        evidenceObject.put("cancellation_proof", JSONObject.NULL);
+        evidenceObject.put("customer_communication", JSONObject.NULL);
+        evidenceObject.put("proof_of_service", JSONObject.NULL);
+        evidenceObject.put("explanation_letter", JSONObject.NULL);
+        evidenceObject.put("refund_confirmation", JSONObject.NULL);
+        evidenceObject.put("access_activity_log", JSONObject.NULL);
+        evidenceObject.put("refund_cancellation_policy", JSONObject.NULL);
+        evidenceObject.put("term_and_conditions", JSONObject.NULL);
+        evidenceObject.put("others", JSONObject.NULL);
+        evidenceObject.put("submitted_at", JSONObject.NULL);
+        mockedResponseJson.put("evidence", evidenceObject);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Dispute fetch = disputeClient.accept(DISPUTE_ID);
             assertNotNull(fetch);
@@ -161,43 +162,49 @@ public class DisputeClientTest extends BaseTest{
      */
     @Test
     public void TestfetchAll() throws RazorpayException {
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"collection\",\n" +
-                "  \"count\": 1,\n" +
-                "  \"items\": [\n" +
-                "    {\n" +
-                "      \"id\": \"disp_Esz7KAitoYM7PJ\",\n" +
-                "      \"entity\": \"dispute\",\n" +
-                "      \"payment_id\": \"pay_EsyWjHrfzb59eR\",\n" +
-                "      \"amount\": 10000,\n" +
-                "      \"currency\": \"INR\",\n" +
-                "      \"amount_deducted\": 0,\n" +
-                "      \"reason_code\": \"pre_arbitration\",\n" +
-                "      \"respond_by\": 1590604200,\n" +
-                "      \"status\": \"open\",\n" +
-                "      \"phase\": \"pre_arbitration\",\n" +
-                "      \"created_at\": 1590059211,\n" +
-                "      \"evidence\": {\n" +
-                "        \"amount\": 10000,\n" +
-                "        \"summary\": null,\n" +
-                "        \"shipping_proof\": null,\n" +
-                "        \"billing_proof\": null,\n" +
-                "        \"cancellation_proof\": null,\n" +
-                "        \"customer_communication\": null,\n" +
-                "        \"proof_of_service\": null,\n" +
-                "        \"explanation_letter\": null,\n" +
-                "        \"refund_confirmation\": null,\n" +
-                "        \"access_activity_log\": null,\n" +
-                "        \"refund_cancellation_policy\": null,\n" +
-                "        \"term_and_conditions\": null,\n" +
-                "        \"others\": null,\n" +
-                "        \"submitted_at\": null\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity", "collection");
+        mockedResponseJson.put("count", 1);
+        
+        JSONArray disputeArray = new JSONArray();
+        
+        JSONObject disputeObj = new JSONObject();
+        disputeObj.put("id", "disp_AHfqOvkldwsbqt");
+        disputeObj.put("entity", "dispute");
+        disputeObj.put("payment_id", "pay_EsyWjHrfzb59eR");
+        disputeObj.put("amount", 10000);
+        disputeObj.put("currency", "INR");
+        disputeObj.put("amount_deducted", 10000);
+        disputeObj.put("reason_code", "pre_arbitration");
+        disputeObj.put("respond_by", 1590604200);
+        disputeObj.put("status", "lost");
+        disputeObj.put("phase", "pre_arbitration");
+        disputeObj.put("created_at", 1590059211);
+
+        JSONObject evidenceObject = new JSONObject();
+        evidenceObject.put("amount", 5000);
+        evidenceObject.put("summary", JSONObject.NULL);
+        evidenceObject.put("shipping_proof", JSONObject.NULL);
+        evidenceObject.put("billing_proof", JSONObject.NULL);
+        evidenceObject.put("cancellation_proof", JSONObject.NULL);
+        evidenceObject.put("customer_communication", JSONObject.NULL);
+        evidenceObject.put("proof_of_service", JSONObject.NULL);
+        evidenceObject.put("explanation_letter", JSONObject.NULL);
+        evidenceObject.put("refund_confirmation", JSONObject.NULL);
+        evidenceObject.put("access_activity_log", JSONObject.NULL);
+        evidenceObject.put("refund_cancellation_policy", JSONObject.NULL);
+        evidenceObject.put("term_and_conditions", JSONObject.NULL);
+        evidenceObject.put("others", JSONObject.NULL);
+        evidenceObject.put("submitted_at", JSONObject.NULL);
+        disputeObj.put("evidence", evidenceObject);
+        
+        disputeArray.put(disputeObj);
+
+        mockedResponseJson.put("items", disputeArray);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             List <Dispute> fetch = disputeClient.fetchAll();
             assertNotNull(fetch);
@@ -215,37 +222,38 @@ public class DisputeClientTest extends BaseTest{
      */
     @Test
     public void testFetch() throws IOException, RazorpayException {
-        String mockedResponseJson = "{\n" +
-                "  \"id\": \"disp_AHfqOvkldwsbqt\",\n" +
-                "  \"entity\": \"dispute\",\n" +
-                "  \"payment_id\": \"pay_EsyWjHrfzb59eR\",\n" +
-                "  \"amount\": 10000,\n" +
-                "  \"currency\": \"INR\",\n" +
-                "  \"amount_deducted\": 0,\n" +
-                "  \"reason_code\": \"pre_arbitration\",\n" +
-                "  \"respond_by\": 1590604200,\n" +
-                "  \"status\": \"open\",\n" +
-                "  \"phase\": \"pre_arbitration\",\n" +
-                "  \"created_at\": 1590059211,\n" +
-                "  \"evidence\": {\n" +
-                "    \"amount\": 10000,\n" +
-                "    \"summary\": \"goods delivered\",\n" +
-                "    \"shipping_proof\": null,\n" +
-                "    \"billing_proof\": null,\n" +
-                "    \"cancellation_proof\": null,\n" +
-                "    \"customer_communication\": null,\n" +
-                "    \"proof_of_service\": null,\n" +
-                "    \"explanation_letter\": null,\n" +
-                "    \"refund_confirmation\": null,\n" +
-                "    \"access_activity_log\": null,\n" +
-                "    \"refund_cancellation_policy\": null,\n" +
-                "    \"term_and_conditions\": null,\n" +
-                "    \"others\": null,\n" +
-                "    \"submitted_at\": null\n" +
-                "  }\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "disp_AHfqOvkldwsbqt");
+        mockedResponseJson.put("entity", "dispute");
+        mockedResponseJson.put("payment_id", "pay_EsyWjHrfzb59eR");
+        mockedResponseJson.put("amount", 10000);
+        mockedResponseJson.put("currency", "INR");
+        mockedResponseJson.put("amount_deducted", 10000);
+        mockedResponseJson.put("reason_code", "pre_arbitration");
+        mockedResponseJson.put("respond_by", 1590604200);
+        mockedResponseJson.put("status", "lost");
+        mockedResponseJson.put("phase", "pre_arbitration");
+        mockedResponseJson.put("created_at", 1590059211);
+
+        JSONObject evidenceObject = new JSONObject();
+        evidenceObject.put("amount", 5000);
+        evidenceObject.put("summary", JSONObject.NULL);
+        evidenceObject.put("shipping_proof", JSONObject.NULL);
+        evidenceObject.put("billing_proof", JSONObject.NULL);
+        evidenceObject.put("cancellation_proof", JSONObject.NULL);
+        evidenceObject.put("customer_communication", JSONObject.NULL);
+        evidenceObject.put("proof_of_service", JSONObject.NULL);
+        evidenceObject.put("explanation_letter", JSONObject.NULL);
+        evidenceObject.put("refund_confirmation", JSONObject.NULL);
+        evidenceObject.put("access_activity_log", JSONObject.NULL);
+        evidenceObject.put("refund_cancellation_policy", JSONObject.NULL);
+        evidenceObject.put("term_and_conditions", JSONObject.NULL);
+        evidenceObject.put("others", JSONObject.NULL);
+        evidenceObject.put("submitted_at", JSONObject.NULL);
+        mockedResponseJson.put("evidence", evidenceObject);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Dispute dispute = disputeClient.fetch(DISPUTE_ID);
             assertNotNull(dispute);
