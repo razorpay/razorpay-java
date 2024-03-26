@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -59,17 +60,17 @@ public class IinClientTest extends BaseTest{
     @Test
     public void fetchList() throws RazorpayException {
 
-        JSONObject request = new JSONObject("{\n  " +
-                "\"flow\": \"otp\",\n  " +
-                "}");
+        JSONObject request = new JSONObject();
+        request.put("flow","otp");
 
-        String mockedResponseJson = "{\n" +
-                "\"count\": 0,\n" +
-                "\"entity\": \"iin\",\n " +
-                "\"iins\": []\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("count", 0);
+        mockedResponseJson.put("entity", "iin");
+        JSONArray iinArr = new JSONArray();
+        mockedResponseJson.put("iins", iinArr);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Iin fetch = iinClient.fetchList(request);
             assertNotNull(fetch);

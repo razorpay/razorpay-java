@@ -12,7 +12,7 @@ Iin token = instance.iin.fetch(tokenIin);
 
 | Name       | Type   | Description                       |
 |------------|--------|-----------------------------------|
-| tokenIin* | string | The token IIN. |
+| tokenIin*  | string | The token IIN.                    |
 
 **Response:**
 ```json
@@ -56,9 +56,9 @@ Iin item = razorpayclient.iin.fetchList(obj);
 
 **Parameters:**
 
-| Name       | Type   | Description                       |
-|------------|--------|-----------------------------------|
-| flow | string | Authentication flow is Native OTP. Possible value is `otp`. |
+| Name       | Type   | Description                                                 |
+|------------|--------|-------------------------------------------------------------|
+| flow       | string | Authentication flow is Native OTP. Possible value is `otp`. |
 
 **Response:**
 ```json
@@ -90,9 +90,9 @@ Iin item = razorpayclient.iin.fetchList(obj);
 
 **Parameters:**
 
-| Name       | Type   | Description                       |
-|------------|--------|-----------------------------------|
-| sub_type | string | The sub_type of the IIN. Possible value is `business`. |
+| Name       | Type   | Description                                            |
+|------------|--------|--------------------------------------------------------|
+| sub_type   | string | The sub_type of the IIN. Possible value is `business`. |
 
 **Response:**
 ```json
