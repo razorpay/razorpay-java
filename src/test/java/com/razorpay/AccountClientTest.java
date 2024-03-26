@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -237,17 +238,17 @@ public class AccountClientTest extends BaseTest{
         request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
         request.put("document_type","business_proof_url");
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"account\",\n" +
-                "  \"business_proof_of_identification\": [\n" +
-                "    {\n" +
-                "      \"type\": \"business_proof_url\",\n" +
-                "      \"url\": \"<https://rzp.io/i/bzDKbNg>\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","account");
+        JSONArray businessArray = new JSONArray();
+        JSONObject businessObj = new JSONObject();
+        businessObj.put("type","business_proof_url");
+        businessObj.put("url","<https://rzp.io/i/bzDKbNg>");
+        businessArray.put(businessObj);
+        mockedResponseJson.put("business_proof_of_identification",businessArray);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Account document = accountClient.uploadAccountDoc(ACCOUNT_ID, request);
             assertNotNull(document);
@@ -260,17 +261,16 @@ public class AccountClientTest extends BaseTest{
     @Test
     public void fetchAccountDoc() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"account\",\n" +
-                "  \"business_proof_of_identification\": [\n" +
-                "    {\n" +
-                "      \"type\": \"business_proof_url\",\n" +
-                "      \"url\": \"<https://rzp.io/i/bzDKbNg>\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","account");
+        JSONArray businessArray = new JSONArray();
+        JSONObject businessObj = new JSONObject();
+        businessObj.put("type","business_proof_url");
+        businessObj.put("url","<https://rzp.io/i/bzDKbNg>");
+        businessArray.put(businessObj);
+        mockedResponseJson.put("business_proof_of_identification",businessArray);
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Account document = accountClient.fetchAccountDoc(ACCOUNT_ID);
             assertNotNull(document);
