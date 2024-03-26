@@ -274,8 +274,8 @@ Order order = instance.orders.viewRtoReview(orderId);
 ```
 **Parameters**
 
-| Name     | Type   | Description                         |
-|----------|--------|-------------------------------------|
+| Name     | Type   | Description                                                             |
+|----------|--------|-------------------------------------------------------------------------|
 | orderId* | string | The unique identifier of an order to access the rto_review information. |
 
 **Response:**
@@ -316,11 +316,11 @@ Order order = instance.orders.editFulfillment(orderId, request);
 ```
 **Parameters**
 
-| Name     | Type   | Description                         |
-|----------|--------|-------------------------------------|
-| orderId* | string | The unique identifier of an order to access the fulfillment information. |
-| payment_method | string | Payment Method opted by the customer to complete the payment. Possible values is `upi`, `card`, `wallet`, `netbanking`, `cod`, `emi`, `cardless_emi`, `paylater`, `recurring`, `other`. |
-| shipping | object  | Contains the shipping data. [here](https://razorpay.com/docs/payments/magic-checkout/rto-intelligence/#step-3-update-the-fulfillment-details) are supported |
+| Name           | Type   | Description                                                                                                                                                                                   |
+|----------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| orderId*       | string | The unique identifier of an order to access the fulfillment information.                                                                                                                      |
+| payment_method | string | Payment Method opted by the customer to complete the payment. Possible values is `upi`, `card`, `wallet`, `netbanking`, `cod`, `emi`, `cardless_emi`, `paylater`, `recurring`, `other`.       |
+| shipping       | object | Contains the shipping data. [here](https://razorpay.com/docs/payments/magic-checkout/rto-intelligence/#step-3-update-the-fulfillment-details) are supported                                   |
 
 **Response:**
 ```json

@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -225,24 +226,28 @@ public class OrderClientTest extends BaseTest{
         JSONObject request = new JSONObject();
         request.put("payment_method","upi");
 
-        String mockedResponseJson = "{\n" +
-                "  \"risk_tier\": \"high\",\n" +
-                "  \"entity\": \"order\",\n" +
-                "  \"rto_reasons\": [\n" +
-                "    {\n" +
-                "      \"reason\": \"short_shipping_address\",\n" +
-                "      \"description\": \"Short shipping address\",\n" +
-                "      \"bucket\": \"address\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"reason\": \"address_pincode_state_mismatch\",\n" +
-                "      \"description\": \"Incorrect pincode state entered\",\n" +
-                "      \"bucket\": \"address\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","order");
+        mockedResponseJson.put("risk_tier","high");
+
+        JSONArray rtoArray = new JSONArray();
+        JSONObject reason1 = new JSONObject();
+        reason1.put("reason", "short_shipping_address");
+        reason1.put("description", "Short shipping address");
+        reason1.put("bucket", "address");
+
+        JSONObject reason2 = new JSONObject();
+        reason1.put("reason", "address_pincode_state_mismatch");
+        reason1.put("description", "Incorrect pincode state entered");
+        reason1.put("bucket", "address");
+
+        rtoArray.put(reason1);
+        rtoArray.put(reason2);
+
+        mockedResponseJson.put("rto_reasons", rtoArray);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Order fetch = orderClient.viewRtoReview(ORDER_ID);
             assertNotNull(fetch);
@@ -264,18 +269,20 @@ public class OrderClientTest extends BaseTest{
         request.put("payment_method","upi");
         request.put("shipping","shipping");
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"order\",\n" +
-                "  \"order_id\": \"order_EKwxwAgItmmXdp\",\n" +
-                "  \"payment_method\": \"upi\",\n" +
-                "  \"shipping\": {\n" +
-                "    \"waybill\": \"123456789\",\n" +
-                "    \"status\": \"rto\",\n" +
-                "    \"provider\": \"Bluedart\"\n" +
-                "  }\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","order");
+        mockedResponseJson.put("order_id","order_EKwxwAgItmmXdp");
+        mockedResponseJson.put("payment_method","upi");
+        
+        JSONObject shippingObj = new JSONObject();
+        shippingObj.put("waybill", "123456789");
+        shippingObj.put("status", "rto");
+        shippingObj.put("provider", "Bluedart");
+
+        mockedResponseJson.put("shipping",shippingObj);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Order fetch = orderClient.editFulfillment(ORDER_ID, request);
             assertNotNull(fetch);
