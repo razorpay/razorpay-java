@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -215,6 +216,80 @@ public class OrderClientTest extends BaseTest{
             assertEquals(ORDER_ID,fetch.get("id"));
             String editRequest = getHost(String.format(Constants.ORDER_EDIT, ORDER_ID));
             verifySentRequest(true, request.toString(), editRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void viewRtoReview() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("payment_method","upi");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","order");
+        mockedResponseJson.put("risk_tier","high");
+
+        JSONArray rtoArray = new JSONArray();
+        JSONObject reason1 = new JSONObject();
+        reason1.put("reason", "short_shipping_address");
+        reason1.put("description", "Short shipping address");
+        reason1.put("bucket", "address");
+
+        JSONObject reason2 = new JSONObject();
+        reason1.put("reason", "address_pincode_state_mismatch");
+        reason1.put("description", "Incorrect pincode state entered");
+        reason1.put("bucket", "address");
+
+        rtoArray.put(reason1);
+        rtoArray.put(reason2);
+
+        mockedResponseJson.put("rto_reasons", rtoArray);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Order fetch = orderClient.viewRtoReview(ORDER_ID);
+            assertNotNull(fetch);
+            assertEquals(true,fetch.has("risk_tier"));
+            String createRequest = getHost(String.format(Constants.VIEW_RTO, ORDER_ID));
+            verifySentRequest(false, null, createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+    @Test
+    public void editFulfillment() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        JSONObject shipping = new JSONObject();
+        shipping.put("waybill", "123456789");
+        shipping.put("status", "rto");
+        shipping.put("provider", "Bluedart");
+
+        request.put("payment_method","upi");
+        request.put("shipping","shipping");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","order");
+        mockedResponseJson.put("order_id","order_EKwxwAgItmmXdp");
+        mockedResponseJson.put("payment_method","upi");
+        
+        JSONObject shippingObj = new JSONObject();
+        shippingObj.put("waybill", "123456789");
+        shippingObj.put("status", "rto");
+        shippingObj.put("provider", "Bluedart");
+
+        mockedResponseJson.put("shipping",shippingObj);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Order fetch = orderClient.editFulfillment(ORDER_ID, request);
+            assertNotNull(fetch);
+            assertEquals(ORDER_ID,fetch.get("order_id"));
+            assertEquals("order",fetch.get("entity"));
+            String createRequest = getHost(String.format(Constants.FULFILLMENT, ORDER_ID));
+            verifySentRequest(true, request.toString(), createRequest);
         } catch (IOException e) {
             assertTrue(false);
         }

@@ -169,5 +169,6 @@ public class Constants {
   static final String AUTHORIZE = "authorize";
   static final String TOKEN     = "/token";
   static final String REVOKE     = "/revoke";
-
+  static final String VIEW_RTO = "orders/%s/rto_review";
+  static final String FULFILLMENT = "orders/%s/fulfillment";
 }
