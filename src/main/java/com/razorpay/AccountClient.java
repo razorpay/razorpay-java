@@ -22,4 +22,11 @@ public class AccountClient extends ApiClient {
     public Account delete(String id) throws RazorpayException {
         return delete(Constants.VERSION_V2, String.format(Constants.ACCOUNT_DELETE, id), null);
     }
+
+    public Account uploadAccountDoc(String id, JSONObject request) throws RazorpayException {
+        return post(Constants.VERSION_V2, String.format(Constants.UPLOAD_ACCOUNT_DOCUMENT, id), request);
+    }
+    public Account fetchAccountDoc(String id) throws RazorpayException {
+        return get(Constants.VERSION_V2, String.format(Constants.UPLOAD_ACCOUNT_DOCUMENT, id), null);
+    }
 }
