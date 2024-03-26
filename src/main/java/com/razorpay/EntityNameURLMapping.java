@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 
 public enum EntityNameURLMapping {
-  
+    IINS("iin"),
     INVOICES("invoice"),
     SETTLEMENTS("settlement"),
     PAYMENTS("payment"),
