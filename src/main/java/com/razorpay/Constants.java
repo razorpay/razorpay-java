@@ -170,4 +170,11 @@ public class Constants {
   static final String TOKEN     = "/token";
   static final String REVOKE     = "/revoke";
 
+  static final String ADD_BANK_ACCOUNT = "customers/%s/bank_account";
+
+  static final String DELETE_BANK_ACCOUNT = "customers/%s/bank_account/%s";
+
+  static final String ELIGIBILITY = "customers/eligibility";
+
+  static final String ELIGIBILITY_FETCH = "customers/eligibility/%s";
 }

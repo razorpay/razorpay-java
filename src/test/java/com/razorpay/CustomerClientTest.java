@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -14,7 +15,8 @@ public class CustomerClientTest extends BaseTest{
     protected CustomerClient customerClient = new CustomerClient(TEST_SECRET_KEY);
 
     private static final String CUSTOMER_ID = "cust_1Aa00000000004";
-
+    private static final String BANKACCOUNT_ID = "ba_LSZht1Cm7xFTwF";
+    private static final String ELIGIBILITY_ID = "elig_F1cxDoHWD4fkQt";
     private static final String TOKEN_ID = "token_Hxe0skTXLeg9pF";
 
     /**
@@ -291,6 +293,167 @@ public class CustomerClientTest extends BaseTest{
             Customer customer = customerClient.deleteToken(CUSTOMER_ID,TOKEN_ID);
             assertNotNull(customer);
             verifySentRequest(false, null, getHost(String.format(Constants.TOKEN_DELETE,CUSTOMER_ID,TOKEN_ID)));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Add Bank Account
+     */
+    @Test
+    public void testaddBankAccount() throws RazorpayException{
+
+        JSONObject request = new JSONObject();
+        request.put("account_number","916010082985661");
+        request.put("beneficiary_name","Pratheek");
+        request.put("ifsc_code","UTIB0000194");
+        request.put("beneficiary_address1","address 1");
+        request.put("beneficiary_address2","address 2");
+        request.put("beneficiary_address3","address 3");
+        request.put("beneficiary_address4","address 4");
+        request.put("beneficiary_email","random@email.com");
+        request.put("beneficiary_mobile","8762489310");
+        request.put("beneficiary_city","Bangalore");
+        request.put("beneficiary_state","KA");
+        request.put("beneficiary_country","IN");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "ba_LSZht1Cm7xFTwF");
+        mockedResponseJson.put("entity", "bank_account");
+        mockedResponseJson.put("ifsc", "ICIC0001207");
+        mockedResponseJson.put("bank_name", "ICICI Bank");
+        mockedResponseJson.put("name", "Gaurav Kumar");
+        ArrayList<String> notes = new ArrayList<String>();
+        mockedResponseJson.put("notes", notes);
+        mockedResponseJson.put("account_number", "XXXXXXXXXXXXXXX0434");
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            BankAccount customer = customerClient.addBankAccount(CUSTOMER_ID,request);
+            assertNotNull(customer);
+            assertEquals(BANKACCOUNT_ID,customer.get("id"));
+            String createRequest = getHost(String.format(Constants.ADD_BANK_ACCOUNT,CUSTOMER_ID));
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+    * Delete Bank Account
+    */
+    @Test
+    public void testDeleteBankAccount() throws RazorpayException {
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id", "ba_LSZht1Cm7xFTwF");
+        mockedResponseJson.put("entity", "customer");
+        mockedResponseJson.put("ifsc", "ICIC0001207");
+        mockedResponseJson.put("bank_name", "ICICI Bank");
+        mockedResponseJson.put("name", "Gaurav Kumar");
+        ArrayList<String> notes = new ArrayList<String>();
+        mockedResponseJson.put("notes", notes);
+        mockedResponseJson.put("account_number", "XXXXXXXXXXXXXXX0434");
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer fetch = customerClient.deleteBankAccount(CUSTOMER_ID, BANKACCOUNT_ID);
+            assertNotNull(fetch);
+            assertEquals(BANKACCOUNT_ID,fetch.get("id"));
+            String fetchRequest = getHost(String.format(Constants.DELETE_BANK_ACCOUNT, CUSTOMER_ID, BANKACCOUNT_ID));
+            verifySentRequest(false, null, fetchRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Eligibility Check
+     */
+    @Test
+    public void testEligibilityCheck() throws RazorpayException{
+
+        JSONObject request = new JSONObject();
+        request.put("inquiry","affordability");
+        request.put("amount", 500);
+        request.put("currency","INR");
+        JSONObject customerParam = new JSONObject();
+        customerParam.put("id","elig_xxxxxxxxxxxxx");
+        customerParam.put("contact","+919999999999");
+        customerParam.put("ip","105.106.107.108");
+        customerParam.put("referrer","https://merchansite.com/example/paybill");
+        customerParam.put("user_agent","Mozilla/5.0");
+        request.put("customer",customerParam);
+
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("amount", 500000);
+        mockedResponseJson.put("entity", "customer");
+        JSONObject _customerParam = new JSONObject();
+        _customerParam.put("id","KkBhM9EC1Y0HTm");
+        _customerParam.put("contact","+918220722114");
+        mockedResponseJson.put("customer", _customerParam);
+        ArrayList<JSONObject> instrument = new ArrayList<JSONObject>();
+        JSONObject instrumentObj = new JSONObject();
+        instrumentObj.put("method","emi");
+        instrumentObj.put("issuer","HDFC");
+        instrumentObj.put("type","debit");
+        instrumentObj.put("eligibility_req_id","elig_KkCNLzlNeMYQyZ");
+        JSONObject eligibilityObj = new JSONObject();
+        eligibilityObj.put("status","eligible");
+        instrument.add(instrumentObj);
+        mockedResponseJson.put("instruments", instrument);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer customer = customerClient.requestEligibilityCheck(request);
+            assertNotNull(customer);
+            assertEquals(true, customer.has("amount"));
+            assertEquals(true, customer.has("customer"));
+            String createRequest = getHost(Constants.ELIGIBILITY);
+            verifySentRequest(true, request.toString(), createRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    /**
+     * Fetch Eligibility
+     */
+    @Test
+    public void testFetchEligibility() throws RazorpayException {
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("amount", 500000);
+        mockedResponseJson.put("entity", "customer");
+        JSONObject _customerParam = new JSONObject();
+        _customerParam.put("id","KkBhM9EC1Y0HTm");
+        _customerParam.put("contact","+918220722114");
+        mockedResponseJson.put("customer", _customerParam);
+        ArrayList<JSONObject> instrument = new ArrayList<JSONObject>();
+        JSONObject instrumentObj = new JSONObject();
+        instrumentObj.put("method","emi");
+        instrumentObj.put("issuer","HDFC");
+        instrumentObj.put("type","debit");
+        instrumentObj.put("eligibility_req_id","elig_KkCNLzlNeMYQyZ");
+        JSONObject eligibilityObj = new JSONObject();
+        eligibilityObj.put("status","eligible");
+        instrument.add(instrumentObj);
+        mockedResponseJson.put("instruments", instrument);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer fetch = customerClient.fetchEligibility(ELIGIBILITY_ID);
+            assertNotNull(fetch);
+            assertEquals(true, fetch.has("amount"));
+            assertEquals(true, fetch.has("customer"));
+            String fetchRequest = getHost(String.format(Constants.ELIGIBILITY_FETCH, ELIGIBILITY_ID));
+            verifySentRequest(false, null, fetchRequest);
         } catch (IOException e) {
             assertTrue(false);
         }
