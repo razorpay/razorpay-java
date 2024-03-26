@@ -349,7 +349,7 @@ public class CustomerClientTest extends BaseTest{
 
         JSONObject mockedResponseJson = new JSONObject();
         mockedResponseJson.put("id", "ba_LSZht1Cm7xFTwF");
-        mockedResponseJson.put("entity", "bank_account");
+        mockedResponseJson.put("entity", "customer");
         mockedResponseJson.put("ifsc", "ICIC0001207");
         mockedResponseJson.put("bank_name", "ICICI Bank");
         mockedResponseJson.put("name", "Gaurav Kumar");
