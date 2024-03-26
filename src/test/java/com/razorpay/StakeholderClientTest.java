@@ -208,7 +208,7 @@ public class StakeholderClientTest extends BaseTest{
         request.put("document_type","aadhar_front");
 
         String mockedResponseJson = "{\n" +
-                "  \"entity\": \"stakeholder\",\n" +
+                "  \"entity\": \"account\",\n" +
                 "  \"individual_proof_of_address\": [\n" +
                 "    {\n" +
                 "      \"type\": \"aadhar_front\",\n" +
@@ -219,7 +219,7 @@ public class StakeholderClientTest extends BaseTest{
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            Stakeholder document = stakeholderClient.uploadStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID, request);
+            Account document = stakeholderClient.uploadStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID, request);
             assertNotNull(document);
             assertEquals(true,document.has("individual_proof_of_address"));
         } catch (IOException e) {
@@ -231,7 +231,7 @@ public class StakeholderClientTest extends BaseTest{
     public void testfetchStakeholderDoc() throws RazorpayException {
 
         String mockedResponseJson = "{\n" +
-                "  \"entity\": \"stakeholder\",\n" +
+                "  \"entity\": \"account\",\n" +
                 "  \"individual_proof_of_address\": [\n" +
                 "    {\n" +
                 "      \"type\": \"aadhar_front\",\n" +
@@ -242,7 +242,7 @@ public class StakeholderClientTest extends BaseTest{
         try {
             mockResponseFromExternalClient(mockedResponseJson);
             mockResponseHTTPCodeFromExternalClient(200);
-            Stakeholder document = stakeholderClient.fetchStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID);
+            Account document = stakeholderClient.fetchStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID);
             assertNotNull(document);
             assertEquals(true,document.has("individual_proof_of_address"));
         } catch (IOException e) {
