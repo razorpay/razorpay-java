@@ -80,7 +80,7 @@ class ApiUtils {
 
     RequestBody requestBody;
 
-    if(requestObject.has("file")){
+    if(requestObject != null && requestObject.has("file")){
        requestBody = fileRequestBody(requestObject);
     }else{
       String requestContent = requestObject == null ? "" : requestObject.toString();
