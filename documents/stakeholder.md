@@ -300,7 +300,7 @@ String accoundId = "acc_LryDIBIjBDbOWy";
 String stakeholderId = "sth_M0zjeiVOLRJRPW";
 
 JSONObject request = new JSONObject();
-request.put("file","/Users/your_name/Downloads/sample_uploaded.pdf");
+request.put("file","/Users/your_name/Downloads/sample_uploaded.jpeg");
 request.put("document_type","aadhar_front");
 
 Stakeholder stakeholder = instance.stakeholder.uploadStakeholderDoc(accoundId, stakeholderId, request);

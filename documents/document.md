@@ -4,7 +4,7 @@
 
 ```java
         JSONObject request = new JSONObject();
-        request.put("file","/Users/your_name/Downloads/sample_uploaded.jpeg");
+        request.put("file","/Users/your_name/Downloads/sample_uploaded.pdf");
         request.put("purpose","dispute_evidence");
 
         Document document = instance.document.create(request);
