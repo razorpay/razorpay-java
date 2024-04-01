@@ -170,6 +170,9 @@ public class Constants {
   static final String TOKEN     = "/token";
   static final String REVOKE     = "/revoke";
 
+  static final String VIEW_RTO = "orders/%s/rto_review";
+  static final String FULFILLMENT = "orders/%s/fulfillment";
+
   static final String DISPUTE  = "/disputes";
   static final String DISPUTE_FETCH = "/disputes/%s";
   static final String DISPUTE_ACCEPT = "/disputes/%s/accept";
