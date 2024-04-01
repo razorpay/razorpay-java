@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 1.4.6 - 2024-04-01
+feat: Added new API endpoints
+* Added support for addBankAccount, deleteBankAccount, requestEligibilityCheck & fetchEligibility on customer
+* Added support for Dispute
+* Added support for uploadStakeholderDoc, fetchStakeholderDoc on stakeholder
+* Added support for uploadAccountDoc, fetchAccountDoc on account
+* Added support for Document
+* Added support for fetch all IINs Supporting native otps & fetch all IINs with business sub-type using fetchList
+* Added support for viewRtoReview & editFulfillment on order
+
 ## Version 1.4.5 - 2024-02-14
 [#302](https://github.com/razorpay/razorpay-java/pull/302)
 * Added oauth APIs (getAuthURL, getAccessToken, refreshToken, revokeToken) 

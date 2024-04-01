@@ -23,7 +23,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.4.5</version>
+ <version>1.4.6</version>
 </dependency>
 ```
 
@@ -118,6 +118,10 @@ razorpayClient.addHeaders(headers);
 - [Webhook](documents/webhook.md)
 
 - [OAuth Token Client](documents/oAuthTokenClient.md)
+
+- [Dispute](documents/dispute.md)
+
+- [Document](documents/document.md)
 ---
 
 * Make custom requests
