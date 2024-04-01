@@ -934,4 +934,69 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void expandedDetails() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("expand[]","payments");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id","pay_IDRP0tbirMSsbn");
+        mockedResponseJson.put("entity","payment");
+        mockedResponseJson.put("amount",100);
+        mockedResponseJson.put("currency","INR");
+        mockedResponseJson.put("status","failed");
+        mockedResponseJson.put("order_id","order_H9o58N6qmLYQKC");
+        mockedResponseJson.put("invoice_id", JSONObject.NULL);
+        mockedResponseJson.put("terminal_id","term_G5kJnYM9GhhLYT");
+        mockedResponseJson.put("international",false);
+        mockedResponseJson.put("method","card");
+        mockedResponseJson.put("amount_refunded",JSONObject.NULL);
+        mockedResponseJson.put("captured",false);
+        mockedResponseJson.put("description",JSONObject.NULL);
+        mockedResponseJson.put("card_id","card_H9oR0ocen1cmZq");
+        JSONObject cardObj = new JSONObject();
+        cardObj.put("id","");
+        cardObj.put("entity","card");
+        cardObj.put("name","Gaurav");
+        cardObj.put("last4","1213");
+        cardObj.put("network","RuPay");
+        cardObj.put("type", "credit");
+        cardObj.put("issuer","UTIB");
+        cardObj.put("international", false);
+        cardObj.put("emi", false);
+        cardObj.put("sub_type","business");
+        mockedResponseJson.put("card",cardObj);
+        mockedResponseJson.put("bank",JSONObject.NULL);
+        mockedResponseJson.put("wallet",JSONObject.NULL);
+        mockedResponseJson.put("vpa",JSONObject.NULL);
+        mockedResponseJson.put("email","gaurav.kumar@example.com");
+        mockedResponseJson.put("contact","+919000090000");
+        JSONObject notesObj = new JSONObject();
+        notesObj.put("key1","");
+        notesObj.put("key2","");
+        mockedResponseJson.put("notes",notesObj);
+        mockedResponseJson.put("fee",JSONObject.NULL);
+        mockedResponseJson.put("tax",JSONObject.NULL);
+        mockedResponseJson.put("error_code","BAD_REQUEST_ERROR");
+        mockedResponseJson.put("error_description","Card issuer is invalid");
+        mockedResponseJson.put("error_source","customer");
+        mockedResponseJson.put("error_step","payment_authentication");
+        mockedResponseJson.put("error_reason","incorrect_card_details");
+        JSONObject acquirerDataObj = new JSONObject();
+        acquirerDataObj.put("auth_code",JSONObject.NULL);
+        acquirerDataObj.put("authentication_reference_number","100222021120200000000742753928");
+        mockedResponseJson.put("acquirer_data",acquirerDataObj);
+        mockedResponseJson.put("created_at",1620807547);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Payment fetch = paymentClient.expandedDetails(PAYMENT_ID, request);
+            assertNotNull(fetch);
+            assertEquals(PAYMENT_ID,fetch.get("id"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
