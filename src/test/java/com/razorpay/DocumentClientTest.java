@@ -16,20 +16,20 @@ public class DocumentClientTest extends BaseTest{
     @Test
     public void create() throws RazorpayException {
         JSONObject request = new JSONObject();
-        request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
         request.put("purpose","dispute_evidence");
 
-        String mockedResponseJson = "{\n" +
-                "  \"id\": \"doc_EsyWjHrfzb59Re\",\n" +
-                "  \"entity\": \"document\",\n" +
-                "  \"purpose\": \"dispute_evidence\",\n" +
-                "  \"name\": \"file_19_18_2020.jpg\",\n" +
-                "  \"mime_type\": \"image/png\",\n" +
-                "  \"size\": 2863,\n" +
-                "  \"created_at\": 1590604200\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id","doc_EsyWjHrfzb59Re");
+        mockedResponseJson.put("entity","document");
+        mockedResponseJson.put("purpose","dispute_evidence");
+        mockedResponseJson.put("name","sample_uploaded.jpg");
+        mockedResponseJson.put("mime_type","image/png");
+        mockedResponseJson.put("size","2863");
+        mockedResponseJson.put("created_at","1590604200");
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Document document = documentClient.create(request);
             assertNotNull(document);
@@ -46,17 +46,17 @@ public class DocumentClientTest extends BaseTest{
     @Test
     public void fetch() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "  \"id\": \"doc_EsyWjHrfzb59Re\",\n" +
-                "  \"entity\": \"document\",\n" +
-                "  \"purpose\": \"dispute_evidence\",\n" +
-                "  \"name\": \"doc_19_12_2020.jpg\",\n" +
-                "  \"mime_type\": \"image/png\",\n" +
-                "  \"size\": 2863,\n" +
-                "  \"created_at\": 1590604200\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id","doc_EsyWjHrfzb59Re");
+        mockedResponseJson.put("entity","document");
+        mockedResponseJson.put("purpose","dispute_evidence");
+        mockedResponseJson.put("name","doc_19_12_2020.jpg");
+        mockedResponseJson.put("mime_type","image/png");
+        mockedResponseJson.put("size","2863");
+        mockedResponseJson.put("created_at","1590604200");
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Document fetch = documentClient.fetch(DOCUMENT_ID);
             assertNotNull(fetch);
