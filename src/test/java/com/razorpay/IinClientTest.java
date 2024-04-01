@@ -1,5 +1,7 @@
 package com.razorpay;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
@@ -50,6 +52,29 @@ public class IinClientTest extends BaseTest{
             assertEquals(TOKEN_IIN,fetch.get("iin"));
             String fetchRequest = getHost(String.format(Constants.IIN_FETCH, TOKEN_IIN));
             verifySentRequest(false, null, fetchRequest);
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchList() throws RazorpayException {
+
+        JSONObject request = new JSONObject();
+        request.put("flow","otp");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("count", 0);
+        mockedResponseJson.put("entity", "iin");
+        JSONArray iinArray = new JSONArray();
+        mockedResponseJson.put("iins", iinArray);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Iin fetch = iinClient.fetchList(request);
+            assertNotNull(fetch);
+            assertEquals(true,fetch.has("iins"));
         } catch (IOException e) {
             assertTrue(false);
         }
