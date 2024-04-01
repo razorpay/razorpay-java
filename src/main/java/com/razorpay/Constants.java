@@ -171,8 +171,19 @@ public class Constants {
   static final String REVOKE     = "/revoke";
 
   static final String DOCUMENTS = "/documents";
-
   static final String DOCUMENT_FETCH = "/documents/%s";
-
   static final String UPLOAD_STAKEHOLDER_DOCUMENT = "accounts/%s/stakeholders/%s/documents";
+
+  static final String VIEW_RTO = "orders/%s/rto_review";
+  static final String FULFILLMENT = "orders/%s/fulfillment";
+
+  static final String DISPUTE  = "/disputes";
+  static final String DISPUTE_FETCH = "/disputes/%s";
+  static final String DISPUTE_ACCEPT = "/disputes/%s/accept";
+  static final String DISPUTE_CONTEST = "/disputes/%s/contest";
+
+  static final String ADD_BANK_ACCOUNT = "customers/%s/bank_account";
+  static final String DELETE_BANK_ACCOUNT = "customers/%s/bank_account/%s";
+  static final String ELIGIBILITY = "customers/eligibility";
+  static final String ELIGIBILITY_FETCH = "customers/eligibility/%s";
 }
