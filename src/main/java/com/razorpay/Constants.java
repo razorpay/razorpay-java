@@ -172,8 +172,11 @@ public class Constants {
 
   static final String DISPUTE  = "/disputes";
   static final String DISPUTE_FETCH = "/disputes/%s";
-
   static final String DISPUTE_ACCEPT = "/disputes/%s/accept";
-
   static final String DISPUTE_CONTEST = "/disputes/%s/contest";
+
+  static final String ADD_BANK_ACCOUNT = "customers/%s/bank_account";
+  static final String DELETE_BANK_ACCOUNT = "customers/%s/bank_account/%s";
+  static final String ELIGIBILITY = "customers/eligibility";
+  static final String ELIGIBILITY_FETCH = "customers/eligibility/%s";
 }

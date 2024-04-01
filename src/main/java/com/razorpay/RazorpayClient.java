@@ -31,6 +31,7 @@ public class RazorpayClient {
 
   public DisputeClient dispute;
   public TncMap tncMap;
+  public BankAccountClient bankAccount;
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
   }
@@ -69,6 +70,7 @@ public class RazorpayClient {
     product = new ProductClient(auth);
     webhook = new WebhookClient(auth);
     dispute = new DisputeClient(auth);
+    bankAccount = new BankAccountClient(auth);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
