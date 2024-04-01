@@ -407,7 +407,7 @@ Account account = instance.account.fetch(accountId);
 String accountId = "acc_M83Uw27KXuC7c8";
 
 JSONObject request = new JSONObject();
-request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
 request.put("document_type","business_proof_url");
 
 Account account = instance.account.uploadAccountDoc(accountId, request);

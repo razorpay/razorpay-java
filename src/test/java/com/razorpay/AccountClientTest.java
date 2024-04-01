@@ -235,7 +235,7 @@ public class AccountClientTest extends BaseTest{
     @Test
     public void uploadAccountDoc() throws RazorpayException {
         JSONObject request = new JSONObject();
-        request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
         request.put("document_type","business_proof_url");
 
         JSONObject mockedResponseJson = new JSONObject();
