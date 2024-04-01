@@ -66,8 +66,8 @@ public class IinClientTest extends BaseTest{
         JSONObject mockedResponseJson = new JSONObject();
         mockedResponseJson.put("count", 0);
         mockedResponseJson.put("entity", "iin");
-        JSONArray iinArr = new JSONArray();
-        mockedResponseJson.put("iins", iinArr);
+        JSONArray iinArray = new JSONArray();
+        mockedResponseJson.put("iins", iinArray);
 
         try {
             mockResponseFromExternalClient(mockedResponseJson.toString());
