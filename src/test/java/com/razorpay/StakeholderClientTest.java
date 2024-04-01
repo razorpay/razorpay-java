@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -199,5 +200,54 @@ public class StakeholderClientTest extends BaseTest{
                 "  ],\n" +
                 "  \"count\": 1\n" +
                 "}";
+    }
+
+    @Test
+    public void testuploadStakeholderDoc() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
+        request.put("document_type","aadhar_front");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity", "account");
+        JSONArray addressArray = new JSONArray();
+        JSONObject addressObj = new JSONObject();
+        addressObj.put("type","aadhar_front");
+        addressObj.put("url","https://rzp.io/i/bzDAbNg");
+        addressArray.put(addressObj);
+        mockedResponseJson.put("individual_proof_of_address", addressArray);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = stakeholderClient.uploadStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID, request);
+            assertNotNull(document);
+            assertEquals(true,document.has("individual_proof_of_address"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testfetchStakeholderDoc() throws RazorpayException {
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity", "account");
+        JSONArray addressArray = new JSONArray();
+        JSONObject addressObj = new JSONObject();
+        addressObj.put("type","aadhar_front");
+        addressObj.put("url","https://rzp.io/i/bzDAbNg");
+        addressArray.put(addressObj);
+        mockedResponseJson.put("individual_proof_of_address", addressArray);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = stakeholderClient.fetchStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID);
+            assertNotNull(document);
+            assertEquals(true,document.has("individual_proof_of_address"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 }

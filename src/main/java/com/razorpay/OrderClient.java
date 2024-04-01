@@ -33,4 +33,12 @@ public class OrderClient extends ApiClient {
   public Order edit(String id, JSONObject request) throws RazorpayException {
     return patch(Constants.VERSION, String.format(Constants.ORDER_EDIT, id), request);
   }
+
+  public Order viewRtoReview(String id) throws RazorpayException {
+    return post(Constants.VERSION, String.format(Constants.VIEW_RTO, id), null);
+  }
+
+  public Order editFulfillment(String id, JSONObject request) throws RazorpayException {
+    return post(Constants.VERSION, String.format(Constants.FULFILLMENT, id), request);
+  }
 }

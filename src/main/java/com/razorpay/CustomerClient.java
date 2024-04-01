@@ -50,4 +50,20 @@ public class CustomerClient extends ApiClient {
   public Customer deleteToken(String id, String tokenId) throws RazorpayException {
     return delete(Constants.VERSION, String.format(Constants.TOKEN_DELETE, id, tokenId), null);
   }
+
+  public BankAccount addBankAccount(String id, JSONObject request) throws RazorpayException {
+    return post(Constants.VERSION, String.format(Constants.ADD_BANK_ACCOUNT, id), request);
+  }
+
+  public Customer deleteBankAccount(String id, String bankId) throws RazorpayException {
+    return delete(Constants.VERSION, String.format(Constants.DELETE_BANK_ACCOUNT, id, bankId), null);
+  }
+
+  public Customer requestEligibilityCheck(JSONObject request) throws RazorpayException {
+    return post(Constants.VERSION, Constants.ELIGIBILITY, request);
+  }
+
+  public Customer fetchEligibility(String id) throws RazorpayException {
+    return get(Constants.VERSION, String.format(Constants.ELIGIBILITY_FETCH, id), null);
+  }
 }

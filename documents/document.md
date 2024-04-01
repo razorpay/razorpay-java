@@ -4,7 +4,7 @@
 
 ```java
         JSONObject request = new JSONObject();
-        request.put("file","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("file","/Users/your_name/Downloads/sample_uploaded.jpeg");
         request.put("purpose","dispute_evidence");
 
         Document document = instance.document.create(request);
@@ -12,10 +12,10 @@
 
 **Parameters:**
 
-| Name  | Type      | Description                                      |
-|-------|-----------|--------------------------------------------------|
-| file*  | string | The URL generated once the business proof document is uploaded. |
-| purpose  | string  | Possible value is `dispute_evidence` |
+| Name     | Type      | Description                                                     |
+|----------|-----------|-----------------------------------------------------------------|
+| file*    | string    | The URL generated once the business proof document is uploaded. |
+| purpose  | string    | Possible value is `dispute_evidence`                            |
 
 **Response:**
 ```json
@@ -41,9 +41,9 @@ Document document = instance.document.fetch(documentId);
 
 **Parameters:**
 
-| Name  | Type   | Description                                      |
-|-------|--------|--------------------------------------------------|
-| documentId  | string | The unique identifier of the document.  |
+| Name        | Type   | Description                                      |
+|-------------|--------|--------------------------------------------------|
+| documentId  | string | The unique identifier of the document.           |
 
 **Response:**
 ```json
