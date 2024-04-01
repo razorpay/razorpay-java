@@ -940,59 +940,57 @@ public class PaymentClientTest extends BaseTest{
         JSONObject request = new JSONObject();
         request.put("expand[]","payments");
 
-        String mockedResponseJson = "{\n" +
-                "  \"id\": \"pay_IDRP0tbirMSsbn\",\n" +
-                "  \"entity\": \"payment\",\n" +
-                "  \"amount\": 100,\n" +
-                "  \"currency\": \"INR\",\n" +
-                "  \"status\": \"failed\",\n" +
-                "  \"order_id\": \"order_H9o58N6qmLYQKC\",\n" +
-                "  \"invoice_id\": null,\n" +
-                "  \"terminal_id\": \"term_G5kJnYM9GhhLYT\",\n" +
-                "  \"international\": false,\n" +
-                "  \"method\": \"card\",\n" +
-                "  \"amount_refunded\": 0,\n" +
-                "  \"refund_status\": null,\n" +
-                "  \"captured\": false,\n" +
-                "  \"description\": null,\n" +
-                "  \"card_id\": \"card_H9oR0ocen1cmZq\",\n" +
-                "  \"card\": {\n" +
-                "    \"id\": \"card_H9oR0ocen1cmZq\",\n" +
-                "    \"entity\": \"card\",\n" +
-                "    \"name\": \"Gaurav\",\n" +
-                "    \"last4\": \"1213\",\n" +
-                "    \"network\": \"RuPay\",\n" +
-                "    \"type\": \"credit\",\n" +
-                "    \"issuer\": \"UTIB\",\n" +
-                "    \"international\": false,\n" +
-                "    \"emi\": false,\n" +
-                "    \"sub_type\": \"business\"\n" +
-                "  },\n" +
-                "  \"bank\": null,\n" +
-                "  \"wallet\": null,\n" +
-                "  \"vpa\": null,\n" +
-                "  \"email\": \"gaurav.kumar@example.com\",\n" +
-                "  \"contact\": \"+919000090000\",\n" +
-                "  \"notes\": {\n" +
-                "    \"email\": \"gaurav.kumar@example.com\",\n" +
-                "    \"phone\": \"09000090000\"\n" +
-                "  },\n" +
-                "  \"fee\": null,\n" +
-                "  \"tax\": null,\n" +
-                "  \"error_code\": \"BAD_REQUEST_ERROR\",\n" +
-                "  \"error_description\": \"Card issuer is invalid\",\n" +
-                "  \"error_source\": \"customer\",\n" +
-                "  \"error_step\": \"payment_authentication\",\n" +
-                "  \"error_reason\": \"incorrect_card_details\",\n" +
-                "  \"acquirer_data\": {\n" +
-                "    \"auth_code\": null,\n" +
-                "    \"authentication_reference_number\": \"100222021120200000000742753928\"\n" +
-                "  },\n" +
-                "  \"created_at\": 1620807547\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("id","pay_IDRP0tbirMSsbn");
+        mockedResponseJson.put("entity","payment");
+        mockedResponseJson.put("amount",100);
+        mockedResponseJson.put("currency","INR");
+        mockedResponseJson.put("status","failed");
+        mockedResponseJson.put("order_id","order_H9o58N6qmLYQKC");
+        mockedResponseJson.put("invoice_id", JSONObject.NULL);
+        mockedResponseJson.put("terminal_id","term_G5kJnYM9GhhLYT");
+        mockedResponseJson.put("international",false);
+        mockedResponseJson.put("method","card");
+        mockedResponseJson.put("amount_refunded",JSONObject.NULL);
+        mockedResponseJson.put("captured",false);
+        mockedResponseJson.put("description",JSONObject.NULL);
+        mockedResponseJson.put("card_id","card_H9oR0ocen1cmZq");
+        JSONObject cardObj = new JSONObject();
+        cardObj.put("id","");
+        cardObj.put("entity","card");
+        cardObj.put("name","Gaurav");
+        cardObj.put("last4","1213");
+        cardObj.put("network","RuPay");
+        cardObj.put("type", "credit");
+        cardObj.put("issuer","UTIB");
+        cardObj.put("international", false);
+        cardObj.put("emi", false);
+        cardObj.put("sub_type","business");
+        mockedResponseJson.put("card",cardObj);
+        mockedResponseJson.put("bank",JSONObject.NULL);
+        mockedResponseJson.put("wallet",JSONObject.NULL);
+        mockedResponseJson.put("vpa",JSONObject.NULL);
+        mockedResponseJson.put("email","gaurav.kumar@example.com");
+        mockedResponseJson.put("contact","+919000090000");
+        JSONObject notesObj = new JSONObject();
+        notesObj.put("key1","");
+        notesObj.put("key2","");
+        mockedResponseJson.put("notes",notesObj);
+        mockedResponseJson.put("fee",JSONObject.NULL);
+        mockedResponseJson.put("tax",JSONObject.NULL);
+        mockedResponseJson.put("error_code","BAD_REQUEST_ERROR");
+        mockedResponseJson.put("error_description","Card issuer is invalid");
+        mockedResponseJson.put("error_source","customer");
+        mockedResponseJson.put("error_step","payment_authentication");
+        mockedResponseJson.put("error_reason","incorrect_card_details");
+        JSONObject acquirerDataObj = new JSONObject();
+        acquirerDataObj.put("auth_code",JSONObject.NULL);
+        acquirerDataObj.put("authentication_reference_number","100222021120200000000742753928");
+        mockedResponseJson.put("acquirer_data",acquirerDataObj);
+        mockedResponseJson.put("created_at",1620807547);
 
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Payment fetch = paymentClient.expandedDetails(PAYMENT_ID, request);
             assertNotNull(fetch);
