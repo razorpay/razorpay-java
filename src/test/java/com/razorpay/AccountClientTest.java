@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -229,5 +230,53 @@ public class AccountClientTest extends BaseTest{
                 "    }\n" +
                 "  }\n" +
                 "}";
+    }
+
+    @Test
+    public void uploadAccountDoc() throws RazorpayException {
+        JSONObject request = new JSONObject();
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
+        request.put("document_type","business_proof_url");
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","account");
+        JSONArray businessArray = new JSONArray();
+        JSONObject businessObj = new JSONObject();
+        businessObj.put("type","business_proof_url");
+        businessObj.put("url","<https://rzp.io/i/bzDKbNg>");
+        businessArray.put(businessObj);
+        mockedResponseJson.put("business_proof_of_identification",businessArray);
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = accountClient.uploadAccountDoc(ACCOUNT_ID, request);
+            assertNotNull(document);
+            assertEquals(true,document.has("business_proof_of_identification"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchAccountDoc() throws RazorpayException {
+
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity","account");
+        JSONArray businessArray = new JSONArray();
+        JSONObject businessObj = new JSONObject();
+        businessObj.put("type","business_proof_url");
+        businessObj.put("url","<https://rzp.io/i/bzDKbNg>");
+        businessArray.put(businessObj);
+        mockedResponseJson.put("business_proof_of_identification",businessArray);
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Account document = accountClient.fetchAccountDoc(ACCOUNT_ID);
+            assertNotNull(document);
+            assertEquals(true,document.has("business_proof_of_identification"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
     }
 }

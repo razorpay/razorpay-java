@@ -119,4 +119,7 @@ public class PaymentClient extends ApiClient {
     return post(Constants.VERSION, Constants.VALIDATE_VPA, request);
   }
 
+  public Payment expandedDetails(String id, JSONObject request) throws RazorpayException {
+    return get(Constants.VERSION, String.format(Constants.PAYMENT_GET, id), request);
+  }
 }

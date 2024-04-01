@@ -28,7 +28,13 @@ public class RazorpayClient {
   public StakeholderClient stakeholder;
   public ProductClient product;
   public WebhookClient webhook;
+
+  public DisputeClient dispute;
   public TncMap tncMap;
+  public DocumentClient document;
+
+  public BankAccountClient bankAccount;
+
   public RazorpayClient(String key, String secret) throws RazorpayException {
     this(key, secret, false);
   }
@@ -66,6 +72,9 @@ public class RazorpayClient {
     stakeholder = new StakeholderClient(auth);
     product = new ProductClient(auth);
     webhook = new WebhookClient(auth);
+    document = new DocumentClient(auth);
+    dispute = new DisputeClient(auth);
+    bankAccount = new BankAccountClient(auth);
   }
 
   public RazorpayClient addHeaders(Map<String, String> headers) {
