@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -204,20 +205,20 @@ public class StakeholderClientTest extends BaseTest{
     @Test
     public void testuploadStakeholderDoc() throws RazorpayException {
         JSONObject request = new JSONObject();
-        request.put("files","/Users/your_name/Downloads/sample_uploaded.pdf");
+        request.put("files","/Users/your_name/Downloads/sample_uploaded.jpeg");
         request.put("document_type","aadhar_front");
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"account\",\n" +
-                "  \"individual_proof_of_address\": [\n" +
-                "    {\n" +
-                "      \"type\": \"aadhar_front\",\n" +
-                "      \"url\": \"https://rzp.io/i/bzDAbNg\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity", "account");
+        JSONArray addressArray = new JSONArray();
+        JSONObject addressObj = new JSONObject();
+        addressObj.put("type","aadhar_front");
+        addressObj.put("url","https://rzp.io/i/bzDAbNg");
+        addressArray.put(addressObj);
+        mockedResponseJson.put("individual_proof_of_address", addressArray);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Account document = stakeholderClient.uploadStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID, request);
             assertNotNull(document);
@@ -230,17 +231,17 @@ public class StakeholderClientTest extends BaseTest{
     @Test
     public void testfetchStakeholderDoc() throws RazorpayException {
 
-        String mockedResponseJson = "{\n" +
-                "  \"entity\": \"account\",\n" +
-                "  \"individual_proof_of_address\": [\n" +
-                "    {\n" +
-                "      \"type\": \"aadhar_front\",\n" +
-                "      \"url\": \"https://rzp.io/i/bzDAbNg\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        JSONObject mockedResponseJson = new JSONObject();
+        mockedResponseJson.put("entity", "account");
+        JSONArray addressArray = new JSONArray();
+        JSONObject addressObj = new JSONObject();
+        addressObj.put("type","aadhar_front");
+        addressObj.put("url","https://rzp.io/i/bzDAbNg");
+        addressArray.put(addressObj);
+        mockedResponseJson.put("individual_proof_of_address", addressArray);
+
         try {
-            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseFromExternalClient(mockedResponseJson.toString());
             mockResponseHTTPCodeFromExternalClient(200);
             Account document = stakeholderClient.fetchStakeholderDoc(ACCOUNT_ID, STAKEHOLDER_ID);
             assertNotNull(document);
