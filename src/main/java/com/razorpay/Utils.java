@@ -54,7 +54,6 @@ public class Utils {
 
   public static String generateOnboardingSignature(JSONObject attributes, String secret) throws RazorpayException {
     String jsonString = attributes.toString();
-    System.out.println("data to encrypt" + jsonString);
     return encrypt(jsonString, secret);
   }
 
