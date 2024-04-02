@@ -32,7 +32,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "com.razorpay:razorpay-java:1.4.5"
+implementation "com.razorpay:razorpay-java:1.4.6"
 ```
 
 ## Usage
