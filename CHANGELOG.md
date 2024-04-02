@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 1.4.6 - 2024-04-01
+## Version 1.4.6 - 2024-04-02
 feat: Added new API endpoints
 * Added support for addBankAccount, deleteBankAccount, requestEligibilityCheck & fetchEligibility on customer
 * Added support for Dispute
