@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.7 - 2024-09-16
+Fix: Updated json dependency to fix security vulnerability
+
 ## Version 1.4.6 - 2024-04-02
 feat: Added new API endpoints
 * Added support for addBankAccount, deleteBankAccount, requestEligibilityCheck & fetchEligibility on customer
