@@ -42,7 +42,6 @@ feat: Added new API endpoints
 ## Version 1.4.0 - 2022-03-07
 * Added Item Api
 * Added RegistrationLink Api
-* Added RegistrationLink Api
 * QR code end point Api
 * Update, cancel update ,fetch details of a Pending Update, pause, resume subscription & delete offer Api
 * Update Customer Api,
