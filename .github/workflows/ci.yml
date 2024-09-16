@@ -36,7 +36,6 @@ jobs:
           verbose: true
           
   publish:
-    if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: ubuntu-latest
     steps:
