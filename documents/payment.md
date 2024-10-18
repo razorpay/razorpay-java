@@ -775,7 +775,7 @@ please refer this [doc](https://razorpay.com/docs/payments/third-party-validatio
 ```java
 RazorpayClient instance  = new RazorpayClient("key",""); // Use only razorpay key
 
-Methods response = instance.payments.get("methods",null);
+Methods methods = instance.payments.fetchPaymentMethods();
 ```
 
 **Response:** <br>
