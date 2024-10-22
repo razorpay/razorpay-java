@@ -123,6 +123,6 @@ public class PaymentClient extends ApiClient {
     return get(Constants.VERSION, String.format(Constants.PAYMENT_GET, id), request);
   }
   public Methods fetchPaymentMethods() throws RazorpayException {
-    return get(Constants.VERSION, Constants.FETCH_PAYMENT_METHODS, null);
+    return get(Constants.VERSION, Constants.METHODS, null);
   }
 }
