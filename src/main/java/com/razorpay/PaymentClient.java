@@ -122,4 +122,7 @@ public class PaymentClient extends ApiClient {
   public Payment expandedDetails(String id, JSONObject request) throws RazorpayException {
     return get(Constants.VERSION, String.format(Constants.PAYMENT_GET, id), request);
   }
+  public Methods fetchPaymentMethods() throws RazorpayException {
+    return get(Constants.VERSION, Constants.METHODS, null);
+  }
 }

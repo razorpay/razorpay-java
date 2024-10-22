@@ -39,7 +39,7 @@ public class Constants {
   static final String PAYMENT_CREATE_UPI = "payments/create/upi";
   static final String VALIDATE_VPA = "payments/validate/vpa";
 
-  static final String FETCH_PAYMENT_METHODS = "methods";
+  static final String METHODS = "methods";
 
   static final String PAYMENTLINK_CREATE = "payment_links";
   static final String PAYMENTLINK_LIST = "payment_links";

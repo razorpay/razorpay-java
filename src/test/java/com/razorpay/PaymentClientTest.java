@@ -999,4 +999,48 @@ public class PaymentClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void fetchPaymentMethods() throws RazorpayException {
+        String mockedResponseJson = "{\n" +
+                "    \"entity\": \"methods\",\n" +
+                "    \"card\": true,\n" +
+                "    \"debit_card\": true,\n" +
+                "    \"credit_card\": true,\n" +
+                "    \"prepaid_card\": true,\n" +
+                "    \"card_networks\": {},\n" +
+                "    \"card_subtype\": {},\n" +
+                "    \"amex\": false,\n" +
+                "    \"netbanking\": {},\n" +
+                "    \"wallet\": [],\n" +
+                "    \"emi\": false,\n" +
+                "    \"upi\": true,\n" +
+                "    \"cardless_emi\": [],\n" +
+                "    \"paylater\": [],\n" +
+                "    \"google_pay_cards\": false,\n" +
+                "    \"app\": {},\n" +
+                "    \"gpay\": false,\n" +
+                "    \"emi_types\": {},\n" +
+                "    \"debit_emi_providers\": {},\n" +
+                "    \"intl_bank_transfer\": [],\n" +
+                "    \"fpx\": [],\n" +
+                "    \"nach\": false,\n" +
+                "    \"cod\": false,\n" +
+                "    \"offline\": false,\n" +
+                "    \"sodexo\": false,\n" +
+                "    \"upi_config\": [],\n" +
+                "    \"recurring\": {},\n" +
+                "    \"upi_intent\": true\n" +
+                "}";
+
+        try {
+            mockResponseFromExternalClient(mockedResponseJson.toString());
+            mockResponseHTTPCodeFromExternalClient(200);
+            Methods fetch = paymentClient.fetchPaymentMethods();
+            assertNotNull(fetch);
+            assertEquals("methods", fetch.get("entity"));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
