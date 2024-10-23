@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.8 - 2024-10-23
+* Added support for fetch methods on payments
+
 ## Version 1.4.7 - 2024-09-16
 Fix: Updated json dependency to fix security vulnerability
 
