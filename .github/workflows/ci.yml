@@ -49,6 +49,19 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+
+      - name: Debug Maven Settings
+        run: |
+          echo "Checking if settings.xml exists:"
+          ls -la ~/.m2/
+          echo "Content of settings.xml:"
+          cat ~/.m2/settings.xml || echo "No settings.xml found"
+          echo "Environment variables:"
+          echo "MAVEN_CENTRAL_USERNAME is set: $([[ -n "$MAVEN_CENTRAL_USERNAME" ]] && echo "YES" || echo "NO")"
+          echo "MAVEN_CENTRAL_TOKEN is set: $([[ -n "$MAVEN_CENTRAL_TOKEN" ]] && echo "YES" || echo "NO")"
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
         
       - name: Build with Maven
         run: mvn clean package -B
