@@ -441,16 +441,28 @@ JSONObject paymentRequest = new JSONObject();
 paymentRequest.put("amount",500);
 paymentRequest.put("currency","INR");
 paymentRequest.put("email", "gaurav.kumar@example.com");
-paymentRequest.put("contact", "9123456789");
-paymentRequest.put("order_id", "order_JZluwjknyWdhnU");
+paymentRequest.put("order_id", "order_DPzFe1Q1dEOKed");
 paymentRequest.put("method", "card");
 JSONObject card = new JSONObject();
-card.put("number","4854980604708430");
-card.put("cvv","123");
-card.put("expiry_month","12");
-card.put("expiry_year","25");
-card.put("name","Gaurav Kumar");
-paymentRequest.put("card",card);
+card.put("number", "4386289407660153");
+card.put("name", "Gaurav");
+card.put("expiry_month", 11);
+card.put("expiry_year", 30);
+card.put("cvv", 100);
+paymentRequest.put("card", card);
+
+JSONObject authentication = new JSONObject();
+authentication.put("authentication_channel", "browser");
+paymentRequest.put("authentication", authentication);
+
+JSONObject browser = new JSONObject();
+browser.put("java_enabled", false);
+browser.put("javascript_enabled", false);
+browser.put("timezone_offset", 11);
+browser.put("color_depth", 23);
+browser.put("screen_width", 23);
+browser.put("screen_height", 100);
+paymentRequest.put("browser", browser);
               
 Payment payment = instance.payments.createJsonPayment(paymentRequest);
 ```
@@ -650,7 +662,7 @@ paymentRequest.put("email", "gaurav.kumar@example.com");
 paymentRequest.put("contact", "9123456789");
 paymentRequest.put("method", "upi");
 paymentRequest.put("customer_id", "cust_EIW4T2etiweBmG");
-paymentRequest.put("save", 1);
+paymentRequest.put("save", true);
 paymentRequest.put("ip", "192.168.0.103");
 paymentRequest.put("referer", "http");
 paymentRequest.put("user_agent", "Mozilla/5.0");
@@ -678,7 +690,7 @@ Payment payment = instance.payments.createUpi(paymentRequest);
 | contact*      | string      | Contact number of the customer              |
 | notes | object  | A key-value pair  |
 | description | string  | Descriptive text of the payment. |
-| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
+| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `true`, `false`  |
 | callback_url   | string      | URL where Razorpay will submit the final payment status. |
 | ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
 | referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |
@@ -728,7 +740,7 @@ Payment payment = instance.payments.createUpi(paymentRequest);
 | contact*      | string      | Contact number of the customer              |
 | notes | object  | A key-value pair  |
 | description | string  | Descriptive text of the payment. |
-| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `0`, `1`  |
+| save | boolean  |  Specifies if the VPA should be stored as tokens.Possible value is `true`, `false`  |
 | callback_url   | string      | URL where Razorpay will submit the final payment status. |
 | ip*   | string      | The client's browser IP address. For example `117.217.74.98` |
 | referer*   | string      | Value of `referer` header passed by the client's browser. For example, `https://example.com/` |

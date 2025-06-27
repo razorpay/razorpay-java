@@ -6,7 +6,7 @@ JSONObject customerRequest = new JSONObject();
 customerRequest.put("name","Gaurav Kumar");
 customerRequest.put("contact","9123456780");
 customerRequest.put("email","gaurav.kumar@example.com");
-customerRequest.put("fail_existing","0");
+customerRequest.put("fail_existing", true);
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
 notes.put("notes_key_2","Tea, Earl Grey… decaf.");
@@ -22,7 +22,7 @@ Customer customer = instance.customers.create(customerRequest);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
-| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `0` or `1`|
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `true` or `false`|
 | notes         | object      | A key-value pair                            |
 
 **Response:**
@@ -126,8 +126,8 @@ subscriptionRegistration.put("max_amount",500);
 subscriptionRegistration.put("expire_at",1609423824);
 registrationLinkRequest.put("subscription_registration", subscriptionRegistration);
 registrationLinkRequest.put("receipt", "Receipt No. 1");
-registrationLinkRequest.put("email_notify", 1);
-registrationLinkRequest.put("sms_notify", 1);
+registrationLinkRequest.put("email_notify", true);
+registrationLinkRequest.put("sms_notify", true);
 registrationLinkRequest.put("expire_by", 1580479824);
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -148,8 +148,8 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 | description*  | string      | A brief description of the payment.   |
 | subscription_registration   | object  | All keys listed [here](https://razorpay.com/docs/api/recurring-payments/cards/authorization-transaction/#121-create-a-registration-link) are supported  |
 | receipt      | string  | Your system order reference id.  |
-| sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : 1)  |
-| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : 1)  |
+| sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : true)  |
+| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : true)  |
 | expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
 | notes | array  | A key-value pair  |
 
@@ -288,7 +288,7 @@ paymentRequest.put("currency", "INR");
 paymentRequest.put("order_id", "order_1Aa00000000002");
 paymentRequest.put("customer_id", "cust_1Aa00000000001");
 paymentRequest.put("token", "token_1Aa00000000001");
-paymentRequest.put("recurring", 1);
+paymentRequest.put("recurring", true);
 paymentRequest.put("description", "Creating recurring payment for Gaurav Kumar");
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -308,7 +308,7 @@ Payment payment = instance.payments.createRecurringPayment(paymentRequest);
 | orderId*   | string      | The id of the order to be fetched |
 | customerId*   | string      | The id of the customer to be fetched |
 | tokenId*   | string      | The id of the token to be fetched |
-| recurring*   | boolean      | Possible values is `0` or `1` |
+| recurring*   | boolean      | Possible values is `true` or `false` |
 | description  | string      | A brief description of the payment.   |
 | notes | object  | A key-value pair  |
 
