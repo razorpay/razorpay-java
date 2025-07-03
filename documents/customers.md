@@ -7,7 +7,7 @@ JSONObject customerRequest = new JSONObject();
 customerRequest.put("name","Gaurav Kumar");
 customerRequest.put("contact","9123456780");
 customerRequest.put("email","gaurav.kumar@example.com");
-customerRequest.put("fail_existing", true);
+customerRequest.put("fail_existing", "1");
 customerRequest.put("gstin","29XAbbA4369J1PA");
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -24,7 +24,7 @@ Customer customer = instance.customers.create(customerRequest);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
-| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `true` or `false`|
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `1` or `0`|
 | gstin         | string      | Customer's GST number, if available. For example, 29XAbbA4369J1PA  |
 | notes         | object      | A key-value pair                            |
 
