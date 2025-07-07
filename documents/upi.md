@@ -21,7 +21,7 @@ Customer customer = instance.customers.create(customerRequest);
 | name*          | string      | Name of the customer                        |
 | email        | string      | Email of the customer                       |
 | contact      | string      | Contact number of the customer              |
-| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `0` or `1`|
+| fail_existing | string | If a customer with the same details already exists, the request throws an exception by default. Possible value is `true` or `false`|
 | notes         | object      | A key-value pair                            |
 
 **Response:**
@@ -125,8 +125,8 @@ subscriptionRegistration.put("expire_at",1609423824);
 subscriptionRegistration.put("frequency","monthly");
 registrationLinkRequest.put("subscription_registration", subscriptionRegistration);
 registrationLinkRequest.put("receipt", "Receipt No. #112");
-registrationLinkRequest.put("email_notify", 1);
-registrationLinkRequest.put("sms_notify", 1);
+registrationLinkRequest.put("email_notify", true);
+registrationLinkRequest.put("sms_notify", true);
 registrationLinkRequest.put("expire_by", 1580479824);
 JSONObject notes = new JSONObject();
 notes.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -146,8 +146,8 @@ Invoice invoice = instance.invoices.createRegistrationLink(registrationLinkReque
 | amount*         | integer  | The payment amount in the smallest currency sub-unit.                 |
 | description*    | string  | A description that appears on the hosted page. For example, `12:30 p.m. Thali meals (Gaurav Kumar`).                                                             |
 | subscription_registration      | object  | All parameters listed [here](https://razorpay.com/docs/api/payments/recurring-payments/upi/create-authorization-transaction/#121-create-a-registration-link) are supported |
-| sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : 1)  |
-| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : 1)  |
+| sms_notify  | boolean  | SMS notifications are to be sent by Razorpay (default : true)  |
+| email_notify | boolean  | Email notifications are to be sent by Razorpay (default : true)  |
 | expire_by    | integer | The timestamp, in Unix format, till when the customer can make the authorization payment. |
 | notes | object  | A key-value pair  |
 
@@ -503,7 +503,7 @@ paymentRequest.put("currency", "INR");
 paymentRequest.put("order_id", "order_1Aa00000000002");
 paymentRequest.put("customer_id", "cust_1Aa00000000001");
 paymentRequest.put("token", "token_1Aa00000000001");
-paymentRequest.put("recurring", 1);
+paymentRequest.put("recurring", true);
 paymentRequest.put("description", "Creating recurring payment for Gaurav Kumar");
 JSONObject notes = new JSONObject();
 paymentRequest.put("notes_key_1","Tea, Earl Grey, Hot");
@@ -523,7 +523,7 @@ Payment payment = instance.payments.createRecurringPayment(paymentRequest);
 | order_id*       | string  | The unique identifier of the order created. |
 | customer_id*      | string  | The `customer_id` for the customer you want to charge.  |
 | token*       | string  | The `token_id` generated when the customer successfully completes the authorization payment. Different payment instruments for the same customer have different `token_id`.|
-| recurring*       | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `1` - Recurring is enabled.* `0` - Recurring is not enabled.|
+| recurring*       | string  | Determines if recurring payment is enabled or not. Possible values:<br>* `true` - Recurring is enabled.* `false` - Recurring is not enabled.|
 | description       | string  | A user-entered description for the payment.|
 | notes        | object  | Key-value pair that can be used to store additional information about the entity. Maximum 15 key-value pairs, 256 characters (maximum) each. |
 

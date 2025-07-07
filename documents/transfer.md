@@ -471,7 +471,7 @@ String paymentId = "pay_EAdwQDe4JrhOFX";
 
 JSONObject params = new JSONObject();
 params.put("amount",100);
-params.put("reverse_all",1);
+params.put("reverse_all", true);
 
 Refund payment = instance.payments.refund(paymentId,params);
 ```
@@ -482,7 +482,7 @@ Refund payment = instance.payments.refund(paymentId,params);
 |-------------|-------------|---------------------------------------------|
 | paymentId*  | string      | The id of the payment to be fetched  |
 | amount*     | integer      | The amount to be captured (should be equal to the authorized amount, in paise) |
-| reverse_all | boolean    | Reverses transfer made to a linked account. Possible values:<br> * `1` - Reverses transfer made to a linked account.<br>* `0` - Does not reverse transfer made to a linked account.|
+| reverse_all | boolean    | Reverses transfer made to a linked account. Possible values:<br> * `true` - Reverses transfer made to a linked account.<br>* `false` - Does not reverse transfer made to a linked account.|
 
 **Response:**
 ```json

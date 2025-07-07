@@ -7,7 +7,7 @@ JSONObject subscriptionRequest = new JSONObject();
 subscriptionRequest.put("plan_id", "plan_Ja4unjXZUeCT3g");
 subscriptionRequest.put("total_count", 6);
 subscriptionRequest.put("quantity", 1);
-subscriptionRequest.put("customer_notify", 1);
+subscriptionRequest.put("customer_notify", true);
 subscriptionRequest.put("start_at", 1580453311);
 subscriptionRequest.put("expire_by", 1580626111);
 List<Object> addons = new ArrayList<>();
@@ -271,7 +271,7 @@ Subscription subscription = instance.subscriptions.fetch(subscriptionId);
 
 ```java
 JSONObject params = new JSONObject();
-params.put("cancel_at_cycle_end", 1);
+params.put("cancel_at_cycle_end", true);
 
 Subscription subscription = instance.subscription.cancel(subscriptionId, params)
 ```
@@ -281,7 +281,7 @@ Subscription subscription = instance.subscription.cancel(subscriptionId, params)
 | Name  | Type      | Description                                      |
 |-------|-----------|--------------------------------------------------|
 | subscriptionId*  | string | The id of the subscription to be cancelled  |
-| cancel_at_cycle_end  | boolean | Possible values:<br>0 (default): Cancel the subscription immediately. <br> 1: Cancel the subscription at the end of the current billing cycle.  |
+| cancel_at_cycle_end  | boolean | Possible values:<br>false (default): Cancel the subscription immediately. <br> true: Cancel the subscription at the end of the current billing cycle.  |
 
 **Response:**
 ```json
@@ -331,7 +331,7 @@ params.put("quantity",5);
 params.put("remaining_count",5);
 params.put("start_at",1496000432);
 params.put("schedule_change_at","now");
-params.put("customer_notify",1);
+params.put("customer_notify", true);
  
 Subscription subscription = instance.subscriptions.update(subscriptionId,params);
 ```
