@@ -19,3 +19,5 @@ target/
 
 #Test
 src/test/
+.pre-commit-config.yaml
+trufflehog/
