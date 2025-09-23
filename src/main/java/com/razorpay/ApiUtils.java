@@ -1,5 +1,6 @@
 package com.razorpay;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,6 +24,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.MultipartBody;
+import okhttp3.MediaType;
 
 class ApiUtils {
 
@@ -65,23 +68,39 @@ class ApiUtils {
     GET, POST, PUT, PATCH, DELETE
   }
 
-  static Response postRequest(String path, JSONObject requestObject, String auth)
+  static Response postRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return postRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response postRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
-    String requestContent = requestObject == null ? "" : requestObject.toString();
-    RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+    RequestBody requestBody;
+
+    if(requestObject != null && requestObject.has("file")){
+       requestBody = fileRequestBody(requestObject);
+    }else{
+      String requestContent = requestObject == null ? "" : requestObject.toString();
+      requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
+    }
 
     Request request =
         createRequest(Method.POST.name(), builder.build().toString(), requestBody, auth);
     return processRequest(request);
   }
 
-  static Response putRequest(String path, JSONObject requestObject, String auth)
+  static Response putRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return putRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response putRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -91,10 +110,15 @@ class ApiUtils {
     return processRequest(request);
   }
 
-  static Response patchRequest(String path, JSONObject requestObject, String auth)
+  static Response patchRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return patchRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response patchRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
 
     String requestContent = requestObject == null ? "" : requestObject.toString();
     RequestBody requestBody = RequestBody.create(Constants.MEDIA_TYPE_JSON, requestContent);
@@ -104,35 +128,70 @@ class ApiUtils {
     return processRequest(request);
   }
 
-  static Response getRequest(String path, JSONObject requestObject, String auth)
+  static Response getRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return getRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response getRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
     addQueryParams(builder, requestObject);
-
     Request request = createRequest(Method.GET.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  static Response deleteRequest(String path, JSONObject requestObject, String auth)
+  static Response deleteRequest(String version, String path, JSONObject requestObject, String auth)
+          throws RazorpayException {
+    return deleteRequest(version, path, requestObject, auth, Constants.API);
+  }
+
+  static Response deleteRequest(String version, String path, JSONObject requestObject, String auth, String host)
       throws RazorpayException {
 
-    HttpUrl.Builder builder = getBuilder(path);
+    HttpUrl.Builder builder = getBuilder(version, path, host);
     addQueryParams(builder, requestObject);
 
     Request request = createRequest(Method.DELETE.name(), builder.build().toString(), null, auth);
     return processRequest(request);
   }
 
-  private static HttpUrl.Builder getBuilder(String path) {
+  private static HttpUrl.Builder getBuilder(String version, String path, String host) {
+    HttpUrl.Builder builder;
+    switch (host)
+    {
+      case Constants.API:
+        builder = getAPIBuilder(version, path);
+        break;
+      case Constants.AUTH:
+        builder = getOAuthBuilder(path);
+        break;
+      default:
+        builder = getAPIBuilder(version, path);
+    }
+    return builder;
+  }
+
+  private static HttpUrl.Builder getAPIBuilder(String version, String path) {
     return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.HOSTNAME)
-        .port(Constants.PORT).addPathSegment(Constants.VERSION).addPathSegments(path);
+            .port(Constants.PORT).addPathSegment(version).addPathSegments(path);
+  }
+
+  private static HttpUrl.Builder getOAuthBuilder(String path) {
+    return new HttpUrl.Builder().scheme(Constants.SCHEME).host(Constants.AUTH_HOSTNAME)
+            .port(Constants.PORT).addPathSegments(path);
   }
 
   private static Request createRequest(String method, String url, RequestBody requestBody,
       String auth) {
     Request.Builder builder =
-        new Request.Builder().url(url).addHeader(Constants.AUTH_HEADER_KEY, auth);
+        new Request.Builder().url(url);
+
+    if (auth != null) {
+      builder.addHeader(Constants.AUTH_HEADER_KEY, auth);
+    }
+
     builder.addHeader(Constants.USER_AGENT,
         "Razorpay/v1 JAVASDK/" + version + " Java/" + System.getProperty("java.version"));
 
@@ -175,5 +234,35 @@ class ApiUtils {
     }
     X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
     return trustManager;
+  }
+
+  private static String getMediaType(String fileName){
+    int extensionIndex = fileName.lastIndexOf('.');
+    String extenionName = fileName.substring(extensionIndex + 1);
+    if(extenionName == "jpg" | extenionName == "jpeg" | extenionName == "png" | extenionName == "jfif"){
+      return "image/jpg";
+    }
+      return "image/pdf";
+  }
+
+  private static RequestBody fileRequestBody(JSONObject requestObject){
+    File fileToUpload = new File((String) requestObject.get("file"));
+    String fileName = fileToUpload.getName();
+
+    MediaType mediaType = MediaType.parse(getMediaType(fileName));
+    RequestBody fileBody = RequestBody.create(mediaType, fileToUpload);
+
+    MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    multipartBodyBuilder.addFormDataPart("file",fileName, fileBody);
+
+    Iterator<?> iterator = requestObject.keys();
+    while (iterator.hasNext()) {
+      Object key = iterator.next();
+      Object value = requestObject.get(key.toString());
+      multipartBodyBuilder.addFormDataPart((String) key, (String) value);
+    }
+
+    MultipartBody requestBody = multipartBodyBuilder.build();
+    return requestBody;
   }
 }
