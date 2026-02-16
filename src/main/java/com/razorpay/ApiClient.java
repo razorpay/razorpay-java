@@ -223,8 +223,8 @@ class ApiClient {
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
     if (responseJson.has(ERROR)) {
       JSONObject errorResponse = responseJson.getJSONObject(ERROR);
-      String code = errorResponse.getString(STATUS_CODE);
-      String description = errorResponse.getString(DESCRIPTION);
+      String code = errorResponse.has(STATUS_CODE) ? errorResponse.getString(STATUS_CODE) : String.valueOf(statusCode);
+      String description = errorResponse.has(DESCRIPTION) ? errorResponse.getString(DESCRIPTION) : errorResponse.toString();
       throw new RazorpayException(code + ":" + description);
     }
     throwServerException(statusCode, responseJson.toString());
