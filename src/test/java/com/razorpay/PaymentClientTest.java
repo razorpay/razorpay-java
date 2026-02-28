@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -997,6 +998,24 @@ public class PaymentClientTest extends BaseTest{
             assertEquals(PAYMENT_ID,fetch.get("id"));
         } catch (IOException e) {
             assertTrue(false);
+        }
+    }
+
+    @Test
+    public void fetchThrowsExceptionWithStatusCodeAndErrorCode() throws IOException {
+        String errorResponse = "{\"error\":{\"code\":\"BAD_REQUEST_ERROR\","
+                + "\"description\":\"Payment not found\"}}";
+        mockResponseFromExternalClient(errorResponse);
+        mockResponseHTTPCodeFromExternalClient(400);
+        mockURL(Arrays.asList("v1", "payments", PAYMENT_ID));
+
+        try {
+            paymentClient.fetch(PAYMENT_ID);
+            assertTrue("Expected RazorpayException", false);
+        } catch (RazorpayException e) {
+            assertEquals(Integer.valueOf(400), e.getStatusCode());
+            assertEquals("BAD_REQUEST_ERROR", e.getCode());
+            assertEquals("Payment not found", e.getDescription());
         }
     }
 
