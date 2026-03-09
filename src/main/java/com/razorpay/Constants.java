@@ -102,6 +102,8 @@ public class Constants {
   static final String TOKEN_GET = "customers/%s/tokens/%s";
   static final String TOKEN_DELETE = "customers/%s/tokens/%s";
 
+  static final String TOKEN_CANCEL = "customers/%s/tokens/%s/cancel";
+
   static final String TRANSFER_CREATE = "transfers";
   static final String TRANSFER_GET = "transfers/%s";
   static final String TRANSFER_EDIT = "transfers/%s";

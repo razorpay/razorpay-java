@@ -66,4 +66,8 @@ public class CustomerClient extends ApiClient {
   public Customer fetchEligibility(String id) throws RazorpayException {
     return get(Constants.VERSION, String.format(Constants.ELIGIBILITY_FETCH, id), null);
   }
+
+  public Customer cancelToken(String customerId, String tokenId) throws RazorpayException {
+    return put(Constants.VERSION, String.format(Constants.TOKEN_CANCEL, customerId, tokenId), null);
+  }
 }
