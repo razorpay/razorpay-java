@@ -14,10 +14,11 @@ public class UtilsTest {
 
     /**
      * Verify razorpay payment signature
+     * 
      * @throws RazorpayException
      */
     @Test
-    public void verifyPaymentSignature() throws RazorpayException{
+    public void verifyPaymentSignature() throws RazorpayException {
         JSONObject options = new JSONObject();
         options.put("razorpay_order_id", "order_IEIaMR65cu6nz3");
         options.put("razorpay_payment_id", "pay_IH4NVgf4Dreq1l");
@@ -28,10 +29,11 @@ public class UtilsTest {
 
     /**
      * Verify razorpay subscription
+     * 
      * @throws RazorpayException
      */
     @Test
-    public void verifySubscription() throws RazorpayException{
+    public void verifySubscription() throws RazorpayException {
         JSONObject options = new JSONObject();
         options.put("razorpay_subscription_id", "sub_ID6MOhgkcoHj9I");
         options.put("razorpay_payment_id", "pay_IDZNwZZFtnjyym");
@@ -42,10 +44,11 @@ public class UtilsTest {
 
     /**
      * Verify razorpay payment link signature
+     * 
      * @throws RazorpayException
      */
     @Test
-    public void verifyPaymentLink() throws RazorpayException{
+    public void verifyPaymentLink() throws RazorpayException {
         JSONObject options = new JSONObject();
         options.put("payment_link_reference_id", "TSsd1989");
         options.put("razorpay_payment_id", "pay_IH3d0ara9bSsjQ");
@@ -58,14 +61,15 @@ public class UtilsTest {
 
     /**
      * Verify razorpay webhook signature
+     * 
      * @throws RazorpayException
      */
     @Test
-    public void verifyWebhookSignature() throws RazorpayException{
+    public void verifyWebhookSignature() throws RazorpayException {
         String signature = "2fe04e22977002e6c7cb553adab8b460cb9e2a4970d5953cb27a8472752e3bbc";
         String payload = "{\"a\":1,\"b\":2,\"c\":{\"d\":3}}";
         String secret = "123456";
-        assertTrue(Utils.verifyWebhookSignature(payload,signature, secret));
+        assertTrue(Utils.verifyWebhookSignature(payload, signature, secret));
     }
 
     @Test
@@ -86,10 +90,42 @@ public class UtilsTest {
         }
     }
 
+    @Test
+    public void verifyWebhookSignatureUtf8Payload() throws Exception {
+        String payload = "{\"name\":\"café ₹ 😄\",\"notes\":\"हेलो\"}";
+        String secret = "123456";
+
+        String signature = computeWebhookSignature(payload, secret);
+
+        assertTrue(Utils.verifyWebhookSignature(payload, signature, secret));
+        assertTrue(Utils.verifyWebhookSignature(payload.getBytes(StandardCharsets.UTF_8), signature, secret));
+    }
+
+    private String computeWebhookSignature(String payload, String secret) throws Exception {
+        javax.crypto.Mac sha256_HMAC = javax.crypto.Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        sha256_HMAC.init(secretKey);
+        byte[] hash = sha256_HMAC.doFinal(payload.getBytes(StandardCharsets.UTF_8));
+        return bytesToHex(hash);
+    }
+
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
     private String decryptData(String encryptedHexData, String secret) throws Exception {
         byte[] encryptedData = hexStringToByteArray(encryptedHexData);
         return decrypt(encryptedData, secret);
     }
+
     public static String decrypt(byte[] encryptedData, String secret) throws Exception {
         byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
@@ -107,7 +143,7 @@ public class UtilsTest {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }

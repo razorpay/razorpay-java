@@ -29,16 +29,16 @@ public class Utils {
     String payload = paymentId + '|' + subscriptionId;
     return verifySignature(payload, expectedSignature, apiSecret);
   }
-  
+
   public static boolean verifyPaymentLink(JSONObject attributes, String apiSecret)
-	      throws RazorpayException {
-	    String expectedSignature = attributes.getString("razorpay_signature");
-	    String paymentLinkStatus = attributes.getString("payment_link_status");
-	    String paymentLinkId = attributes.getString("payment_link_id");
-	    String paymentLinkRefId = attributes.getString("payment_link_reference_id");
-	    String paymentId = attributes.getString("razorpay_payment_id");
-	    String payload = paymentLinkId + '|' + paymentLinkRefId + '|' + paymentLinkStatus + '|' + paymentId;
-	    return verifySignature(payload, expectedSignature, apiSecret);
+      throws RazorpayException {
+    String expectedSignature = attributes.getString("razorpay_signature");
+    String paymentLinkStatus = attributes.getString("payment_link_status");
+    String paymentLinkId = attributes.getString("payment_link_id");
+    String paymentLinkRefId = attributes.getString("payment_link_reference_id");
+    String paymentId = attributes.getString("razorpay_payment_id");
+    String payload = paymentLinkId + '|' + paymentLinkRefId + '|' + paymentLinkStatus + '|' + paymentId;
+    return verifySignature(payload, expectedSignature, apiSecret);
   }
 
   public static boolean verifyWebhookSignature(String payload, String expectedSignature,
@@ -46,10 +46,23 @@ public class Utils {
     return verifySignature(payload, expectedSignature, webhookSecret);
   }
 
+  public static boolean verifyWebhookSignature(byte[] payload, String expectedSignature,
+      String webhookSecret) throws RazorpayException {
+    return verifySignature(payload, expectedSignature, webhookSecret);
+  }
+
   public static boolean verifySignature(String payload, String expectedSignature, String secret)
       throws RazorpayException {
     String actualSignature = getHash(payload, secret);
-    return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());
+    return isEqual(actualSignature.getBytes(StandardCharsets.UTF_8),
+        expectedSignature.getBytes(StandardCharsets.UTF_8));
+  }
+
+  public static boolean verifySignature(byte[] payload, String expectedSignature, String secret)
+      throws RazorpayException {
+    String actualSignature = getHash(payload, secret);
+    return isEqual(actualSignature.getBytes(StandardCharsets.UTF_8),
+        expectedSignature.getBytes(StandardCharsets.UTF_8));
   }
 
   public static String generateOnboardingSignature(JSONObject attributes, String secret) throws RazorpayException {
@@ -68,8 +81,7 @@ public class Utils {
       cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
       byte[] encryptedData = cipher.doFinal(dataToEncrypt.getBytes(StandardCharsets.UTF_8));
       return bytesToHex(encryptedData);
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       throw new RazorpayException(e.getMessage());
     }
   }
@@ -87,12 +99,16 @@ public class Utils {
   }
 
   public static String getHash(String payload, String secret) throws RazorpayException {
+    return getHash(payload.getBytes(StandardCharsets.UTF_8), secret);
+  }
+
+  public static String getHash(byte[] payload, String secret) throws RazorpayException {
     Mac sha256_HMAC;
     try {
       sha256_HMAC = Mac.getInstance("HmacSHA256");
-      SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256");
+      SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
       sha256_HMAC.init(secret_key);
-      byte[] hash = sha256_HMAC.doFinal(payload.getBytes());
+      byte[] hash = sha256_HMAC.doFinal(payload);
       return new String(Hex.encodeHex(hash));
     } catch (Exception e) {
       throw new RazorpayException(e.getMessage());
@@ -100,7 +116,8 @@ public class Utils {
   }
 
   /**
-   * We are not using String.equals() method because of security issue mentioned in
+   * We are not using String.equals() method because of security issue mentioned
+   * in
    * <a href="http://security.stackexchange.com/a/83670">StackOverflow</a>
    * 
    * @param a
