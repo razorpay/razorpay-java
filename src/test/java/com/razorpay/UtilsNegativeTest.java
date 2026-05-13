@@ -33,16 +33,18 @@ public class UtilsNegativeTest {
     }
 
     @Test
-    public void testWrongLengthSignatureRejected() throws RazorpayException {
+    public void testMismatchedSignatureRejected() throws RazorpayException {
+        // Short string that doesn't match the computed HMAC
         boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, "abc123", WEBHOOK_SECRET);
-        assertFalse("Wrong length signature should be rejected", result);
+        assertFalse("Mismatched signature should be rejected", result);
     }
 
     @Test
-    public void testNonHexSignatureRejected() throws RazorpayException {
-        String nonHexSig = new String(new char[64]).replace('\0', 'z');
-        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, nonHexSig, WEBHOOK_SECRET);
-        assertFalse("Non-hex signature should be rejected", result);
+    public void testWrongValueSignatureRejected() throws RazorpayException {
+        // 64-char string with invalid chars - rejected because value doesn't match, not because of hex validation
+        String wrongSig = new String(new char[64]).replace('\0', 'z');
+        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, wrongSig, WEBHOOK_SECRET);
+        assertFalse("Wrong value signature should be rejected", result);
     }
 
     @Test
