@@ -27,45 +27,29 @@ public class UtilsNegativeTest {
     }
 
     @Test
-    public void testEmptySignatureRejected() {
-        try {
-            Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, "", WEBHOOK_SECRET);
-            fail("Expected RazorpayException for empty signature");
-        } catch (RazorpayException e) {
-            // Expected
-        }
+    public void testEmptySignatureRejected() throws RazorpayException {
+        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, "", WEBHOOK_SECRET);
+        assertFalse("Empty signature should be rejected", result);
     }
 
     @Test
-    public void testWrongLengthSignatureRejected() {
-        try {
-            Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, "abc123", WEBHOOK_SECRET);
-            fail("Expected RazorpayException for wrong length signature");
-        } catch (RazorpayException e) {
-            // Expected
-        }
+    public void testWrongLengthSignatureRejected() throws RazorpayException {
+        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, "abc123", WEBHOOK_SECRET);
+        assertFalse("Wrong length signature should be rejected", result);
     }
 
     @Test
-    public void testNonHexSignatureRejected() {
+    public void testNonHexSignatureRejected() throws RazorpayException {
         String nonHexSig = new String(new char[64]).replace('\0', 'z');
-        try {
-            Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, nonHexSig, WEBHOOK_SECRET);
-            fail("Expected RazorpayException for non-hex signature");
-        } catch (RazorpayException e) {
-            // Expected
-        }
+        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, nonHexSig, WEBHOOK_SECRET);
+        assertFalse("Non-hex signature should be rejected", result);
     }
 
     @Test
-    public void testTamperedValidHexSignatureRejected() {
+    public void testTamperedValidHexSignatureRejected() throws RazorpayException {
         String tamperedSig = new String(new char[64]).replace('\0', 'a');
-        try {
-            Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, tamperedSig, WEBHOOK_SECRET);
-            fail("Expected RazorpayException for tampered signature");
-        } catch (RazorpayException e) {
-            // Expected
-        }
+        boolean result = Utils.verifyWebhookSignature(WEBHOOK_PAYLOAD, tamperedSig, WEBHOOK_SECRET);
+        assertFalse("Tampered signature should be rejected", result);
     }
 
     @Test
