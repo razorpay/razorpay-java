@@ -1,6 +1,7 @@
 package com.razorpay;
 
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
@@ -61,13 +62,25 @@ public class Utils {
     try {
       byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
       SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+
+      // Generate a fresh random 12-byte nonce per call (fixes AES-GCM nonce reuse).
+      // A static IV derived from the key allows keystream recovery and tag forgery
+      // (NIST SP 800-38D §8.3 Forbidden Attack) using only two captured ciphertexts.
       byte[] iv = new byte[12];
-      System.arraycopy(keyBytes, 0, iv, 0, 12);
+      new SecureRandom().nextBytes(iv);
+
       Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
       GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
       cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
+      // In Java, doFinal() appends the 16-byte GCM auth tag to the ciphertext.
       byte[] encryptedData = cipher.doFinal(dataToEncrypt.getBytes(StandardCharsets.UTF_8));
-      return bytesToHex(encryptedData);
+
+      // Output format: iv (12 bytes) || ciphertext || tag (16 bytes), hex-encoded.
+      // Receiver must read the first 24 hex chars as the IV before decrypting.
+      byte[] combined = new byte[iv.length + encryptedData.length];
+      System.arraycopy(iv, 0, combined, 0, iv.length);
+      System.arraycopy(encryptedData, 0, combined, iv.length, encryptedData.length);
+      return bytesToHex(combined);
     }
     catch (Exception e) {
       throw new RazorpayException(e.getMessage());
