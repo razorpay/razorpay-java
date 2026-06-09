@@ -57,12 +57,13 @@ jobs:
           echo "=== Checking generated artifacts ==="
           ls -la target/*.jar
           echo ""
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "=== Verifying JAR ==="
-          test -f target/razorpay-java-*.jar && echo "✓ Main JAR found" || (echo "✗ Main JAR missing" && exit 1)
+          test -f "target/razorpay-java-${VERSION}.jar" && echo "✓ Main JAR found" || (echo "✗ Main JAR missing" && exit 1)
           echo "=== Verifying Sources JAR ==="
-          test -f target/razorpay-java-*-sources.jar && echo "✓ Sources JAR found" || (echo "✗ Sources JAR missing" && exit 1)
+          test -f "target/razorpay-java-${VERSION}-sources.jar" && echo "✓ Sources JAR found" || (echo "✗ Sources JAR missing" && exit 1)
           echo "=== Verifying Javadoc JAR ==="
-          test -f target/razorpay-java-*-javadoc.jar && echo "✓ Javadoc JAR found" || (echo "✗ Javadoc JAR missing" && exit 1)
+          test -f "target/razorpay-java-${VERSION}-javadoc.jar" && echo "✓ Javadoc JAR found" || (echo "✗ Javadoc JAR missing" && exit 1)
 
       - name: Validate pom.xml metadata
         run: |
