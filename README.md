@@ -23,7 +23,7 @@ Add this dependency to your project's POM:
 <dependency>
  <groupId>com.razorpay</groupId>
  <artifactId>razorpay-java</artifactId>
- <version>1.4.8</version>
+ <version>1.4.9</version>
 </dependency>
 ```
 
