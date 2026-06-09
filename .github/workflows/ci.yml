@@ -77,6 +77,30 @@ jobs:
           echo ""
           echo "=== All Central Portal validations passed ==="
 
+      - name: Validate Central Portal credentials
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+        run: |
+          echo "=== Validating Central Portal credentials ==="
+          if [ -z "$CENTRAL_USERNAME" ] || [ -z "$CENTRAL_TOKEN" ]; then
+            echo "✗ CENTRAL_USERNAME or CENTRAL_TOKEN secrets are not set"
+            exit 1
+          fi
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
+            "https://central.sonatype.com/api/v1/publisher/published?namespace=com.razorpay&name=razorpay-java")
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✓ Central Portal credentials are valid (HTTP $HTTP_STATUS)"
+          elif [ "$HTTP_STATUS" -eq 401 ]; then
+            echo "✗ Central Portal credentials are invalid (HTTP 401 Unauthorized)"
+            exit 1
+          elif [ "$HTTP_STATUS" -eq 403 ]; then
+            echo "✗ Central Portal credentials lack permission (HTTP 403 Forbidden)"
+            exit 1
+          else
+            echo "⚠ Unexpected response from Central Portal (HTTP $HTTP_STATUS) — credentials may still be valid"
+          fi
+
   publish:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     needs: publish-dry-run
