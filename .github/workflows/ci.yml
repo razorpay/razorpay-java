@@ -36,9 +36,49 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
+  publish-dry-run:
+    name: Publish dry run (validate artifacts)
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+
+      - name: Build package with sources and javadoc
+        run: mvn clean package -B -Dgpg.skip
+
+      - name: Verify artifacts exist
+        run: |
+          echo "=== Checking generated artifacts ==="
+          ls -la target/*.jar
+          echo ""
+          echo "=== Verifying JAR ==="
+          test -f target/razorpay-java-*.jar && echo "✓ Main JAR found" || (echo "✗ Main JAR missing" && exit 1)
+          echo "=== Verifying Sources JAR ==="
+          test -f target/razorpay-java-*-sources.jar && echo "✓ Sources JAR found" || (echo "✗ Sources JAR missing" && exit 1)
+          echo "=== Verifying Javadoc JAR ==="
+          test -f target/razorpay-java-*-javadoc.jar && echo "✓ Javadoc JAR found" || (echo "✗ Javadoc JAR missing" && exit 1)
+
+      - name: Validate pom.xml metadata
+        run: |
+          echo "=== Validating pom.xml for Central Portal requirements ==="
+          mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout | grep -q "com.razorpay" && echo "✓ groupId present" || (echo "✗ groupId missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout | grep -q "razorpay-java" && echo "✓ artifactId present" || (echo "✗ artifactId missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -qv "SNAPSHOT" && echo "✓ version is release (non-SNAPSHOT)" || (echo "✗ version is SNAPSHOT" && exit 1)
+          mvn help:evaluate -Dexpression=project.name -q -DforceStdout | grep -q "." && echo "✓ name present" || (echo "✗ name missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.description -q -DforceStdout | grep -q "." && echo "✓ description present" || (echo "✗ description missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.url -q -DforceStdout | grep -q "http" && echo "✓ url present" || (echo "✗ url missing" && exit 1)
+          echo ""
+          echo "=== All Central Portal validations passed ==="
+
   publish:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
-    needs: test
+    needs: publish-dry-run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
