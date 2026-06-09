@@ -94,11 +94,13 @@ public class UtilsTest {
         byte[] keyBytes = secret.substring(0, 16).getBytes(StandardCharsets.UTF_8);
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
         byte[] iv = new byte[12];
-        System.arraycopy(keyBytes, 0, iv, 0, 12);
+        System.arraycopy(encryptedData, 0, iv, 0, 12);
+        byte[] ciphertext = new byte[encryptedData.length - 12];
+        System.arraycopy(encryptedData, 12, ciphertext, 0, ciphertext.length);
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         GCMParameterSpec gcmSpec = new GCMParameterSpec(128, iv);
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec, gcmSpec);
-        byte[] decryptedBytes = cipher.doFinal(encryptedData);
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec);
+        byte[] decryptedBytes = cipher.doFinal(ciphertext);
         return new String(decryptedBytes);
     }
 
