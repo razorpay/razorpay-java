@@ -2,7 +2,6 @@
 
 ## Version 1.4.9 - 2026-06-09
 * fix: use random nonce per call in AES-GCM onboarding signature
-* fix: Boolean correction in doc
 
 ## Version 1.4.8 - 2024-10-23
 * Added support for fetch methods on payments
