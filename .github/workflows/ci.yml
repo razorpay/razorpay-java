@@ -102,7 +102,7 @@ jobs:
           fi
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+#    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     needs: publish-dry-run
     runs-on: ubuntu-latest
     steps:
