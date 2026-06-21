@@ -221,20 +221,22 @@ class ApiClient {
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
-    if (responseJson.has(ERROR)) {
+    if (responseJson != null && responseJson.has(ERROR)) {
       JSONObject errorResponse = responseJson.getJSONObject(ERROR);
-      String code = errorResponse.getString(STATUS_CODE);
-      String description = errorResponse.getString(DESCRIPTION);
-      throw new RazorpayException(code + ":" + description);
+      String code = errorResponse.optString(STATUS_CODE, null);
+      String description = errorResponse.optString(DESCRIPTION, null);
+      String message = (code != null && description != null) ? code + ":" + description
+          : (description != null) ? description : "API request failed";
+      throw new RazorpayException(message, statusCode, code, description);
     }
-    throwServerException(statusCode, responseJson.toString());
+    throwServerException(statusCode, responseJson != null ? responseJson.toString() : "");
   }
 
   private void throwServerException(int statusCode, String responseBody) throws RazorpayException {
     StringBuilder sb = new StringBuilder();
     sb.append("Status Code: ").append(statusCode).append("\n");
     sb.append("Server response: ").append(responseBody);
-    throw new RazorpayException(sb.toString());
+    throw new RazorpayException(sb.toString(), statusCode);
   }
 
   private Class getClass(String entity) {
