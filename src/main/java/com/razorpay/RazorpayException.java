@@ -75,4 +75,8 @@ public class RazorpayException extends Exception {
   public String getStep() {
     return errorResponse != null ? errorResponse.optString("step", null) : null;
   }
+
+  public JSONObject getMetadata() {
+    return errorResponse != null ? errorResponse.optJSONObject("metadata") : null;
+  }
 }

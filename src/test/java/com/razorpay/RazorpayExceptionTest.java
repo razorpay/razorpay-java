@@ -26,7 +26,10 @@ public class RazorpayExceptionTest extends BaseTest {
             "\"source\":\"business\"," +
             "\"step\":\"payment_initiation\"," +
             "\"reason\":\"input_validation_failed\"," +
-            "\"metadata\":{}," +
+            "\"metadata\":{" +
+            "\"payment_id\":\"pay_EDNBKIP31Y4jl8\"," +
+            "\"order_id\":\"order_DBJKIP31Y4jl8\"" +
+            "}," +
             "\"field\":\"amount\"" +
             "}}";
 
@@ -189,6 +192,9 @@ public class RazorpayExceptionTest extends BaseTest {
             assertEquals("input_validation_failed", e.getReason());
             assertEquals("business", e.getSource());
             assertEquals("payment_initiation", e.getStep());
+            assertNotNull(e.getMetadata());
+            assertEquals("pay_EDNBKIP31Y4jl8", e.getMetadata().getString("payment_id"));
+            assertEquals("order_DBJKIP31Y4jl8", e.getMetadata().getString("order_id"));
         } catch (IOException e) {
             fail("Unexpected IOException");
         }
@@ -210,6 +216,7 @@ public class RazorpayExceptionTest extends BaseTest {
             assertNull(e.getReason());
             assertNull(e.getSource());
             assertNull(e.getStep());
+            assertNull(e.getMetadata());
         } catch (IOException e) {
             fail("Unexpected IOException");
         }
@@ -224,5 +231,6 @@ public class RazorpayExceptionTest extends BaseTest {
         assertNull(ex.getReason());
         assertNull(ex.getSource());
         assertNull(ex.getStep());
+        assertNull(ex.getMetadata());
     }
 }
