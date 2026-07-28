@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class RazorpayException extends Exception {
 
-  private JSONObject errorResponse;
+  private transient JSONObject errorResponse;
   private int statusCode;
 
   public RazorpayException(String message) {
@@ -50,5 +50,29 @@ public class RazorpayException extends Exception {
 
   public int getStatusCode() {
     return statusCode;
+  }
+
+  public String getCode() {
+    return errorResponse != null ? errorResponse.optString("code", null) : null;
+  }
+
+  public String getDescription() {
+    return errorResponse != null ? errorResponse.optString("description", null) : null;
+  }
+
+  public String getField() {
+    return errorResponse != null ? errorResponse.optString("field", null) : null;
+  }
+
+  public String getReason() {
+    return errorResponse != null ? errorResponse.optString("reason", null) : null;
+  }
+
+  public String getSource() {
+    return errorResponse != null ? errorResponse.optString("source", null) : null;
+  }
+
+  public String getStep() {
+    return errorResponse != null ? errorResponse.optString("step", null) : null;
   }
 }

@@ -107,7 +107,7 @@ class ApiClient {
         responseJson = new JSONObject(responseBody);
       }
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
     } catch (JSONException e) {
       throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
@@ -173,7 +173,7 @@ class ApiClient {
         responseJson = new JSONObject(responseBody);
       }
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
     } catch (JSONException e) {
       throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
@@ -200,7 +200,7 @@ class ApiClient {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
     } catch (JSONException e) {
       throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
