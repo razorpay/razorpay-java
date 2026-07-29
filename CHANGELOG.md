@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 1.4.10 - 2026-07-29
+* feat: expose structured API error data in RazorpayException
+
 ## Version 1.4.9 - 2026-06-09
 * fix: use random nonce per call in AES-GCM onboarding signature
 
