@@ -87,19 +87,31 @@ jobs:
             echo "✗ CENTRAL_USERNAME or CENTRAL_TOKEN secrets are not set"
             exit 1
           fi
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
-            "https://central.sonatype.com/api/v1/publisher/published?namespace=com.razorpay&name=razorpay-java")
-          if [ "$HTTP_STATUS" -eq 200 ]; then
-            echo "✓ Central Portal credentials are valid (HTTP $HTTP_STATUS)"
-          elif [ "$HTTP_STATUS" -eq 401 ]; then
-            echo "✗ Central Portal credentials are invalid (HTTP 401 Unauthorized)"
-            exit 1
-          elif [ "$HTTP_STATUS" -eq 403 ]; then
-            echo "✗ Central Portal credentials lack permission (HTTP 403 Forbidden)"
-            exit 1
-          else
-            echo "⚠ Unexpected response from Central Portal (HTTP $HTTP_STATUS) — credentials may still be valid"
-          fi
+          for attempt in 1 2 3; do
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
+              "https://central.sonatype.com/api/v1/publisher/status")
+            case "$HTTP_STATUS" in
+              200)
+                echo "✓ Central Portal credentials are valid (HTTP 200)"
+                exit 0
+                ;;
+              401|403)
+                echo "✗ Central Portal rejected credentials (HTTP $HTTP_STATUS)"
+                exit 1
+                ;;
+              5*)
+                echo "⚠ Attempt $attempt: transient error (HTTP $HTTP_STATUS), retrying in 5s…"
+                sleep 5
+                ;;
+              *)
+                echo "✗ Unexpected response from Central Portal (HTTP $HTTP_STATUS)"
+                exit 1
+                ;;
+            esac
+          done
+          echo "✗ Central Portal unreachable after 3 attempts"
+          exit 1
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
