@@ -8,55 +8,128 @@ on:
   pull_request:
     branches:
       - master
-# Jobs
+  workflow_dispatch:
+
 jobs:
   test:
     name: Run tests and publish test coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Java JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: 8
           distribution: 'adopt'
-             
+
       - name: Install dependencies
         run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
-           
+
       - name: Run tests and collect coverage
-        run: mvn -B test 
+        run: mvn -B test
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: false
           verbose: true
-          
-  publish:
-    if: startsWith(github.ref, 'refs/tags/v')
+
+  publish-dry-run:
+    name: Publish dry run (validate artifacts)
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Maven Central Repository
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v4
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v4
         with:
           java-version: 8
           distribution: 'adopt'
-          server-id: ossrh
+
+      - name: Build package with sources and javadoc
+        run: mvn clean package -B -Dgpg.skip
+
+      - name: Verify artifacts exist
+        run: |
+          echo "=== Checking generated artifacts ==="
+          ls -la target/*.jar
+          echo ""
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "=== Verifying JAR ==="
+          test -f "target/razorpay-java-${VERSION}.jar" && echo "✓ Main JAR found" || (echo "✗ Main JAR missing" && exit 1)
+          echo "=== Verifying Sources JAR ==="
+          test -f "target/razorpay-java-${VERSION}-sources.jar" && echo "✓ Sources JAR found" || (echo "✗ Sources JAR missing" && exit 1)
+          echo "=== Verifying Javadoc JAR ==="
+          test -f "target/razorpay-java-${VERSION}-javadoc.jar" && echo "✓ Javadoc JAR found" || (echo "✗ Javadoc JAR missing" && exit 1)
+
+      - name: Validate pom.xml metadata
+        run: |
+          echo "=== Validating pom.xml for Central Portal requirements ==="
+          mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout | grep -q "com.razorpay" && echo "✓ groupId present" || (echo "✗ groupId missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout | grep -q "razorpay-java" && echo "✓ artifactId present" || (echo "✗ artifactId missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -qv "SNAPSHOT" && echo "✓ version is release (non-SNAPSHOT)" || (echo "✗ version is SNAPSHOT" && exit 1)
+          mvn help:evaluate -Dexpression=project.name -q -DforceStdout | grep -q "." && echo "✓ name present" || (echo "✗ name missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.description -q -DforceStdout | grep -q "." && echo "✓ description present" || (echo "✗ description missing" && exit 1)
+          mvn help:evaluate -Dexpression=project.url -q -DforceStdout | grep -q "http" && echo "✓ url present" || (echo "✗ url missing" && exit 1)
+          echo ""
+          echo "=== All Central Portal validations passed ==="
+
+      - name: Validate Central Portal credentials
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_TOKEN: ${{ secrets.CENTRAL_TOKEN }}
+        run: |
+          echo "=== Validating Central Portal credentials ==="
+          if [ -z "$CENTRAL_USERNAME" ] || [ -z "$CENTRAL_TOKEN" ]; then
+            echo "✗ CENTRAL_USERNAME or CENTRAL_TOKEN secrets are not set"
+            exit 1
+          fi
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
+            "https://central.sonatype.com/api/v1/publisher/status")
+          case "$HTTP_STATUS" in
+            401|403)
+              echo "✗ Central Portal rejected credentials (HTTP $HTTP_STATUS)"
+              exit 1
+              ;;
+            *)
+              echo "✓ Central Portal accepted credentials (HTTP $HTTP_STATUS) — deep validation happens at publish time"
+              ;;
+          esac
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    needs: publish-dry-run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v4
+        with:
+          java-version: 8
+          distribution: 'adopt'
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-        
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Configure GPG
+        run: |
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpg-connect-agent reloadagent /bye
+          gpg --list-secret-keys
+
       - name: Build with Maven
         run: mvn clean package -B
-        
+
       - name: Publish package
-        run: |
-            mvn deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        run: mvn deploy
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
