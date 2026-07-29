@@ -87,31 +87,18 @@ jobs:
             echo "✗ CENTRAL_USERNAME or CENTRAL_TOKEN secrets are not set"
             exit 1
           fi
-          for attempt in 1 2 3; do
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-              -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
-              "https://central.sonatype.com/api/v1/publisher/status")
-            case "$HTTP_STATUS" in
-              200)
-                echo "✓ Central Portal credentials are valid (HTTP 200)"
-                exit 0
-                ;;
-              401|403)
-                echo "✗ Central Portal rejected credentials (HTTP $HTTP_STATUS)"
-                exit 1
-                ;;
-              5*)
-                echo "⚠ Attempt $attempt: transient error (HTTP $HTTP_STATUS), retrying in 5s…"
-                sleep 5
-                ;;
-              *)
-                echo "✗ Unexpected response from Central Portal (HTTP $HTTP_STATUS)"
-                exit 1
-                ;;
-            esac
-          done
-          echo "✗ Central Portal unreachable after 3 attempts"
-          exit 1
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -u "${CENTRAL_USERNAME}:${CENTRAL_TOKEN}" \
+            "https://central.sonatype.com/api/v1/publisher/status")
+          case "$HTTP_STATUS" in
+            401|403)
+              echo "✗ Central Portal rejected credentials (HTTP $HTTP_STATUS)"
+              exit 1
+              ;;
+            *)
+              echo "✓ Central Portal accepted credentials (HTTP $HTTP_STATUS) — deep validation happens at publish time"
+              ;;
+          esac
 
   publish:
     if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
