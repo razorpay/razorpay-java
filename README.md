@@ -64,6 +64,26 @@ Map<String, String> headers = new HashMap<String, String>();
 razorpayClient.addHeaders(headers);
 ```
 
+## Error Handling
+
+SDK calls throw `RazorpayException` on API errors. In addition to the message, you can access structured error data returned by the API:
+
+```java
+try {
+  Order order = razorpayClient.orders.create(orderRequest);
+} catch (RazorpayException e) {
+  int    httpStatus  = e.getStatusCode();   // HTTP status code (e.g. 400)
+  String code        = e.getCode();         // e.g. "BAD_REQUEST_ERROR"
+  String description = e.getDescription();  // human-readable message
+  String field       = e.getField();        // offending field, if any
+  String reason      = e.getReason();
+  String source      = e.getSource();
+  String step        = e.getStep();
+  JSONObject metadata = e.getMetadata();
+  JSONObject raw     = e.getErrorResponse(); // full error JSON
+}
+```
+
 ## Supported Resources
 - [Addon](documents/addon.md)
 
