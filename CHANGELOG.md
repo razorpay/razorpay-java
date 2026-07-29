@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.4.10 - 2026-07-29
+* feat: expose structured API error data in `RazorpayException`
+  * `ApiClient` now parses the API error body and attaches it to the exception, so callers no longer need to parse the response themselves
+  * New getters on `RazorpayException`: `getCode()`, `getDescription()`, `getField()`, `getReason()`, `getSource()`, `getStep()`, `getMetadata()`, and `getErrorResponse()` for the full error JSON
+  * `getStatusCode()` returns the HTTP status code from the failed response
+  * Backwards compatible: existing constructors and `getMessage()` behavior are unchanged
+
 ## Version 1.4.9 - 2026-06-09
 * fix: use random nonce per call in AES-GCM onboarding signature
 

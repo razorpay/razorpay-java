@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.text.WordUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.HttpUrl;
@@ -106,7 +107,9 @@ class ApiClient {
         responseJson = new JSONObject(responseBody);
       }
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
+    } catch (JSONException e) {
+      throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
 
     if (statusCode < STATUS_OK || statusCode >= STATUS_MULTIPLE_CHOICE) {
@@ -170,7 +173,9 @@ class ApiClient {
         responseJson = new JSONObject(responseBody);
       }
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
+    } catch (JSONException e) {
+      throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
 
     if (statusCode >= STATUS_OK && statusCode < STATUS_MULTIPLE_CHOICE) {
@@ -195,7 +200,9 @@ class ApiClient {
       responseBody = response.body().string();
       responseJson = new JSONObject(responseBody);
     } catch (IOException e) {
-      throw new RazorpayException(e.getMessage());
+      throw new RazorpayException(e.getMessage(), statusCode);
+    } catch (JSONException e) {
+      throw new RazorpayException("Unable to parse response: " + e.getMessage(), statusCode);
     }
 
     String collectionName  = null;
@@ -221,20 +228,21 @@ class ApiClient {
   }
 
   private void throwException(int statusCode, JSONObject responseJson) throws RazorpayException {
-    if (responseJson.has(ERROR)) {
+    if (responseJson != null && responseJson.has(ERROR)) {
       JSONObject errorResponse = responseJson.getJSONObject(ERROR);
       String code = errorResponse.getString(STATUS_CODE);
       String description = errorResponse.getString(DESCRIPTION);
-      throw new RazorpayException(code + ":" + description);
+      throw new RazorpayException(code + ":" + description, errorResponse, statusCode);
     }
-    throwServerException(statusCode, responseJson.toString());
+    String bodyForServerException = responseJson != null ? responseJson.toString() : "Invalid or empty response from server";
+    throwServerException(statusCode, bodyForServerException);
   }
 
   private void throwServerException(int statusCode, String responseBody) throws RazorpayException {
     StringBuilder sb = new StringBuilder();
     sb.append("Status Code: ").append(statusCode).append("\n");
     sb.append("Server response: ").append(responseBody);
-    throw new RazorpayException(sb.toString());
+    throw new RazorpayException(sb.toString(), statusCode);
   }
 
   private Class getClass(String entity) {
