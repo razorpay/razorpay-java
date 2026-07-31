@@ -121,6 +121,9 @@ class ApiClient {
   private <T extends Entity> T parseResponse(JSONObject jsonObject, String entity) throws RazorpayException {
     if (entity != null) {
       Class<T> cls = getClass(entity);
+      if (cls == null) {
+        throw new RazorpayException("Unable to find class for entity: " + entity);
+      }
       try {
         return cls.getConstructor(JSONObject.class).newInstance(jsonObject);
       } catch (Exception e) {
@@ -247,7 +250,7 @@ class ApiClient {
 
   private Class getClass(String entity) {
     try {
-      String entityClass = "com.razorpay." + WordUtils.capitalize(entity, '_').replaceAll("_", "");
+      String entityClass = getClass().getPackage().getName() + "." + WordUtils.capitalize(entity, '_').replaceAll("_", "");
       return Class.forName(entityClass);
     } catch (ClassNotFoundException e) {
       return null;
