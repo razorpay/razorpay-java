@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +30,7 @@ public class BaseTest {
     @Before
     public void setUp() throws Exception {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         mockGetCall();
         mockURL(Collections.emptyList());
     }
@@ -44,7 +44,7 @@ public class BaseTest {
 
         Call call = mock(Call.class);
         when(call.execute()).thenReturn(mockedResponse);
-        when(okHttpClient.newCall(anyObject())).thenReturn(call);
+        when(okHttpClient.newCall(any())).thenReturn(call);
 
     }
 
