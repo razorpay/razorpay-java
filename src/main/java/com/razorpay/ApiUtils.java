@@ -236,13 +236,22 @@ class ApiUtils {
     return trustManager;
   }
 
-  private static String getMediaType(String fileName){
+  static String getMediaType(String fileName) {
     int extensionIndex = fileName.lastIndexOf('.');
-    String extenionName = fileName.substring(extensionIndex + 1);
-    if(extenionName == "jpg" | extenionName == "jpeg" | extenionName == "png" | extenionName == "jfif"){
-      return "image/jpg";
+    if (extensionIndex < 0 || extensionIndex == fileName.length() - 1) {
+      return "application/octet-stream";
     }
-      return "image/pdf";
+    String extensionName = fileName.substring(extensionIndex + 1).toLowerCase();
+    if ("jpg".equals(extensionName) || "jpeg".equals(extensionName) || "jfif".equals(extensionName)) {
+      return "image/jpeg";
+    }
+    if ("png".equals(extensionName)) {
+      return "image/png";
+    }
+    if ("pdf".equals(extensionName)) {
+      return "application/pdf";
+    }
+    return "application/octet-stream";
   }
 
   private static RequestBody fileRequestBody(JSONObject requestObject){
