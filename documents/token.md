@@ -384,7 +384,31 @@ Token token = instance.token.processPaymentOnAlternatePAorPG(productRequest);
 }
 ```
 -------------------------------------------------------------------------------------------------------
+### Cancel token
 
+```java
+String customerId = "cust_1Aa00000000004";
+
+String tokenId = "token_Hxe0skTXLeg9pF";
+
+instance.customers.cancelToken(customerId, tokenId);
+```
+
+**Parameters:**
+
+| Name         | Type   | Description                                                                 |
+| ------------ | ------ | --------------------------------------------------------------------------- |
+| customerId*  | string | The unique identifier of the customer with whom the token is linked.        |
+| tokenId*     | string | The unique identifier of the token that is to be cancelled.                 |
+
+**Response:**
+```json
+{ 
+  "status": "cancellation_initiated"
+}
+```
+
+-------------------------------------------------------------------------------------------------------
 **PN: * indicates mandatory fields**
 <br>
 <br>

@@ -458,4 +458,18 @@ public class CustomerClientTest extends BaseTest{
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testCanelToken() throws IOException, RazorpayException {
+        String mockedResponseJson = "{\"entity\":\"customer\",\"status\":cancellation_initiated}";
+        try {
+            mockResponseFromExternalClient(mockedResponseJson);
+            mockResponseHTTPCodeFromExternalClient(200);
+            Customer customer = customerClient.cancelToken(CUSTOMER_ID,TOKEN_ID);
+            assertNotNull(customer);
+            verifySentRequest(false, null, getHost(String.format(Constants.TOKEN_CANCEL,CUSTOMER_ID,TOKEN_ID)));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
 }
