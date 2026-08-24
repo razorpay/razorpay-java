@@ -13,9 +13,18 @@ jobs:
   test:
     name: Run tests and publish test coverage
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      # Start PMG in server mode
+      - uses: safedep/pmg@v1
+        with:
+          server-mode: true
+          api-key: ${{ secrets.PMG_PUBLIC_REPOS_TOKEN }}
+          tenant-id: ${{ secrets.PMG_TENANT_ID }}
 
       - name: Set up Java JDK
         uses: actions/setup-java@v2
@@ -34,13 +43,28 @@ jobs:
         with:
           fail_ci_if_error: false
           verbose: true
-          
+
+      # Enforce the result and flush events
+      - name: Stop proxy
+        if: always()
+        run: pmg proxy stop --fail-on-violation
+
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v2
+
+      # Start PMG in server mode
+      - uses: safedep/pmg@v1
+        with:
+          server-mode: true
+          api-key: ${{ secrets.PMG_PUBLIC_REPOS_TOKEN }}
+          tenant-id: ${{ secrets.PMG_TENANT_ID }}
+
       - name: Set up Maven Central Repository
         uses: actions/setup-java@v2
         with:
@@ -60,3 +84,8 @@ jobs:
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+
+      # Enforce the result and flush events
+      - name: Stop proxy
+        if: always()
+        run: pmg proxy stop --fail-on-violation
