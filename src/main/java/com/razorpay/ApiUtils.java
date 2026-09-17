@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -238,11 +239,24 @@ class ApiUtils {
 
   private static String getMediaType(String fileName){
     int extensionIndex = fileName.lastIndexOf('.');
-    String extenionName = fileName.substring(extensionIndex + 1);
-    if(extenionName == "jpg" | extenionName == "jpeg" | extenionName == "png" | extenionName == "jfif"){
-      return "image/jpg";
+    String extensionName =
+        extensionIndex == -1 ? "" : fileName.substring(extensionIndex + 1).toLowerCase(Locale.ROOT);
+
+    switch (extensionName) {
+      case "jpg":
+      case "jpeg":
+      case "jfif":
+        return "image/jpeg";
+      case "png":
+        return "image/png";
+      case "pdf":
+        return "application/pdf";
+      default:
+        // Unsupported extensions keep the pre-existing fallback. This upload path is shared
+        // with the account and stakeholder document endpoints, whose accepted formats are not
+        // documented here, so rejecting them client-side could break working integrations.
+        return "image/pdf";
     }
-      return "image/pdf";
   }
 
   private static RequestBody fileRequestBody(JSONObject requestObject){
@@ -258,6 +272,11 @@ class ApiUtils {
     Iterator<?> iterator = requestObject.keys();
     while (iterator.hasNext()) {
       Object key = iterator.next();
+      // "file" is already sent above as the binary part; adding it again here would put the
+      // local file path on the wire as a duplicate form field.
+      if ("file".equals(key)) {
+        continue;
+      }
       Object value = requestObject.get(key.toString());
       multipartBodyBuilder.addFormDataPart((String) key, (String) value);
     }
