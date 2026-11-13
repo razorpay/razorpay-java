@@ -238,11 +238,11 @@ class ApiUtils {
 
   private static String getMediaType(String fileName){
     int extensionIndex = fileName.lastIndexOf('.');
-    String extenionName = fileName.substring(extensionIndex + 1);
-    if(extenionName == "jpg" | extenionName == "jpeg" | extenionName == "png" | extenionName == "jfif"){
-      return "image/jpg";
+    String extensionName = fileName.substring(extensionIndex + 1).toLowerCase();
+    if(extensionName.equals("jpg") || extensionName.equals("jpeg") || extensionName.equals("png") || extensionName.equals("jfif")){
+      return "image/jpeg";
     }
-      return "image/pdf";
+    return "application/pdf";
   }
 
   private static RequestBody fileRequestBody(JSONObject requestObject){
@@ -258,6 +258,7 @@ class ApiUtils {
     Iterator<?> iterator = requestObject.keys();
     while (iterator.hasNext()) {
       Object key = iterator.next();
+      if (key.toString().equals("file")) continue;
       Object value = requestObject.get(key.toString());
       multipartBodyBuilder.addFormDataPart((String) key, (String) value);
     }
