@@ -15,48 +15,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+  uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
 
       - name: Set up Java JDK
-        uses: actions/setup-java@v2
+  uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12
         with:
           java-version: 8
-          distribution: 'adopt'
-             
+          distribution: 'temurin'
+
       - name: Install dependencies
         run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dgpg.skip
-           
+
       - name: Run tests and collect coverage
-        run: mvn -B test 
+        run: mvn -B test
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+  # Replace with the verified 40-character commit SHA for the intended codecov/codecov-action v4 release.
+  uses: codecov/codecov-action@<VERIFIED_VALUE_REQUIRED>
+  with:
+    fail_ci_if_error: false
+    verbose: true
         with:
           fail_ci_if_error: false
           verbose: true
-          
+
   publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+
       - name: Set up Maven Central Repository
-        uses: actions/setup-java@v2
+  uses: actions/setup-java@8df103950f1a284ea214c9acc06196fd9f766f2a
         with:
           java-version: 8
-          distribution: 'adopt'
+          distribution: 'temurin'
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
           gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-        
+
       - name: Build with Maven
         run: mvn clean package -B
-        
+
       - name: Publish package
         run: |
-            mvn deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          mvn deploy -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
