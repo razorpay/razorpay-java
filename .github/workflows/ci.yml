@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
 
       - name: Set up Maven Central Repository
-        uses: actions/setup-java@v4
+  uses: actions/setup-java@8df103950f1a284ea214c9acc06196fd9f766f2a
         with:
           java-version: 8
           distribution: 'temurin'
