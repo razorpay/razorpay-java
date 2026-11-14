@@ -30,7 +30,11 @@ jobs:
         run: mvn -B test
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+  # Replace with the verified 40-character commit SHA for the intended codecov/codecov-action v4 release.
+  uses: codecov/codecov-action@<VERIFIED_VALUE_REQUIRED>
+  with:
+    fail_ci_if_error: false
+    verbose: true
         with:
           fail_ci_if_error: false
           verbose: true
