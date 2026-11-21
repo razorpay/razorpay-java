@@ -2,19 +2,11 @@ package com.razorpay;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONObject;
 
@@ -43,16 +35,11 @@ class ApiUtils {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
       }
       
-      try {
-        client = new OkHttpClient.Builder()
-                                 .readTimeout(60, TimeUnit.SECONDS)
-                                 .writeTimeout(60, TimeUnit.SECONDS)
-                                 .addInterceptor(loggingInterceptor)
-                                 .sslSocketFactory(new CustomTLSSocketFactory(), createDefaultTrustManager())
-                                 .build();
-      } catch (Exception e) {
-        throw new RazorpayException(e);
-      }
+      client = new OkHttpClient.Builder()
+                               .readTimeout(60, TimeUnit.SECONDS)
+                               .writeTimeout(60, TimeUnit.SECONDS)
+                               .addInterceptor(loggingInterceptor)
+                               .build();
     }
 
     Properties properties = new Properties();
@@ -225,17 +212,6 @@ class ApiUtils {
     headers.putAll(header);
   }
   
-  private static X509TrustManager createDefaultTrustManager() throws NoSuchAlgorithmException, KeyStoreException {
-    TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-    trustManagerFactory.init((KeyStore) null);
-    TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-    if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-      throw new IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers));
-    }
-    X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
-    return trustManager;
-  }
-
   private static String getMediaType(String fileName){
     int extensionIndex = fileName.lastIndexOf('.');
     String extenionName = fileName.substring(extensionIndex + 1);

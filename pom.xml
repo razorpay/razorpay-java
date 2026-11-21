@@ -68,19 +68,19 @@
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
-      <version>3.10.0</version>
+      <version>4.12.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>logging-interceptor</artifactId>
-      <version>3.10.0</version>
+      <version>4.12.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20231013</version>
+      <version>20260814</version>
     </dependency>
 
     <dependency>
@@ -162,7 +162,6 @@
         <configuration>
           <excludes>
             <exclude>com/razorpay/**/EntityNameURLMapping.class</exclude>
-            <exclude>com/razorpay/**/CustomTLSSocketFactory.class</exclude>
             <exclude>com/razorpay/**/Constants.class</exclude>
             <exclude>com/razorpay/**/Methods.class</exclude>
           </excludes>
